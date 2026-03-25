@@ -69,26 +69,33 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 ### Phase 2 — Développement
 - **Agents** : @infrastructure, @fullstack, @qa
 - **Parallélisation** : @infrastructure d'abord (batch 1), puis @fullstack (batch 2), puis @qa (batch 3)
-- **Statut** : EN COURS (@infrastructure TERMINÉ, @fullstack TERMINÉ, @qa EN COURS)
-- **Livrables attendus** :
+- **Statut** : TERMINÉ
+- **Livrables reçus** :
   - docs/infra/infrastructure.md — LIVRÉ (700 lignes, 12 sections)
   - src/ (code application) — LIVRÉ (26 fichiers, landing + API + dashboard + onboarding + admin)
   - .env.example — LIVRÉ (16 env vars)
-  - docs/qa/qa-strategy.md + tests/ — EN COURS
+  - docs/qa/qa-strategy.md + tests/ — LIVRÉ (66 tests, 7 suites, 3.4s)
+  - docs/qa/TESTING.md — LIVRÉ
+  - vitest.config.ts — LIVRÉ
+- **Escalations** : 15 events PostHog P0 manquants, invoice.payment_failed non géré dans webhook Stripe
+- **Décision utilisateur** : DB changée de Supabase → Replit PostgreSQL + Object Storage (code à adapter)
 
 ### Phase 3 — Contenu & SEO
 - **Agents** : @seo, @geo
-- **Parallélisation** : @seo d'abord, puis @geo
-- **Statut** : En attente
-- **Livrables attendus** :
-  - docs/seo/seo-strategy.md
-  - docs/seo/keyword-map.md
-  - docs/geo/geo-strategy.md
+- **Parallélisation** : @seo + @geo en parallèle
+- **Statut** : TERMINÉ
+- **Livrables reçus** :
+  - docs/seo/seo-strategy.md — LIVRÉ (stratégie complète, cocon 4 piliers, timeline M1-M6)
+  - docs/seo/keyword-map.md — LIVRÉ (6 clusters, 50+ mots-clés)
+  - docs/seo/metadata-templates.md — LIVRÉ (code TS intégrable, sitemap, robots, JSON-LD)
+  - docs/geo/geo-strategy.md — LIVRÉ (visibilité LLM, monitoring, baseline zéro confirmé)
+  - docs/geo/content-restructuring.md — LIVRÉ (audit landing, Schema.org specs)
+  - docs/geo/llm-content-templates.md — LIVRÉ (5 templates contenu LLM-friendly)
 
 ### Phase 4 — Acquisition
 - **Agents** : @growth, @social
-- **Parallélisation** : @growth d'abord, puis @social
-- **Statut** : En attente
+- **Parallélisation** : @growth + @social en parallèle
+- **Statut** : EN COURS
 - **Livrables attendus** :
   - docs/growth/growth-strategy.md
   - docs/social/social-strategy.md
@@ -117,9 +124,15 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 - **2026-03-25** : Session 2. @infrastructure relancé et livré (700 lignes, schéma SQL 8 tables, config Replit/Clerk/Stripe/PostHog, pipeline IA, sécurité, coûts).
 - **2026-03-25** : @fullstack livré (26 fichiers). Landing page 9 composants, 4 API routes, dashboard client, onboarding wizard 7 étapes, admin. TypeScript strict, 0 erreurs.
 - **2026-03-25** : @qa lancé (stratégie + tests Vitest + config).
+- **2026-03-25** : @qa livré (66 tests, 7 suites). Escalations : 15 events PostHog manquants, invoice.payment_failed absent.
+- **2026-03-25** : Phase 3 lancée. @seo + @geo en parallèle.
+- **2026-03-25** : @geo livré (3 fichiers). Baseline zéro confirmé, page comparatif Cocoon-Immo prioritaire.
+- **2026-03-25** : @seo livré (3 fichiers). 50+ mots-clés, fenêtre "mandataire" confirmée vs "agence" Cocoon-Immo.
+- **2026-03-25** : Décision utilisateur : Replit PostgreSQL + Object Storage remplace Supabase.
+- **2026-03-25** : Phase 4 lancée. @growth + @social en parallèle.
 
 ## État pour reprise prochaine session
-- **Phases terminées** : 0 (fondations), 1 (expérience)
-- **Phase en cours** : 2 (développement) — @qa en cours
+- **Phases terminées** : 0, 1, 2, 3
+- **Phase en cours** : 4 (acquisition) — @growth + @social lancés
 - **Phases à faire** : 3 (SEO/GEO), 4 (acquisition), revue finale
 - **Pour reprendre** : lire project-context.md + docs/orchestration-plan.md, vérifier si @qa a terminé, puis lancer Phase 3
