@@ -24,7 +24,7 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 ### Phase 0 — Fondations stratégiques
 - **Agents** : @creative-strategy, @product-manager, @data-analyst, @legal
 - **Parallélisation** : @creative-strategy + @legal en parallèle (batch 1), puis @agent-factory (batch 1b, crée @mandataire à partir des personas), puis @product-manager (batch 2, dépend de brand-platform), puis @data-analyst (batch 3, dépend de product-vision + persona)
-- **Statut** : EN COURS
+- **Statut** : TERMINÉ (validé par utilisateur 2026-03-25)
 - **Livrables attendus** :
   - docs/strategy/brand-platform.md (@creative-strategy)
   - docs/strategy/personas.md (@creative-strategy)
@@ -43,21 +43,21 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
   - docs/product/functional-specs.md (828 lignes) — OK
   - docs/product/roadmap.md (144 lignes) — OK
   - .claude/agents/mandataire.md (231 lignes) — OK (agent @mandataire créé par @agent-factory)
-  - docs/analytics/kpi-framework.md — EN COURS (@data-analyst)
-  - docs/analytics/tracking-plan.md — EN COURS (@data-analyst)
+  - docs/analytics/kpi-framework.md (~500 lignes) — OK
+  - docs/analytics/tracking-plan.md (~500 lignes) — OK
   - docs/legal/rgpd-checklist.md — NON PRODUIT (fusionné dans legal-audit.md)
 - **Verdict vérification** :
   - @creative-strategy : OK (brand-platform complet et différenciant, personas détaillés avec verbatims)
   - @legal : OK (RGPD + AI Act + CGV + Hoguet couverts, 3 points marqués "À vérifier avec juriste")
   - @agent-factory : OK (agent @mandataire fonctionnel, grille 8 critères)
   - @product-manager : OK (vision + specs 828 lignes + roadmap 6 mois)
-  - @data-analyst : EN COURS
-- **Checkpoint utilisateur** : OBLIGATOIRE après Phase 0 — en attente de @data-analyst
+  - @data-analyst : OK (KPI framework AARRR 40+ KPIs, tracking plan 22 events PostHog)
+- **Checkpoint utilisateur** : VALIDÉ par l'utilisateur (2026-03-25). Positionnement confirmé comme clé de succès.
 
 ### Phase 1 — Expérience utilisateur
 - **Agents** : @ux, @design, @copywriter
-- **Parallélisation** : @ux d'abord, puis @design + @copywriter en parallèle (brand-platform disponible)
-- **Statut** : En attente
+- **Parallélisation** : @ux d'abord (batch 1), puis @design + @copywriter en parallèle (batch 2)
+- **Statut** : EN COURS
 - **Livrables attendus** :
   - docs/ux/user-flows.md
   - docs/ux/wireframes.md
