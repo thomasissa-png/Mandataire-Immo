@@ -89,7 +89,7 @@ export default async function DashboardPage() {
         /* Empty state — warm welcome, no scary zeros */
         <div className="rounded-xl bg-card border border-border p-10 text-center max-w-lg mx-auto">
           <div className="w-16 h-16 rounded-full bg-secondary-50 flex items-center justify-center mx-auto mb-6">
-            <span className="text-secondary text-display-lg">&#9997;</span>
+            <span className="text-secondary text-display-lg" aria-hidden="true">&#9997;</span>
           </div>
           <h2 className="font-display text-h2 text-primary mb-3">
             Bienvenue dans ton espace !

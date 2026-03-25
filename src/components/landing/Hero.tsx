@@ -31,8 +31,8 @@ export function Hero() {
             </p>
           </div>
 
-          {/* Mockup visuel (placeholder) */}
-          <div className="mt-10 desktop:mt-0 desktop:w-[40%]">
+          {/* Mockup visuel (placeholder — decoratif) */}
+          <div className="mt-10 desktop:mt-0 desktop:w-[40%]" aria-hidden="true">
             <div className="relative mx-auto max-w-sm desktop:max-w-none">
               <div className="rounded-xl bg-white border border-border shadow-md p-6 space-y-4">
                 <div className="flex items-center gap-3">

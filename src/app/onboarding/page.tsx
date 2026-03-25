@@ -27,11 +27,15 @@ const STEPS = [
   },
   {
     title: "Tes biens en cours",
+    subtitle: "Optionnel — tu pourras les ajouter plus tard",
     fields: ["biens_actuels"],
+    optional: true,
   },
   {
     title: "Tes comptes",
+    subtitle: "Optionnel — on peut travailler sans",
     fields: ["instagram", "facebook", "linkedin", "site_web"],
+    optional: true,
   },
 ] as const
 
@@ -64,13 +68,32 @@ const FIELD_LABELS: Record<string, { label: string; placeholder: string; type: "
 
 export default function OnboardingPage() {
   const { user } = useUser()
-  const [currentStep, setCurrentStep] = useState(0)
-  const [data, setData] = useState<OnboardingData>({})
+  // Restore state from sessionStorage on mount
+  const [currentStep, setCurrentStep] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = sessionStorage.getItem("immocrew_onboarding_step")
+      return saved ? parseInt(saved, 10) : 0
+    }
+    return 0
+  })
+  const [data, setData] = useState<OnboardingData>(() => {
+    if (typeof window !== "undefined") {
+      const saved = sessionStorage.getItem("immocrew_onboarding_data")
+      return saved ? JSON.parse(saved) : {}
+    }
+    return {}
+  })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
 
   const step = STEPS[currentStep]
   const progress = ((currentStep + 1) / STEPS.length) * 100
+
+  // Persist state to sessionStorage on every change
+  useEffect(() => {
+    sessionStorage.setItem("immocrew_onboarding_step", String(currentStep))
+    sessionStorage.setItem("immocrew_onboarding_data", JSON.stringify(data))
+  }, [currentStep, data])
 
   useEffect(() => {
     track("onboarding_start")
@@ -126,6 +149,8 @@ export default function OnboardingPage() {
         track("onboarding_complete", {
           total_steps: STEPS.length,
         })
+        sessionStorage.removeItem("immocrew_onboarding_step")
+        sessionStorage.removeItem("immocrew_onboarding_data")
         setIsComplete(true)
       }
     } catch (err) {
@@ -178,9 +203,16 @@ export default function OnboardingPage() {
         {/* Progress */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <span className="font-display text-h3 text-primary">
-              {step.title}
-            </span>
+            <div>
+              <span className="font-display text-h3 text-primary">
+                {step.title}
+              </span>
+              {"subtitle" in step && step.subtitle && (
+                <p className="text-caption text-neutral-400 mt-1">
+                  {step.subtitle}
+                </p>
+              )}
+            </div>
             <span className="text-caption text-neutral-500">
               Etape {currentStep + 1} sur {STEPS.length}
             </span>
@@ -243,13 +275,24 @@ export default function OnboardingPage() {
           </button>
 
           {currentStep < STEPS.length - 1 ? (
-            <button
-              type="button"
-              onClick={handleNext}
-              className="h-12 px-8 rounded-full bg-secondary text-white font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
-            >
-              Suivant
-            </button>
+            <div className="flex items-center gap-3">
+              {"optional" in step && step.optional && (
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="text-body-sm text-neutral-400 hover:text-neutral-600 underline transition-colors"
+                >
+                  Passer
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleNext}
+                className="h-12 px-8 rounded-full bg-secondary text-white font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
+              >
+                Suivant
+              </button>
+            </div>
           ) : (
             <button
               type="button"

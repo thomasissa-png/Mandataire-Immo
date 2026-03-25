@@ -84,7 +84,7 @@ export function Pricing() {
           Choisis ton pack.
         </h2>
 
-        <div className="grid gap-6 tablet:grid-cols-3 items-start max-w-5xl mx-auto">
+        <div className="grid gap-6 tablet:grid-cols-3 items-start max-w-5xl mx-auto overflow-x-hidden">
           {PACKS.map((pack, index) => (
             <div
               key={index}
