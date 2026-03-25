@@ -25,6 +25,7 @@ interface ClientRow {
   email: string
   pack: string | null
   stripe_customer_id: string | null
+  client_context: Record<string, unknown> | null
 }
 
 const TYPE_LABELS: Record<DeliverableType, string> = {
@@ -54,12 +55,23 @@ export default async function DashboardPage() {
 
   const primaryEmail = user.emailAddresses[0]?.emailAddress
 
-  // Fetch client info
+  // Fetch client info (include client_context for monthly update check)
   const { rows: clientRows } = await query<ClientRow>(
-    "SELECT * FROM clients WHERE email = $1 LIMIT 1",
+    "SELECT id, email, pack, stripe_customer_id, client_context FROM clients WHERE email = $1 LIMIT 1",
     [primaryEmail]
   )
   const client = clientRows[0] || null
+
+  // Check if monthly update is needed (absent or older than 25 days)
+  let showMonthlyBanner = true
+  if (client?.client_context) {
+    const lastUpdate = client.client_context.last_monthly_update
+    if (typeof lastUpdate === "string") {
+      const updateDate = new Date(lastUpdate)
+      const daysSince = (Date.now() - updateDate.getTime()) / (1000 * 60 * 60 * 24)
+      showMonthlyBanner = daysSince > 25
+    }
+  }
 
   // Fetch deliverables (draft + delivered, ordered by most recent)
   const { rows: deliverables } = await query<Deliverable>(
@@ -73,6 +85,53 @@ export default async function DashboardPage() {
 
   return (
     <div>
+      {/* Monthly update banner */}
+      {showMonthlyBanner && (
+        <a
+          href="/dashboard/monthly-update"
+          className="block mb-6 p-4 rounded-lg border border-secondary/30 bg-secondary-50 hover:bg-secondary-100 transition-colors duration-normal"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0">
+              <svg
+                className="w-5 h-5 text-secondary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-display text-body-sm font-semibold text-primary">
+                Tes infos du mois
+              </p>
+              <p className="text-caption text-neutral-500">
+                10 min pour des livrables encore plus personnalises
+              </p>
+            </div>
+            <svg
+              className="w-5 h-5 text-neutral-400 flex-shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
+        </a>
+      )}
+
       {/* Welcome */}
       <div className="mb-8">
         <h1 className="font-display text-h1 text-primary mb-2">

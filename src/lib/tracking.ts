@@ -19,6 +19,8 @@ type TrackingEvent =
   | "production_completed"
   | "admin_trigger_production"
   | "deliverable_generated"
+  | "monthly_update_started"
+  | "monthly_update_completed"
 
 interface TrackingProperties {
   [key: string]: string | number | boolean | null | undefined
