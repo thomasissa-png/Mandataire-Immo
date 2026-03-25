@@ -21,17 +21,17 @@ export interface AnnonceStorytellingInput {
     surface: number
     pieces: number
     points_forts: string
+    dpe?: string // ex: "C", "D", "E" — obligatoire legalement
   }>
   cible_clients: string
   gamme_prix: string
-  // Contexte optionnel pour enrichir les annonces
+  // Donnees locales enrichies (depuis onboarding)
   donnees_locales?: {
-    prix_m2_moyen?: number
-    ecoles?: string[]
-    transports?: string[]
-    commerces?: string[]
-    parcs?: string[]
-    tendance_marche?: string
+    prix_m2_moyen: number
+    commerces: string[]
+    ecoles: string[]
+    transports: string[]
+    ambiance_quartier: string
   }
   // Pour le Boost Mandat (un seul bien)
   bien_unique?: {
@@ -43,27 +43,41 @@ export interface AnnonceStorytellingInput {
     pieces: number
     points_forts: string
     description_detaillee?: string
+    dpe?: string
   }
   nombre_annonces?: number
+  // Contact mandataire pour le CTA
+  telephone_contact?: string
+  email_contact?: string
 }
 
 export function buildAnnonceStorytellingPrompt(input: AnnonceStorytellingInput): {
   system: string
   user: string
 } {
+  const donneesLocalesDisponibles = input.donnees_locales &&
+    (input.donnees_locales.commerces.length > 0 || input.donnees_locales.ecoles.length > 0 || input.donnees_locales.transports.length > 0)
+
   const system = `Tu es un redacteur immobilier specialise dans les annonces storytelling haut de gamme pour le marche francais. Tu transformes des descriptions techniques de biens en recits immersifs qui projettent l'acheteur dans sa future vie.
 
-REGLES ABSOLUES :
+## Regles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
+- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+- OBLIGATOIRE DPE : chaque annonce DOIT contenir une mention DPE. Si le DPE est fourni dans les donnees du bien, l'afficher clairement (ex: "DPE : C"). Si le DPE n'est pas fourni, ecrire en fin d'annonce : "[DPE : information en cours — sera communique avant publication]". Ne JAMAIS ecrire "DPE : non communique" (formulation illegale depuis 2021).
+
+REGLES EDITORIALES :
 - Chaque annonce fait entre 600 et 900 mots — c'est un vrai texte, pas une fiche technique
-- Structure narrative obligatoire : accroche quartier → histoire du bien → projection de vie de l'acheteur → appel a l'action
-- Chaque annonce DOIT contenir des elements hyper-locaux : nom du quartier, rues proches, ecoles precises, commerces reels, transports, parcs
+- Structure narrative obligatoire : accroche quartier -> histoire du bien -> projection de vie de l'acheteur -> appel a l'action
+- Chaque annonce DOIT contenir des elements hyper-locaux UNIQUEMENT s'ils sont presents dans les donnees fournies (donnees_locales ou zone_geo). NE PAS inventer de noms de rues, ecoles, commerces ou boulangeries.
 - Les prix au m2 doivent etre coherents avec la zone (utilise les donnees fournies)
 - Jamais de cliches immobiliers : "bel appartement lumineux", "proche commerces et transports", "dans un ecrin de verdure", "coup de coeur assure"
 - Le ton est celui d'un conseiller qui connait intimement le quartier, pas d'un agent qui lit une fiche
 - Tutoie le lecteur (l'acheteur potentiel)
 - L'IA est INVISIBLE : ne jamais mentionner l'IA
 - Pas de superlatif non justifie ("le plus beau", "exceptionnel") — prefere des details concrets
-- Inclure les mentions legales obligatoires : prix, surface Carrez si applicable, DPE si disponible
+- Inclure les mentions legales obligatoires : prix, surface Carrez si applicable, DPE (voir regle DPE ci-dessus)
 
 STRUCTURE DE CHAQUE ANNONCE :
 
