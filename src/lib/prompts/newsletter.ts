@@ -26,8 +26,17 @@ export interface NewsletterInput {
     pieces: number
     points_forts: string
   }>
+  annees_experience: number
+  // Histoire personnelle (pour l'edito)
+  histoire?: {
+    parcours_avant_immo: string
+    pourquoi_immobilier: string
+    anecdote_memorable: string
+  }
   // Contexte newsletter
   mois_cible: string // ex: "avril 2026"
+  // Anecdote/edito du mois fournie par le mandataire (prioritaire sur la generation)
+  anecdote_mois?: string // ex: "Ce mois-ci j'ai aide un couple a trouver leur premier appart en 3 visites"
   bien_du_mois?: {
     titre: string
     type: string
@@ -53,7 +62,14 @@ export function buildNewsletterPrompt(input: NewsletterInput): {
 } {
   const system = `Tu es un redacteur specialise dans les newsletters immobilieres locales. Tu rediges des emails mensuels que les mandataires envoient a leur base de contacts (acheteurs, vendeurs, anciens clients). L'objectif : rester dans l'esprit du contact, apporter de la valeur, et generer des prises de contact.
 
-REGLES ABSOLUES :
+## Regles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
+- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
+- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+
+REGLES EDITORIALES :
 - L'email doit donner envie d'etre lu — pas un catalogue de biens
 - Tutoie le lecteur
 - Ton chaleureux et local — comme une lettre d'un voisin expert en immobilier
@@ -108,14 +124,18 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
     .map((b) => `- ${b.titre} : ${b.type}, ${b.prix.toLocaleString('fr-FR')}€, ${b.surface}m²`)
     .join('\n')
 
-  const donneesLocales = input.donnees_locales
+  const donneesLocalesDisponibles = input.donnees_locales &&
+    (input.donnees_locales.prix_m2_moyen || input.donnees_locales.tendance_marche || input.donnees_locales.evenements_locaux?.length || input.donnees_locales.nouveaux_commerces?.length)
+
+  const donneesLocales = donneesLocalesDisponibles
     ? `
-DONNEES LOCALES :
-${input.donnees_locales.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
-${input.donnees_locales.tendance_marche ? `- Tendance : ${input.donnees_locales.tendance_marche}` : ''}
-${input.donnees_locales.evenements_locaux?.length ? `- Evenements locaux : ${input.donnees_locales.evenements_locaux.join(', ')}` : ''}
-${input.donnees_locales.nouveaux_commerces?.length ? `- Nouveaux commerces : ${input.donnees_locales.nouveaux_commerces.join(', ')}` : ''}`
-    : ''
+DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references, ne rien inventer) :
+${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
+${input.donnees_locales!.tendance_marche ? `- Tendance : ${input.donnees_locales!.tendance_marche}` : ''}
+${input.donnees_locales!.evenements_locaux?.length ? `- Evenements locaux : ${input.donnees_locales!.evenements_locaux.join(', ')}` : ''}
+${input.donnees_locales!.nouveaux_commerces?.length ? `- Nouveaux commerces : ${input.donnees_locales!.nouveaux_commerces.join(', ')}` : ''}`
+    : `
+DONNEES LOCALES : non disponibles. Pour le chiffre du mois, utiliser un format "Le saviez-vous ?" avec un fait immobilier general (pas de chiffre local invente).`
 
   const historiqueStr = input.historique_newsletters?.length
     ? `Sujets deja traites dans les newsletters precedentes (varier) : ${input.historique_newsletters.join(', ')}.`
@@ -141,9 +161,13 @@ AUTRES BIENS EN COURS :
 ${autresBiens || 'Aucun autre bien.'}
 ${donneesLocales}
 
+${input.anecdote_mois ? `EDITO DU MOIS (fourni par le mandataire — utiliser comme base pour l'edito, ne pas inventer d'autre anecdote) :\n${input.anecdote_mois}` : ''}
+${input.histoire?.anecdote_memorable ? `ANECDOTE PERSONNELLE (reutilisable si pertinent pour l'edito) :\n${input.histoire.anecdote_memorable}` : ''}
+${input.histoire?.pourquoi_immobilier ? `MOTIVATION PERSONNELLE : ${input.histoire.pourquoi_immobilier}` : ''}
+
 CONSIGNES :
 ${historiqueStr}
-- L'edito doit etre ancre dans le mois de ${input.mois_cible} (saisonnalite, evenements, ambiance)
+- ${input.anecdote_mois ? "L'edito DOIT s'appuyer sur l'anecdote fournie par le mandataire ci-dessus. Ne pas inventer d'autre anecdote." : "L'edito doit etre ancre dans le mois de " + input.mois_cible + " (saisonnalite, evenements, ambiance). Si aucune anecdote n'est fournie, rester general sur le contexte saisonnier."}
 - Le conseil du mois doit etre ultra-concret (pas "preparez votre bien" mais "repeins les plinthes et change les poignees de porte — ca coute 50€ et ca change tout")
 - Le chiffre du mois utilise les donnees locales fournies. Si aucune donnee n'est disponible, propose un format "Le saviez-vous ?" avec un fait immobilier local pertinent
 - Le HTML doit etre simple : fond blanc, texte noir, une couleur d'accent (#2563EB), police systeme (Arial, sans-serif)

@@ -30,6 +30,12 @@ export interface BioMultiformatInput {
   // Issu du positionnement (L1) si deja genere
   accroche_identitaire?: string // La phrase signature de L1
   piliers_differenciation?: string[] // Les 3 piliers de L1
+  // Histoire personnelle (depuis ClientContext)
+  histoire?: {
+    parcours_avant_immo: string
+    pourquoi_immobilier: string
+    anecdote_memorable: string
+  }
   // Infos complementaires pour les bios
   certifications?: string[] // ex: "Certifiee negociateur immobilier"
   langues?: string[] // ex: ["Francais", "Anglais"]
@@ -42,7 +48,14 @@ export function buildBioMultiformatPrompt(input: BioMultiformatInput): {
 } {
   const system = `Tu es un specialiste du personal branding digital pour les professionnels de l'immobilier. Tu rediges des bios optimisees pour chaque plateforme, en respectant les contraintes de caracteres et les codes de chaque reseau.
 
-REGLES ABSOLUES :
+## Regles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
+- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
+- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+
+REGLES EDITORIALES :
 - Chaque bio respecte STRICTEMENT la limite de caracteres de sa plateforme
 - Tutoie le lecteur quand le format le permet (Instagram, general) — vouvoiement acceptable sur LinkedIn et Google Business si le ton du mandataire est formel
 - L'IA est INVISIBLE : ces bios sont ecrites comme si ${input.prenom} les avait redigees
@@ -130,6 +143,9 @@ PROFIL COMPLET :
 ${input.certifications?.length ? `- Certifications : ${input.certifications.join(', ')}` : ''}
 ${input.langues?.length ? `- Langues : ${input.langues.join(', ')}` : ''}
 ${input.hobbies_pro ? `- Centre d'interet pro : ${input.hobbies_pro}` : ''}
+${input.histoire?.parcours_avant_immo ? `- Parcours avant l'immobilier : ${input.histoire.parcours_avant_immo}` : ''}
+${input.histoire?.pourquoi_immobilier ? `- Pourquoi l'immobilier : ${input.histoire.pourquoi_immobilier}` : ''}
+${input.histoire?.anecdote_memorable ? `- Anecdote memorable : ${input.histoire.anecdote_memorable}` : ''}
 ${biensResume}
 ${positionnementStr}
 

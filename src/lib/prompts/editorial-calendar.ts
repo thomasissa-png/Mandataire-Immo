@@ -24,7 +24,17 @@ export interface EditorialCalendarInput {
   }>
   reseaux_sociaux: { instagram?: string; facebook?: string; linkedin?: string; site_web?: string }
   nb_transactions_an: number
+  annees_experience: number
   cible_clients: string
+  gamme_prix?: string
+  // Donnees locales enrichies (depuis onboarding)
+  donnees_locales?: {
+    prix_m2_moyen?: number
+    commerces?: string[]
+    ecoles?: string[]
+    transports?: string[]
+    ambiance_quartier?: string
+  }
   // Contexte de generation
   date_debut?: string // ISO date, defaut: aujourd'hui
   frequence_hebdo?: number // publications par semaine, defaut: 5
@@ -41,7 +51,14 @@ export function buildEditorialCalendarPrompt(input: EditorialCalendarInput): { s
 ## Ton role
 Produire un calendrier editorial de 30 jours, concret et actionnable, adapte au profil du mandataire, a sa zone geographique et a son style de communication.
 
-## Regles absolues
+## Regles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
+- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
+- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+
+## Regles editoriales
 - Chaque entree doit etre suffisamment detaillee pour qu'un autre agent IA puisse rediger le post complet sans contexte supplementaire
 - Varier les types de contenu : conseil, bien en avant, vie de quartier, coulisses metier, temoignage, actu marche, contenu educatif
 - Alterner les plateformes selon leurs forces : Instagram (visuel, Reels), Facebook (communaute locale, albums), LinkedIn (expertise, marche)
@@ -71,6 +88,18 @@ Reponds UNIQUEMENT avec un objet JSON valide :
     ? `\nBiens actuellement en vente :\n${input.biens.map((b, i) => `${i + 1}. ${b.titre} — ${b.type}, ${b.surface}m2, ${b.pieces} pieces, ${b.prix}EUR, ${b.adresse}. Points forts : ${b.points_forts}`).join("\n")}`
     : "\nAucun bien en vente actuellement — privilegier le contenu expertise, quartier et conseil."
 
+  const donneesLocalesDisponibles = input.donnees_locales &&
+    (input.donnees_locales.commerces?.length || input.donnees_locales.ecoles?.length || input.donnees_locales.transports?.length || input.donnees_locales.prix_m2_moyen)
+
+  const donneesLocalesSection = donneesLocalesDisponibles
+    ? `\nDONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references dans les sujets de posts, ne rien inventer) :
+${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}EUR` : ''}
+${input.donnees_locales!.commerces?.length ? `- Commerces de reference : ${input.donnees_locales!.commerces.join(', ')}` : ''}
+${input.donnees_locales!.ecoles?.length ? `- Ecoles de reference : ${input.donnees_locales!.ecoles.join(', ')}` : ''}
+${input.donnees_locales!.transports?.length ? `- Transports : ${input.donnees_locales!.transports.join(', ')}` : ''}
+${input.donnees_locales!.ambiance_quartier ? `- Ambiance quartier : ${input.donnees_locales!.ambiance_quartier}` : ''}`
+    : `\nDONNEES LOCALES : non disponibles. Dans les sujets de posts, utiliser UNIQUEMENT les noms de ville et quartiers fournis dans zone_geo. NE PAS inventer de noms de commerces, ecoles, marches ou arrets de transport.`
+
   const evenementsSection = input.evenements_locaux && input.evenements_locaux.length > 0
     ? `\nEvenements locaux a integrer : ${input.evenements_locaux.join(", ")}`
     : ""
@@ -91,7 +120,9 @@ Reponds UNIQUEMENT avec un objet JSON valide :
 - Nom : ${input.prenom} ${input.nom}
 - Reseau : ${input.reseau}
 - Specialite : ${input.specialite}
-- Experience : ${input.nb_transactions_an} transactions/an
+- Annees d'experience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais ecrire un autre nombre)
+- Volume : ${input.nb_transactions_an} transactions/an
+${input.gamme_prix ? `- Gamme de prix : ${input.gamme_prix}` : ''}
 - Zone : ${input.zone_geo.ville} (${input.zone_geo.departement})
 - Quartiers de reference : ${input.zone_geo.quartiers.join(", ") || "non precises"}
 - Clients cibles : ${input.cible_clients}
@@ -100,6 +131,7 @@ Reponds UNIQUEMENT avec un objet JSON valide :
 - Ton : ${input.ton}
 - Reseaux sociaux actifs : ${reseauxSection}
 ${biensSection}
+${donneesLocalesSection}
 ${evenementsSection}
 ${sujetsSection}
 

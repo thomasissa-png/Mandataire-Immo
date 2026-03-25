@@ -9,6 +9,7 @@ export interface EmailProspectionInput {
   nom: string
   reseau: string
   specialite: string
+  annees_experience: number
   zone_geo: { ville: string; departement: string; quartiers: string[] }
   ton: string
   valeurs: string
@@ -17,6 +18,9 @@ export interface EmailProspectionInput {
   cible_clients: string
   gamme_prix: string
   reseaux_sociaux: { instagram?: string; facebook?: string; linkedin?: string; site_web?: string }
+  // Coordonnees reelles du mandataire (pas de placeholders)
+  email_contact: string // ex: "sophie.martin@iadfrance.fr"
+  telephone_contact: string // ex: "06 12 34 56 78"
   biens: Array<{
     titre: string
     type: string
@@ -59,7 +63,16 @@ export function buildEmailProspectionPrompt(input: EmailProspectionInput): {
 
   const system = `Tu es un redacteur specialise dans les emails immobiliers pour le marche francais. Tu rediges des emails ${isProspection ? 'de prospection pour convaincre des proprietaires de confier la vente de leur bien' : 'de promotion immobiliere pour informer des acheteurs potentiels d\'un bien correspondant a leurs criteres'}.
 
-REGLES ABSOLUES :
+## Regles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
+- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
+- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+- Le domaine email IAD est "iadfrance.fr", PAS "iad.fr". Si le reseau est IAD, verifier que le mailto utilise @iadfrance.fr.
+- UTILISER LES VRAIES COORDONNEES du mandataire fournies ci-dessous. Ne JAMAIS ecrire "06 00 00 00 00" ou un email placeholder.
+
+REGLES EDITORIALES :
 - Email court et percutant : 150-250 mots maximum. Chaque mot compte.
 - Tutoie le destinataire
 - L'IA est INVISIBLE : ne jamais mentionner l'IA
@@ -108,14 +121,18 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
     ? input.zone_geo.quartiers.join(', ')
     : input.zone_geo.ville
 
-  const donneesLocales = input.donnees_locales
+  const donneesLocalesDisponibles = input.donnees_locales &&
+    (input.donnees_locales.prix_m2_moyen || input.donnees_locales.tendance_marche || input.donnees_locales.delai_vente_moyen || input.donnees_locales.nombre_ventes_trimestre)
+
+  const donneesLocales = donneesLocalesDisponibles
     ? `
-DONNEES LOCALES :
-${input.donnees_locales.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
-${input.donnees_locales.tendance_marche ? `- Tendance : ${input.donnees_locales.tendance_marche}` : ''}
-${input.donnees_locales.delai_vente_moyen ? `- Delai de vente moyen : ${input.donnees_locales.delai_vente_moyen}` : ''}
-${input.donnees_locales.nombre_ventes_trimestre ? `- Ventes ce trimestre : ${input.donnees_locales.nombre_ventes_trimestre}` : ''}`
-    : ''
+DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces chiffres, ne rien inventer) :
+${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
+${input.donnees_locales!.tendance_marche ? `- Tendance : ${input.donnees_locales!.tendance_marche}` : ''}
+${input.donnees_locales!.delai_vente_moyen ? `- Delai de vente moyen : ${input.donnees_locales!.delai_vente_moyen}` : ''}
+${input.donnees_locales!.nombre_ventes_trimestre ? `- Ventes ce trimestre : ${input.donnees_locales!.nombre_ventes_trimestre}` : ''}`
+    : `
+DONNEES LOCALES : non disponibles. Ne pas citer de chiffres locaux (prix m2, delai de vente, nombre de ventes). Rester sur des arguments qualitatifs.`
 
   let contexteSpecifique = ''
 
@@ -145,7 +162,8 @@ ${input.criteres_acheteurs ? `- Profil acheteur cible : ${input.criteres_acheteu
 PROFIL DU MANDATAIRE :
 - Zone : ${input.zone_geo.ville} (${input.zone_geo.departement}), quartiers : ${quartiersStr}
 - Specialite : ${input.specialite}
-- Experience : ${input.nb_transactions_an} transactions/an
+- Annees d'experience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais ecrire un autre nombre)
+- Volume : ${input.nb_transactions_an} transactions/an
 - Ton : ${input.ton}
 - Valeurs : ${input.valeurs}
 - Ce qui la/le differencie : ${input.ce_qui_differencie}
@@ -159,7 +177,13 @@ CONSIGNES :
 - L'objet doit contenir le nom de ${input.zone_geo.ville} ou d'un quartier pour la pertinence locale
 - Le HTML doit etre minimaliste : fond blanc, texte noir, une couleur d'accent (#2563EB), police systeme
 - Inclure un placeholder desabonnement : {{unsubscribe_url}}
-- Signature : ${input.prenom} ${input.nom} — ${input.reseau}, ${input.zone_geo.ville}
+- Signature OBLIGATOIRE avec les VRAIES coordonnees :
+  ${input.prenom} ${input.nom} — Mandataire ${input.reseau}
+  Email : ${input.email_contact}
+  ${input.telephone_contact ? `Telephone : ${input.telephone_contact}` : ''}
+  ${input.zone_geo.ville}
+- Le mailto dans le HTML doit pointer vers ${input.email_contact} (PAS un placeholder)
+- ${input.telephone_contact ? `Le lien tel: doit pointer vers ${input.telephone_contact}` : 'Pas de numero de telephone fourni — ne pas inventer de numero.'}
 - Le CTA doit etre une action simple : repondre a l'email, appeler, ou cliquer sur un lien unique`
 
   return { system, user }

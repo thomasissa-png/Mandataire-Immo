@@ -119,20 +119,21 @@ Adresse : ${b.adresse}
 Prix : ${b.prix.toLocaleString('fr-FR')}€
 Surface : ${b.surface}m²
 Pieces : ${b.pieces}
-Points forts : ${b.points_forts}${'description_detaillee' in b && b.description_detaillee ? `\nDescription detaillee : ${b.description_detaillee}` : ''}`
+Points forts : ${b.points_forts}
+DPE : ${'dpe' in b && b.dpe ? b.dpe : '[DPE : information en cours — sera communique avant publication]'}${'description_detaillee' in b && b.description_detaillee ? `\nDescription detaillee : ${b.description_detaillee}` : ''}`
     )
     .join('\n\n')
 
-  const donneesLocales = input.donnees_locales
+  const donneesLocales = donneesLocalesDisponibles
     ? `
-DONNEES LOCALES (a integrer dans les annonces) :
-${input.donnees_locales.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
-${input.donnees_locales.ecoles?.length ? `- Ecoles du quartier : ${input.donnees_locales.ecoles.join(', ')}` : ''}
-${input.donnees_locales.transports?.length ? `- Transports : ${input.donnees_locales.transports.join(', ')}` : ''}
-${input.donnees_locales.commerces?.length ? `- Commerces : ${input.donnees_locales.commerces.join(', ')}` : ''}
-${input.donnees_locales.parcs?.length ? `- Parcs et espaces verts : ${input.donnees_locales.parcs.join(', ')}` : ''}
-${input.donnees_locales.tendance_marche ? `- Tendance du marche : ${input.donnees_locales.tendance_marche}` : ''}`
-    : ''
+DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references, ne rien inventer) :
+${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
+${input.donnees_locales!.ecoles?.length ? `- Ecoles du quartier : ${input.donnees_locales!.ecoles.join(', ')}` : ''}
+${input.donnees_locales!.transports?.length ? `- Transports : ${input.donnees_locales!.transports.join(', ')}` : ''}
+${input.donnees_locales!.commerces?.length ? `- Commerces : ${input.donnees_locales!.commerces.join(', ')}` : ''}
+${input.donnees_locales!.ambiance_quartier ? `- Ambiance quartier : ${input.donnees_locales!.ambiance_quartier}` : ''}`
+    : `
+DONNEES LOCALES : non disponibles. Rester general sur les references locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, ecoles, boulangeries, arrets de transport ou marches.`
 
   const nombre = input.nombre_annonces || biensATraiter.length
 
@@ -153,9 +154,9 @@ ${donneesLocales}
 CONSIGNES :
 - Chaque annonce doit etre unique dans son approche narrative (pas la meme structure pour tous les biens)
 - Adapte le ton et l'angle selon le type de bien : un T2 investisseur n'a pas le meme recit qu'une maison familiale
-- Cite au moins 2 elements locaux precis par annonce (ecole, commerce, parc, transport, rue)
+- Cite au moins 2 elements locaux precis par annonce — UNIQUEMENT si ces elements sont dans les donnees locales ci-dessus ou dans zone_geo. NE RIEN INVENTER.
 - L'accroche courte (150 car.) doit donner envie de lire la suite — pas un resume technique
-- Le CTA final redirige vers ${input.prenom} (telephone ou message)`
+- Le CTA final redirige vers ${input.prenom}${input.telephone_contact ? ` (${input.telephone_contact})` : ''}${input.email_contact ? ` ou ${input.email_contact}` : ''}`
 
   return { system, user }
 }

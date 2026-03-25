@@ -27,7 +27,13 @@ export interface PositioningStatementInput {
     pieces: number
     points_forts: string
   }>
-  // Contexte supplementaire pour le positionnement
+  // Contexte supplementaire pour le positionnement (depuis ClientContext.histoire)
+  histoire?: {
+    parcours_avant_immo: string
+    pourquoi_immobilier: string
+    anecdote_memorable: string
+  }
+  // Legacy fields (retrocompatibilite)
   parcours_avant_immo?: string // ex: "10 ans assistante de direction"
   pourquoi_immobilier?: string // ex: "Passion pour l'habitat, envie de liberte"
   anecdote_memorable?: string // ex: "Ma premiere vente, c'etait..."
@@ -45,7 +51,14 @@ export function buildPositioningStatementPrompt(input: PositioningStatementInput
 } {
   const system = `Tu es un strategiste en personal branding specialise dans l'immobilier. Tu crees des documents de positionnement pour des mandataires immobiliers independants. Ce document est la FONDATION de toute leur communication — il sert de reference pour tous les contenus futurs (posts, articles, annonces, bio).
 
-REGLES ABSOLUES :
+## Regles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
+- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
+- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+
+REGLES EDITORIALES :
 - Le positionnement doit etre UNIQUE a ce mandataire — pas un template avec des variables changees
 - Chaque phrase doit pouvoir etre dite a voix haute par ${input.prenom} sans que ca sonne faux
 - Le ton est determine par le profil du mandataire (pas par toi)
@@ -115,14 +128,18 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
         .join('\n')
     : 'Aucun bien actif actuellement.'
 
-  const donneesLocales = input.donnees_locales
+  const donneesLocalesDisponibles = input.donnees_locales &&
+    (input.donnees_locales.prix_m2_moyen || input.donnees_locales.tendance_marche || input.donnees_locales.population || input.donnees_locales.concurrents_locaux?.length)
+
+  const donneesLocales = donneesLocalesDisponibles
     ? `
-CONTEXTE LOCAL :
-${input.donnees_locales.prix_m2_moyen ? `- Prix moyen au m² a ${input.zone_geo.ville} : ${input.donnees_locales.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
-${input.donnees_locales.tendance_marche ? `- Tendance du marche : ${input.donnees_locales.tendance_marche}` : ''}
-${input.donnees_locales.population ? `- Population : ${input.donnees_locales.population.toLocaleString('fr-FR')} hab.` : ''}
-${input.donnees_locales.concurrents_locaux?.length ? `- Concurrents locaux connus : ${input.donnees_locales.concurrents_locaux.join(', ')}` : ''}`
-    : ''
+CONTEXTE LOCAL VERIFIE (utilise UNIQUEMENT ces donnees, ne rien inventer) :
+${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² a ${input.zone_geo.ville} : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
+${input.donnees_locales!.tendance_marche ? `- Tendance du marche : ${input.donnees_locales!.tendance_marche}` : ''}
+${input.donnees_locales!.population ? `- Population : ${input.donnees_locales!.population.toLocaleString('fr-FR')} hab.` : ''}
+${input.donnees_locales!.concurrents_locaux?.length ? `- Concurrents locaux connus : ${input.donnees_locales!.concurrents_locaux.join(', ')}` : ''}`
+    : `
+CONTEXTE LOCAL : donnees detaillees non disponibles. Ancrer le positionnement sur le nom de ville et quartiers fournis dans zone_geo. NE PAS inventer de prix m2, de concurrents ou de donnees demographiques.`
 
   const user = `Cree le document de positionnement pour ${input.prenom} ${input.nom}, mandataire immobilier chez ${input.reseau}.
 
@@ -136,9 +153,9 @@ PROFIL COMPLET :
 - Ton souhaite : ${input.ton}
 - Valeurs declarees : ${input.valeurs}
 - Ce qui la/le differencie (ses propres mots) : ${input.ce_qui_differencie}
-${input.parcours_avant_immo ? `- Parcours avant l'immobilier : ${input.parcours_avant_immo}` : ''}
-${input.pourquoi_immobilier ? `- Pourquoi l'immobilier : ${input.pourquoi_immobilier}` : ''}
-${input.anecdote_memorable ? `- Anecdote memorable : ${input.anecdote_memorable}` : ''}
+${input.histoire?.parcours_avant_immo || input.parcours_avant_immo ? `- Parcours avant l'immobilier : ${input.histoire?.parcours_avant_immo || input.parcours_avant_immo}` : ''}
+${input.histoire?.pourquoi_immobilier || input.pourquoi_immobilier ? `- Pourquoi l'immobilier : ${input.histoire?.pourquoi_immobilier || input.pourquoi_immobilier}` : ''}
+${input.histoire?.anecdote_memorable || input.anecdote_memorable ? `- Anecdote memorable : ${input.histoire?.anecdote_memorable || input.anecdote_memorable}` : ''}
 
 BIENS ACTUELS (donne une idee de son activite) :
 ${biensStr}
