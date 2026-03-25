@@ -1,0 +1,191 @@
+import { currentUser } from "@clerk/nextjs/server"
+import { redirect, notFound } from "next/navigation"
+import { createAdminSupabaseClient } from "@/lib/supabase"
+
+interface ClientDetail {
+  id: string
+  email: string
+  first_name: string | null
+  last_name: string | null
+  clerk_user_id: string | null
+  stripe_customer_id: string | null
+  stripe_subscription_id: string | null
+  pack: string | null
+  status: string | null
+  client_context: Record<string, unknown> | null
+  paid_at: string | null
+  created_at: string
+}
+
+interface Payment {
+  id: string
+  amount: number
+  currency: string
+  pack: string
+  status: string
+  created_at: string
+}
+
+export default async function AdminClientDetailPage({
+  params,
+}: {
+  params: { id: string }
+}) {
+  const user = await currentUser()
+  const adminEmail = process.env.ADMIN_EMAIL
+  const userEmail = user?.emailAddresses[0]?.emailAddress
+
+  if (!userEmail || userEmail !== adminEmail) {
+    redirect("/dashboard")
+  }
+
+  const supabase = createAdminSupabaseClient()
+
+  const { data: client } = await supabase
+    .from("clients")
+    .select("*")
+    .eq("id", params.id)
+    .single()
+
+  if (!client) {
+    notFound()
+  }
+
+  const clientData = client as ClientDetail
+
+  // Fetch payments
+  const { data: payments } = await supabase
+    .from("payments")
+    .select("*")
+    .eq("email", clientData.email)
+    .order("created_at", { ascending: false })
+
+  const paymentList = (payments as Payment[] | null) || []
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Admin header */}
+      <header className="sticky top-0 z-50 bg-primary text-white border-b border-primary-600">
+        <div className="container-immocrew flex items-center justify-between h-14">
+          <div className="flex items-center gap-4">
+            <a href="/admin" className="font-display text-h3 font-bold">
+              ImmoCrew
+            </a>
+            <span className="text-caption bg-secondary px-2 py-0.5 rounded-full">
+              Admin
+            </span>
+          </div>
+          <a
+            href="/admin"
+            className="text-body-sm text-primary-200 hover:text-white transition-colors duration-normal"
+          >
+            Retour liste
+          </a>
+        </div>
+      </header>
+
+      <main className="container-immocrew py-8 max-w-3xl">
+        {/* Client info */}
+        <div className="rounded-xl bg-card border border-border p-6 mb-6">
+          <h1 className="font-display text-h1 text-primary mb-4">
+            {clientData.first_name || ""} {clientData.last_name || ""}
+          </h1>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-caption text-neutral-500">Email</p>
+              <p className="text-body-sm text-foreground">
+                {clientData.email}
+              </p>
+            </div>
+            <div>
+              <p className="text-caption text-neutral-500">Pack</p>
+              <p className="text-body-sm text-foreground capitalize">
+                {clientData.pack || "—"}
+              </p>
+            </div>
+            <div>
+              <p className="text-caption text-neutral-500">Statut</p>
+              <p className="text-body-sm text-foreground capitalize">
+                {clientData.status || "pending"}
+              </p>
+            </div>
+            <div>
+              <p className="text-caption text-neutral-500">Date inscription</p>
+              <p className="text-body-sm text-foreground">
+                {clientData.paid_at
+                  ? new Date(clientData.paid_at).toLocaleDateString("fr-FR")
+                  : "—"}
+              </p>
+            </div>
+            <div>
+              <p className="text-caption text-neutral-500">Stripe ID</p>
+              <p className="text-body-sm text-foreground font-mono">
+                {clientData.stripe_customer_id || "—"}
+              </p>
+            </div>
+            <div>
+              <p className="text-caption text-neutral-500">Clerk ID</p>
+              <p className="text-body-sm text-foreground font-mono">
+                {clientData.clerk_user_id || "—"}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Context data */}
+        {clientData.client_context && (
+          <div className="rounded-xl bg-card border border-border p-6 mb-6">
+            <h2 className="font-display text-h2 text-primary mb-4">
+              Contexte client
+            </h2>
+            <pre className="text-body-sm text-neutral-600 bg-neutral-50 rounded-lg p-4 overflow-x-auto">
+              {JSON.stringify(clientData.client_context, null, 2)}
+            </pre>
+          </div>
+        )}
+
+        {/* Payments */}
+        <div className="rounded-xl bg-card border border-border p-6">
+          <h2 className="font-display text-h2 text-primary mb-4">
+            Paiements
+          </h2>
+
+          {paymentList.length === 0 ? (
+            <p className="text-body-sm text-neutral-500">
+              Aucun paiement enregistre.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {paymentList.map((payment) => (
+                <div
+                  key={payment.id}
+                  className="flex items-center justify-between py-3 border-b border-border last:border-0"
+                >
+                  <div>
+                    <p className="text-body-sm font-medium text-foreground capitalize">
+                      {payment.pack}
+                    </p>
+                    <p className="text-caption text-neutral-500">
+                      {new Date(payment.created_at).toLocaleDateString(
+                        "fr-FR"
+                      )}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-display text-body font-semibold text-primary">
+                      {payment.amount}&euro;
+                    </p>
+                    <p className="text-caption text-success">
+                      {payment.status}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
+    </div>
+  )
+}
