@@ -1,8 +1,8 @@
 # Audit UX — ImmoCrew Frontend
 
 > Produit par @ux | 2026-03-25
-> Périmètre : landing page (Header, Hero, Problem, Pricing, FAQ, Footer, CTAButton, CookieConsent) + onboarding wizard + dashboard
-> Référence : wireframes.md, personas.md (Sophie, 38 ans, iPhone, mandataire IAD)
+> Scope : landing page (PC + mobile), onboarding wizard, dashboard
+> Persona de référence : Sophie, 38 ans, mandataire IAD, iPhone, pas de compétences digitales
 
 ---
 
