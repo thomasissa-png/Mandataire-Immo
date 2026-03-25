@@ -26,9 +26,36 @@ const STEPS = [
     fields: ["ton_communication", "valeurs", "ce_qui_te_differencie"],
   },
   {
+    title: "Ton quartier en detail",
+    fields: [
+      "prix_m2_moyen",
+      "commerces_reference",
+      "ecoles_reference",
+      "transports",
+      "ambiance_quartier",
+    ],
+  },
+  {
+    title: "Ton histoire",
+    subtitle:
+      "Facultatif — mais ca rend tes livrables beaucoup plus personnels",
+    fields: [
+      "parcours_avant_immo",
+      "pourquoi_immobilier",
+      "anecdote_memorable",
+    ],
+    optional: true,
+  },
+  {
     title: "Tes biens en cours",
-    subtitle: "Optionnel — tu pourras les ajouter plus tard",
-    fields: ["biens_actuels"],
+    subtitle: "Facultatif — tu pourras les ajouter plus tard",
+    fields: ["__biens__"],
+    optional: true,
+  },
+  {
+    title: "La video",
+    subtitle: "Facultatif — permet d'adapter les scripts video a ton niveau",
+    fields: ["confort_camera"],
     optional: true,
   },
   {
@@ -43,28 +70,185 @@ interface OnboardingData {
   [key: string]: string
 }
 
-const FIELD_LABELS: Record<string, { label: string; placeholder: string; type: "text" | "textarea" | "select" }> = {
+interface BienData {
+  titre: string
+  type: string
+  adresse: string
+  prix: string
+  surface: string
+  pieces: string
+  points_forts: string
+}
+
+const EMPTY_BIEN: BienData = {
+  titre: "",
+  type: "",
+  adresse: "",
+  prix: "",
+  surface: "",
+  pieces: "",
+  points_forts: "",
+}
+
+interface FieldConfig {
+  label: string
+  placeholder: string
+  type: "text" | "textarea" | "select"
+  options?: { value: string; label: string }[]
+}
+
+const FIELD_LABELS: Record<string, FieldConfig> = {
   prenom: { label: "Prenom", placeholder: "Sophie", type: "text" },
   nom: { label: "Nom", placeholder: "Martin", type: "text" },
-  telephone: { label: "Telephone", placeholder: "06 12 34 56 78", type: "text" },
-  reseau: { label: "Ton reseau", placeholder: "IAD, SAFTI, Capifrance, independant...", type: "text" },
-  experience_annees: { label: "Annees d'experience", placeholder: "2", type: "text" },
-  nb_transactions_an: { label: "Nombre de transactions/an", placeholder: "5", type: "text" },
+  telephone: {
+    label: "Telephone",
+    placeholder: "06 12 34 56 78",
+    type: "text",
+  },
+  reseau: {
+    label: "Ton reseau",
+    placeholder: "IAD, SAFTI, Capifrance, independant...",
+    type: "text",
+  },
+  experience_annees: {
+    label: "Annees d'experience",
+    placeholder: "2",
+    type: "text",
+  },
+  nb_transactions_an: {
+    label: "Nombre de transactions/an",
+    placeholder: "5",
+    type: "text",
+  },
   ville: { label: "Ville principale", placeholder: "Angers", type: "text" },
-  quartiers: { label: "Quartiers ou tu travailles", placeholder: "La Doutre, Centre-ville, Doutre...", type: "textarea" },
-  departement: { label: "Departement", placeholder: "49 - Maine-et-Loire", type: "text" },
-  type_biens: { label: "Types de biens", placeholder: "Appartements, maisons, neuf, ancien...", type: "text" },
-  gamme_prix: { label: "Gamme de prix", placeholder: "100K - 300K EUR", type: "text" },
-  cible_clients: { label: "Tes clients types", placeholder: "Primo-accedants, familles, investisseurs...", type: "text" },
-  ton_communication: { label: "Comment tu parles a tes clients", placeholder: "Pro mais accessible, chaleureux, direct...", type: "textarea" },
-  valeurs: { label: "Ce qui compte pour toi", placeholder: "Transparence, proximite, reactivite...", type: "text" },
-  ce_qui_te_differencie: { label: "Ce qui te differencie", placeholder: "Connaissance du quartier, disponibilite...", type: "textarea" },
-  biens_actuels: { label: "Tes biens en vente actuellement (optionnel)", placeholder: "T3 68m2 La Doutre Angers 145K EUR...", type: "textarea" },
-  instagram: { label: "Instagram", placeholder: "@sophie.immo", type: "text" },
-  facebook: { label: "Page Facebook", placeholder: "facebook.com/sophie.immo", type: "text" },
-  linkedin: { label: "LinkedIn", placeholder: "linkedin.com/in/sophie-martin", type: "text" },
-  site_web: { label: "Site web (si existant)", placeholder: "www.sophie-immo.fr", type: "text" },
+  quartiers: {
+    label: "Quartiers ou tu travailles",
+    placeholder: "La Doutre, Centre-ville, Doutre...",
+    type: "textarea",
+  },
+  departement: {
+    label: "Departement",
+    placeholder: "49 - Maine-et-Loire",
+    type: "text",
+  },
+  type_biens: {
+    label: "Types de biens",
+    placeholder: "Appartements, maisons, neuf, ancien...",
+    type: "text",
+  },
+  gamme_prix: {
+    label: "Gamme de prix",
+    placeholder: "100K - 300K EUR",
+    type: "text",
+  },
+  cible_clients: {
+    label: "Tes clients types",
+    placeholder: "Primo-accedants, familles, investisseurs...",
+    type: "text",
+  },
+  ton_communication: {
+    label:
+      "Comment tu parles a tes clients — donne un exemple de phrase que tu utilises souvent",
+    placeholder:
+      "Ex: Je suis directe mais bienveillante. Quand un bien ne correspond pas, je le dis. Je tutoie mes clients.",
+    type: "textarea",
+  },
+  valeurs: {
+    label: "Tes 3 valeurs les plus importantes dans ton metier",
+    placeholder:
+      "Ex: Transparence sur les prix, disponibilite 7j/7, honnetete meme quand ca ne plait pas",
+    type: "text",
+  },
+  ce_qui_te_differencie: {
+    label:
+      "Ce que tes clients disent de toi que les autres mandataires n'ont pas",
+    placeholder:
+      "Ex: Je connais chaque rue de La Doutre, j'y vis depuis 10 ans. Mes clients disent que je reponds en moins d'1h.",
+    type: "textarea",
+  },
+  prix_m2_moyen: {
+    label: "Prix moyen au m2 dans ta zone (estimation)",
+    placeholder: "Ex: 2800",
+    type: "text",
+  },
+  commerces_reference: {
+    label: "Les commerces et lieux que tes clients connaissent",
+    placeholder:
+      "Ex: Marche de La Doutre le samedi, boulangerie Lepine, parc Balzac, mediatheque Toussaint",
+    type: "textarea",
+  },
+  ecoles_reference: {
+    label: "Les ecoles et colleges du coin",
+    placeholder: "Ex: Ecole Dacier, college Chevreul, lycee Bergson",
+    type: "textarea",
+  },
+  transports: {
+    label: "Transports et acces",
+    placeholder:
+      "Ex: Tramway ligne A arret La Doutre, gare Saint-Laud a 10 min, rocade sud a 5 min",
+    type: "textarea",
+  },
+  ambiance_quartier: {
+    label: "Decris l'ambiance de ton quartier en 2-3 phrases",
+    placeholder:
+      "Ex: La Doutre c'est le quartier boheme d'Angers. Rues pavees, maisons a colombages, bistrots. Les gens qui s'y installent ne repartent plus.",
+    type: "textarea",
+  },
+  parcours_avant_immo: {
+    label: "Que faisais-tu avant l'immobilier ?",
+    placeholder:
+      "Ex: Assistante de direction pendant 8 ans dans une PME",
+    type: "text",
+  },
+  pourquoi_immobilier: {
+    label: "Pourquoi tu as choisi ce metier ?",
+    placeholder:
+      "Ex: J'ai eu un coup de foudre pour l'immobilier quand j'ai achete mon premier appart. J'ai adore le processus.",
+    type: "textarea",
+  },
+  anecdote_memorable: {
+    label: "Une anecdote qui te definit comme mandataire",
+    placeholder:
+      "Ex: Un couple qui cherchait depuis 1 an m'a remerciee en pleurant le jour de la signature. C'est la que j'ai su.",
+    type: "textarea",
+  },
+  confort_camera: {
+    label: "Ton rapport a la video",
+    placeholder: "",
+    type: "select",
+    options: [
+      { value: "", label: "Choisis ton niveau..." },
+      {
+        value: "debutant",
+        label: "Je n'ai jamais fait de video — ca me stresse",
+      },
+      { value: "a_laise", label: "J'ai deja fait quelques videos, ca va" },
+      { value: "expert", label: "Je suis a l'aise devant la camera" },
+    ],
+  },
+  instagram: {
+    label: "Instagram",
+    placeholder: "@sophie.immo",
+    type: "text",
+  },
+  facebook: {
+    label: "Page Facebook",
+    placeholder: "facebook.com/sophie.immo",
+    type: "text",
+  },
+  linkedin: {
+    label: "LinkedIn",
+    placeholder: "linkedin.com/in/sophie-martin",
+    type: "text",
+  },
+  site_web: {
+    label: "Site web (si existant)",
+    placeholder: "www.sophie-immo.fr",
+    type: "text",
+  },
 }
+
+const MAX_BIENS = 5
 
 export default function OnboardingPage() {
   const { user } = useUser()
@@ -83,6 +267,13 @@ export default function OnboardingPage() {
     }
     return {}
   })
+  const [biens, setBiens] = useState<BienData[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = sessionStorage.getItem("immocrew_onboarding_biens")
+      return saved ? JSON.parse(saved) : [{ ...EMPTY_BIEN }]
+    }
+    return [{ ...EMPTY_BIEN }]
+  })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
 
@@ -93,7 +284,8 @@ export default function OnboardingPage() {
   useEffect(() => {
     sessionStorage.setItem("immocrew_onboarding_step", String(currentStep))
     sessionStorage.setItem("immocrew_onboarding_data", JSON.stringify(data))
-  }, [currentStep, data])
+    sessionStorage.setItem("immocrew_onboarding_biens", JSON.stringify(biens))
+  }, [currentStep, data, biens])
 
   useEffect(() => {
     track("onboarding_start")
@@ -115,6 +307,27 @@ export default function OnboardingPage() {
     setData((prev) => ({ ...prev, [field]: value }))
   }
 
+  const updateBien = (index: number, field: keyof BienData, value: string) => {
+    setBiens((prev) => {
+      const next = [...prev]
+      next[index] = { ...next[index], [field]: value }
+      return next
+    })
+  }
+
+  const addBien = () => {
+    if (biens.length < MAX_BIENS) {
+      setBiens((prev) => [...prev, { ...EMPTY_BIEN }])
+    }
+  }
+
+  const removeBien = (index: number) => {
+    setBiens((prev) => {
+      if (prev.length <= 1) return prev
+      return prev.filter((_, i) => i !== index)
+    })
+  }
+
   const handleNext = () => {
     if (currentStep < STEPS.length - 1) {
       track("onboarding_step_complete", {
@@ -134,13 +347,21 @@ export default function OnboardingPage() {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     try {
+      // Serialize biens into data before sending
+      const submitData = {
+        ...data,
+        biens: JSON.stringify(
+          biens.filter((b) => b.titre.trim() !== "")
+        ),
+      }
+
       // Envoyer toutes les donnees du wizard vers /api/onboarding (persistance client_context)
       // ET garder /api/leads en parallele pour ne pas casser le funnel
       const [onboardingResponse] = await Promise.all([
         fetch("/api/onboarding", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify(submitData),
         }),
         fetch("/api/leads", {
           method: "POST",
@@ -160,6 +381,7 @@ export default function OnboardingPage() {
         })
         sessionStorage.removeItem("immocrew_onboarding_step")
         sessionStorage.removeItem("immocrew_onboarding_data")
+        sessionStorage.removeItem("immocrew_onboarding_biens")
         setIsComplete(true)
       }
     } catch (err) {
@@ -206,6 +428,9 @@ export default function OnboardingPage() {
     )
   }
 
+  // Check if current step is the biens step (step index 7)
+  const isBiensStep = currentStep === 7
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container-immocrew max-w-xl py-8 desktop:py-16">
@@ -236,40 +461,192 @@ export default function OnboardingPage() {
 
         {/* Fields */}
         <div className="space-y-4">
-          {step.fields.map((field) => {
-            const config = FIELD_LABELS[field]
-            if (!config) return null
-
-            return (
-              <div key={field}>
-                <label
-                  htmlFor={field}
-                  className="block text-caption font-medium text-neutral-600 mb-1"
+          {isBiensStep ? (
+            /* Biens step — repeatable mini-form */
+            <>
+              {biens.map((bien, index) => (
+                <div
+                  key={index}
+                  className="p-4 rounded-md border border-neutral-200 bg-white space-y-3"
                 >
-                  {config.label}
-                </label>
-                {config.type === "textarea" ? (
-                  <textarea
-                    id={field}
-                    value={data[field] || ""}
-                    onChange={(e) => updateField(field, e.target.value)}
-                    placeholder={config.placeholder}
-                    rows={3}
-                    className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast resize-y"
-                  />
-                ) : (
-                  <input
-                    id={field}
-                    type="text"
-                    value={data[field] || ""}
-                    onChange={(e) => updateField(field, e.target.value)}
-                    placeholder={config.placeholder}
-                    className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
-                  />
-                )}
-              </div>
-            )
-          })}
+                  <div className="flex items-center justify-between">
+                    <span className="font-display text-body-sm font-semibold text-primary">
+                      Bien {index + 1}
+                    </span>
+                    {biens.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeBien(index)}
+                        className="text-body-sm text-neutral-400 hover:text-red-500 transition-colors"
+                      >
+                        Supprimer
+                      </button>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-caption font-medium text-neutral-600 mb-1">
+                      Titre du bien
+                    </label>
+                    <input
+                      type="text"
+                      value={bien.titre}
+                      onChange={(e) =>
+                        updateBien(index, "titre", e.target.value)
+                      }
+                      placeholder="T3 vue Loire La Doutre"
+                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-caption font-medium text-neutral-600 mb-1">
+                        Type
+                      </label>
+                      <input
+                        type="text"
+                        value={bien.type}
+                        onChange={(e) =>
+                          updateBien(index, "type", e.target.value)
+                        }
+                        placeholder="Appartement, Maison..."
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-caption font-medium text-neutral-600 mb-1">
+                        Adresse ou quartier
+                      </label>
+                      <input
+                        type="text"
+                        value={bien.adresse}
+                        onChange={(e) =>
+                          updateBien(index, "adresse", e.target.value)
+                        }
+                        placeholder="12 rue Beaurepaire, La Doutre"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-caption font-medium text-neutral-600 mb-1">
+                        Prix
+                      </label>
+                      <input
+                        type="text"
+                        value={bien.prix}
+                        onChange={(e) =>
+                          updateBien(index, "prix", e.target.value)
+                        }
+                        placeholder="185000"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-caption font-medium text-neutral-600 mb-1">
+                        Surface (m2)
+                      </label>
+                      <input
+                        type="text"
+                        value={bien.surface}
+                        onChange={(e) =>
+                          updateBien(index, "surface", e.target.value)
+                        }
+                        placeholder="68"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-caption font-medium text-neutral-600 mb-1">
+                        Nombre de pieces
+                      </label>
+                      <input
+                        type="text"
+                        value={bien.pieces}
+                        onChange={(e) =>
+                          updateBien(index, "pieces", e.target.value)
+                        }
+                        placeholder="3"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-caption font-medium text-neutral-600 mb-1">
+                      Points forts (2-3 phrases)
+                    </label>
+                    <textarea
+                      value={bien.points_forts}
+                      onChange={(e) =>
+                        updateBien(index, "points_forts", e.target.value)
+                      }
+                      placeholder="Vue Loire, parquet chene, cave voutee, 5 min tramway"
+                      rows={2}
+                      className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast resize-y"
+                    />
+                  </div>
+                </div>
+              ))}
+              {biens.length < MAX_BIENS && (
+                <button
+                  type="button"
+                  onClick={addBien}
+                  className="w-full h-12 rounded-md border-2 border-dashed border-neutral-300 text-body-sm text-neutral-500 hover:border-secondary hover:text-secondary transition-colors"
+                >
+                  + Ajouter un autre bien
+                </button>
+              )}
+            </>
+          ) : (
+            /* Standard fields */
+            step.fields.map((field) => {
+              const config = FIELD_LABELS[field]
+              if (!config) return null
+
+              return (
+                <div key={field}>
+                  <label
+                    htmlFor={field}
+                    className="block text-caption font-medium text-neutral-600 mb-1"
+                  >
+                    {config.label}
+                  </label>
+                  {config.type === "textarea" ? (
+                    <textarea
+                      id={field}
+                      value={data[field] || ""}
+                      onChange={(e) => updateField(field, e.target.value)}
+                      placeholder={config.placeholder}
+                      rows={3}
+                      className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast resize-y"
+                    />
+                  ) : config.type === "select" && config.options ? (
+                    <select
+                      id={field}
+                      value={data[field] || ""}
+                      onChange={(e) => updateField(field, e.target.value)}
+                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                    >
+                      {config.options.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      id={field}
+                      type="text"
+                      value={data[field] || ""}
+                      onChange={(e) => updateField(field, e.target.value)}
+                      placeholder={config.placeholder}
+                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                    />
+                  )}
+                </div>
+              )
+            })
+          )}
         </div>
 
         {/* Navigation */}
