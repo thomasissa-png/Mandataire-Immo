@@ -55,9 +55,9 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 - **Checkpoint utilisateur** : VALIDÉ par l'utilisateur (2026-03-25). Positionnement confirmé comme clé de succès.
 
 ### Phase 1 — Expérience utilisateur
-- **Agents** : @ux, @design, @copywriter
-- **Parallélisation** : @ux d'abord (batch 1), puis @design + @copywriter en parallèle (batch 2)
-- **Statut** : EN COURS
+- **Agents** : @ux, @design, @copywriter, @creative-strategy (audit critique)
+- **Parallélisation** : @ux d'abord (batch 1), puis @design + @copywriter en parallèle (batch 2), @creative-strategy audit en parallèle
+- **Statut** : TERMINÉ
 - **Livrables attendus** :
   - docs/ux/user-flows.md
   - docs/ux/wireframes.md
@@ -68,8 +68,8 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 
 ### Phase 2 — Développement
 - **Agents** : @infrastructure, @fullstack, @qa
-- **Parallélisation** : @infrastructure d'abord (setup), puis @fullstack, puis @qa
-- **Statut** : En attente
+- **Parallélisation** : @infrastructure d'abord (batch 1), puis @fullstack (batch 2), puis @qa (batch 3)
+- **Statut** : EN COURS
 - **Livrables attendus** :
   - docs/infra/infrastructure.md
   - src/ (code application)
