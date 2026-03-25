@@ -16,6 +16,10 @@ const { mockSessionCreate } = vi.hoisted(() => ({
   mockSessionCreate: vi.fn(),
 }))
 
+vi.mock("@/lib/tracking", () => ({
+  trackServer: vi.fn().mockResolvedValue(undefined),
+}))
+
 vi.mock("@/lib/stripe", () => ({
   stripe: {
     checkout: {
