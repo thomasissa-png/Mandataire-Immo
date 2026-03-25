@@ -15,6 +15,10 @@ type TrackingEvent =
   | "login"
   | "deliverable_view"
   | "deliverable_download"
+  | "production_started"
+  | "production_completed"
+  | "admin_trigger_production"
+  | "deliverable_generated"
 
 interface TrackingProperties {
   [key: string]: string | number | boolean | null | undefined

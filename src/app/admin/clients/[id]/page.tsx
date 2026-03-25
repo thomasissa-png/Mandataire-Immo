@@ -1,6 +1,16 @@
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect, notFound } from "next/navigation"
 import { query } from "@/lib/db"
+import { TriggerProductionButton } from "@/components/admin/TriggerProductionButton"
+
+interface ClientDeliverable {
+  id: string
+  type: string
+  title: string
+  status: string
+  month: string
+  created_at: string
+}
 
 interface ClientDetail {
   id: string
@@ -53,6 +63,12 @@ export default async function AdminClientDetailPage({
   const { rows: paymentList } = await query<Payment>(
     "SELECT * FROM payments WHERE email = $1 ORDER BY created_at DESC",
     [clientData.email]
+  )
+
+  // Fetch recent deliverables
+  const { rows: deliverableList } = await query<ClientDeliverable>(
+    "SELECT id, type, title, status, month, created_at FROM deliverables WHERE client_id = $1 ORDER BY created_at DESC LIMIT 20",
+    [params.id]
   )
 
   return (
@@ -137,6 +153,54 @@ export default async function AdminClientDetailPage({
             </pre>
           </div>
         )}
+
+        {/* Production trigger */}
+        <div className="rounded-xl bg-card border border-border p-6 mb-6">
+          <h2 className="font-display text-h2 text-primary mb-4">
+            Production IA
+          </h2>
+          <TriggerProductionButton clientId={params.id} clientPack={clientData.pack} />
+        </div>
+
+        {/* Deliverables */}
+        <div className="rounded-xl bg-card border border-border p-6 mb-6">
+          <h2 className="font-display text-h2 text-primary mb-4">
+            Livrables ({deliverableList.length})
+          </h2>
+          {deliverableList.length === 0 ? (
+            <p className="text-body-sm text-neutral-500">
+              Aucun livrable genere pour ce client.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {deliverableList.map((d) => (
+                <div
+                  key={d.id}
+                  className="flex items-center justify-between py-2 border-b border-border last:border-0"
+                >
+                  <div>
+                    <p className="text-body-sm font-medium text-foreground">
+                      {d.title}
+                    </p>
+                    <p className="text-caption text-neutral-500">
+                      {d.type} &middot; {d.month} &middot;{" "}
+                      {new Date(d.created_at).toLocaleDateString("fr-FR")}
+                    </p>
+                  </div>
+                  <span
+                    className={`inline-block px-2 py-0.5 rounded-full text-caption font-semibold ${
+                      d.status === "delivered"
+                        ? "bg-success-50 text-success-800"
+                        : "bg-warning-50 text-warning-800"
+                    }`}
+                  >
+                    {d.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Payments */}
         <div className="rounded-xl bg-card border border-border p-6">

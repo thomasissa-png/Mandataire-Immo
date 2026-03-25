@@ -134,18 +134,27 @@ export default function OnboardingPage() {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     try {
-      const response = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: user?.emailAddresses[0]?.emailAddress,
-          name: `${data.prenom || ""} ${data.nom || ""}`.trim(),
-          city: data.ville,
-          source: "onboarding",
+      // Envoyer toutes les donnees du wizard vers /api/onboarding (persistance client_context)
+      // ET garder /api/leads en parallele pour ne pas casser le funnel
+      const [onboardingResponse] = await Promise.all([
+        fetch("/api/onboarding", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
         }),
-      })
+        fetch("/api/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: user?.emailAddresses[0]?.emailAddress,
+            name: `${data.prenom || ""} ${data.nom || ""}`.trim(),
+            city: data.ville,
+            source: "onboarding",
+          }),
+        }),
+      ])
 
-      if (response.ok) {
+      if (onboardingResponse.ok) {
         track("onboarding_complete", {
           total_steps: STEPS.length,
         })
