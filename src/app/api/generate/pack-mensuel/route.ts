@@ -7,10 +7,9 @@ import { trackServer } from "@/lib/tracking"
 import { buildPostSocialPrompt } from "@/lib/prompts/post-social"
 import { buildAnnonceStorytellingPrompt } from "@/lib/prompts/annonce-storytelling"
 import { buildArticleSeoPrompt } from "@/lib/prompts/article-seo"
-// Prompts codes par @ia en parallele — imports a activer quand disponibles
-// import { buildScriptVideoPrompt } from "@/lib/prompts/script-video"
-// import { buildNewsletterPrompt } from "@/lib/prompts/newsletter"
-// import { buildEmailProspectionPrompt } from "@/lib/prompts/email-prospection"
+import { buildScriptVideoPrompt } from "@/lib/prompts/script-video"
+import { buildNewsletterPrompt } from "@/lib/prompts/newsletter"
+import { buildEmailProspectionPrompt } from "@/lib/prompts/email-prospection"
 
 interface PackMensuelBody {
   client_id: string
@@ -23,7 +22,9 @@ interface DeliverableRow {
 
 /**
  * POST /api/generate/pack-mensuel
- * Genere le pack mensuel complet pour un client.
+ * Genere le pack mensuel complet pour un client :
+ * M1: 12 posts, M2: 4 scripts video, M3: 2 articles SEO,
+ * M4: 1 newsletter, M5: 4 annonces, M6: 1 email prospection.
  * Admin-only.
  */
 export async function POST(request: NextRequest) {
@@ -79,7 +80,7 @@ export async function POST(request: NextRequest) {
   const moisLabel = formatMoisLabel(mois)
 
   try {
-    // M1 : 12 posts reseaux sociaux (sequentiel)
+    // M1 : 12 posts reseaux sociaux
     const postsPrompt = buildPostSocialPrompt({
       ...ctx,
       plateforme: "mix",
@@ -146,46 +147,68 @@ export async function POST(request: NextRequest) {
     }
 
     // M2 : 4 scripts video
-    // [PROVISOIRE — a activer quand @ia livre buildScriptVideoPrompt]
-    // Pour l'instant, generer via un prompt inline simple
-    const scriptsResult = await generateScriptsVideo(ctx, 4, moisLabel)
-    for (const script of scriptsResult) {
+    const scriptsPrompt = buildScriptVideoPrompt({
+      ...ctx,
+      nombre_scripts: 4,
+      format: "mix",
+      confort_camera: "debutant",
+    })
+    const scriptsResult = await generateJSON<{ scripts: Array<{ titre: string; format: string; duree_cible: string; scenes: Array<{ numero: number; duree: string; voix_off: string; indication_visuelle: string }>; musique_suggeree: string; hook: string }> }>(
+      { ...scriptsPrompt, maxTokens: 8192 }
+    )
+    for (const script of scriptsResult.data.scripts) {
+      const scenesText = script.scenes
+        .map((s) => `Scene ${s.numero} (${s.duree}):\nVoix off: ${s.voix_off}\nVisuel: ${s.indication_visuelle}`)
+        .join("\n\n")
       const id = await insertDeliverable({
         clientEmail,
         clientId: client_id,
         type: "script_video",
-        title: script.title,
-        content: script.content,
-        metadata: {},
+        title: script.titre || script.hook,
+        content: `${script.titre}\nFormat: ${script.format} | Duree: ${script.duree_cible}\nMusique: ${script.musique_suggeree}\n\n${scenesText}`,
+        metadata: { format: script.format, duree_cible: script.duree_cible, hook: script.hook },
         month: mois,
       })
       deliverableIds.push(id)
     }
 
     // M4 : 1 newsletter
-    // [PROVISOIRE — a activer quand @ia livre buildNewsletterPrompt]
-    const newsletterResult = await generateNewsletter(ctx, moisLabel)
+    const newsletterPrompt = buildNewsletterPrompt({
+      ...ctx,
+      mois_cible: moisLabel,
+      bien_du_mois: ctx.biens[0] || undefined,
+    })
+    const newsletterResult = await generateJSON<{ objet_email: string; html: string; texte_brut: string; sections: Array<{ titre: string; contenu: string }> }>(
+      { ...newsletterPrompt, maxTokens: 4096 }
+    )
+    const nlData = newsletterResult.data
     const newsletterId = await insertDeliverable({
       clientEmail,
       clientId: client_id,
       type: "newsletter",
-      title: newsletterResult.title,
-      content: newsletterResult.content,
-      metadata: {},
+      title: nlData.objet_email,
+      content: nlData.html || nlData.texte_brut,
+      metadata: { objet_email: nlData.objet_email, sections: nlData.sections },
       month: mois,
     })
     deliverableIds.push(newsletterId)
 
-    // M6 : 1 email prospection
-    // [PROVISOIRE — a activer quand @ia livre buildEmailProspectionPrompt]
-    const emailResult = await generateEmailProspection(ctx, moisLabel)
+    // M6 : 1 email prospection vendeurs
+    const emailPrompt = buildEmailProspectionPrompt({
+      ...ctx,
+      type_email: "prospection_vendeurs",
+    })
+    const emailResult = await generateJSON<{ objet_email: string; html: string; texte_brut: string; cta_principal: string }>(
+      { ...emailPrompt, maxTokens: 2048 }
+    )
+    const emailData = emailResult.data
     const emailId = await insertDeliverable({
       clientEmail,
       clientId: client_id,
       type: "email_prospection",
-      title: emailResult.title,
-      content: emailResult.content,
-      metadata: {},
+      title: emailData.objet_email,
+      content: emailData.html || emailData.texte_brut,
+      metadata: { objet_email: emailData.objet_email, cta: emailData.cta_principal },
       month: mois,
     })
     deliverableIds.push(emailId)
@@ -254,70 +277,4 @@ async function insertDeliverable(params: InsertDeliverableParams): Promise<strin
     ]
   )
   return rows[0].id
-}
-
-// --- Prompts provisoires pour les types non encore codes par @ia ---
-
-import { generate } from "@/lib/claude"
-import type { ClientContext } from "@/lib/client-context"
-
-async function generateScriptsVideo(
-  ctx: ClientContext,
-  count: number,
-  moisLabel: string
-): Promise<Array<{ title: string; content: string }>> {
-  const result = await generate({
-    system: `Tu es un redacteur specialise en scripts video courts (Reels/TikTok) pour mandataires immobiliers. Reponds en JSON valide uniquement.`,
-    user: `Genere ${count} scripts video pour ${ctx.prenom} ${ctx.nom}, mandataire chez ${ctx.reseau} a ${ctx.zone_geo.ville}.
-Specialite: ${ctx.specialite}. Ton: ${ctx.ton}. Mois: ${moisLabel}.
-Format JSON: {"scripts": [{"title": "titre", "content": "script complet scene par scene"}]}`,
-    maxTokens: 4096,
-  })
-  try {
-    const parsed = JSON.parse(result.content.match(/\{[\s\S]*\}/)?.[0] || "{}")
-    return (parsed.scripts || []).map((s: { title: string; content: string }) => ({
-      title: s.title || "Script video",
-      content: s.content || "",
-    }))
-  } catch {
-    return [{ title: "Script video", content: result.content }]
-  }
-}
-
-async function generateNewsletter(
-  ctx: ClientContext,
-  moisLabel: string
-): Promise<{ title: string; content: string }> {
-  const result = await generate({
-    system: `Tu es un redacteur de newsletters immobilieres. Reponds en JSON valide uniquement.`,
-    user: `Redige 1 newsletter pour ${ctx.prenom} ${ctx.nom}, mandataire chez ${ctx.reseau} a ${ctx.zone_geo.ville}.
-Mois: ${moisLabel}. Ton: ${ctx.ton}. Specialite: ${ctx.specialite}.
-Format JSON: {"title": "objet email", "content": "newsletter complete en HTML"}`,
-    maxTokens: 4096,
-  })
-  try {
-    const parsed = JSON.parse(result.content.match(/\{[\s\S]*\}/)?.[0] || "{}")
-    return { title: parsed.title || `Newsletter ${moisLabel}`, content: parsed.content || result.content }
-  } catch {
-    return { title: `Newsletter ${moisLabel}`, content: result.content }
-  }
-}
-
-async function generateEmailProspection(
-  ctx: ClientContext,
-  moisLabel: string
-): Promise<{ title: string; content: string }> {
-  const result = await generate({
-    system: `Tu es un redacteur d'emails de prospection immobiliere. Reponds en JSON valide uniquement.`,
-    user: `Redige 1 email de prospection vendeurs pour ${ctx.prenom} ${ctx.nom}, mandataire chez ${ctx.reseau} a ${ctx.zone_geo.ville}.
-Mois: ${moisLabel}. Ton: ${ctx.ton}. Ce qui la differencie: ${ctx.ce_qui_differencie}.
-Format JSON: {"title": "objet email", "content": "email complet"}`,
-    maxTokens: 2048,
-  })
-  try {
-    const parsed = JSON.parse(result.content.match(/\{[\s\S]*\}/)?.[0] || "{}")
-    return { title: parsed.title || "Email prospection", content: parsed.content || result.content }
-  } catch {
-    return { title: "Email prospection", content: result.content }
-  }
 }

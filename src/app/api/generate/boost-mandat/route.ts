@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import { currentUser } from "@clerk/nextjs/server"
 import { query } from "@/lib/db"
-import { generate, generateJSON } from "@/lib/claude"
-import { getClientContext, type ClientContext } from "@/lib/client-context"
+import { generateJSON } from "@/lib/claude"
+import { getClientContext } from "@/lib/client-context"
 import { trackServer } from "@/lib/tracking"
 import { buildAnnonceStorytellingPrompt } from "@/lib/prompts/annonce-storytelling"
 import { buildPostSocialPrompt } from "@/lib/prompts/post-social"
+import { buildScriptVideoPrompt } from "@/lib/prompts/script-video"
+import { buildEmailProspectionPrompt } from "@/lib/prompts/email-prospection"
 
 interface BienInput {
   titre: string
@@ -28,7 +30,8 @@ interface DeliverableRow {
 
 /**
  * POST /api/generate/boost-mandat
- * Genere le pack Boost Mandat pour un bien specifique.
+ * Genere le pack Boost Mandat pour un bien specifique :
+ * B1: 1 annonce storytelling, B2: 3 posts + 1 Reel, B4: 1 email blast.
  * Admin-only.
  */
 export async function POST(request: NextRequest) {
@@ -54,7 +57,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  let ctx: ClientContext
+  let ctx
   try {
     ctx = await getClientContext(client_id)
   } catch (err) {
@@ -104,13 +107,12 @@ export async function POST(request: NextRequest) {
       deliverableIds.push(id)
     }
 
-    // B2 : 3 posts + 1 Reel dedies au bien
+    // B2 : 3 posts dedies au bien
     const postsPrompt = buildPostSocialPrompt({
       ...ctx,
       plateforme: "mix",
       nombre_posts: 3,
       biens_a_mettre_en_avant: [0],
-      // Overrider les biens avec uniquement le bien boost
       biens: [bien],
     })
     const postsResult = await generateJSON<{ posts: Array<{ plateforme: string; type: string; texte: string; hashtags: string[]; brief_visuel: string; hook: string }> }>(
@@ -129,28 +131,52 @@ export async function POST(request: NextRequest) {
       deliverableIds.push(id)
     }
 
-    // 1 script Reel dedie au bien
-    const reelResult = await generateReelScript(ctx, bien)
-    const reelId = await insertDeliverable({
-      clientEmail,
-      clientId: client_id,
-      type: "script_video",
-      title: `Reel — ${bien.titre}`,
-      content: reelResult,
-      metadata: { boost: true, bien_titre: bien.titre },
-      month,
+    // B2 (suite) : 1 script Reel dedie au bien
+    const reelPrompt = buildScriptVideoPrompt({
+      ...ctx,
+      nombre_scripts: 1,
+      format: "reel",
+      confort_camera: "debutant",
+      bien_unique: bien,
+      biens: [bien],
     })
-    deliverableIds.push(reelId)
+    const reelResult = await generateJSON<{ scripts: Array<{ titre: string; format: string; duree_cible: string; scenes: Array<{ numero: number; duree: string; voix_off: string; indication_visuelle: string }>; musique_suggeree: string; hook: string }> }>(
+      { ...reelPrompt, maxTokens: 4096 }
+    )
+    for (const script of reelResult.data.scripts) {
+      const scenesText = script.scenes
+        .map((s) => `Scene ${s.numero} (${s.duree}):\nVoix off: ${s.voix_off}\nVisuel: ${s.indication_visuelle}`)
+        .join("\n\n")
+      const id = await insertDeliverable({
+        clientEmail,
+        clientId: client_id,
+        type: "script_video",
+        title: `Reel — ${bien.titre}`,
+        content: `${script.titre}\nFormat: ${script.format} | Duree: ${script.duree_cible}\nMusique: ${script.musique_suggeree}\n\n${scenesText}`,
+        metadata: { boost: true, bien_titre: bien.titre, format: script.format },
+        month,
+      })
+      deliverableIds.push(id)
+    }
 
     // B4 : Email blast acheteurs
-    const emailResult = await generateEmailBlast(ctx, bien)
+    const emailPrompt = buildEmailProspectionPrompt({
+      ...ctx,
+      type_email: "blast_acheteurs",
+      bien_a_promouvoir: bien,
+      biens: [bien],
+    })
+    const emailResult = await generateJSON<{ objet_email: string; html: string; texte_brut: string; cta_principal: string }>(
+      { ...emailPrompt, maxTokens: 2048 }
+    )
+    const emailData = emailResult.data
     const emailId = await insertDeliverable({
       clientEmail,
       clientId: client_id,
       type: "email_prospection",
       title: `Email blast — ${bien.titre}`,
-      content: emailResult,
-      metadata: { boost: true, bien_titre: bien.titre, sub_type: "email_blast_acheteurs" },
+      content: emailData.html || emailData.texte_brut,
+      metadata: { boost: true, bien_titre: bien.titre, sub_type: "email_blast_acheteurs", objet_email: emailData.objet_email },
       month,
     })
     deliverableIds.push(emailId)
@@ -207,32 +233,4 @@ async function insertDeliverable(params: {
     ]
   )
   return rows[0].id
-}
-
-// --- Prompts provisoires ---
-
-async function generateReelScript(ctx: ClientContext, bien: BienInput): Promise<string> {
-  const result = await generate({
-    system: `Tu es un redacteur de scripts video courts (Reels 30-60s) pour mandataires immobiliers en France.`,
-    user: `Redige 1 script Reel pour mettre en avant ce bien :
-Titre: ${bien.titre}. Type: ${bien.type}. Adresse: ${bien.adresse}. Prix: ${bien.prix.toLocaleString("fr-FR")}EUR.
-Surface: ${bien.surface}m2. Pieces: ${bien.pieces}. Points forts: ${bien.points_forts}.
-Mandataire: ${ctx.prenom} ${ctx.nom}, ${ctx.reseau}, ${ctx.zone_geo.ville}. Ton: ${ctx.ton}.
-Format: decoupage scene par scene avec texte voix off et indications visuelles.`,
-    maxTokens: 2048,
-  })
-  return result.content
-}
-
-async function generateEmailBlast(ctx: ClientContext, bien: BienInput): Promise<string> {
-  const result = await generate({
-    system: `Tu es un redacteur d'emails immobiliers. Tu rediges des emails de presentation de bien a une base d'acheteurs potentiels.`,
-    user: `Redige 1 email pour presenter ce bien a des acheteurs potentiels :
-Bien: ${bien.titre}, ${bien.type}, ${bien.adresse}, ${bien.prix.toLocaleString("fr-FR")}EUR, ${bien.surface}m2, ${bien.pieces} pieces.
-Points forts: ${bien.points_forts}.
-Mandataire: ${ctx.prenom} ${ctx.nom}, ${ctx.reseau}, ${ctx.zone_geo.ville}. Ton: ${ctx.ton}.
-L'email doit donner envie de visiter. CTA: contacter ${ctx.prenom}.`,
-    maxTokens: 2048,
-  })
-  return result.content
 }
