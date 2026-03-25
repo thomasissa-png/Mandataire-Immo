@@ -13,27 +13,29 @@ export async function uploadFile(
   key: string,
   data: Buffer | string
 ): Promise<string> {
-  await storage.uploadFromBytes(key, typeof data === "string" ? Buffer.from(data) : data)
+  const result = await storage.uploadFromBytes(
+    key,
+    typeof data === "string" ? Buffer.from(data) : data
+  )
+  if (!result.ok) {
+    throw new Error(`Upload failed for key "${key}": ${result.error}`)
+  }
   return key
 }
 
 /**
- * Recupere l'URL publique d'un fichier.
- * Sur Replit Object Storage, les fichiers sont accessibles via le client.
+ * Verifie qu'un fichier existe et retourne sa cle.
+ * Sur Replit Object Storage, les fichiers sont identifies par leur cle.
  *
  * @param key - Chemin/cle du fichier
- * @returns L'URL du fichier ou null si non trouve
+ * @returns La cle du fichier ou null si non trouve
  */
 export async function getFileUrl(key: string): Promise<string | null> {
-  try {
-    const exists = await storage.downloadAsBytes(key)
-    if (exists) {
-      return key
-    }
-    return null
-  } catch {
-    return null
+  const result = await storage.downloadAsBytes(key)
+  if (result.ok) {
+    return key
   }
+  return null
 }
 
 /**
@@ -43,12 +45,11 @@ export async function getFileUrl(key: string): Promise<string | null> {
  * @returns Le contenu du fichier ou null si non trouve
  */
 export async function getFileContent(key: string): Promise<Buffer | null> {
-  try {
-    const data = await storage.downloadAsBytes(key)
-    return Buffer.from(data)
-  } catch {
-    return null
+  const result = await storage.downloadAsBytes(key)
+  if (result.ok) {
+    return result.value[0]
   }
+  return null
 }
 
 /**
@@ -57,7 +58,10 @@ export async function getFileContent(key: string): Promise<Buffer | null> {
  * @param key - Chemin/cle du fichier
  */
 export async function deleteFile(key: string): Promise<void> {
-  await storage.delete(key)
+  const result = await storage.delete(key)
+  if (!result.ok) {
+    throw new Error(`Delete failed for key "${key}": ${result.error}`)
+  }
 }
 
 export { storage }
