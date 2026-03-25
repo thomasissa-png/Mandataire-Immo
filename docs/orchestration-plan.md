@@ -35,9 +35,24 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
   - docs/analytics/tracking-plan.md (@data-analyst)
   - docs/legal/legal-audit.md (@legal)
   - docs/legal/rgpd-checklist.md (@legal)
-- **Livrables reçus** : —
-- **Verdict vérification** : —
-- **Checkpoint utilisateur** : OBLIGATOIRE après Phase 0
+- **Livrables reçus** :
+  - docs/strategy/brand-platform.md (221 lignes) — OK
+  - docs/strategy/personas.md (371 lignes) — OK
+  - docs/legal/legal-audit.md (302 lignes) — OK
+  - docs/product/product-vision.md (165 lignes) — OK
+  - docs/product/functional-specs.md (828 lignes) — OK
+  - docs/product/roadmap.md (144 lignes) — OK
+  - .claude/agents/mandataire.md (231 lignes) — OK (agent @mandataire créé par @agent-factory)
+  - docs/analytics/kpi-framework.md — EN COURS (@data-analyst)
+  - docs/analytics/tracking-plan.md — EN COURS (@data-analyst)
+  - docs/legal/rgpd-checklist.md — NON PRODUIT (fusionné dans legal-audit.md)
+- **Verdict vérification** :
+  - @creative-strategy : OK (brand-platform complet et différenciant, personas détaillés avec verbatims)
+  - @legal : OK (RGPD + AI Act + CGV + Hoguet couverts, 3 points marqués "À vérifier avec juriste")
+  - @agent-factory : OK (agent @mandataire fonctionnel, grille 8 critères)
+  - @product-manager : OK (vision + specs 828 lignes + roadmap 6 mois)
+  - @data-analyst : EN COURS
+- **Checkpoint utilisateur** : OBLIGATOIRE après Phase 0 — en attente de @data-analyst
 
 ### Phase 1 — Expérience utilisateur
 - **Agents** : @ux, @design, @copywriter
