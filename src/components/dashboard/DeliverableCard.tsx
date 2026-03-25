@@ -42,6 +42,20 @@ export function DeliverableCard({
           <p className="text-body-sm text-neutral-600 line-clamp-3">
             {content}
           </p>
+          <button
+            className="mt-3 text-body-sm text-secondary font-semibold hover:text-secondary-600 transition-colors"
+            onClick={(e) => {
+              e.stopPropagation()
+              navigator.clipboard.writeText(content)
+              track("deliverable_download", {
+                deliverable_id: id,
+                type,
+                method: "copy",
+              })
+            }}
+          >
+            Copier le texte
+          </button>
         </div>
       </div>
     </div>

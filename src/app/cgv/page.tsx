@@ -4,9 +4,9 @@ import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "Conditions Generales de Vente — ImmoCrew",
+  title: "Conditions Générales de Vente — ImmoCrew",
   description:
-    "Conditions Generales de Vente du service ImmoCrew, production de contenu marketing pour mandataires immobiliers.",
+    "Conditions Générales de Vente du service ImmoCrew, production de contenu marketing pour mandataires immobiliers.",
 }
 
 export default function CGVPage() {

@@ -4,9 +4,9 @@ import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "Politique de Confidentialite — ImmoCrew",
+  title: "Politique de Confidentialité — ImmoCrew",
   description:
-    "Politique de confidentialite et protection des donnees personnelles — ImmoCrew, conforme RGPD.",
+    "Politique de confidentialité et protection des données personnelles — ImmoCrew, conforme RGPD.",
 }
 
 export default function ConfidentialitePage() {

@@ -4,9 +4,9 @@ import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
 
 export const metadata: Metadata = {
-  title: "Mentions Legales — ImmoCrew",
+  title: "Mentions Légales — ImmoCrew",
   description:
-    "Mentions legales du site immocrew.fr — editeur, hebergeur, propriete intellectuelle.",
+    "Mentions légales du site immocrew.fr — éditeur, hébergeur, propriété intellectuelle.",
 }
 
 export default function MentionsLegalesPage() {

@@ -74,7 +74,19 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     track("onboarding_start")
-  }, [])
+
+    const handleBeforeUnload = () => {
+      if (!isComplete) {
+        track("onboarding_step_abandon", {
+          step: currentStep + 1,
+          step_name: STEPS[currentStep].title,
+        })
+      }
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload)
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload)
+  }, [currentStep, isComplete])
 
   const updateField = (field: string, value: string) => {
     setData((prev) => ({ ...prev, [field]: value }))
