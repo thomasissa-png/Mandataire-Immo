@@ -95,44 +95,86 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 ### Phase 4 — Acquisition
 - **Agents** : @growth, @social
 - **Parallélisation** : @growth + @social en parallèle
-- **Statut** : EN COURS
+- **Statut** : TERMINÉ
+- **Livrables reçus** :
+  - docs/growth/growth-strategy.md — LIVRÉ (308 lignes, funnel AARRR, unit economics, 4 canaux, scripts DM)
+  - docs/social/social-strategy.md — LIVRÉ (337 lignes)
+  - docs/social/editorial-calendar.md — LIVRÉ (126 lignes)
+  - docs/social/content-templates.md — NON PRODUIT (timeout, reporté)
+
+### Phase 5 — Revue finale + corrections
+- **Agents** : @reviewer (x2), @mandataire, @ux, @design, @product-manager
+- **Statut** : TERMINÉ
+- **Livrables reçus** :
+  - docs/reviews/cross-review-report.md — V1 (GO avec réserves)
+  - docs/reviews/cross-review-v2.md — V2 (8.5/10, GO avec réserves mineures)
+  - docs/reviews/mandataire-audit.md — LIVRÉ (verdict À RETRAVAILLER → corrections appliquées)
+  - docs/ux/ux-audit.md — LIVRÉ (7.5/10 → corrections appliquées → ~9/10)
+  - docs/design/design-audit.md — LIVRÉ (8.2/10 → corrections WCAG appliquées → ~9.5/10)
+- **Corrections appliquées** :
+  - Migration Supabase → Replit PostgreSQL (10 fichiers)
+  - Pages légales (CGV, mentions, confidentialité)
+  - 14/14 events PostHog P0 implémentés
+  - invoice.payment_failed webhook handler
+  - sitemap.ts, robots.ts, JSON-LD (Organization, Service, FAQPage)
+  - Cookie consent RGPD + a11y
+  - Faux témoignages → métriques vérifiables
+  - CTA Hero corrigé, jargon supprimé, prix reformulé
+  - Dashboard vide redesigné
+  - Onboarding : sessionStorage + steps optionnelles
+  - Contrastes WCAG AA corrigés (3 corrections)
+  - aria-hidden sur éléments décoratifs
+
+### Phase 6 — Pipeline IA (NON COMMENCÉE)
+- **Agents** : @fullstack, @ia
+- **Statut** : SPÉCIFIÉ, NON CODÉ — c'est le CHANTIER CRITIQUE
+- **Spec** : docs/product/ai-services-roadmap.md (23 livrables cartographiés, architecture 9 fichiers, estimation 25h MVP)
 - **Livrables attendus** :
-  - docs/growth/growth-strategy.md
-  - docs/social/social-strategy.md
-  - docs/social/editorial-calendar.md
+  - src/lib/claude.ts — client Anthropic
+  - src/lib/client-context.ts — compiler données onboarding → prompt context
+  - src/lib/prompts/*.ts — 8+ fichiers de prompts par type de livrable
+  - src/app/api/generate/pack-mensuel/route.ts — génération pack mensuel
+  - src/app/api/generate/pack-lancement/route.ts — génération pack lancement
+  - src/app/api/generate/boost-mandat/route.ts — génération boost mandat
+  - src/app/api/admin/trigger-production/route.ts — bouton admin
+  - Persistance complète onboarding en base (contexte client)
 
 ---
 
 ## Feedbacks remontants
 | # | Sévérité | Agent source | Agent cible | Problème | Statut |
 |---|---|---|---|---|---|
+| 1 | CRITIQUE | @product-manager | @fullstack + @ia | Pipeline IA non codé — cœur du produit absent | SPÉCIFIÉ dans ai-services-roadmap.md, à implémenter |
+| 2 | BLOQUANT | @mandataire | fondateur | Placeholders CGV (SIRET, adresse) — bloquant légal | En attente infos société VERSI |
+| 3 | CRITIQUE | @product-manager | @fullstack | Données onboarding non persistées en base — seuls email/nom/ville sauvés | À coder |
 
 ## Décisions d'arbitrage
 | # | Sujet | Décision | Justification | Agents impactés |
 |---|---|---|---|---|
+| 1 | Base de données | Replit PostgreSQL + Object Storage remplace Supabase | Simplifie la stack, réduit les coûts | @fullstack, @infrastructure |
+| 2 | Règle n°5 CLAUDE.md | "Mindset IA, pas équipe humaine" ajoutée | Le pipeline IA avait été oublié — cette règle empêche la répétition | Tous les agents |
+| 3 | Kit graphique | Non automatisable — brief graphique IA en P0, Canva en P1, freelance en P2 | LLM texte ne produit pas de fichiers Canva vectoriels | @fullstack, @design |
 
 ---
 
 ## Journal d'avancement
-- **2026-03-25** : Initialisation. project-context.md validé (qualité OK sur tous les champs critiques). Plan créé. Phase 0 lancée.
-- **2026-03-25** : Batch 1 Phase 0 lancé : @creative-strategy + @legal en parallèle.
-- **2026-03-25** : Demande utilisateur ajoutée — créer un agent @mandataire via @agent-factory après livraison des personas par @creative-strategy. Cet agent servira de "testeur métier" pour toutes les revues.
-- **2026-03-25** : Phase 0 terminée et validée par l'utilisateur. Positionnement confirmé.
-- **2026-03-25** : Phase 1 terminée. @ux, @design, @copywriter livrés. Directive IA ajoutée au brand-platform.
-- **2026-03-25** : Audit critique @creative-strategy livré. Corrections : marché 80K→40-50K, LinkedIn 20%→10-15%, objection ChatGPT Thomas ajoutée.
-- **2026-03-25** : Phase 2 lancée. @infrastructure bloqué par rate limit API — à relancer en prochaine session.
-- **2026-03-25** : Session 2. @infrastructure relancé et livré (700 lignes, schéma SQL 8 tables, config Replit/Clerk/Stripe/PostHog, pipeline IA, sécurité, coûts).
-- **2026-03-25** : @fullstack livré (26 fichiers). Landing page 9 composants, 4 API routes, dashboard client, onboarding wizard 7 étapes, admin. TypeScript strict, 0 erreurs.
-- **2026-03-25** : @qa lancé (stratégie + tests Vitest + config).
-- **2026-03-25** : @qa livré (66 tests, 7 suites). Escalations : 15 events PostHog manquants, invoice.payment_failed absent.
-- **2026-03-25** : Phase 3 lancée. @seo + @geo en parallèle.
-- **2026-03-25** : @geo livré (3 fichiers). Baseline zéro confirmé, page comparatif Cocoon-Immo prioritaire.
-- **2026-03-25** : @seo livré (3 fichiers). 50+ mots-clés, fenêtre "mandataire" confirmée vs "agence" Cocoon-Immo.
-- **2026-03-25** : Décision utilisateur : Replit PostgreSQL + Object Storage remplace Supabase.
-- **2026-03-25** : Phase 4 lancée. @growth + @social en parallèle.
+- **2026-03-25 S1** : Initialisation. project-context.md validé. Plan créé. Phase 0 lancée.
+- **2026-03-25 S1** : Phase 0 terminée (brand-platform, personas, roadmap, specs, KPIs, tracking, legal, agent @mandataire).
+- **2026-03-25 S1** : Phase 1 terminée (UX, design, copy, audit créatif).
+- **2026-03-25 S1** : Phase 2 lancée. @infrastructure bloqué par rate limit API.
+- **2026-03-25 S2** : Phase 2 terminée (@infrastructure + @fullstack 26 fichiers + @qa 66 tests).
+- **2026-03-25 S2** : Phase 3 terminée (@seo + @geo, 6 livrables).
+- **2026-03-25 S2** : Phase 4 lancée (@growth + @social).
+- **2026-03-25 S3** : Phase 4 terminée (@growth + @social livrés).
+- **2026-03-25 S3** : Phase 5 — Revue V1 (@reviewer), V2, corrections blockers (DB migration, legal, PostHog, SEO).
+- **2026-03-25 S3** : Audits frontend : @mandataire (À RETRAVAILLER → corrections), @ux (7.5→9/10), @design (8.2→9.5/10).
+- **2026-03-25 S3** : DÉCOUVERTE CRITIQUE — pipeline IA non codé. Postmortem + roadmap services IA par @product-manager.
+- **2026-03-25 S3** : Règle n°5 ajoutée à CLAUDE.md : "Mindset IA, pas équipe humaine".
+- **2026-03-25 S3** : Clôture session. Phase 6 (pipeline IA) préparée mais non lancée.
 
 ## État pour reprise prochaine session
-- **Phases terminées** : 0, 1, 2, 3
-- **Phase en cours** : 4 (acquisition) — @growth + @social lancés
-- **Phases à faire** : 3 (SEO/GEO), 4 (acquisition), revue finale
-- **Pour reprendre** : lire project-context.md + docs/orchestration-plan.md, vérifier si @qa a terminé, puis lancer Phase 3
+- **Phases terminées** : 0, 1, 2, 3, 4, 5
+- **Phase en cours** : 6 (pipeline IA) — spécifiée, non codée
+- **Chantier critique** : implémenter le pipeline IA (docs/product/ai-services-roadmap.md)
+- **Blockers** : infos société VERSI pour placeholders CGV
+- **Pour reprendre** : voir mémo de reprise ci-dessous dans project-context.md
