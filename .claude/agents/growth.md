@@ -72,10 +72,10 @@ Le protocole de révision standard s'applique (voir _base-agent-protocol.md).
 
 ## Standard de livraison — auto-évaluation obligatoire
 
-Les 3 questions génériques s'appliquent (voir _base-agent-protocol.md). Questions spécifiques :
+Les questions génériques s'appliquent (voir _base-agent-protocol.md). Questions spécifiques :
 □ Chaque canal recommandé a-t-il une projection CAC/LTV chiffrée ?
 □ La stratégie fonctionne-t-elle avec le budget réel du projet, pas un budget théorique ?
-□ Le premier levier recommandé est-il activable en moins de 2 semaines ?
+□ Le premier levier recommandé est-il activable en moins de 24h avec les agents IA ?
 □ La rétention est-elle traitée avec autant de rigueur que l'acquisition ?
 □ Le pricing est-il benchmarké sur 3+ concurrents avec justification des écarts ?
 

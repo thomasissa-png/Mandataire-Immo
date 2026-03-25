@@ -72,6 +72,23 @@ Pour chaque paire de livrables, vérifier systématiquement :
 - [ ] Les tests de @qa couvrent-ils les flows critiques de @ux ?
 - [ ] L'infrastructure de @infrastructure supporte-t-elle les choix de @fullstack et @ia ?
 
+### Cohérence UX → Code → Tests
+- [ ] Les wireframes de @ux sont-ils fidèlement implémentés par @fullstack ?
+- [ ] Les tests UX documentés dans `docs/ux/` ont-ils des tests E2E correspondants dans @qa ?
+- [ ] La revue UX post-implémentation (`ux-review.md`) a-t-elle été produite par @ux ?
+- [ ] Les écarts détectés dans la revue UX ont-ils été corrigés par @fullstack ?
+
+### Validation expérience mobile ET desktop (pas seulement responsive)
+Le responsive (adaptation des composants aux breakpoints) n'est pas suffisant. Il faut valider que l'**expérience complète** fonctionne nativement sur chaque device :
+- [ ] **Parcours mobile complet** : chaque parcours critique du persona a-t-il été testé sur un viewport mobile (375px) de bout en bout ? Navigation au pouce, clavier virtuel, scroll, formulaires — pas seulement le layout.
+- [ ] **Parcours desktop complet** : chaque parcours critique a-t-il été testé sur un viewport desktop (1280px+) ? Hover states, navigation clavier, utilisation de l'espace, densité d'information adaptée.
+- [ ] **Parité fonctionnelle** : aucune feature critique n'est absente ou dégradée sur mobile vs desktop. Si une fonctionnalité est volontairement réduite sur mobile, c'est documenté et justifié dans les specs @ux.
+- [ ] **Tests E2E multi-viewport** : @qa a-t-il des tests Playwright sur au moins 3 viewports (mobile 375px, tablet 768px, desktop 1280px) pour chaque parcours critique ?
+- [ ] **Performance mobile** : le LCP sur mobile est-il < 3s (pas seulement le LCP desktop) ? Les fonts, images et JS sont-ils optimisés pour mobile (budget JS < 150KB) ?
+- [ ] **Touch targets** : tous les éléments interactifs font-ils ≥ 44x44px sur mobile ?
+
+Si l'une de ces vérifications échoue → NO-GO. Un produit qui ne fonctionne que sur desktop (ou que sur mobile) n'est pas un produit fini.
+
 ### Cohérence éditoriale
 - [ ] Le ton du @copywriter est-il aligné avec la brand voice de @creative-strategy ?
 - [ ] Les contenus @seo et @geo ne se cannibalisent-ils pas ?
@@ -81,6 +98,34 @@ Pour chaque paire de livrables, vérifier systématiquement :
 - [ ] Les CGU de @legal couvrent-elles le modèle économique défini par @product-manager ?
 - [ ] La politique de confidentialité est-elle alignée avec le tracking plan de @data-analyst ?
 - [ ] La conformité IA est-elle vérifiée si @ia a intégré des LLM ?
+
+## Protocole d'itération qualité — Objectif 4.5/5
+
+**Règle absolue** : aucun livrable ne passe en statut "validé" tant qu'il n'atteint pas un score moyen de **4.5/5 minimum** sur les 5 critères du tableau Performance des agents (Complétude, Cohérence, Actionnabilité, Messages, Spécificité).
+
+### Processus d'itération
+
+1. **Évaluation initiale** : scorer chaque livrable sur les 5 critères (échelle 1-5, alignée avec CLAUDE.md). Utiliser des demi-points (3.5, 4.5) pour la granularité.
+2. **Si score moyen < 4.5/5** : produire un rapport de corrections détaillé par livrable :
+
+```markdown
+### Corrections requises — @[agent] — [livrable]
+
+**Score actuel : X/5** (objectif : 4.5/5)
+
+| Critère | Score | Points à améliorer | Correction demandée |
+|---|---|---|---|
+| Complétude | X/5 | [sections manquantes] | [action précise] |
+| Cohérence | X/5 | [contradictions avec...] | [action précise] |
+| Actionnabilité | X/5 | [parties vagues] | [action précise] |
+| Messages | X/5 | [données non sourcées] | [action précise] |
+| Spécificité | X/5 | [parties génériques] | [action précise] |
+
+→ Handoff @[agent] : appliquer ces corrections puis resoumission à @reviewer.
+```
+
+3. **Resoumission** : l'agent corrige et remet le livrable. @reviewer réévalue.
+4. **Itération** : répéter jusqu'à 4.5/5. Maximum 3 itérations — si le score reste < 4.5/5 après 3 passes, escalader à @orchestrator avec un diagnostic de la cause racine (prompt insuffisant ? contexte manquant ? agent mal calibré ?).
 
 ## Format du rapport de revue
 
@@ -135,7 +180,7 @@ Quand on passe un rapport de revue existant à mettre à jour :
 
 ## Standard de livraison — auto-évaluation obligatoire
 
-Les 3 questions génériques s'appliquent (voir _base-agent-protocol.md). Questions spécifiques :
+Les questions génériques s'appliquent (voir _base-agent-protocol.md). Questions spécifiques :
 
 □ Ai-je lu TOUS les livrables existants, pas seulement les plus récents ?
 □ Chaque contradiction identifiée a-t-elle une résolution proposée et un agent responsable ?

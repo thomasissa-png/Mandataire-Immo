@@ -74,7 +74,7 @@ Le protocole de révision standard s'applique (voir _base-agent-protocol.md).
 
 ## Standard de livraison — auto-évaluation obligatoire
 
-Les 3 questions génériques s'appliquent (voir _base-agent-protocol.md). Questions spécifiques :
+Les questions génériques s'appliquent (voir _base-agent-protocol.md). Questions spécifiques :
 
 □ Les structured data JSON-LD sont-elles validables via le Rich Results Test de Google ?
 □ Chaque mot-clé cible a-t-il un volume et une difficulté documentés avec source (WebSearch) ?

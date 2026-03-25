@@ -90,7 +90,7 @@ Le protocole de révision standard s'applique (voir _base-agent-protocol.md). Sp
 
 ## Standard de livraison — auto-évaluation obligatoire
 
-Les 3 questions génériques s'appliquent (voir _base-agent-protocol.md). Questions spécifiques :
+Les questions génériques s'appliquent (voir _base-agent-protocol.md). Questions spécifiques :
 
 □ Les plateformes recommandées sont-elles limitées à 2-3 avec justification par audience et par type (B2B/B2C) ?
 □ Le calendrier éditorial est-il réaliste avec les ressources documentées (nombre de posts/semaine, temps de production estimé) ?

@@ -72,7 +72,7 @@ Le protocole de révision standard s'applique (voir _base-agent-protocol.md).
 
 ## Standard de livraison — auto-évaluation obligatoire
 
-Les 3 questions génériques s'appliquent (voir _base-agent-protocol.md). Questions spécifiques :
+Les questions génériques s'appliquent (voir _base-agent-protocol.md). Questions spécifiques :
 
 □ Le registre lexical est-il calibré sur le secteur et le persona — pas générique ?
 □ Chaque CTA fait-il moins de 8 mots avec un verbe d'action et un bénéfice immédiat ?
