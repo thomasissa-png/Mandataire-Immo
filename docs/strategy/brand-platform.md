@@ -79,6 +79,24 @@ Tu fais 10+ ventes par an. Tu sais que le digital est un levier, mais tu veux d�
 | publier | poster du contenu |
 | simple | intuitif |
 | chaque mois | sur une base récurrente |
+| ton équipe, nos rédacteurs | notre IA, notre intelligence artificielle |
+| personnalisé pour toi | généré par IA |
+| on rédige, on crée | l'IA génère, l'algorithme produit |
+
+### Directive stratégique — Place de l'IA dans la communication
+
+**L'IA est un moyen de production, PAS un argument de vente.**
+
+Sophie ne cherche pas "du contenu fait par IA". Elle cherche du contenu fait pour elle, par des gens qui comprennent son métier. Le mot "IA" dans la communication client :
+- **Ne doit JAMAIS être le headline** ou l'accroche principale
+- **Ne doit JAMAIS être présenté comme le bénéfice** ("grâce à l'IA, vos contenus sont...")
+- **Peut être mentionné** en transparence (AI Act l'exige) mais en position secondaire : footer, FAQ, page "Comment ça marche", mentions légales
+- **Formulation acceptée** : "Notre équipe s'appuie sur des outils IA pour personnaliser chaque contenu à ta zone"
+- **Formulation interdite** : "Notre IA révolutionnaire génère vos contenus marketing"
+
+**Pourquoi :** le mot "IA" déclenche chez Sophie deux réactions négatives : "c'est générique" et "c'est pas humain". Or notre force est l'inverse — c'est hyper-personnalisé et ça sonne humain. Mettre l'IA en avant détruit notre positionnement.
+
+**Exception :** sur Product Hunt / IndieHackers / LinkedIn tech, l'angle "équipe de 19 agents IA" est un hook d'acquisition valide — mais c'est de l'acquisition fondateur, pas de l'acquisition client.
 
 ---
 
