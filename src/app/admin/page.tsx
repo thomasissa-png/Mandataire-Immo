@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
-import { createAdminSupabaseClient } from "@/lib/supabase"
+import { query } from "@/lib/db"
 
 interface Client {
   id: string
@@ -31,14 +31,9 @@ export default async function AdminPage() {
     redirect("/dashboard")
   }
 
-  const supabase = createAdminSupabaseClient()
-
-  const { data: clients } = await supabase
-    .from("clients")
-    .select("*")
-    .order("created_at", { ascending: false })
-
-  const clientList = (clients as Client[] | null) || []
+  const { rows: clientList } = await query<Client>(
+    "SELECT * FROM clients ORDER BY created_at DESC"
+  )
 
   // Stats
   const activeClients = clientList.filter((c) => c.status === "active").length

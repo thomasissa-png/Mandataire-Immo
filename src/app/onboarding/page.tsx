@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useUser } from "@clerk/nextjs"
+import { track } from "@/lib/tracking"
 
 const STEPS = [
   {
@@ -71,12 +72,20 @@ export default function OnboardingPage() {
   const step = STEPS[currentStep]
   const progress = ((currentStep + 1) / STEPS.length) * 100
 
+  useEffect(() => {
+    track("onboarding_start")
+  }, [])
+
   const updateField = (field: string, value: string) => {
     setData((prev) => ({ ...prev, [field]: value }))
   }
 
   const handleNext = () => {
     if (currentStep < STEPS.length - 1) {
+      track("onboarding_step_complete", {
+        step: currentStep + 1,
+        step_name: step.title,
+      })
       setCurrentStep(currentStep + 1)
     }
   }
@@ -102,6 +111,9 @@ export default function OnboardingPage() {
       })
 
       if (response.ok) {
+        track("onboarding_complete", {
+          total_steps: STEPS.length,
+        })
         setIsComplete(true)
       }
     } catch (err) {

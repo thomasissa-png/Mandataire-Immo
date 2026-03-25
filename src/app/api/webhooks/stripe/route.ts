@@ -2,7 +2,8 @@ import { headers } from "next/headers"
 import { NextResponse } from "next/server"
 import Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
-import { createAdminSupabaseClient } from "@/lib/supabase"
+import { query } from "@/lib/db"
+import { trackServer } from "@/lib/tracking"
 
 export async function POST(request: Request) {
   const body = await request.text()
@@ -33,8 +34,6 @@ export async function POST(request: Request) {
     )
   }
 
-  const supabase = createAdminSupabaseClient()
-
   try {
     switch (event.type) {
       case "checkout.session.completed": {
@@ -48,44 +47,48 @@ export async function POST(request: Request) {
         const pack =
           session.metadata?.pack || "mensuel"
 
-        // Create or update client in Supabase
-        const { error: clientError } = await supabase
-          .from("clients")
-          .upsert(
-            {
-              email: session.customer_email,
-              stripe_customer_id: session.customer as string,
-              pack,
-              status: "active",
-              stripe_subscription_id:
-                session.subscription as string | null,
-              paid_at: new Date().toISOString(),
-            },
-            { onConflict: "email" }
-          )
-
-        if (clientError) {
-          console.error("Error creating client:", clientError)
-        }
+        // Create or update client in database
+        await query(
+          `INSERT INTO clients (email, stripe_customer_id, pack, status, stripe_subscription_id, paid_at)
+           VALUES ($1, $2, $3, $4, $5, $6)
+           ON CONFLICT (email) DO UPDATE SET
+             stripe_customer_id = EXCLUDED.stripe_customer_id,
+             pack = EXCLUDED.pack,
+             status = EXCLUDED.status,
+             stripe_subscription_id = EXCLUDED.stripe_subscription_id,
+             paid_at = EXCLUDED.paid_at`,
+          [
+            session.customer_email,
+            session.customer as string,
+            pack,
+            "active",
+            session.subscription as string | null,
+            new Date().toISOString(),
+          ]
+        )
 
         // Record payment
-        const { error: paymentError } = await supabase
-          .from("payments")
-          .insert({
-            email: session.customer_email,
-            stripe_session_id: session.id,
-            stripe_customer_id: session.customer as string,
-            amount: session.amount_total
+        await query(
+          `INSERT INTO payments (email, stripe_session_id, stripe_customer_id, amount, currency, pack, status)
+           VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+          [
+            session.customer_email,
+            session.id,
+            session.customer as string,
+            session.amount_total
               ? session.amount_total / 100
               : 0,
-            currency: session.currency || "eur",
+            session.currency || "eur",
             pack,
-            status: "completed",
-          })
+            "completed",
+          ]
+        )
 
-        if (paymentError) {
-          console.error("Error recording payment:", paymentError)
-        }
+        await trackServer("payment_success", session.customer_email, {
+          pack,
+          amount: session.amount_total ? session.amount_total / 100 : 0,
+          currency: session.currency || "eur",
+        })
 
         console.log(
           `Checkout completed for ${session.customer_email} — pack: ${pack}`
@@ -98,21 +101,19 @@ export async function POST(request: Request) {
         const customerEmail = invoice.customer_email
 
         if (customerEmail) {
-          const { error } = await supabase
-            .from("payments")
-            .insert({
-              email: customerEmail,
-              stripe_session_id: invoice.id,
-              stripe_customer_id: invoice.customer as string,
-              amount: invoice.amount_paid / 100,
-              currency: invoice.currency,
-              pack: "mensuel",
-              status: "completed",
-            })
-
-          if (error) {
-            console.error("Error recording invoice payment:", error)
-          }
+          await query(
+            `INSERT INTO payments (email, stripe_session_id, stripe_customer_id, amount, currency, pack, status)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+            [
+              customerEmail,
+              invoice.id,
+              invoice.customer as string,
+              invoice.amount_paid / 100,
+              invoice.currency,
+              "mensuel",
+              "completed",
+            ]
+          )
         }
         break
       }
@@ -121,17 +122,54 @@ export async function POST(request: Request) {
         const subscription = event.data.object as Stripe.Subscription
         const customerId = subscription.customer as string
 
-        const { error } = await supabase
-          .from("clients")
-          .update({
-            status:
-              subscription.status === "active" ? "active" : "inactive",
-          })
-          .eq("stripe_customer_id", customerId)
+        await query(
+          `UPDATE clients SET status = $1 WHERE stripe_customer_id = $2`,
+          [
+            subscription.status === "active" ? "active" : "inactive",
+            customerId,
+          ]
+        )
+        break
+      }
 
-        if (error) {
-          console.error("Error updating subscription status:", error)
+      case "invoice.payment_failed": {
+        const invoice = event.data.object as Stripe.Invoice
+        const customerId = invoice.customer as string
+        const customerEmail = invoice.customer_email
+
+        // Mark subscription as past_due
+        await query(
+          `UPDATE clients SET status = $1 WHERE stripe_customer_id = $2`,
+          ["past_due", customerId]
+        )
+
+        // Record failed payment
+        if (customerEmail) {
+          await query(
+            `INSERT INTO payments (email, stripe_session_id, stripe_customer_id, amount, currency, pack, status)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+            [
+              customerEmail,
+              invoice.id,
+              customerId,
+              invoice.amount_due / 100,
+              invoice.currency,
+              "mensuel",
+              "failed",
+            ]
+          )
         }
+
+        if (customerEmail) {
+          await trackServer("payment_failed", customerEmail, {
+            amount: invoice.amount_due / 100,
+            currency: invoice.currency,
+          })
+        }
+
+        console.log(
+          `Payment failed for customer ${customerId} — invoice ${invoice.id}`
+        )
         break
       }
 
@@ -139,14 +177,14 @@ export async function POST(request: Request) {
         const subscription = event.data.object as Stripe.Subscription
         const customerId = subscription.customer as string
 
-        const { error } = await supabase
-          .from("clients")
-          .update({ status: "churned" })
-          .eq("stripe_customer_id", customerId)
+        await query(
+          `UPDATE clients SET status = $1 WHERE stripe_customer_id = $2`,
+          ["churned", customerId]
+        )
 
-        if (error) {
-          console.error("Error marking subscription as churned:", error)
-        }
+        await trackServer("subscription_cancel", customerId, {
+          subscription_id: subscription.id,
+        })
         break
       }
 

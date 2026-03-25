@@ -1,7 +1,7 @@
 import { headers } from "next/headers"
 import { NextResponse } from "next/server"
 import { Webhook } from "svix"
-import { createAdminSupabaseClient } from "@/lib/supabase"
+import { query } from "@/lib/db"
 
 interface ClerkUserCreatedEvent {
   data: {
@@ -60,25 +60,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ received: true })
     }
 
-    const supabase = createAdminSupabaseClient()
-
-    // Upsert client — if already created by Stripe webhook, update with Clerk ID
-    const { error } = await supabase
-      .from("clients")
-      .upsert(
-        {
-          email: primaryEmail,
-          clerk_user_id: id,
-          first_name: first_name || null,
-          last_name: last_name || null,
-        },
-        { onConflict: "email" }
+    try {
+      // Upsert client — if already created by Stripe webhook, update with Clerk ID
+      await query(
+        `INSERT INTO clients (email, clerk_user_id, first_name, last_name)
+         VALUES ($1, $2, $3, $4)
+         ON CONFLICT (email) DO UPDATE SET
+           clerk_user_id = EXCLUDED.clerk_user_id,
+           first_name = EXCLUDED.first_name,
+           last_name = EXCLUDED.last_name`,
+        [primaryEmail, id, first_name || null, last_name || null]
       )
 
-    if (error) {
-      console.error("Error syncing Clerk user to Supabase:", error)
-    } else {
       console.log(`Clerk user synced: ${primaryEmail} (${id})`)
+    } catch (err) {
+      console.error("Error syncing Clerk user to database:", err)
     }
   }
 

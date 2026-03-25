@@ -10,7 +10,7 @@
  *
  * Ce qui est mocke :
  * - stripe.webhooks.constructEvent : simule la verification de signature
- * - createAdminSupabaseClient : retourne un client mock
+ * - query : la fonction d'acces DB via pg pool
  * - next/headers : simule les headers HTTP
  */
 
@@ -21,17 +21,11 @@ import type Stripe from "stripe"
 
 const {
   mockConstructEvent,
-  mockUpsert,
-  mockInsert,
-  mockUpdate,
-  mockEq,
+  mockQuery,
   mockHeaderStore,
 } = vi.hoisted(() => ({
   mockConstructEvent: vi.fn(),
-  mockUpsert: vi.fn().mockResolvedValue({ error: null }),
-  mockInsert: vi.fn().mockResolvedValue({ error: null }),
-  mockUpdate: vi.fn(),
-  mockEq: vi.fn().mockResolvedValue({ error: null }),
+  mockQuery: vi.fn().mockResolvedValue({ rows: [], rowCount: 1 }),
   mockHeaderStore: { headers: {} as Record<string, string | null> },
 }))
 
@@ -43,24 +37,12 @@ vi.mock("@/lib/stripe", () => ({
   },
 }))
 
-vi.mock("@/lib/supabase", () => ({
-  createAdminSupabaseClient: () => ({
-    from: (table: string) => {
-      if (table === "clients") {
-        return {
-          upsert: mockUpsert,
-          update: (data: unknown) => {
-            mockUpdate(data)
-            return { eq: mockEq }
-          },
-        }
-      }
-      if (table === "payments") {
-        return { insert: mockInsert }
-      }
-      return { upsert: mockUpsert, insert: mockInsert }
-    },
-  }),
+vi.mock("@/lib/db", () => ({
+  query: (...args: unknown[]) => mockQuery(...args),
+}))
+
+vi.mock("@/lib/tracking", () => ({
+  trackServer: vi.fn().mockResolvedValue(undefined),
 }))
 
 vi.mock("next/headers", () => ({
@@ -96,9 +78,7 @@ describe("POST /api/webhooks/stripe", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockHeaderStore.headers = { "stripe-signature": "sig_test_123" }
-    mockUpsert.mockResolvedValue({ error: null })
-    mockInsert.mockResolvedValue({ error: null })
-    mockEq.mockResolvedValue({ error: null })
+    mockQuery.mockResolvedValue({ rows: [], rowCount: 1 })
   })
 
   // --- Signature verification ---
@@ -139,26 +119,29 @@ describe("POST /api/webhooks/stripe", () => {
     const response = await POST(makeRequest())
     expect(response.status).toBe(200)
 
-    // Client upserted
-    expect(mockUpsert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        email: "sophie@example.com",
-        stripe_customer_id: "cus_test_123",
-        pack: "lancement",
-        status: "active",
-      }),
-      { onConflict: "email" }
+    // First call: INSERT INTO clients (upsert)
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("INSERT INTO clients"),
+      expect.arrayContaining([
+        "sophie@example.com",
+        "cus_test_123",
+        "lancement",
+        "active",
+      ])
     )
 
-    // Payment recorded
-    expect(mockInsert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        email: "sophie@example.com",
-        stripe_session_id: "cs_test_123",
-        amount: 497,
-        pack: "lancement",
-        status: "completed",
-      })
+    // Second call: INSERT INTO payments
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("INSERT INTO payments"),
+      expect.arrayContaining([
+        "sophie@example.com",
+        "cs_test_123",
+        "cus_test_123",
+        497,
+        "eur",
+        "lancement",
+        "completed",
+      ])
     )
   })
 
@@ -176,9 +159,9 @@ describe("POST /api/webhooks/stripe", () => {
 
     await POST(makeRequest())
 
-    expect(mockUpsert).toHaveBeenCalledWith(
-      expect.objectContaining({ pack: "mensuel" }),
-      expect.any(Object)
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("INSERT INTO clients"),
+      expect.arrayContaining(["mensuel"])
     )
   })
 
@@ -192,8 +175,7 @@ describe("POST /api/webhooks/stripe", () => {
 
     const response = await POST(makeRequest())
     expect(response.status).toBe(200)
-    expect(mockUpsert).not.toHaveBeenCalled()
-    expect(mockInsert).not.toHaveBeenCalled()
+    expect(mockQuery).not.toHaveBeenCalled()
   })
 
   // --- invoice.paid ---
@@ -211,13 +193,14 @@ describe("POST /api/webhooks/stripe", () => {
     const response = await POST(makeRequest())
     expect(response.status).toBe(200)
 
-    expect(mockInsert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        email: "sophie@example.com",
-        amount: 197,
-        pack: "mensuel",
-        status: "completed",
-      })
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("INSERT INTO payments"),
+      expect.arrayContaining([
+        "sophie@example.com",
+        197,
+        "mensuel",
+        "completed",
+      ])
     )
   })
 
@@ -233,7 +216,7 @@ describe("POST /api/webhooks/stripe", () => {
 
     const response = await POST(makeRequest())
     expect(response.status).toBe(200)
-    expect(mockInsert).not.toHaveBeenCalled()
+    expect(mockQuery).not.toHaveBeenCalled()
   })
 
   // --- customer.subscription.updated ---
@@ -248,8 +231,10 @@ describe("POST /api/webhooks/stripe", () => {
     const response = await POST(makeRequest())
     expect(response.status).toBe(200)
 
-    expect(mockUpdate).toHaveBeenCalledWith({ status: "active" })
-    expect(mockEq).toHaveBeenCalledWith("stripe_customer_id", "cus_test_123")
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("UPDATE clients SET status"),
+      ["active", "cus_test_123"]
+    )
   })
 
   it("updates client status to inactive when subscription is past_due", async () => {
@@ -261,7 +246,10 @@ describe("POST /api/webhooks/stripe", () => {
 
     await POST(makeRequest())
 
-    expect(mockUpdate).toHaveBeenCalledWith({ status: "inactive" })
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("UPDATE clients SET status"),
+      ["inactive", "cus_test_123"]
+    )
   })
 
   // --- customer.subscription.deleted ---
@@ -275,8 +263,10 @@ describe("POST /api/webhooks/stripe", () => {
     const response = await POST(makeRequest())
     expect(response.status).toBe(200)
 
-    expect(mockUpdate).toHaveBeenCalledWith({ status: "churned" })
-    expect(mockEq).toHaveBeenCalledWith("stripe_customer_id", "cus_test_123")
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("UPDATE clients SET status"),
+      ["churned", "cus_test_123"]
+    )
   })
 
   // --- Unknown event ---
@@ -304,7 +294,7 @@ describe("POST /api/webhooks/stripe", () => {
       id: "cs_test_err",
     })
     mockConstructEvent.mockReturnValueOnce(event)
-    mockUpsert.mockRejectedValueOnce(new Error("DB crashed"))
+    mockQuery.mockRejectedValueOnce(new Error("DB crashed"))
 
     const response = await POST(makeRequest())
     expect(response.status).toBe(500)

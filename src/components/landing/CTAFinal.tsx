@@ -1,3 +1,5 @@
+import { CTAButton } from "./CTAButton"
+
 export function CTAFinal() {
   return (
     <section className="section-padding bg-primary">
@@ -7,12 +9,11 @@ export function CTAFinal() {
         </h2>
 
         <div className="flex flex-col items-center gap-4">
-          <a
+          <CTAButton
             href="#pricing"
-            className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-secondary text-white font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
-          >
-            Commencer maintenant&nbsp;&rarr;
-          </a>
+            label="Commencer maintenant →"
+            location="cta_final"
+          />
 
           <a
             href="#avant-apres"

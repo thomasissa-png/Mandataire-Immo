@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect, notFound } from "next/navigation"
-import { createAdminSupabaseClient } from "@/lib/supabase"
+import { query } from "@/lib/db"
 
 interface ClientDetail {
   id: string
@@ -39,28 +39,21 @@ export default async function AdminClientDetailPage({
     redirect("/dashboard")
   }
 
-  const supabase = createAdminSupabaseClient()
+  const { rows: clientRows } = await query<ClientDetail>(
+    "SELECT * FROM clients WHERE id = $1 LIMIT 1",
+    [params.id]
+  )
 
-  const { data: client } = await supabase
-    .from("clients")
-    .select("*")
-    .eq("id", params.id)
-    .single()
-
-  if (!client) {
+  const clientData = clientRows[0]
+  if (!clientData) {
     notFound()
   }
 
-  const clientData = client as ClientDetail
-
   // Fetch payments
-  const { data: payments } = await supabase
-    .from("payments")
-    .select("*")
-    .eq("email", clientData.email)
-    .order("created_at", { ascending: false })
-
-  const paymentList = (payments as Payment[] | null) || []
+  const { rows: paymentList } = await query<Payment>(
+    "SELECT * FROM payments WHERE email = $1 ORDER BY created_at DESC",
+    [clientData.email]
+  )
 
   return (
     <div className="min-h-screen bg-background">

@@ -4,24 +4,24 @@
  * Pourquoi ces tests existent :
  * - La capture de leads est le deuxieme chemin de conversion (lead magnet "Voir un exemple pour ma zone").
  * - Un email invalide qui passe = donnees pourries en base.
- * - Une erreur Supabase silencieuse = leads perdus sans alerte.
+ * - Une erreur DB silencieuse = leads perdus sans alerte.
  *
  * Ce qui est mocke :
- * - createAdminSupabaseClient : retourne un client Supabase mock avec .from().upsert()
+ * - query : la fonction d'acces DB via pg pool
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
-const { mockUpsert } = vi.hoisted(() => ({
-  mockUpsert: vi.fn(),
+const { mockQuery } = vi.hoisted(() => ({
+  mockQuery: vi.fn(),
 }))
 
-vi.mock("@/lib/supabase", () => ({
-  createAdminSupabaseClient: () => ({
-    from: () => ({
-      upsert: mockUpsert,
-    }),
-  }),
+vi.mock("@/lib/db", () => ({
+  query: (...args: unknown[]) => mockQuery(...args),
+}))
+
+vi.mock("@/lib/tracking", () => ({
+  trackServer: vi.fn().mockResolvedValue(undefined),
 }))
 
 import { POST } from "@/app/api/leads/route"
@@ -46,7 +46,7 @@ function makeRawRequest(body: string): NextRequest {
 describe("POST /api/leads", () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockUpsert.mockResolvedValue({ error: null })
+    mockQuery.mockResolvedValue({ rows: [], rowCount: 1 })
   })
 
   it("returns 400 if body is not valid JSON", async () => {
@@ -82,7 +82,7 @@ describe("POST /api/leads", () => {
     expect(data.success).toBe(true)
   })
 
-  it("upserts lead with lowercased and trimmed email", async () => {
+  it("inserts lead with lowercased and trimmed email", async () => {
     await POST(
       makeRequest({
         email: "  Sophie@Example.COM  ",
@@ -92,44 +92,37 @@ describe("POST /api/leads", () => {
       })
     )
 
-    expect(mockUpsert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        email: "sophie@example.com",
-        name: "Sophie Martin",
-        city: "Angers",
-        source: "footer_cta",
-      }),
-      { onConflict: "email" }
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("INSERT INTO leads"),
+      expect.arrayContaining([
+        "sophie@example.com",
+        "Sophie Martin",
+        "Angers",
+        "footer_cta",
+      ])
     )
   })
 
   it("uses default source 'landing_hero' if not provided", async () => {
     await POST(makeRequest({ email: "sophie@example.com" }))
 
-    expect(mockUpsert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        source: "landing_hero",
-      }),
-      expect.any(Object)
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("INSERT INTO leads"),
+      expect.arrayContaining(["landing_hero"])
     )
   })
 
   it("stores null for optional fields when not provided", async () => {
     await POST(makeRequest({ email: "sophie@example.com" }))
 
-    expect(mockUpsert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: null,
-        city: null,
-      }),
-      expect.any(Object)
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("INSERT INTO leads"),
+      expect.arrayContaining([null, null])
     )
   })
 
-  it("returns 500 if Supabase upsert fails", async () => {
-    mockUpsert.mockResolvedValueOnce({
-      error: { message: "DB connection failed" },
-    })
+  it("returns 500 if database query fails", async () => {
+    mockQuery.mockRejectedValueOnce(new Error("DB connection failed"))
 
     const response = await POST(
       makeRequest({ email: "sophie@example.com" })

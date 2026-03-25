@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import { ClerkProvider } from "@clerk/nextjs"
 import { Plus_Jakarta_Sans, Inter } from "next/font/google"
 import { PostHogProvider } from "@/components/PostHogProvider"
+import { JsonLd } from "@/components/JsonLd"
+import { CookieConsent } from "@/components/CookieConsent"
 import "./globals.css"
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -19,16 +21,71 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "ImmoCrew — L'equipe marketing des mandataires immobiliers",
+  title: {
+    default: "ImmoCrew — L'équipe marketing des mandataires immobiliers",
+    template: "%s | ImmoCrew",
+  },
   description:
-    "Chaque mois, recois tes posts, tes articles et tes annonces — 100% personnalises pour ta zone. Tu publies, on fait le reste. A partir de 197 EUR/mois.",
+    "Chaque mois, reçois tes posts, tes articles SEO et tes annonces — 100% personnalisés pour ta zone. Tu publies, on fait le reste. À partir de 197€/mois.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://immocrew.fr"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "ImmoCrew — L'equipe marketing des mandataires immobiliers",
+    title: "ImmoCrew — L'équipe marketing des mandataires immobiliers",
     description:
-      "Posts, articles SEO, annonces storytelling, scripts video. 100% personnalises pour ta zone. Tu publies, on fait le reste.",
+      "Posts, articles SEO, annonces storytelling, scripts vidéo. 100% personnalisés pour ta zone. Tu publies, on fait le reste.",
     type: "website",
     locale: "fr_FR",
+    url: "https://immocrew.fr",
+    siteName: "ImmoCrew",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "ImmoCrew — L'équipe marketing des mandataires immobiliers",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ImmoCrew — L'équipe marketing des mandataires immobiliers",
+    description:
+      "Posts, articles SEO, annonces storytelling. 100% personnalisés. À partir de 197€/mois.",
+    images: ["/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+}
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "ImmoCrew",
+  url: "https://immocrew.fr",
+  logo: "https://immocrew.fr/logo.png",
+  description:
+    "Équipe marketing externalisée pour mandataires immobiliers indépendants. Posts, articles SEO, annonces storytelling, scripts vidéo — 100% personnalisés.",
+  foundingDate: "2026",
+  areaServed: "FR",
+  serviceArea: {
+    "@type": "Country",
+    name: "France",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer support",
+    availableLanguage: "French",
   },
 }
 
@@ -44,8 +101,10 @@ export default function RootLayout({
         className={`${plusJakartaSans.variable} ${inter.variable}`}
       >
         <body>
+          <JsonLd data={organizationJsonLd} />
           <PostHogProvider>
             {children}
+            <CookieConsent />
           </PostHogProvider>
         </body>
       </html>

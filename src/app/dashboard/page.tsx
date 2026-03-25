@@ -1,5 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server"
-import { createAdminSupabaseClient } from "@/lib/supabase"
+import { DeliverableCard } from "@/components/dashboard/DeliverableCard"
+import { query } from "@/lib/db"
 
 type DeliverableType =
   | "post"
@@ -17,6 +18,13 @@ interface Deliverable {
   month: string
   status: "draft" | "delivered"
   created_at: string
+}
+
+interface ClientRow {
+  id: string
+  email: string
+  pack: string | null
+  stripe_customer_id: string | null
 }
 
 const TYPE_LABELS: Record<DeliverableType, string> = {
@@ -44,26 +52,24 @@ export default async function DashboardPage() {
     return null
   }
 
-  const supabase = createAdminSupabaseClient()
+  const primaryEmail = user.emailAddresses[0]?.emailAddress
 
   // Fetch client info
-  const primaryEmail = user.emailAddresses[0]?.emailAddress
-  const { data: client } = await supabase
-    .from("clients")
-    .select("*")
-    .eq("email", primaryEmail)
-    .single()
+  const { rows: clientRows } = await query<ClientRow>(
+    "SELECT * FROM clients WHERE email = $1 LIMIT 1",
+    [primaryEmail]
+  )
+  const client = clientRows[0] || null
 
-  // Fetch deliverables for current month
-  const currentMonth = new Date().toISOString().slice(0, 7) // YYYY-MM
-  const { data: deliverables } = await supabase
-    .from("deliverables")
-    .select("*")
-    .eq("client_email", primaryEmail)
-    .eq("status", "delivered")
-    .order("created_at", { ascending: false })
+  // Fetch deliverables (delivered only, ordered by most recent)
+  const { rows: deliverables } = await query<Deliverable>(
+    `SELECT * FROM deliverables
+     WHERE client_email = $1 AND status = $2
+     ORDER BY created_at DESC`,
+    [primaryEmail, "delivered"]
+  )
 
-  const monthDeliverables = (deliverables as Deliverable[] | null) || []
+  const monthDeliverables = deliverables || []
 
   return (
     <div>
@@ -126,30 +132,15 @@ export default async function DashboardPage() {
       ) : (
         <div className="space-y-4">
           {monthDeliverables.map((deliverable) => (
-            <div
+            <DeliverableCard
               key={deliverable.id}
-              className="rounded-lg bg-card border border-border p-6 hover:shadow-md transition-shadow duration-normal"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span
-                      className={`inline-block px-2 py-0.5 rounded-full text-caption font-semibold ${
-                        TYPE_COLORS[deliverable.type]
-                      }`}
-                    >
-                      {TYPE_LABELS[deliverable.type]}
-                    </span>
-                  </div>
-                  <h3 className="font-display text-h4 text-primary mb-2">
-                    {deliverable.title}
-                  </h3>
-                  <p className="text-body-sm text-neutral-600 line-clamp-3">
-                    {deliverable.content}
-                  </p>
-                </div>
-              </div>
-            </div>
+              id={deliverable.id}
+              type={deliverable.type}
+              typeLabel={TYPE_LABELS[deliverable.type]}
+              typeColor={TYPE_COLORS[deliverable.type]}
+              title={deliverable.title}
+              content={deliverable.content}
+            />
           ))}
         </div>
       )}

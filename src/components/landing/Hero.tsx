@@ -1,3 +1,5 @@
+import { CTAButton } from "./CTAButton"
+
 export function Hero() {
   return (
     <section className="section-padding bg-background">
@@ -16,12 +18,11 @@ export function Hero() {
             </p>
 
             {/* CTA */}
-            <a
+            <CTAButton
               href="#pricing"
-              className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-secondary text-white font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
-            >
-              Voir un exemple pour ma zone&nbsp;&rarr;
-            </a>
+              label="Voir un exemple pour ma zone →"
+              location="hero"
+            />
 
             {/* Mention rassurante */}
             <p className="mt-4 text-body-sm text-neutral-500">

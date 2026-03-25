@@ -72,9 +72,13 @@ const PACKS = [
   },
 ] as const
 
+import { PricingTracker } from "./PricingTracker"
+import { CTAButton } from "./CTAButton"
+
 export function Pricing() {
   return (
     <section className="section-padding bg-white" id="pricing">
+      <PricingTracker />
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-10 desktop:mb-16">
           Choisis ton pack.
@@ -182,16 +186,13 @@ export function Pricing() {
               </ul>
 
               {/* CTA */}
-              <a
+              <CTAButton
                 href={pack.ctaHref}
-                className={`flex items-center justify-center w-full h-12 rounded-full font-display font-semibold text-body transition-all duration-normal ${
-                  pack.featured
-                    ? "bg-secondary text-white shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97]"
-                    : "border-2 border-primary text-primary hover:bg-primary-50 active:scale-[0.97]"
-                }`}
-              >
-                {pack.cta}&nbsp;&rarr;
-              </a>
+                label={`${pack.cta} →`}
+                location={`pricing_${pack.name.toLowerCase().replace(/\s+/g, "_")}`}
+                variant={pack.featured ? "primary" : "outline"}
+                className="w-full"
+              />
 
               {/* Mention */}
               <p
