@@ -69,11 +69,12 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 ### Phase 2 — Développement
 - **Agents** : @infrastructure, @fullstack, @qa
 - **Parallélisation** : @infrastructure d'abord (batch 1), puis @fullstack (batch 2), puis @qa (batch 3)
-- **Statut** : EN COURS
+- **Statut** : EN COURS (@infrastructure TERMINÉ, @fullstack TERMINÉ, @qa EN COURS)
 - **Livrables attendus** :
-  - docs/infra/infrastructure.md
-  - src/ (code application)
-  - docs/qa/qa-strategy.md + tests/
+  - docs/infra/infrastructure.md — LIVRÉ (700 lignes, 12 sections)
+  - src/ (code application) — LIVRÉ (26 fichiers, landing + API + dashboard + onboarding + admin)
+  - .env.example — LIVRÉ (16 env vars)
+  - docs/qa/qa-strategy.md + tests/ — EN COURS
 
 ### Phase 3 — Contenu & SEO
 - **Agents** : @seo, @geo
@@ -113,9 +114,12 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 - **2026-03-25** : Phase 1 terminée. @ux, @design, @copywriter livrés. Directive IA ajoutée au brand-platform.
 - **2026-03-25** : Audit critique @creative-strategy livré. Corrections : marché 80K→40-50K, LinkedIn 20%→10-15%, objection ChatGPT Thomas ajoutée.
 - **2026-03-25** : Phase 2 lancée. @infrastructure bloqué par rate limit API — à relancer en prochaine session.
+- **2026-03-25** : Session 2. @infrastructure relancé et livré (700 lignes, schéma SQL 8 tables, config Replit/Clerk/Stripe/PostHog, pipeline IA, sécurité, coûts).
+- **2026-03-25** : @fullstack livré (26 fichiers). Landing page 9 composants, 4 API routes, dashboard client, onboarding wizard 7 étapes, admin. TypeScript strict, 0 erreurs.
+- **2026-03-25** : @qa lancé (stratégie + tests Vitest + config).
 
 ## État pour reprise prochaine session
 - **Phases terminées** : 0 (fondations), 1 (expérience)
-- **Phase en cours** : 2 (développement) — @infrastructure à relancer (rien sauvegardé)
+- **Phase en cours** : 2 (développement) — @qa en cours
 - **Phases à faire** : 3 (SEO/GEO), 4 (acquisition), revue finale
-- **Pour reprendre** : lire project-context.md + docs/orchestration-plan.md, relancer @infrastructure
+- **Pour reprendre** : lire project-context.md + docs/orchestration-plan.md, vérifier si @qa a terminé, puis lancer Phase 3
