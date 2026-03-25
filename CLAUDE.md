@@ -76,6 +76,7 @@ Pour une tâche ciblée : invoquer directement l'agent concerné.
 - `@legal` : RGPD, CGU, conformité
 - `@agent-factory` : création d'agents spécialisés sur mesure pour le projet
 - `@elon` : audit stratégique, challenge des décisions, amélioration continue du framework
+- `@mandataire` : testeur métier — évalue les livrables du point de vue d'une mandataire IAD réaliste (Sophie)
 
 ## Convention de chemin des livrables
 
