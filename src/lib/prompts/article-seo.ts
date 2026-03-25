@@ -9,6 +9,7 @@ export interface ArticleSeoInput {
   nom: string
   reseau: string
   specialite: string
+  annees_experience: number
   zone_geo: { ville: string; departement: string; quartiers: string[] }
   ton: string
   valeurs: string
@@ -21,13 +22,16 @@ export interface ArticleSeoInput {
   mots_cles_cibles?: string[]
   articles_deja_rediges?: string[] // titres des articles existants pour eviter doublons
   nombre_articles: number
-  // Donnees locales pour enrichir
+  // Format : "blog" (900-1200 mots, defaut) ou "linkedin" (400-600 mots, pour mandataires sans site web)
+  format?: 'blog' | 'linkedin'
+  // Donnees locales enrichies (depuis onboarding)
   donnees_locales?: {
     prix_m2_moyen?: number
+    commerces?: string[]
     ecoles?: string[]
     transports?: string[]
-    commerces?: string[]
     parcs?: string[]
+    ambiance_quartier?: string
     tendance_marche?: string
     population?: number
     evenements_locaux?: string[]
@@ -48,10 +52,20 @@ export function buildArticleSeoPrompt(input: ArticleSeoInput): {
   system: string
   user: string
 } {
-  const system = `Tu es un redacteur SEO specialise dans l'immobilier local en France. Tu rediges des articles de blog optimises pour le referencement naturel, destines a positionner un mandataire immobilier en premiere page Google sur des requetes locales.
+  const isLinkedin = input.format === 'linkedin'
+  const wordRange = isLinkedin ? '400 et 600' : '900 et 1200'
 
-REGLES ABSOLUES :
-- Chaque article fait entre 900 et 1200 mots — assez long pour le SEO, assez concis pour etre lu
+  const system = `Tu es un redacteur SEO specialise dans l'immobilier local en France. Tu rediges des ${isLinkedin ? 'articles courts pour LinkedIn' : 'articles de blog optimises pour le referencement naturel'}, destines a positionner un mandataire immobilier ${isLinkedin ? 'comme expert local sur LinkedIn' : 'en premiere page Google sur des requetes locales'}.
+
+## Regles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
+- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
+- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+
+REGLES EDITORIALES :
+- Chaque article fait entre ${wordRange} mots${isLinkedin ? ' — format LinkedIn, pas de frontmatter SEO' : ' — assez long pour le SEO, assez concis pour etre lu'}
 - Le mot-cle principal doit apparaitre dans le titre H1, le premier paragraphe, au moins 2 sous-titres H2, et dans la meta description
 - Densite de mots-cles naturelle : 1-2% max. Pas de keyword stuffing
 - Chaque article DOIT contenir des donnees locales reelles : prix au m2, noms de quartiers, ecoles, transports, commerces
@@ -109,18 +123,23 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
     ? `Articles deja publies (ne pas refaire les memes sujets) : ${input.articles_deja_rediges.join(', ')}.`
     : ''
 
-  const donneesLocales = input.donnees_locales
+  const donneesLocalesDisponibles = input.donnees_locales &&
+    (input.donnees_locales.commerces?.length || input.donnees_locales.ecoles?.length || input.donnees_locales.transports?.length || input.donnees_locales.prix_m2_moyen)
+
+  const donneesLocales = donneesLocalesDisponibles
     ? `
-DONNEES LOCALES (a integrer dans les articles) :
-${input.donnees_locales.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
-${input.donnees_locales.ecoles?.length ? `- Ecoles : ${input.donnees_locales.ecoles.join(', ')}` : ''}
-${input.donnees_locales.transports?.length ? `- Transports : ${input.donnees_locales.transports.join(', ')}` : ''}
-${input.donnees_locales.commerces?.length ? `- Commerces : ${input.donnees_locales.commerces.join(', ')}` : ''}
-${input.donnees_locales.parcs?.length ? `- Parcs : ${input.donnees_locales.parcs.join(', ')}` : ''}
-${input.donnees_locales.tendance_marche ? `- Tendance du marche : ${input.donnees_locales.tendance_marche}` : ''}
-${input.donnees_locales.population ? `- Population : ${input.donnees_locales.population.toLocaleString('fr-FR')} habitants` : ''}
-${input.donnees_locales.evenements_locaux?.length ? `- Evenements locaux : ${input.donnees_locales.evenements_locaux.join(', ')}` : ''}`
-    : ''
+DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references, ne rien inventer) :
+${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
+${input.donnees_locales!.ecoles?.length ? `- Ecoles : ${input.donnees_locales!.ecoles.join(', ')}` : ''}
+${input.donnees_locales!.transports?.length ? `- Transports : ${input.donnees_locales!.transports.join(', ')}` : ''}
+${input.donnees_locales!.commerces?.length ? `- Commerces : ${input.donnees_locales!.commerces.join(', ')}` : ''}
+${input.donnees_locales!.parcs?.length ? `- Parcs : ${input.donnees_locales!.parcs.join(', ')}` : ''}
+${input.donnees_locales!.ambiance_quartier ? `- Ambiance quartier : ${input.donnees_locales!.ambiance_quartier}` : ''}
+${input.donnees_locales!.tendance_marche ? `- Tendance du marche : ${input.donnees_locales!.tendance_marche}` : ''}
+${input.donnees_locales!.population ? `- Population : ${input.donnees_locales!.population.toLocaleString('fr-FR')} habitants` : ''}
+${input.donnees_locales!.evenements_locaux?.length ? `- Evenements locaux : ${input.donnees_locales!.evenements_locaux.join(', ')}` : ''}`
+    : `
+DONNEES LOCALES : non disponibles. Rester general sur les references locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, ecoles, arrets de transport ou marches.`
 
   const biensStr = input.biens.length > 0
     ? input.biens
@@ -131,12 +150,13 @@ ${input.donnees_locales.evenements_locaux?.length ? `- Evenements locaux : ${inp
         .join('\n')
     : 'Aucun bien actif.'
 
-  const user = `Redige ${input.nombre_articles} article(s) SEO local pour ${input.prenom} ${input.nom}, mandataire chez ${input.reseau}.
+  const user = `Redige ${input.nombre_articles} ${isLinkedin ? 'article(s) LinkedIn (400-600 mots)' : 'article(s) SEO local (900-1200 mots)'} pour ${input.prenom} ${input.nom}, mandataire chez ${input.reseau}.
 
 PROFIL DU MANDATAIRE :
 - Zone : ${input.zone_geo.ville} (${input.zone_geo.departement}), quartiers : ${quartiersStr}
 - Specialite : ${input.specialite}
-- Experience : ${input.nb_transactions_an} transactions/an
+- Annees d'experience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais ecrire un autre nombre)
+- Volume : ${input.nb_transactions_an} transactions/an
 - Ton : ${input.ton}
 - Valeurs : ${input.valeurs}
 - Ce qui la/le differencie : ${input.ce_qui_differencie}
@@ -155,9 +175,10 @@ ${input.mois_cible ? `Mois de publication cible : ${input.mois_cible} — adapte
 
 - Varie les types d'articles (guide quartier, guide vendeur, guide acheteur, marche local, conseil pratique)
 - Chaque article doit cibler une requete longue traine differente
-- Utilise des donnees locales precises — pas de "proche commerces" mais le nom du commerce
+- Utilise des donnees locales precises — pas de "proche commerces" mais le nom du commerce — UNIQUEMENT si ces noms sont dans les donnees locales ci-dessus. NE RIEN INVENTER.
 - L'article doit apporter une vraie valeur au lecteur, pas juste du remplissage SEO
-- Le CTA en fin d'article doit etre naturel : ${input.prenom} est presente(e) comme l'expert(e) local(e) a contacter`
+- Le CTA en fin d'article doit etre naturel : ${input.prenom} est presente(e) comme l'expert(e) local(e) a contacter
+- L'annee courante est 2026. Toute reference temporelle doit utiliser 2026, jamais 2024 ou 2025.`
 
   return { system, user }
 }

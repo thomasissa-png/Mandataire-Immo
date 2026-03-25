@@ -25,10 +25,13 @@ export interface ScriptVideoInput {
     pieces: number
     points_forts: string
   }>
+  annees_experience: number
   // Contexte video
   nombre_scripts: number
   format: 'reel' | 'youtube_short' | 'mix'
-  confort_camera: 'debutant' | 'a_laise' | 'expert'
+  // "diaporama" = script pour Reel a partir de photos, sans se filmer (ideal pour debutants)
+  type_video?: 'face_camera' | 'diaporama' | 'mix'
+  confort_camera: 'debutant' | 'a_laise' | 'expert' | ''
   sujets_prioritaires?: string[]
   historique_sujets?: string[]
   // Pour le Boost (un seul bien)
@@ -56,13 +59,16 @@ export function buildScriptVideoPrompt(input: ScriptVideoInput): {
   system: string
   user: string
 } {
-  const confortInstructions = {
-    debutant: `Le mandataire n'est pas a l'aise devant la camera. Les scripts doivent etre :
+  const confortLevel = input.confort_camera || 'debutant'
+
+  const confortInstructions: Record<string, string> = {
+    debutant: `Le mandataire n'est pas a l'aise devant la camera (ou n'a pas precise son niveau). Les scripts doivent etre :
 - Courts (15-30 secondes max)
 - Avec des textes a l'ecran plutot que de la voix off quand possible
 - Des plans simples (pas de mouvements complexes)
 - Des phrases courtes et naturelles (comme si on parlait a un ami)
-- Option "face camera" minimale — privilegier les plans du bien/quartier avec texte superpose`,
+- Option "face camera" minimale — privilegier les plans du bien/quartier avec texte superpose
+- PRIVILEGIER le format diaporama : photos avec texte anime, musique tendance, pas besoin de se filmer`,
 
     a_laise: `Le mandataire est a l'aise devant la camera. Les scripts peuvent :
 - Durer 30-60 secondes
@@ -77,9 +83,27 @@ export function buildScriptVideoPrompt(input: ScriptVideoInput): {
 - Utiliser des techniques avancees (POV, time-lapse, before/after)`
   }
 
+  const diaporamaInstructions = input.type_video === 'diaporama' || (confortLevel === 'debutant' && input.type_video !== 'face_camera')
+    ? `
+FORMAT DIAPORAMA (prioritaire pour ce mandataire) :
+- Les scripts "diaporama" utilisent des PHOTOS statiques avec texte anime par-dessus
+- Pas besoin de se filmer — le mandataire prend des photos et l'appli fait le montage
+- Structure : photo 1 (3s) + texte hook -> photo 2 (3s) + texte info -> photo 3 (3s) + texte CTA
+- Indiquer pour chaque scene : quelle photo prendre (ex: "Photo de la facade depuis le trottoir d'en face")
+- Suggerer l'appli de montage : CapCut ou InShot (gratuit)
+- Musique tendance Instagram suggeree pour chaque script`
+    : ''
+
   const system = `Tu es un scenariste specialise dans les videos courtes pour les professionnels de l'immobilier. Tu crees des scripts Reels/Shorts detailles, scene par scene, que le mandataire peut tourner seul avec son smartphone.
 
-REGLES ABSOLUES :
+## Regles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
+- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
+- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+
+REGLES EDITORIALES :
 - Chaque script est decoupe scene par scene avec : duree, texte a dire OU texte a l'ecran, indication visuelle, musique/son suggere
 - Les scripts sont adaptes au niveau de confort camera du mandataire
 - Chaque video doit raconter quelque chose — pas de contenu generique "regardez ce bel appart"
@@ -90,7 +114,8 @@ REGLES ABSOLUES :
 - Les premieres 3 secondes sont CRUCIALES : hook visuel ou textuel percutant
 - Chaque script se termine par un CTA clair (appeler ${input.prenom}, visiter le profil, envoyer un message)
 
-${confortInstructions[input.confort_camera]}
+${confortInstructions[confortLevel]}
+${diaporamaInstructions}
 
 TYPES DE VIDEOS A ALTERNER :
 1. Visite bien : mini-visite guidee d'un bien en vente (le best-seller des Reels immo)
@@ -147,16 +172,20 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
     ? `Sujets deja traites (a ne pas repeter) : ${input.historique_sujets.join(', ')}.`
     : ''
 
-  const donneesLocales = input.donnees_locales
+  const donneesLocalesDisponibles = input.donnees_locales &&
+    (input.donnees_locales.commerces?.length || input.donnees_locales.ecoles?.length || input.donnees_locales.transports?.length || input.donnees_locales.prix_m2_moyen)
+
+  const donneesLocales = donneesLocalesDisponibles
     ? `
-DONNEES LOCALES :
-${input.donnees_locales.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
-${input.donnees_locales.ecoles?.length ? `- Ecoles : ${input.donnees_locales.ecoles.join(', ')}` : ''}
-${input.donnees_locales.transports?.length ? `- Transports : ${input.donnees_locales.transports.join(', ')}` : ''}
-${input.donnees_locales.commerces?.length ? `- Commerces : ${input.donnees_locales.commerces.join(', ')}` : ''}
-${input.donnees_locales.parcs?.length ? `- Parcs : ${input.donnees_locales.parcs.join(', ')}` : ''}
-${input.donnees_locales.tendance_marche ? `- Tendance marche : ${input.donnees_locales.tendance_marche}` : ''}`
-    : ''
+DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references, ne rien inventer) :
+${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
+${input.donnees_locales!.ecoles?.length ? `- Ecoles : ${input.donnees_locales!.ecoles.join(', ')}` : ''}
+${input.donnees_locales!.transports?.length ? `- Transports : ${input.donnees_locales!.transports.join(', ')}` : ''}
+${input.donnees_locales!.commerces?.length ? `- Commerces : ${input.donnees_locales!.commerces.join(', ')}` : ''}
+${input.donnees_locales!.parcs?.length ? `- Parcs : ${input.donnees_locales!.parcs.join(', ')}` : ''}
+${input.donnees_locales!.tendance_marche ? `- Tendance marche : ${input.donnees_locales!.tendance_marche}` : ''}`
+    : `
+DONNEES LOCALES : non disponibles. Rester general sur les references locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, ecoles, arrets de transport ou marches.`
 
   const user = `Cree ${input.nombre_scripts} script(s) video pour ${input.prenom} ${input.nom}, mandataire chez ${input.reseau}.
 
@@ -168,8 +197,10 @@ PROFIL DU MANDATAIRE :
 - Valeurs : ${input.valeurs}
 - Ce qui la/le differencie : ${input.ce_qui_differencie}
 - Cible clients : ${input.cible_clients}
-- Confort camera : ${input.confort_camera}
+- Annees d'experience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais ecrire un autre nombre)
+- Confort camera : ${confortLevel}
 - Format : ${input.format === 'mix' ? 'Mix Reels Instagram + YouTube Shorts' : input.format === 'reel' ? 'Reels Instagram' : 'YouTube Shorts'}
+- Type video prefere : ${input.type_video === 'diaporama' ? 'Diaporama (photos + texte, sans se filmer)' : input.type_video === 'face_camera' ? 'Face camera' : 'Mix (adapter au confort camera)'}
 
 BIENS DISPONIBLES POUR LES SCRIPTS :
 ${biensStr || 'Aucun bien actif — concentre les scripts sur les conseils, le quartier et le marche.'}
