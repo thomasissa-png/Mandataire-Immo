@@ -1,8 +1,9 @@
 # Audit visuel — ImmoCrew Frontend
 
-> Produit par @design | 2026-03-25
+> Produit par @design | 2026-03-25 — Révisé 2026-03-25 (audit complet code réel)
 > Périmètre : landing (Hero, Pricing, Footer, CTAButton), CookieConsent, Onboarding
 > Référence : design-tokens.json v1.0.0, design-system.md
+> Fichiers audités : tailwind.config.ts, globals.css, Hero.tsx, Pricing.tsx, Footer.tsx, CTAButton.tsx, CookieConsent.tsx, onboarding/page.tsx
 
 ---
 
@@ -71,6 +72,11 @@ Implémentation très solide — les tokens sont intégralement repris dans tail
 **5. Footer — `text-background` sur `bg-primary-800` pour liens**
 - `text-background` (#F8F6F2) sur #0D1326 = correct (ratio ~12:1), mais le hover `text-secondary` (#F27A1A) sur #0D1326 = 4.6:1 — PASS AA, rien à corriger, point de vigilance si secondary change.
 - Fichier : `Footer.tsx:28`.
+
+**6. Footer copyright — `text-primary-300` à 12px**
+- `text-primary-300` (#7A92AB) sur `bg-primary-800` (#0D1326) à 12px caption : ratio ~4.1:1. Seuil WCAG AA texte normal < 18px = 4.5:1 — léger échec.
+- Fichier : `Footer.tsx:104`.
+- Correction : `text-primary-200` (#9FAFC2) → ratio ~5.5:1, PASS AA.
 
 ---
 
