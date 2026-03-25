@@ -28,6 +28,19 @@ export interface ClientContext {
   nb_transactions_an: number
   gamme_prix: string
   cible_clients: string
+  donnees_locales: {
+    prix_m2_moyen: number
+    commerces: string[]
+    ecoles: string[]
+    transports: string[]
+    ambiance_quartier: string
+  }
+  histoire: {
+    parcours_avant_immo: string
+    pourquoi_immobilier: string
+    anecdote_memorable: string
+  }
+  confort_camera: "debutant" | "a_laise" | "expert" | ""
 }
 
 interface ClientRow {
@@ -61,6 +74,22 @@ export async function getClientContext(clientId: string): Promise<ClientContext>
 }
 
 /**
+ * Parse une string separee par des virgules ou retours a la ligne en array de strings.
+ */
+function parseStringList(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string" && item.trim() !== "")
+  }
+  if (typeof value === "string" && value.trim()) {
+    return value
+      .split(/[,\n]/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
+  return []
+}
+
+/**
  * Parse le JSONB brut en ClientContext type.
  * Fournit des valeurs par defaut pour les champs optionnels.
  */
@@ -79,13 +108,7 @@ function parseClientContext(raw: Record<string, unknown>): ClientContext {
   }
 
   // Parse quartiers : peut etre un array ou une string separee par des virgules
-  const rawQuartiers = raw.quartiers
-  let quartiers: string[] = []
-  if (Array.isArray(rawQuartiers)) {
-    quartiers = rawQuartiers.filter((q): q is string => typeof q === "string")
-  } else if (typeof rawQuartiers === "string" && rawQuartiers.trim()) {
-    quartiers = rawQuartiers.split(",").map((q) => q.trim()).filter(Boolean)
-  }
+  const quartiers = parseStringList(raw.quartiers)
 
   // Parse biens : peut etre un array d'objets ou une string (depuis le textarea onboarding)
   const rawBiens = raw.biens_actuels ?? raw.biens
@@ -115,7 +138,7 @@ function parseClientContext(raw: Record<string, unknown>): ClientContext {
       }
     })
   } else if (typeof rawBiens === "string" && rawBiens.trim()) {
-    // Textarea libre : un bien par ligne
+    // Textarea libre : un bien par ligne (legacy)
     biens = rawBiens
       .split("\n")
       .filter((line) => line.trim())
@@ -135,6 +158,29 @@ function parseClientContext(raw: Record<string, unknown>): ClientContext {
     typeof raw.reseaux_sociaux === "object" && raw.reseaux_sociaux !== null
       ? (raw.reseaux_sociaux as Record<string, unknown>)
       : raw
+
+  // Parse donnees locales
+  const donnees_locales: ClientContext["donnees_locales"] = {
+    prix_m2_moyen: getNumber("prix_m2_moyen"),
+    commerces: parseStringList(raw.commerces_reference),
+    ecoles: parseStringList(raw.ecoles_reference),
+    transports: parseStringList(raw.transports),
+    ambiance_quartier: getString("ambiance_quartier"),
+  }
+
+  // Parse histoire
+  const histoire: ClientContext["histoire"] = {
+    parcours_avant_immo: getString("parcours_avant_immo"),
+    pourquoi_immobilier: getString("pourquoi_immobilier"),
+    anecdote_memorable: getString("anecdote_memorable"),
+  }
+
+  // Parse confort camera
+  const rawConfort = getString("confort_camera")
+  const confort_camera: ClientContext["confort_camera"] =
+    rawConfort === "debutant" || rawConfort === "a_laise" || rawConfort === "expert"
+      ? rawConfort
+      : ""
 
   return {
     prenom: getString("prenom"),
@@ -167,5 +213,8 @@ function parseClientContext(raw: Record<string, unknown>): ClientContext {
     ),
     gamme_prix: getString("gamme_prix"),
     cible_clients: getString("cible_clients"),
+    donnees_locales,
+    histoire,
+    confort_camera,
   }
 }

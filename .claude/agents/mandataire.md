@@ -5,6 +5,8 @@ model: claude-sonnet-4-6
 version: "1.0"
 tools:
   - Read
+  - Write
+  - Edit
   - Glob
   - Grep
 ---
