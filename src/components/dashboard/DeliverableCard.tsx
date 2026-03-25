@@ -9,6 +9,7 @@ interface DeliverableCardProps {
   typeColor: string
   title: string
   content: string
+  status?: "draft" | "delivered"
 }
 
 export function DeliverableCard({
@@ -18,6 +19,7 @@ export function DeliverableCard({
   typeColor,
   title,
   content,
+  status = "delivered",
 }: DeliverableCardProps) {
   return (
     <div
@@ -37,6 +39,11 @@ export function DeliverableCard({
             >
               {typeLabel}
             </span>
+            {status === "draft" && (
+              <span className="inline-block px-2 py-0.5 rounded-full text-caption font-semibold bg-warning-50 text-warning-800">
+                En preparation
+              </span>
+            )}
           </div>
           <h3 className="font-display text-h4 text-primary mb-2">{title}</h3>
           <p className="text-body-sm text-neutral-600 line-clamp-3">

@@ -8,6 +8,7 @@ import { buildAnnonceStorytellingPrompt } from "@/lib/prompts/annonce-storytelli
 import { buildPostSocialPrompt } from "@/lib/prompts/post-social"
 import { buildScriptVideoPrompt } from "@/lib/prompts/script-video"
 import { buildEmailProspectionPrompt } from "@/lib/prompts/email-prospection"
+import { buildLandingBienPrompt } from "@/lib/prompts/landing-bien"
 
 interface BienInput {
   titre: string
@@ -158,6 +159,28 @@ export async function POST(request: NextRequest) {
       })
       deliverableIds.push(id)
     }
+
+    // B3 : Mini landing page du bien
+    const annonceText = annonceResult.data.annonces[0]?.annonce_complete || ""
+    const landingPrompt = buildLandingBienPrompt({
+      ...ctx,
+      bien,
+      annonce_storytelling: annonceText,
+      email_contact: clientEmail,
+    })
+    const landingResult = await generateJSON<{ titre_page: string; meta_description: string; html: string }>(
+      { ...landingPrompt, maxTokens: 8192 }
+    )
+    const landingId = await insertDeliverable({
+      clientEmail,
+      clientId: client_id,
+      type: "annonce",
+      title: `Landing page — ${bien.titre}`,
+      content: landingResult.data.html,
+      metadata: { sub_type: "landing_bien", titre_page: landingResult.data.titre_page, meta_description: landingResult.data.meta_description, boost: true, bien_titre: bien.titre },
+      month,
+    })
+    deliverableIds.push(landingId)
 
     // B4 : Email blast acheteurs
     const emailPrompt = buildEmailProspectionPrompt({

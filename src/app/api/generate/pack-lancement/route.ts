@@ -10,6 +10,7 @@ import { buildArticleSeoPrompt } from "@/lib/prompts/article-seo"
 import { buildScriptVideoPrompt } from "@/lib/prompts/script-video"
 import { buildPositioningStatementPrompt } from "@/lib/prompts/positioning-statement"
 import { buildBioMultiformatPrompt } from "@/lib/prompts/bio-multiformat"
+import { buildEditorialCalendarPrompt } from "@/lib/prompts/editorial-calendar"
 
 interface PackLancementBody {
   client_id: string
@@ -202,6 +203,28 @@ export async function POST(request: NextRequest) {
       })
       deliverableIds.push(id)
     }
+
+    // L5 : Calendrier editorial 30 jours
+    const calendarPrompt = buildEditorialCalendarPrompt({
+      ...ctx,
+      frequence_hebdo: 5,
+    })
+    const calendarResult = await generateJSON<{ calendrier: Array<{ jour: number; date: string; plateforme: string; type: string; sujet: string; angle: string; hashtags: string[]; heure_suggeree: string }> }>(
+      { ...calendarPrompt, maxTokens: 8192 }
+    )
+    const calendarContent = calendarResult.data.calendrier
+      .map((entry) => `**Jour ${entry.jour} (${entry.date})** — ${entry.plateforme}\nType: ${entry.type} | ${entry.heure_suggeree}\nSujet: ${entry.sujet}\nAngle: ${entry.angle}\nHashtags: ${entry.hashtags.join(", ")}`)
+      .join("\n\n")
+    const calendarId = await insertDeliverable({
+      clientEmail,
+      clientId: client_id,
+      type: "post",
+      title: `Calendrier editorial 30 jours — ${ctx.prenom} ${ctx.nom}`,
+      content: calendarContent,
+      metadata: { sub_type: "editorial_calendar", entries_count: calendarResult.data.calendrier.length },
+      month,
+    })
+    deliverableIds.push(calendarId)
 
     // Design brief (L8 preparation — non automatisable)
     const designBriefId = await insertDeliverable({

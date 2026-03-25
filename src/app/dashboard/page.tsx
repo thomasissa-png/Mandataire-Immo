@@ -61,12 +61,12 @@ export default async function DashboardPage() {
   )
   const client = clientRows[0] || null
 
-  // Fetch deliverables (delivered only, ordered by most recent)
+  // Fetch deliverables (draft + delivered, ordered by most recent)
   const { rows: deliverables } = await query<Deliverable>(
     `SELECT * FROM deliverables
-     WHERE client_email = $1 AND status = $2
+     WHERE client_email = $1 AND status IN ('draft', 'delivered')
      ORDER BY created_at DESC`,
-    [primaryEmail, "delivered"]
+    [primaryEmail]
   )
 
   const monthDeliverables = deliverables || []
@@ -170,6 +170,7 @@ export default async function DashboardPage() {
               typeColor={TYPE_COLORS[deliverable.type]}
               title={deliverable.title}
               content={deliverable.content}
+              status={deliverable.status}
             />
           ))}
         </div>
