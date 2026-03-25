@@ -93,7 +93,7 @@ describe("Pricing", () => {
   it("renders the anchor price comparison text", () => {
     render(<Pricing />)
     expect(
-      screen.getByText(/Moins que ta commission sur un studio/i)
+      screen.getByText(/Une vente de plus dans l'ann/i)
     ).toBeInTheDocument()
   })
 

@@ -19,8 +19,8 @@ export function Hero() {
 
             {/* CTA */}
             <CTAButton
-              href="#pricing"
-              label="Voir un exemple pour ma zone →"
+              href="#avant-apres"
+              label="Voir des exemples concrets →"
               location="hero"
             />
 

@@ -25,7 +25,7 @@ const PACKS = [
     ctaHref: "/api/checkout?pack=lancement",
     featured: false,
     features: [
-      "Positionnement et personal branding",
+      "Positionnement et mise en avant de ton expertise",
       "Bio optimisee pour tous tes profils",
       "5 templates d'annonces storytelling",
       "5 articles SEO local (quartier + ville)",
@@ -208,8 +208,8 @@ export function Pricing() {
 
         {/* Phrase d'ancrage */}
         <p className="text-center text-body-lg text-neutral-600 mt-10 max-w-xl mx-auto">
-          197&euro;/mois. Moins que ta commission sur un studio. Sauf que
-          &ccedil;a t&apos;aide &agrave; en vendre dix.
+          197&euro;/mois. Une vente de plus dans l&apos;ann&eacute;e,
+          c&apos;est rembours&eacute; — largement.
         </p>
         <p className="text-center text-body-sm text-neutral-400 mt-2">
           Tous les prix sont TTC.

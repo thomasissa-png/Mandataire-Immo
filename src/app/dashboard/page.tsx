@@ -85,51 +85,81 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 tablet:grid-cols-4 gap-4 mb-8">
-        {[
-          {
-            label: "Livrables ce mois",
-            value: monthDeliverables.length,
-          },
-          {
-            label: "Posts",
-            value: monthDeliverables.filter((d) => d.type === "post").length,
-          },
-          {
-            label: "Articles SEO",
-            value: monthDeliverables.filter((d) => d.type === "article_seo")
-              .length,
-          },
-          {
-            label: "Annonces",
-            value: monthDeliverables.filter((d) => d.type === "annonce")
-              .length,
-          },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-lg bg-card border border-border p-4 text-center"
-          >
-            <p className="font-display text-display-lg text-primary">
-              {stat.value}
-            </p>
-            <p className="text-caption text-neutral-500">{stat.label}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Deliverables list */}
       {monthDeliverables.length === 0 ? (
-        <div className="rounded-xl bg-card border border-border p-12 text-center">
-          <p className="text-body text-neutral-500 mb-2">
-            Tes livrables sont en cours de preparation.
+        /* Empty state — warm welcome, no scary zeros */
+        <div className="rounded-xl bg-card border border-border p-10 text-center max-w-lg mx-auto">
+          <div className="w-16 h-16 rounded-full bg-secondary-50 flex items-center justify-center mx-auto mb-6">
+            <span className="text-secondary text-display-lg">&#9997;</span>
+          </div>
+          <h2 className="font-display text-h2 text-primary mb-3">
+            Bienvenue dans ton espace !
+          </h2>
+          <p className="text-body text-neutral-600 mb-4">
+            Ton &eacute;quipe est au travail. Tu recevras tes premiers livrables sous 48h.
           </p>
-          <p className="text-body-sm text-neutral-400">
-            Tu recevras un email des qu&apos;ils seront prets.
+          <div className="rounded-lg bg-background p-4 mb-4 text-left">
+            <p className="text-body-sm text-neutral-500 font-semibold mb-2">
+              Ce que tu vas recevoir :
+            </p>
+            <ul className="text-body-sm text-neutral-600 space-y-1">
+              {client?.pack === "lancement" ? (
+                <>
+                  <li>&#10003; 20 posts pr&ecirc;ts &agrave; publier</li>
+                  <li>&#10003; 5 articles SEO local</li>
+                  <li>&#10003; 5 annonces storytelling</li>
+                  <li>&#10003; 10 scripts vid&eacute;o</li>
+                  <li>&#10003; Kit graphique personnalis&eacute;</li>
+                </>
+              ) : (
+                <>
+                  <li>&#10003; 12 posts pr&ecirc;ts &agrave; publier</li>
+                  <li>&#10003; 2 articles SEO local</li>
+                  <li>&#10003; 4 annonces personnalis&eacute;es</li>
+                  <li>&#10003; 4 scripts vid&eacute;o</li>
+                  <li>&#10003; 1 newsletter + 1 email prospection</li>
+                </>
+              )}
+            </ul>
+          </div>
+          <p className="text-caption text-neutral-400">
+            On t&apos;envoie un email d&egrave;s que c&apos;est pr&ecirc;t.
           </p>
         </div>
       ) : (
+        <>
+        {/* Stats — only shown when deliverables exist */}
+        <div className="grid grid-cols-2 tablet:grid-cols-4 gap-4 mb-8">
+          {[
+            {
+              label: "Livrables ce mois",
+              value: monthDeliverables.length,
+            },
+            {
+              label: "Posts",
+              value: monthDeliverables.filter((d) => d.type === "post").length,
+            },
+            {
+              label: "Articles SEO",
+              value: monthDeliverables.filter((d) => d.type === "article_seo")
+                .length,
+            },
+            {
+              label: "Annonces",
+              value: monthDeliverables.filter((d) => d.type === "annonce")
+                .length,
+            },
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-lg bg-card border border-border p-4 text-center"
+            >
+              <p className="font-display text-display-lg text-primary">
+                {stat.value}
+              </p>
+              <p className="text-caption text-neutral-500">{stat.label}</p>
+            </div>
+          ))}
+        </div>
         <div className="space-y-4">
           {monthDeliverables.map((deliverable) => (
             <DeliverableCard
@@ -143,6 +173,7 @@ export default async function DashboardPage() {
             />
           ))}
         </div>
+        </>
       )}
 
       {/* Manage subscription link */}
