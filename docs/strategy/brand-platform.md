@@ -24,7 +24,9 @@ ImmoCrew est l'équipe marketing externalisée des mandataires immobiliers indé
 **Différenciation structurelle vs Cocoon-Immo :**
 Cocoon-Immo vend une plateforme — un outil de plus dans la pile tech du professionnel. Le mandataire doit encore se connecter, choisir, adapter, programmer. ImmoCrew ne vend pas d'outil. Il n'y a rien à apprendre, rien à configurer. Chaque mois, le mandataire reçoit ses livrables terminés, personnalisés pour SA zone, SES biens, SON ton. C'est la différence entre recevoir une boîte à outils et recevoir la maison construite.
 
-De plus, Cocoon-Immo cible les agences (250+ agences clientes, intégrations avec les logiciels d'agence comme Hektor, Apimo, Netty). ImmoCrew cible spécifiquement les mandataires indépendants — un marché de 80 000+ professionnels en France, sous-servi et structurellement différent (pas de budget marketing, pas d'équipe, pas de back-office).
+De plus, Cocoon-Immo cible les agences (250+ agences clientes, intégrations avec les logiciels d'agence comme Hektor, Apimo, Netty — non compatibles avec les mandataires indépendants qui n'ont pas ces logiciels). ImmoCrew cible spécifiquement les mandataires indépendants — un marché de 40 000-50 000 mandataires dans les réseaux en France (baromètre LMDM 2023, données réseaux 2024-2025), dont ~15 000-20 000 dans le profil cible actif. Marché sous-servi et structurellement différent des agences (pas de budget marketing, pas d'équipe, pas de back-office).
+
+> ⚠️ Note d'audit (2026-03-25) : Le chiffre "80 000+" initialement documenté dans le brief incluait des agents commerciaux d'agences traditionnelles. Le chiffre 40 000-50 000 est le marché réseaux mandataires vérifiable. Cible adressable ImmoCrew (profil actif, 1-15 ventes/an) : ~15 000-20 000.
 
 ---
 
@@ -236,4 +238,4 @@ ImmoCrew — L'équipe marketing des mandataires immobiliers
 ---
 
 *Document produit par @creative-strategy dans le cadre du framework Gradient Agents.*
-*Données marché : 80 000+ mandataires actifs en France (2026), 25% de parts de marché des transactions, Cocoon-Immo : 250+ agences clientes, 99-269€/mois.*
+*Données marché (révisées après audit 2026-03-25) : ~40 000-50 000 mandataires dans les réseaux en France (sources : Baromètre LMDM 2023, données réseaux IAD/SAFTI/BSK/Capifrance 2024-2025). Cible adressable : ~15 000-20 000. Cocoon-Immo : formule libre-service 99€/mois, clé-en-main 269€/mois — cible principale agences avec intégration logiciels métier.*

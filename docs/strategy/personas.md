@@ -228,6 +228,9 @@ Lors d'un point mensuel, son manager IAD lui dit "il faudrait que tu travailles 
 - Mais ne veut pas le faire lui-même. A essayé de déléguer à un CM freelance — résultat décevant. A abandonné après 3 mois.
 - Profil LinkedIn actif (500+ connexions) mais publications rares et sans stratégie. Instagram pro avec 350 abonnés, contenu sporadique.
 - A un Google Business Profile à jour (20 avis, 4.6 étoiles) — c'est sa meilleure vitrine digitale actuellement.
+- A testé ChatGPT pour rédiger des annonces. Résultat correct mais chronophage à prompter et à corriger. N'a pas industrialisé.
+
+**Note tutoiement (audit 2026-03-25) :** Thomas a 45 ans, profil premium, attentes de qualité supérieures. En communication broadcast (landing page, réseaux) : tutoiement maintenu (cohérence de marque). En communication one-to-one (DM LinkedIn, email, call de vente) : s'adapter au ton de Thomas. S'il vouvoie dans sa réponse, maintenir le vouvoiement jusqu'à ce qu'il initie le passage au tutoiement. Ne pas imposer le tutoiement à un prospect qui valorise la relation formelle avec ses prestataires.
 
 **Rapport à l'argent :**
 - 197€/mois ne lui fait pas peur — c'est même suspicieusement peu cher pour lui. Il se demande si la qualité suit à ce prix.
@@ -336,6 +339,9 @@ Thomas est plus exigeant que Sophie sur la qualité. Il vérifie chaque livrable
 | 5 | **"Je veux pouvoir valider avant publication."** | "Bien sûr. Tu reçois tes livrables en début de mois. Tu relis, tu ajustes si tu veux, tu publies quand tu veux. On livre, tu contrôles. Si un texte ne te plaît pas, on le retouche." |
 | 6 | **"Mon réseau SAFTI/IAD va peut-être lancer un service similaire."** | "Les réseaux lancent des outils internes — des templates Canva, un générateur de posts standardisé. C'est le même contenu pour des milliers de mandataires. Nous, on te donne une identité unique. Le jour où ton réseau lance un outil, tes collègues posteront tous le même contenu. Toi, tu te démarqueras." |
 | 7 | **"Je n'ai pas le temps de publier non plus."** | "Publier 3 posts par semaine, c'est 10 minutes. Pas 10 heures. On te livre le texte et les visuels — tu copies, tu colles, tu publies. Si même ça c'est trop, on peut te montrer comment programmer tes posts en 15 min pour tout le mois." |
+| 8 | **"Je vais faire ça moi-même avec ChatGPT, c'est la même chose pour beaucoup moins cher."** | "Tu peux. Si tu veux passer 2-3h par mois à prompter, réviser, trouver les données locales (prix au m² réels, projets urbains, points de repère du quartier), structurer le calendrier éditorial, corriger les hallucinations... Nos clients qui ont essayé sont revenus en moyenne 6 semaines plus tard. La question n'est pas si l'IA peut faire ça — c'est si toi tu veux t'en occuper. Et si tu veux t'en occuper, tu n'as pas besoin de nous." |
+
+> **Note d'audit (2026-03-25) :** L'objection ChatGPT est spécifique à Thomas (profil tech-savvy, exigeant, conscient des outils IA). Elle n'est pas documentée pour Sophie (elle ne connaît pas suffisamment ChatGPT pour l'utiliser en workflow pro). À traiter comme objection B2B Thomas uniquement.
 
 ### 2.8 Canaux de prédilection
 
