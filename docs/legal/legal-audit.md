@@ -149,25 +149,154 @@ ImmoCrew est dans une position confortable : risque limité, contenu B2B (pas de
 ## 3. CGV / CGU — Cadre contractuel
 
 ### 3.1 Points obligatoires pour un abonnement SaaS en France
-_À compléter_
+
+ImmoCrew vend à des **professionnels** (B2B). Le Code de la consommation s'applique de manière limitée, mais certaines dispositions restent pertinentes. Les CGV doivent couvrir les points suivants :
+
+| Clause | Contenu obligatoire | Fondement |
+|--------|---------------------|-----------|
+| **Identité du prestataire** | Nom/raison sociale, SIRET, adresse, email, n° TVA | Art. L.441-1 Code de commerce |
+| **Description du service** | Détail précis de chaque offre (Pack Lancement, Pack Mensuel, Boost Mandat) avec livrables inclus, délais de livraison, format | Obligation d'information précontractuelle |
+| **Prix et modalités de paiement** | Prix HT et TTC, devise, fréquence de facturation, moyens de paiement acceptés (Stripe), TVA applicable (20%) | Art. L.441-1 Code de commerce |
+| **Durée et renouvellement** | Durée de l'abonnement (mensuel), conditions de renouvellement tacite, date limite de résiliation | Art. L.215-1 Code de la consommation (applicable aux pros depuis la loi Chatel) |
+| **Résiliation** | Modalités de résiliation (email, espace client), préavis requis, conséquences (accès aux livrables passés) | Bonne pratique contractuelle |
+| **Conditions de livraison** | Délais (24-48h pour livrables courants, J+7 pour Pack Lancement), format (PDF, texte, image), canal (espace client) | Art. L.216-1 et suivants |
+| **Propriété intellectuelle** | Cession des droits sur les livrables au client après paiement. Le client est libre de publier, modifier, réutiliser. ImmoCrew conserve le droit de montrer les livrables en portfolio (sauf opposition). | Clarification indispensable |
+| **Responsabilité et garanties** | Obligation de moyens (pas de résultat marketing garanti). Exclusion de responsabilité pour les résultats commerciaux. Plafond de responsabilité = montant des 3 derniers mois facturés. | Standard B2B |
+| **Utilisation de l'IA** | Mention que les livrables sont produits avec assistance IA (cf. AI Act section 2). Relecture humaine avant livraison. | AI Act + transparence |
+| **Données personnelles** | Renvoi vers la Politique de Confidentialité | RGPD Art. 13-14 |
+| **Droit applicable et juridiction** | Droit français. Tribunal de commerce du siège social. | Clause standard B2B |
+| **Médiation** | En B2B, pas d'obligation de médiation de la consommation. Mais clause de résolution amiable recommandée. | Bonne pratique |
+| **Force majeure** | Définition et conséquences (suspension, résiliation sans indemnité) | Art. 1218 Code civil |
+| **Modification des CGV** | Procédure de notification en cas de modification (email + délai de 30 jours) | Bonne pratique |
+
+**ACTIONS** :
+1. Rédiger les CGV en s'appuyant sur ce cadre. Faire relire par un juriste avant publication.
+2. Prévoir un mécanisme d'acceptation des CGV lors de l'inscription (checkbox "J'ai lu et j'accepte les CGV" avec lien).
+3. Conserver la preuve de l'acceptation (horodatage + version des CGV acceptées) dans Supabase.
+4. Versionner les CGV (v1, v2...) et archiver chaque version.
 
 ### 3.2 Droit de rétractation (14 jours)
-_À compléter_
+
+#### Contexte juridique
+
+Le droit de rétractation de 14 jours (Art. L.221-18 Code de la consommation) s'applique aux contrats conclus **à distance** avec des **consommateurs**.
+
+**Question clé** : les mandataires immobiliers indépendants sont-ils des consommateurs ou des professionnels ?
+
+| Statut du mandataire | Analyse | Conséquence |
+|---------------------|---------|-------------|
+| Agent commercial inscrit au RSAC | **Professionnel** — le service est souscrit pour son activité professionnelle | Pas de droit de rétractation obligatoire |
+| Micro-entrepreneur | **Professionnel** s'il souscrit pour son activité | Idem |
+| Salarié achetant à titre personnel | Peu probable (le service est clairement B2B) | Rétractation applicable le cas échéant |
+
+**Recommandation** : bien que juridiquement non obligatoire en B2B, **accorder volontairement une garantie "satisfait ou remboursé" de 14 jours** sur le Pack Lancement. Raisons :
+- Argument commercial fort ("Essaye sans risque")
+- Réduit la friction à l'achat
+- Aligne le service sur les standards du marché SaaS
+- Prévient tout litige avec un client qui se prévaudrait du statut de consommateur
+
+**ACTIONS** :
+1. Dans les CGV, préciser que le service s'adresse aux professionnels.
+2. Offrir une garantie commerciale de 14 jours (remboursement sur demande, hors livrables déjà utilisés/publiés).
+3. Pour les abonnements mensuels : pas de rétractation mais résiliation libre à la fin de chaque période mensuelle (pas d'engagement minimum sauf choix explicite du client).
+4. *À vérifier avec un juriste : le statut d'agent commercial peut dans certains cas être requalifié — la garantie volontaire protège contre ce risque.*
 
 ---
 
 ## 4. Mentions légales obligatoires
 
-_À compléter_
+Toute page web professionnelle en France doit afficher des mentions légales (Art. 6 III LCEN — Loi n° 2004-575).
+
+### Mentions à inclure sur la page /mentions-legales
+
+| Information | Détail | Obligation |
+|-------------|--------|------------|
+| **Raison sociale / nom** | Nom de la société ou de l'entrepreneur individuel | LCEN Art. 6 III |
+| **Forme juridique** | SAS, SASU, EI, micro-entreprise, etc. | LCEN Art. 6 III |
+| **Adresse du siège social** | Adresse postale complète | LCEN Art. 6 III |
+| **Numéro SIRET / SIREN** | Numéro d'immatriculation | LCEN Art. 6 III |
+| **Numéro de TVA intracommunautaire** | FR + 11 chiffres (dès assujettissement) | LCEN Art. 6 III |
+| **Capital social** | Montant (si société) | LCEN Art. 6 III |
+| **Responsable de la publication** | Nom du dirigeant | LCEN Art. 6 III |
+| **Email de contact** | contact@immocrew.fr | LCEN Art. 6 III |
+| **Numéro de téléphone** | Numéro professionnel | LCEN Art. 6 III |
+| **Hébergeur** | Nom, raison sociale, adresse de Replit Inc. (350 Mission St, San Francisco, CA 94105, USA) | LCEN Art. 6 III |
+| **Données personnelles** | Lien vers la Politique de Confidentialité + mention du droit de réclamation auprès de la CNIL | RGPD + LCEN |
+
+### ACTIONS
+
+1. **Créer la page /mentions-legales** sur le site (accessible depuis le footer de toutes les pages).
+2. **Créer la structure juridique** d'ImmoCrew si ce n'est pas fait (SASU recommandée pour un fondateur solo avec perspective de croissance). *À valider avec un expert-comptable.*
+3. **Réserver le domaine** immocrew.fr et créer les adresses email (contact@, dpo@).
+4. Lien vers les CGV et la Politique de Confidentialité depuis cette page.
 
 ---
 
 ## 5. Loi Hoguet — Analyse d'applicabilité
 
-_À compléter_
+### Contexte
+
+La Loi Hoguet (Loi n° 70-9 du 2 janvier 1970) réglemente les activités d'**entremise et de gestion immobilières** : achat, vente, location, gestion de biens immobiliers pour le compte d'autrui. Elle impose une carte professionnelle (carte T, carte G) et des obligations strictes (garantie financière, assurance RCP, etc.).
+
+### Analyse pour ImmoCrew
+
+| Critère Loi Hoguet | Activité ImmoCrew | Conclusion |
+|--------------------|-------------------|------------|
+| Entremise immobilière (mise en relation acheteur/vendeur) | **Non** — ImmoCrew produit du contenu marketing, il ne met pas en relation des parties | Non soumis |
+| Gestion immobilière | **Non** — aucune gestion de biens | Non soumis |
+| Rédaction d'actes / compromis | **Non** — ImmoCrew rédige des textes marketing (annonces, posts), pas des actes juridiques | Non soumis |
+| Perception de fonds pour compte de tiers | **Non** — ImmoCrew facture ses propres services | Non soumis |
+| Conseil en investissement immobilier | **Non** — aucun conseil d'achat/vente/investissement | Non soumis |
+
+### Conclusion
+
+**ImmoCrew n'est PAS soumis à la Loi Hoguet.** Le service est un prestataire de marketing B2B qui produit du contenu pour des professionnels de l'immobilier. Il n'exerce aucune activité d'entremise, de gestion ou de conseil immobilier.
+
+**Aucune carte professionnelle, garantie financière ou assurance spécifique Hoguet n'est requise.**
+
+### Précautions à maintenir
+
+1. **Ne jamais** inclure dans les livrables de conseils d'investissement immobilier ou d'estimations de prix à destination des clients finaux des mandataires.
+2. **Ne jamais** intervenir dans une transaction (pas de mise en relation acheteur/vendeur, pas de rédaction de compromis).
+3. **Ne pas** se présenter comme "agence immobilière" ou "conseil immobilier" — toujours comme "agence marketing" ou "service marketing".
+4. Si un client demande un service qui relèverait de la Loi Hoguet (ex : rédiger un avis de valeur), **refuser** et rediriger vers un professionnel habilité.
+
+*À vérifier avec un juriste : la rédaction d'annonces immobilières optimisées ne constitue-t-elle pas une forme d'assistance à la commercialisation ? Réponse attendue : non, tant qu'ImmoCrew ne publie pas lui-même les annonces et ne perçoit pas de commission sur les transactions. Mais une validation formelle est recommandée.*
 
 ---
 
 ## 6. Checklist de conformité pré-lancement
 
-_À compléter_
+### Bloquants (à faire AVANT la mise en ligne)
+
+- [ ] Créer la structure juridique (SASU / micro-entreprise) et obtenir le SIRET
+- [ ] Rédiger et publier les **CGV** (cf. section 3)
+- [ ] Rédiger et publier la **Politique de Confidentialité** (cf. section 1)
+- [ ] Créer la page **Mentions Légales** (cf. section 4)
+- [ ] Implémenter le **bandeau de consentement cookies** (Tarteaucitron.js ou équivalent)
+- [ ] Configurer **Supabase en région EU** (Francfort)
+- [ ] Configurer **PostHog EU Cloud** (eu.posthog.com)
+- [ ] Signer les **DPA** : Supabase, Clerk, Stripe, Replit, Anthropic
+- [ ] Créer l'adresse **dpo@immocrew.fr** (ou privacy@immocrew.fr)
+- [ ] Ajouter la **mention IA** dans les CGV et le processus d'onboarding (cf. section 2)
+- [ ] Implémenter la **checkbox d'acceptation des CGV** à l'inscription (avec horodatage)
+
+### Importants (à faire dans les 30 premiers jours)
+
+- [ ] Rédiger le **Registre des Traitements** (Art. 30 RGPD) — document interne
+- [ ] Préparer les **scripts d'export et de suppression** de données client (portabilité + effacement)
+- [ ] Documenter la **procédure de QA/relecture** des livrables IA (cf. section 2.2.C)
+- [ ] Souscrire une **assurance RCP** (Responsabilité Civile Professionnelle) — recommandé pour tout prestataire de services B2B
+- [ ] Mettre en place un **lien de désinscription** dans tous les emails commerciaux
+
+### Souhaitables (dans les 3 premiers mois)
+
+- [ ] Faire **valider les CGV par un juriste** spécialisé en droit du numérique
+- [ ] Faire **valider l'analyse Loi Hoguet** par un juriste spécialisé en droit immobilier
+- [ ] Implémenter une **purge automatique** des données à la résiliation
+- [ ] Mettre en conformité avec les **évolutions du AI Act** (application complète août 2026)
+- [ ] Envisager la certification **ISO 27001** ou un audit de sécurité si le volume de clients dépasse 100
+
+---
+
+> **Note finale** : cet audit est un cadrage initial. Il identifie les obligations et les actions concrètes. Il ne remplace pas une consultation juridique. Les points marqués "À vérifier avec un juriste" doivent être soumis à un professionnel du droit avant le lancement en production.
