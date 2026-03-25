@@ -298,7 +298,7 @@ export default function OnboardingPage() {
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="h-12 px-8 rounded-full bg-success text-white font-display font-semibold text-body shadow-sm hover:bg-success-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60"
+              className="h-12 px-8 rounded-full bg-success-600 text-white font-display font-semibold text-body shadow-sm hover:bg-success-700 hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60"
             >
               {isSubmitting ? "Envoi..." : "Terminer"}
             </button>

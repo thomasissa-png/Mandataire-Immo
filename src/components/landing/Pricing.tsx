@@ -131,7 +131,7 @@ export function Pricing() {
                 {pack.unit && (
                   <span
                     className={`text-body-sm ml-1 ${
-                      pack.featured ? "text-primary-300" : "text-neutral-400"
+                      pack.featured ? "text-primary-100" : "text-neutral-400"
                     }`}
                   >
                     {pack.unit}
@@ -139,7 +139,7 @@ export function Pricing() {
                 )}
                 <p
                   className={`text-caption mt-1 ${
-                    pack.featured ? "text-primary-300" : "text-neutral-400"
+                    pack.featured ? "text-primary-100" : "text-neutral-400"
                   }`}
                 >
                   TTC
@@ -197,7 +197,7 @@ export function Pricing() {
               {/* Mention */}
               <p
                 className={`text-caption text-center mt-3 ${
-                  pack.featured ? "text-primary-300" : "text-neutral-400"
+                  pack.featured ? "text-primary-100" : "text-neutral-400"
                 }`}
               >
                 {pack.mention}
