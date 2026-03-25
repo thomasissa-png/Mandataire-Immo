@@ -109,3 +109,13 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 - **2026-03-25** : Initialisation. project-context.md validé (qualité OK sur tous les champs critiques). Plan créé. Phase 0 lancée.
 - **2026-03-25** : Batch 1 Phase 0 lancé : @creative-strategy + @legal en parallèle.
 - **2026-03-25** : Demande utilisateur ajoutée — créer un agent @mandataire via @agent-factory après livraison des personas par @creative-strategy. Cet agent servira de "testeur métier" pour toutes les revues.
+- **2026-03-25** : Phase 0 terminée et validée par l'utilisateur. Positionnement confirmé.
+- **2026-03-25** : Phase 1 terminée. @ux, @design, @copywriter livrés. Directive IA ajoutée au brand-platform.
+- **2026-03-25** : Audit critique @creative-strategy livré. Corrections : marché 80K→40-50K, LinkedIn 20%→10-15%, objection ChatGPT Thomas ajoutée.
+- **2026-03-25** : Phase 2 lancée. @infrastructure bloqué par rate limit API — à relancer en prochaine session.
+
+## État pour reprise prochaine session
+- **Phases terminées** : 0 (fondations), 1 (expérience)
+- **Phase en cours** : 2 (développement) — @infrastructure à relancer (rien sauvegardé)
+- **Phases à faire** : 3 (SEO/GEO), 4 (acquisition), revue finale
+- **Pour reprendre** : lire project-context.md + docs/orchestration-plan.md, relancer @infrastructure
