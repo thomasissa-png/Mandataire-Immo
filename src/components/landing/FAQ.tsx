@@ -6,52 +6,52 @@ const FAQ_ITEMS = [
   {
     question: "C'est quoi exactement ImmoCrew ?",
     answer:
-      "ImmoCrew, c'est ton equipe marketing externalisee. Chaque mois, on redige pour toi tes posts, tes articles SEO, tes annonces immobilieres et tes scripts video. Tout est personnalise pour ta zone, tes biens et ton ton. Tu recois, tu publies, tu te concentres sur ton metier. On n'est pas un outil — on est une equipe qui bosse pour toi.",
+      "ImmoCrew, c'est ton équipe marketing externalisée. Chaque mois, on rédige pour toi tes posts, tes articles SEO, tes annonces immobilières et tes scripts vidéo. Tout est personnalisé pour ta zone, tes biens et ton ton. Tu reçois, tu publies, tu te concentres sur ton métier. On n'est pas un outil — on est une équipe qui bosse pour toi, chaque mois, sans que t'aies à demander.",
   },
   {
     question: "Le contenu est fait par une IA ?",
     answer:
-      "On utilise des outils IA pour personnaliser chaque contenu a ta zone (quartier, ecoles, prix au m\u00B2, transports). Mais chaque livrable est relu, ajuste et valide par notre equipe avant de t'etre envoye. Le resultat ? Du contenu qui sonne comme toi, pas comme un robot. On est transparents la-dessus : l'IA nous aide a etre rapides et precis. L'humain garantit que c'est naturel et juste.",
+      "On utilise des outils IA pour personnaliser chaque texte à ta zone (quartier, écoles, prix au m², transports). Mais chaque livrable est relu, ajusté et validé par notre équipe avant de t'être envoyé. Le résultat ? Du texte qui sonne comme toi, pas comme un robot. On est transparents là-dessus : l'IA nous aide à être rapides et précis. L'humain garantit que c'est naturel et juste.",
   },
   {
-    question: "Comment c'est personnalise pour ma zone ?",
+    question: "Comment c'est personnalisé pour ma zone ?",
     answer:
-      "Quand tu commences, on te pose une vingtaine de questions : ta ville, ton quartier precis, ta specialite (appartements, maisons, neuf, ancien), ton ton de communication, tes biens en cours. A partir de la, chaque contenu integre des donnees locales reelles — les ecoles du quartier, les commerces, les prix au m\u00B2, les transports, l'ambiance. Pas juste le nom de ta ville en gras.",
+      "Quand tu commences, on te pose une vingtaine de questions : ta ville, ton quartier précis, ta spécialité (appartements, maisons, neuf, ancien), ton ton de communication, tes biens en cours. À partir de là, chaque texte intègre des données locales réelles — les écoles du quartier, les commerces, les prix au m², les transports, l'ambiance. Pas juste le nom de ta ville en gras.",
   },
   {
     question: "150\u20AC/mois, c'est rentable ?",
     answer:
-      "Fais le calcul autrement. Combien d'heures passes-tu sur ton marketing par mois — entre Canva, les idees de posts, les annonces a rediger ? Si c'est 10 heures, c'est 10 heures que tu ne passes pas en prospection ou en visites. 150\u20AC/mois, c'est te racheter ces heures-la. Et si en plus ca t'amene un contact vendeur de plus dans l'annee — et ca arrive, parce que tu es enfin visible sur Google — ta commission rembourse 12 mois d'abonnement. Mais meme sans ca : ton temps vaut plus que 5\u20AC par jour.",
+      "Fais le calcul autrement. Combien d'heures passes-tu sur ton marketing par mois — entre Canva, les idées de posts, les annonces à rédiger ? Si c'est 10 heures, c'est 10 heures que tu ne passes pas en prospection ou en visites. 150\u20AC/mois, c'est te racheter ces heures-là. Et si en plus ça t'amène un contact vendeur de plus dans l'année — et ça arrive, parce que tu es enfin visible sur Google — ta commission rembourse 12 mois d'abonnement. Mais même sans ça : ton temps vaut plus que 5\u20AC par jour.",
   },
   {
-    question: "Je n'ai vraiment pas le temps de publier, meme du contenu tout fait.",
+    question: "Je n'ai vraiment pas le temps de publier, même du contenu tout fait.",
     answer:
-      "Publier un post ImmoCrew, c'est 3 minutes. Tu ouvres ton espace client, tu copies le texte, tu le colles sur Instagram ou Facebook, tu publies. Pas 45 minutes devant Canva a chercher des idees. 3 minutes par jour, meme entre deux visites. Et si tu preferes tout publier le dimanche soir pour la semaine, ca marche aussi.",
+      "Publier un post ImmoCrew, c'est 3 minutes. Tu ouvres ton espace client, tu copies le texte, tu le colles sur Instagram ou Facebook, tu publies. Pas 45 minutes devant Canva à chercher des idées. 3 minutes par jour, même entre deux visites. Et si tu préfères tout publier le dimanche soir pour la semaine, ça marche aussi.",
   },
   {
-    question: "Mon reseau IAD (ou SAFTI) me donne deja des templates.",
+    question: "Mon réseau me donne déjà des templates.",
     answer:
-      "Les templates de ton reseau, c'est le meme visuel pour 18 000 mandataires. Ton voisin IAD a exactement le meme post que toi. Avec ImmoCrew, chaque contenu parle de ton quartier, de tes biens, de ton expertise a toi. C'est la difference entre porter un uniforme et avoir un costume sur mesure.",
+      "Les templates de ton réseau, c'est le même visuel pour 18 000 mandataires. Ton voisin a exactement le même post que toi. Avec ImmoCrew, chaque texte parle de ton quartier, de tes biens, de ton expertise à toi. C'est la différence entre porter un uniforme et avoir un costume sur mesure.",
   },
   {
-    question: "J'ai deja essaye un community manager freelance et c'etait decevant.",
+    question: "J'ai déjà essayé un community manager freelance et c'était décevant.",
     answer:
-      "On comprend. Le probleme des CM freelance, c'est qu'ils ne connaissent pas l'immobilier. Ils postent des trucs generiques avec des hashtags random. ImmoCrew est fait uniquement pour les mandataires immobiliers. Nos redacteurs connaissent ton metier, tes frustrations, tes clients. Et a 150\u20AC/mois au lieu de 500-800\u20AC, le risque est nettement plus faible.",
+      "On comprend. Le problème des freelances, c'est qu'ils ne connaissent pas l'immobilier. Ils postent des trucs génériques avec des hashtags au hasard. ImmoCrew est fait uniquement pour les mandataires. Nos rédacteurs connaissent ton métier, tes frustrations, tes clients. Et à 150\u20AC/mois au lieu de 500-800\u20AC, le risque est nettement plus faible.",
   },
   {
-    question: "Comment je recois mes livrables ?",
+    question: "Comment je reçois mes posts et articles ?",
     answer:
-      "Tu as un espace client en ligne. Chaque mois, tu te connectes, tes livrables sont la : posts, articles, annonces, scripts video. Tu peux les copier en un clic. Pas de pieces jointes par email, pas de fichiers a telecharger, pas de format bizarre. Tout est pret, tout est accessible depuis ton telephone.",
+      "Tu as un espace client en ligne. Chaque mois, tu te connectes, tes posts et articles sont là — prêts à copier en un clic. Pas de pièces jointes par email, pas de fichiers à télécharger, pas de format bizarre. Tout est prêt, tout est accessible depuis ton téléphone.",
   },
   {
-    question: "Je peux arreter quand je veux ?",
+    question: "Je peux arrêter quand je veux ?",
     answer:
-      "Oui. Le Pack Mensuel est sans engagement. Tu peux resilier a tout moment, en un clic depuis ton espace client. Pas de frais caches, pas de preavis de 3 mois, pas de coup de fil pour te retenir. Et pour le Pack Lancement, tu as une garantie satisfait ou rembourse de 14 jours.",
+      "Oui. Le Pack Mensuel est sans engagement. Tu peux résilier à tout moment, en un clic depuis ton espace client. Pas de frais cachés, pas de préavis de 3 mois, pas de coup de fil pour te retenir. Et pour le Pack Lancement, tu as une garantie satisfait ou remboursé de 14 jours.",
   },
   {
-    question: "Qui est derriere ImmoCrew ?",
+    question: "Qui est derrière ImmoCrew ?",
     answer:
-      "ImmoCrew a ete cree par un entrepreneur qui a travaille avec des dizaines de mandataires immobiliers et qui connait une frustration universelle : vous etes des pros de l'immobilier, pas du marketing digital. Notre mission, c'est de vous donner acces a une equipe marketing de qualite, a un prix qui fait sens pour un independant. Pas une usine a gaz, pas un logiciel de plus — juste du contenu pro, personnalise, livre chaque mois.",
+      "ImmoCrew a été créé par un entrepreneur qui a travaillé avec des dizaines de mandataires et qui connaît une frustration universelle : tu es pro de l'immobilier, pas du marketing. Notre mission, c'est de te donner accès à une équipe de qualité, à un prix qui fait sens pour un indépendant. Pas une usine à gaz, pas un outil de plus — juste tes posts et tes articles, personnalisés, livrés chaque mois.",
   },
 ] as const
 
@@ -87,12 +87,13 @@ function FAQItem({
           {question}
         </span>
         <svg
-          className={`w-5 h-5 text-neutral-400 flex-shrink-0 transition-transform duration-slow ${
-            isOpen ? "rotate-180" : ""
+          className={`w-5 h-5 flex-shrink-0 transition-transform duration-slow ${
+            isOpen ? "rotate-180 text-secondary" : "text-neutral-400"
           }`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
+          aria-hidden="true"
         >
           <path
             strokeLinecap="round"
@@ -106,7 +107,7 @@ function FAQItem({
       <div
         id={`faq-panel-${index}`}
         className={`overflow-hidden transition-all duration-slow ${
-          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div className="px-6 pb-6">

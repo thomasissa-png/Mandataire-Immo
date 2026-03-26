@@ -32,7 +32,7 @@ const PACKS = [
       "Calendrier \u00E9ditorial sur 30 jours",
       "20 posts pr\u00EAts \u00E0 publier",
       "10 scripts Reels",
-      "Brief d'identit\u00E9 visuelle personnalis\u00E9",
+      "Guide visuel personnalis\u00E9 pour ton image",
     ],
   },
   {
@@ -65,10 +65,10 @@ const PACKS = [
     ctaHref: "/api/checkout?pack=boost",
     featured: false,
     features: [
-      "1 annonce storytelling qui sort du lot",
+      "1 annonce qui raconte l'histoire du bien",
       "3 posts d\u00E9di\u00E9s au bien + 1 Reel",
-      "1 mini landing page du bien",
-      "1 email blast vers ta base d'acheteurs",
+      "1 page d\u00E9di\u00E9e au bien \u00E0 partager",
+      "1 email envoy\u00E9 \u00E0 tes acheteurs potentiels",
     ],
   },
 ] as const
@@ -224,13 +224,13 @@ export function Pricing() {
             </div>
             <div className="p-4 rounded-lg bg-warning-50">
               <p className="font-display text-h2 text-warning-800">250-300&euro;</p>
-              <p className="text-body-sm text-neutral-600 mt-1">Plateforme SaaS cl&eacute; en main</p>
-              <p className="text-caption text-neutral-400">Templates &agrave; adapter toi-m&ecirc;me</p>
+              <p className="text-body-sm text-neutral-600 mt-1">Outil avec templates</p>
+              <p className="text-caption text-neutral-400">&Agrave; adapter toi-m&ecirc;me</p>
             </div>
             <div className="p-4 rounded-lg bg-success-50 ring-2 ring-success">
               <p className="font-display text-h2 text-success-800">150&euro;</p>
               <p className="text-body-sm text-neutral-600 mt-1 font-semibold">ImmoCrew</p>
-              <p className="text-caption text-neutral-400">Contenu fini, personnalis&eacute; pour ta zone</p>
+              <p className="text-caption text-neutral-400">Tes posts finis, personnalis&eacute;s pour ta zone</p>
             </div>
           </div>
           <p className="text-center text-body text-neutral-600 mt-4">

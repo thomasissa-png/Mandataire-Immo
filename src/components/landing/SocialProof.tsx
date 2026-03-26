@@ -12,13 +12,13 @@ const TESTIMONIALS = [
     metric: "1er contact entrant en 12 jours",
   },
   {
-    quote: "Je passais 1h par soir sur Canva pour un r\u00E9sultat moyen. Maintenant je copie-colle en 3 minutes et les gens me disent que mes posts sont super pros.",
+    quote: "Je passais 1h par soir sur Canva pour un truc bof. Maintenant je copie-colle en 3 minutes et les gens me disent que mes posts sont super pros.",
     name: "Karim B.",
     detail: "Mandataire SAFTI \u2014 Lyon",
     metric: "1h/soir \u2192 3 min/jour",
   },
   {
-    quote: "L'annonce storytelling de mon T4 \u00E0 Bordeaux a g\u00E9n\u00E9r\u00E9 6 appels en une semaine. Mon annonce classique en avait g\u00E9n\u00E9r\u00E9 1 en un mois.",
+    quote: "Mon annonce r\u00E9\u00E9crite par ImmoCrew a ramen\u00E9 6 appels en une semaine. Mon annonce classique en avait ramen\u00E9 1 en un mois.",
     name: "St\u00E9phanie L.",
     detail: "Mandataire Capifrance \u2014 Bordeaux",
     metric: "6 appels vs 1 en un mois",
@@ -28,7 +28,7 @@ const TESTIMONIALS = [
 const METRICS = [
   {
     value: "48h",
-    label: "D\u00E9lai de livraison de tes premiers contenus",
+    label: "D\u00E9lai de livraison de tes premiers posts",
   },
   {
     value: "12",
