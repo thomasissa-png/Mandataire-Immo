@@ -226,7 +226,7 @@ export async function POST(request: NextRequest) {
     })
     const calendarData = await generateJSON(calendarPrompt)
     const calendarId = await insertDeliverable({
-      clientEmail: userEmail,
+      clientEmail,
       clientId: client_id,
       type: "calendrier",
       title: `Calendrier de publication — ${formatMoisLabel(mois)}`,
