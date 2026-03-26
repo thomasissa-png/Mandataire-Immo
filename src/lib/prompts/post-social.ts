@@ -73,9 +73,9 @@ REGLES EDITORIALES :
 - Les posts doivent donner envie de contacter ${input.prenom}, pas juste de liker
 
 FORMATS PAR PLATEFORME :
-- Instagram : 5-15 lignes, emojis moderees (2-4 max), hashtags pertinents (8-15), brief visuel en commentaire
-- Facebook : 5-20 lignes, ton conversationnel, question en fin de post, 3-5 hashtags max
-- LinkedIn : 8-20 lignes, ton expert, chiffres marche local, 3-5 hashtags pro
+- Instagram : 8-15 lignes MINIMUM, emojis moderees (2-4 max), hashtags pertinents (8-15), brief visuel en commentaire. Un post de moins de 8 lignes est INSUFFISANT — developper le contenu.
+- Facebook : 8-20 lignes MINIMUM, ton conversationnel, question en fin de post, 3-5 hashtags max. Un post de moins de 8 lignes est INSUFFISANT.
+- LinkedIn : 10-20 lignes MINIMUM, ton expert, chiffres marche local, 3-5 hashtags pro. Un post LinkedIn court ne genere pas d'engagement.
 
 TYPES DE POSTS A ALTERNER :
 1. Mise en avant d'un bien (storytelling quartier + projection de vie)

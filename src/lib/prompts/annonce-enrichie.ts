@@ -1,7 +1,7 @@
 /**
  * Prompt — Annonce immobiliere enrichie DVF/DPE (version longue + courte)
  * Utilise pour : Versiroom integration — annonce avec donnees publiques verifiees
- * Genere 2 versions : longue storytelling ImmoCrew (~500 mots) + courte portail (SeLoger 1500 car. max)
+ * Genere 2 versions : longue storytelling ImmoCrew (600-800 mots) + courte portail (SeLoger 1500 car. max)
  * Modele cible : Claude Sonnet (meilleur ratio qualite/cout pour du redactionnel long)
  */
 
@@ -142,7 +142,7 @@ ${input.dpe.date_diagnostic ? `- Date du diagnostic : ${input.dpe.date_diagnosti
 - Citer la source en fin d'annonce : "Donnees DVF: [source]. DPE: [source]."
 
 ## Regles editoriales
-- Version LONGUE : ~500 mots, storytelling immersif ImmoCrew (accroche quartier → decouverte bien → projection de vie → chiffres verifies → CTA)
+- Version LONGUE : 600-800 mots, storytelling immersif ImmoCrew (accroche quartier → decouverte bien → projection de vie → chiffres verifies → CTA)
 - Version COURTE : 1500 caracteres max, format portail SeLoger/LeBonCoin (factuel, structure, les donnees cles en premier)
 - Tutoie le lecteur (l'acheteur potentiel)
 - Pas de cliches immobiliers : "bel appartement lumineux", "proche commerces", "ecrin de verdure"
@@ -153,7 +153,7 @@ Reponds UNIQUEMENT avec un JSON valide :
 {
   "version_longue": {
     "titre": "Titre accrocheur (~60 caracteres)",
-    "texte": "Texte complet ~500 mots avec donnees DVF/DPE integrees, en Markdown",
+    "texte": "Texte complet 600-800 mots avec donnees DVF/DPE integrees, en Markdown",
     "mentions_legales": "Prix, surface Carrez, DPE, sources des donnees"
   },
   "version_courte": {
@@ -233,7 +233,7 @@ ${input.email_contact ? `- Email : ${input.email_contact}` : ''}
 ${donneesLocalesStr}
 
 ## Consignes
-- Version LONGUE : ~500 mots, storytelling ImmoCrew. Integrer les donnees DVF et DPE comme des faits naturellement dans le recit (pas en bloc separe).
+- Version LONGUE : 600-800 mots, storytelling ImmoCrew. Integrer les donnees DVF et DPE comme des faits naturellement dans le recit (pas en bloc separe).
 - Version COURTE : <=1500 caracteres, format SeLoger. Structure : titre, localisation, surface/pieces, DPE, prix/m2 vs marche, points forts, contact. Factuel et dense.
 - Les donnees DVF/DPE sont des FAITS publics verifies — les presenter comme tels.
 - Inclure les sources en fin de chaque version.

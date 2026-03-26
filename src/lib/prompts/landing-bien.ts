@@ -149,6 +149,7 @@ ${hasDvf || hasDpeData ? '\n- Les donnees DVF et DPE sont des FAITS publics veri
 - Palette : ${input.couleur_principale || '#1B2A4A'} pour les titres, ${input.couleur_accent || '#F27A1A'} pour les CTA, blanc/gris clair pour le fond
 - Section hero avec le titre du bien et l'accroche
 - Section description avec le texte storytelling (fourni ou a generer)
+${!input.annonce_storytelling ? '- IMPORTANT : si aucune annonce storytelling n\'est fournie, tu DOIS generer une description immersive du bien de MINIMUM 300 mots. Decrire piece par piece avec projection de vie, pas une fiche technique. L\'acheteur doit pouvoir s\'imaginer vivre dans ce bien en lisant la description.' : ''}
 - Section caracteristiques (surface, pieces, prix, points forts${hasDpeData ? ', badge DPE colore' : ''}) en grille
 ${hasDvf ? '- Section "Marche local" avec donnees DVF (prix median, nb transactions, positionnement du bien)' : ''}
 - Section quartier (description locale, commodites, transports${hasCoordonnees ? ', carte OpenStreetMap' : ''})

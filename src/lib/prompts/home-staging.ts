@@ -1,9 +1,19 @@
 /**
- * Prompt — Home staging virtuel par IA (generation d'images)
- * Utilise pour : Versiroom integration — visuels de home staging sur photos de biens vides/mal meublis
+ * Prompt — Home staging virtuel par IA (generation d'images DE REFERENCE)
+ * Utilise pour : Versiroom integration — visuels de home staging pour pages de biens
  * Modele cible : gpt-image-1 (OpenAI) — generation d'image a partir de texte
  * Fallback : Replicate SDXL (si OpenAI indisponible ou trop cher)
  * Cout estime : ~0.04-0.08 USD/image, max 5 images/bien
+ *
+ * IMPORTANT — Ce prompt genere des IMAGES DE REFERENCE (studio shots) a partir
+ * d'une description textuelle de la piece. Ce n'est PAS une retouche de photo
+ * existante (inpainting). Pour du home staging sur une VRAIE photo du bien,
+ * il faudrait un pipeline inpainting separe (DALL-E image editing, Stable
+ * Diffusion inpainting) qui n'est pas implemente dans cette version.
+ *
+ * Les images generees sont des illustrations d'ambiance montrant le potentiel
+ * de la piece avec du mobilier. Elles doivent TOUJOURS porter la mention legale :
+ * "Home staging virtuel — mobilier non inclus dans la vente — photo non contractuelle"
  */
 
 export interface HomeStagingInput {

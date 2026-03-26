@@ -137,7 +137,7 @@ CONTEXTE LOCAL VERIFIE (utilise UNIQUEMENT ces donnees, ne rien inventer) :
 ${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² a ${input.zone_geo.ville} : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
 ${input.donnees_locales!.tendance_marche ? `- Tendance du marche : ${input.donnees_locales!.tendance_marche}` : ''}
 ${input.donnees_locales!.population ? `- Population : ${input.donnees_locales!.population.toLocaleString('fr-FR')} hab.` : ''}
-${input.donnees_locales!.concurrents_locaux?.length ? `- Concurrents locaux connus : ${input.donnees_locales!.concurrents_locaux.join(', ')}` : ''}`
+${input.donnees_locales!.concurrents_locaux?.length ? `- Concurrents locaux connus (pour calibration INTERNE uniquement — NE JAMAIS citer ces noms dans le document final) : ${input.donnees_locales!.concurrents_locaux.join(', ')}` : ''}`
     : `
 CONTEXTE LOCAL : donnees detaillees non disponibles. Ancrer le positionnement sur le nom de ville et quartiers fournis dans zone_geo. NE PAS inventer de prix m2, de concurrents ou de donnees demographiques.`
 
