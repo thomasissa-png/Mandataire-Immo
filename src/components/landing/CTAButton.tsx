@@ -26,7 +26,7 @@ export function CTAButton({
     secondary:
       "bg-primary text-white shadow-sm hover:bg-primary-600 hover:shadow-md",
     outline:
-      "border-2 border-secondary text-secondary hover:bg-secondary-50",
+      "bg-primary text-white shadow-sm hover:bg-primary-600 hover:shadow-md",
   }
 
   return (
