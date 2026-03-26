@@ -18,20 +18,20 @@ export function Hero() {
               fait le reste.
             </p>
 
-            {/* CTA principal → exemples (basse friction) */}
-            <CTAButton
-              href="#avant-apres"
-              label="Voir un exemple concret →"
-              location="hero_primary"
-            />
-
-            {/* CTA secondaire → pricing */}
-            <a
-              href="#pricing"
-              className="mt-3 inline-block text-body-sm text-neutral-500 hover:text-secondary underline transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded"
-            >
-              Voir les tarifs &rarr;
-            </a>
+            {/* Double CTA — exemple + tarifs, cote a cote */}
+            <div className="flex flex-col tablet:flex-row items-start tablet:items-center gap-4">
+              <CTAButton
+                href="#avant-apres"
+                label="Voir un exemple concret →"
+                location="hero_primary"
+              />
+              <CTAButton
+                href="#pricing"
+                label="Voir les tarifs →"
+                location="hero_secondary"
+                variant="outline"
+              />
+            </div>
 
             {/* Mention rassurante */}
             <p className="mt-4 text-body-sm text-neutral-500">
