@@ -72,7 +72,7 @@ function discoverArticles(): ArticleMeta[] {
   try {
     files = fs
       .readdirSync(ARTICLES_DIR)
-      .filter((f) => f.startsWith("article-") && f.endsWith(".md"))
+      .filter((f: string) => f.startsWith("article-") && f.endsWith(".md"))
       .sort()
   } catch {
     // Dossier introuvable — retourner la liste legacy
@@ -258,7 +258,7 @@ function parseArticle(meta: ArticleMeta): Article {
       continue
     }
     if (line.startsWith("> Mots-cl\u00E9s secondaires :") || line.startsWith("> Mots-cles secondaires :")) {
-      keywords = line.replace(/> Mots-cl[eé]s secondaires\s*:\s*/i, "").split(",").map((k) => k.trim())
+      keywords = line.replace(/> Mots-cl[eé]s secondaires\s*:\s*/i, "").split(",").map((k: string) => k.trim())
       continue
     }
     if (line.startsWith("> Temps de lecture :")) {

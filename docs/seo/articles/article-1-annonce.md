@@ -124,7 +124,7 @@ Si tu veux aller plus loin sur ta visibilité en ligne, lis aussi notre guide su
 
 ## Tu veux que tes annonces soient rédigées pour toi, chaque mois ?
 
-Mettre en pratique ces conseils demande du temps. Et le temps, c'est ce que tu as le moins quand tu jonbles visites, estimations et paperasse.
+Mettre en pratique ces conseils demande du temps. Et le temps, c'est ce que tu as le moins quand tu jongles entre visites, estimations et paperasse.
 
 ImmoCrew rédige tes annonces immobilières pour toi — personnalisées pour ta zone, avec les prix au m² réels de ton secteur et les repères locaux qui font la différence. Tu reçois le texte, tu copies, tu publies.
 

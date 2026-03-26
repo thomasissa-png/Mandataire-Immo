@@ -181,7 +181,7 @@ CONSIGNES :
   const articlesDir = path.join(process.cwd(), "docs", "seo", "articles")
   const existingFiles = fs
     .readdirSync(articlesDir)
-    .filter((f) => f.startsWith("article-") && f.endsWith(".md"))
+    .filter((f: string) => f.startsWith("article-") && f.endsWith(".md"))
   const nextNumber = existingFiles.length + 1
 
   // Construire le contenu markdown avec frontmatter

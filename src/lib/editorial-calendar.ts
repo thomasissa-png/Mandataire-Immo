@@ -350,6 +350,42 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     priorite: 20,
     statut: "planifie",
   },
+
+  // ── Angles morts critiques (audit creative-strategy 2026-03-26) ──
+  {
+    slug: "mandats-entrants-sans-prospecter",
+    titre:
+      "Comment avoir des mandats entrants sans prospecter (et sans budget pub)",
+    mot_cle_principal: "mandats entrants mandataire immobilier",
+    mots_cles_secondaires: [
+      "comment generer des mandats",
+      "mandats sans prospecter",
+      "mandats entrants agent immobilier",
+      "generer mandats entrants immobilier",
+    ],
+    categorie: "Strat\u00E9gie",
+    angle:
+      "Les 4 leviers digitaux pour recevoir des mandats au lieu d'aller les chercher — chaque levier necessite du contenu regulier",
+    priorite: 6, // Haute priorite — middle funnel, requete volumineuse
+    statut: "planifie",
+  },
+  {
+    slug: "budget-marketing-mandataire-immobilier",
+    titre:
+      "Quel budget marketing pour un mandataire immobilier ? (comparatif 2026)",
+    mot_cle_principal: "budget marketing mandataire immobilier",
+    mots_cles_secondaires: [
+      "combien coute community manager immobilier",
+      "tarif freelance marketing immobilier",
+      "cout marketing agent immobilier",
+      "externaliser marketing immobilier prix",
+    ],
+    categorie: "Strat\u00E9gie",
+    angle:
+      "Comparatif honnete : freelance vs templates reseau vs service productise — sans nommer de concurrent, avec les vrais chiffres du marche",
+    priorite: 7, // Haute priorite — bottom funnel, intention commerciale
+    statut: "planifie",
+  },
 ]
 
 /**

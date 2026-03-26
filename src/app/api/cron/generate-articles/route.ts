@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
 function getExistingSlugs(): Set<string> {
   try {
     const files = fs.readdirSync(ARTICLES_DIR).filter(
-      (f) => f.startsWith("article-") && f.endsWith(".md")
+      (f: string) => f.startsWith("article-") && f.endsWith(".md")
     )
     const slugs = new Set<string>()
     for (const file of files) {
@@ -189,7 +189,7 @@ CONSIGNES :
   // Determiner le numero
   const existingFiles = fs
     .readdirSync(ARTICLES_DIR)
-    .filter((f) => f.startsWith("article-") && f.endsWith(".md"))
+    .filter((f: string) => f.startsWith("article-") && f.endsWith(".md"))
   const nextNumber = existingFiles.length + 1
 
   const today = new Date().toISOString().split("T")[0]
