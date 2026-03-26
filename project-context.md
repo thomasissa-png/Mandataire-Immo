@@ -230,6 +230,12 @@ ImmoCrew n'est PAS un outil. C'est une ÉQUIPE. Le mandataire rêve d'avoir un d
 | @reviewer | 2026-03-26 | Revue croisee V4 (`docs/reviews/cross-review-v4.md`) | GO avec reserves. 4 chantiers audites (agents update, social templates, E2E Playwright, Versiroom). 1 BLOQUANT securite (XSS dangerouslySetInnerHTML page bien), 3 MAJEURS (validation key images, duplication prompt openai.ts, OPENAI_API_KEY .env), 5 MINEURS. Score persona 9.0/10 PASS. Score B2B 8.9/10 limite. Tous livrables >= 4.5/5. | Verdict GO (pas NO-GO) car le bloquant est une correction de 30 min (ajouter sanitization dans markdownToHtml). Les fondations sont solides. L'integration Versiroom est un vrai differenciateur. Les templates social comblent le dernier trou de la Phase 4. |
 | @qa | 2026-03-26 | Tests unitaires enrich-property (`src/__tests__/lib/enrich-property.test.ts`, 20 tests) + Tests E2E page bien (`e2e/property-page.spec.ts`, 5 tests) + MAJ vitest.config.ts (coverage src/lib/) | 20 tests unitaires couvrant geocodeAddress (4 cas : valide, vide, erreur 500, timeout), fetchDVFData (4 cas : valide avec calcul prix_m2_moyen, vide, timeout, erreur), fetchDPEData via enrichPropertyExtended (4 cas : valide, vide, timeout avec isolation DVF, erreur), generateShortAnnonce (7 cas : sous limite, depassement 1500 car, pas de coupe milieu mot, limite custom, coupe phrase complete, suppression markdown, non-vide). 5 tests E2E : route 404/500 ID inexistant, slug inexistant, injection SQL/XSS (3 IDs malveillants), structure HTML si DB accessible, mention legale home staging, erreurs JS non catchees. | Angles morts m2 et m3 de cross-review-v4.md. Tests unitaires via mock global.fetch (pas d'appel reseau) — chaque API mockee independamment pour tester les scenarios de timeout/erreur sans affecter les autres APIs. Tests E2E adaptes a l'absence de DB en CI : acceptent 404 ou 500, skip automatique si bien test non trouve. Coverage vitest etendu a src/lib/enrich-property.ts. Alternative ecartee : tester geocodeAddress/fetchDVFData directement (fonctions privees) — teste indirectement via enrichProperty/enrichPropertyExtended pour ne pas coupler les tests a l'implementation interne. |
 | @reviewer | 2026-03-26 | Revue croisee V5 (`docs/reviews/cross-review-v5.md`) | GO sans reserve. 10/10 corrections V4 verifiees et conformes. Score persona 9.1/10 PASS. Score B2B 9.0/10 PASS. Tous livrables >= 4.5/5 (4.9, 5, 5, 5). Zero faille securite ouverte. | Verdict GO (plus de reserve) car toutes les corrections sont appliquees. B1 sanitize HTML operationnel, M1 validation key images, M2 duplication resolue, M3 .env.example complet, m1-m5 tous corriges. Angles morts restants (export portails, perf mobile Leaflet) sont des evolutions backlog, pas des pre-requis. |
+| @orchestrator | 2026-03-26 | Session 5 — Audit pricing + prix ronds 400/150/100 | @creative-strategy : charm pricing "en 7" incoherent brand voice. 497/197/97 → 400/150/100. MRR cible 40 clients. CGV, FAQ, checkout, metadata, tests alignes. | Prix ronds car "zero bullshit". 150€ dans le sweet spot tresorerie Sophie. |
+| @orchestrator | 2026-03-26 | Session 5 — Audit design/UX 9.5/10 | 4 agents, ~50 fichiers. Focus rings, rounded-xl, contrastes WCAG, Hero double CTA, Pricing 2 packs + Boost upsell, FAQ reecrite UTF-8, CTA orange vif text-body-lg. | Accents dans FIELD_LABELS = probleme critique pour un service de qualite redactionnelle. |
+| @orchestrator | 2026-03-26 | Session 5 — Blog SEO + pipeline auto | /blog + 5 articles + pages GEO + favicons + OG image + calendrier 22 sujets + cron 2x/sem. | Longue traine "mandataire" car zero concurrence SEO sur ce terme. |
+| @orchestrator | 2026-03-26 | Session 5 — Migration Clerk → NextAuth.js | 18 fichiers, modal auth, UserMenu, middleware JWT, bcryptjs, /api/setup-admin. | NextAuth car auth locale, zero dependance externe. |
+| @orchestrator | 2026-03-26 | Session 5 — PostgreSQL audit + persistance | Webhook user.updated, bug calendrier fixe, Object Storage articles, churned bloque, banniere mensuelle timing. | Bug calendrier = email admin au lieu de client. |
+| @orchestrator | 2026-03-26 | Session 5 — Onboarding enrichi | LinkedIn URL + bio, photo profil, autocompletion adresse, lien annonce, pre-remplissage session, erreur visible sur Terminer. | LinkedIn plutot que 3 champs texte car Sophie ne racontera pas son histoire. |
 
 ---
 
@@ -266,18 +272,24 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 
 ## Memo de reprise — derniere session
 
-- **Date de cloture** : 2026-03-26, session 4
-- **Resume de la session** : Phase 6 (pipeline IA) integralement implementee et validee. 10 prompts codes et ameliores (anti-hallucination, donnees locales verifiees, DPE obligatoire). Onboarding refonte 10 etapes (biens structures, donnees locales, histoire perso, confort camera). Formulaire mise a jour mensuelle. Enrichissement auto via API gouv + DVF. Audits Sophie (9.06/10) + Marc (9.1/10) — objectif 9/10 atteint. Revue V3 (9.2/10, GO). Infos VERSI renseignees dans les pages legales. Favicon ajoutee. Comparaison ImmoCrew vs Versiroom realisee (synergie identifiee : visuels + enrichissement auto).
-- **Travaux en cours** : AUCUN — toutes les phases de la roadmap sont terminees (0 a 6).
+- **Date de cloture** : 2026-03-26, session 5
+- **Branche** : `claude/review-project-context-Pw0Fn`
+- **Resume de la session** : Session massive d'audit et d'iteration. 6 chantiers : (1) Audit pricing complet + migration prix ronds 400/150/100 EUR, (2) Audit design/UX section par section jusqu'a 9/10, (3) Blog SEO complet avec 5 articles + pipeline automatise 22 sujets, (4) Migration Clerk → NextAuth.js (18 fichiers), (5) Audit PostgreSQL + corrections persistance, (6) Onboarding enrichi (LinkedIn, photo, autocompletion). 40+ agents lances, ~50 commits, ~100 fichiers modifies.
+- **Travaux en cours** :
+  - **Onboarding enrichi** : @fullstack a implemente LinkedIn URL, photo profil, autocompletion adresse, lien annonce. A tester en production.
+  - **Option trimestrielle** : documentee dans la strategie (135€/mois engagement 3 mois), non implementee (necessite produit Stripe).
+  - **Sequence email Lancement → Mensuel** : specifiee (J+2, J+7, J+14), non codee.
+  - **Lien "Mot de passe oublie"** : absent du modal auth (necessite une route de reset password).
 - **Prochaines actions recommandees** :
-  1. **Fondateur : Deployer en production** — executer `sql/003_ai_pipeline.sql`, configurer `ANTHROPIC_API_KEY` dans Replit Secrets, deployer la branche `claude/update-gradient-agents-l9MVz`.
-  2. **Fondateur : Premier client test** — tester le pipeline complet (onboarding → trigger production → livrables dans dashboard) avec un vrai mandataire et une vraie cle API.
-  3. **@fullstack : Integration visuels Versiroom** — combiner home staging IA + annonces storytelling + page annonce hebergee (cf. `docs/reviews/sophie-immocrew-vs-versiroom.md`). Feature premium potentielle (+19-29 EUR/mois).
-  4. **@qa : Tests E2E Playwright** — reportes depuis la Phase 2. Le pipeline est fonctionnel, les tests E2E valideraient le parcours complet (onboarding → generation → dashboard).
-  5. **@social : Templates contenu manquant** — `docs/social/content-templates.md` non produit (timeout Phase 4). A relancer.
-- **Blockers** : AUCUN blocker technique ni legal. Pret pour mise en production.
+  1. **Fondateur : Deployer et tester** — executer les migrations SQL (003, 004, 005), configurer les Secrets Replit (NEXTAUTH_SECRET, NEXTAUTH_URL, ADMIN_EMAIL, ADMIN_PASSWORD, ANTHROPIC_API_KEY, DATABASE_URL), visiter /api/setup-admin, tester le flow complet sign-up → onboarding → admin trigger → dashboard.
+  2. **@fullstack : Route reset password** — ajouter /api/auth/reset-password + lien "Mot de passe oublie" dans AuthModal. Critique pour la retention.
+  3. **@fullstack : Option trimestrielle Stripe** — creer le produit Stripe 135€/mois engagement 3 mois, ajouter toggle dans Pricing.tsx.
+- **Blockers** :
+  - Les migrations SQL doivent etre executees avant tout test (tables clients, deliverables, payments)
+  - NEXTAUTH_SECRET et NEXTAUTH_URL obligatoires pour que l'auth fonctionne
+  - Marque INPI "ImmoCrew" a verifier (collision avec SIRET 894616713 Auterive)
 - **Commande de reprise suggeree** :
 
 ```
-Lis project-context.md et docs/orchestration-plan.md. Le projet ImmoCrew est feature-complete (Phases 0-6 terminees, scores 9+/10). Prochaines actions : (1) deployer en production (sql/003_ai_pipeline.sql + ANTHROPIC_API_KEY), (2) tester le pipeline avec un vrai client, (3) integration visuels Versiroom (home staging IA + page annonce hebergee) comme feature premium. Voir docs/reviews/sophie-immocrew-vs-versiroom.md pour les specs de synergie.
+@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 5). Le projet est sur la branche claude/review-project-context-Pw0Fn. Les prix sont 400/150/100 EUR (prix ronds). L'auth est NextAuth.js (plus de Clerk). Le blog a 5 articles + pipeline auto 22 sujets. Toutes les sections landing sont a 9/10+. Les prochaines priorites : (1) tester le deploiement avec les migrations SQL, (2) ajouter le reset password, (3) option trimestrielle Stripe. Ne jamais mentionner de concurrent par nom.
 ```
