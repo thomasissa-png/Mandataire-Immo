@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { currentUser } from "@clerk/nextjs/server"
 import { query } from "@/lib/db"
-import { generateImage, buildHomeStagingPrompt } from "@/lib/openai"
+import { generateImage } from "@/lib/openai"
+import { buildHomeStagingPrompt, type HomeStagingInput } from "@/lib/prompts/home-staging"
 import { uploadFile, getFileContent } from "@/lib/storage"
 import { trackServer } from "@/lib/tracking"
 import type { PropertyPage, StagingPhoto } from "@/types/property"
@@ -103,11 +104,16 @@ export async function POST(request: NextRequest) {
         continue
       }
 
-      // Construire le prompt
-      const prompt = buildHomeStagingPrompt({
-        piece: item.piece,
-        style: item.style,
-      })
+      // Construire le prompt via le prompt riche (garde-fous proportions)
+      const stagingInput: HomeStagingInput = {
+        type_piece: item.piece as HomeStagingInput["type_piece"],
+        style: item.style as HomeStagingInput["style"],
+        contraintes: {
+          lumiere_naturelle: "moderee",
+          elements_fixes: [],
+        },
+      }
+      const prompt = buildHomeStagingPrompt(stagingInput)
 
       // Generer l'image via OpenAI gpt-image-1
       const imageResult = await generateImage({

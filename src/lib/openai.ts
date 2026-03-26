@@ -80,30 +80,6 @@ export async function generateImage(
   }
 }
 
-/**
- * Construit le prompt de home staging pour gpt-image-1.
- * Le prompt est precis pour eviter les problemes de proportion signales par Sophie.
- */
-export function buildHomeStagingPrompt(params: {
-  piece: string
-  style: string
-  description?: string
-}): string {
-  const { piece, style, description } = params
-
-  return `Home staging virtuel professionnel d'une piece immobiliere.
-
-Type de piece : ${piece}
-Style de mobilier : ${style}
-${description ? `Description : ${description}` : ""}
-
-Instructions :
-- Ajouter du mobilier ${style} realiste et bien proportionne a la piece
-- Les meubles doivent respecter les dimensions reelles de la piece (pas de canape trop grand pour un petit salon)
-- Garder les murs, sols, fenetres et elements architecturaux existants intacts
-- Eclairage naturel et chaleureux
-- Rendu photoréaliste de qualite professionnelle
-- Ne pas modifier la structure de la piece
-- Ajouter des elements de decoration (plantes, coussins, tableaux) de facon subtile
-- Le resultat doit ressembler a une photo immobiliere reelle, pas a un rendu 3D`
-}
+// Le prompt de home staging est dans src/lib/prompts/home-staging.ts
+// Utiliser buildHomeStagingPrompt depuis ce fichier pour beneficier
+// des garde-fous de proportions et de la personnalisation par piece.

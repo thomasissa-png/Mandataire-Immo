@@ -760,7 +760,7 @@ Bonne continuation !
 | 4 | Génération 2 articles SEO | Templates SEO (docs/seo/) | 2 articles avec données locales |
 | 5 | Génération 4 annonces personnalisées | LK-04 + template annonce | 4 annonces hyper-locales |
 | 6 | Génération 1 newsletter | Template newsletter (docs/copy/) | 1 newsletter prête |
-| 7 | Stockage dans espace client | Route `/api/generate/monthly` | Dashboard client mis à jour |
+| 7 | Stockage dans espace client | Route `/api/generate/pack-mensuel` | Dashboard client mis à jour |
 
 **Prompt système (à compléter dans `src/lib/prompts/social-post.ts`) :**
 
@@ -789,7 +789,7 @@ Format de sortie : [voir template correspondant]
 |-------|--------|---------|---------------|
 | 1 | Scraping mandataires actifs LinkedIn | — | Manuel (recherche LinkedIn filtrée) |
 | 2 | Récupération d'une annonce par prospect | — | Manuel ou semi-auto (recherche SeLoger) |
-| 3 | Réécriture annonce | Prompt réécriture Claude | Automatique via `/api/generate/dm-rewrite` |
+| 3 | Réécriture annonce | Prompt réécriture Claude | Automatique via `/api/generate/boost-mandat` (reecriture d'annonce) |
 | 4 | Génération DM-01 personnalisé | DM-01 template | Automatique — variables remplacées |
 | 5 | Validation + envoi | — | Manuel (validation fondateur, envoi LinkedIn) |
 | 6 | Relance J+3 (DM-02) | DM-02 template | Rappel automatique dans dashboard |
@@ -858,4 +858,4 @@ Points d'attention :
 - Les templates Facebook groupes ne sont pas des posts de marque — le fondateur poste en son nom propre, ImmoCrew n'est mentionné qu'en mention naturelle après 3-4 interactions d'aide
 - Le prompt système de la section 6.1 est une V1 à affiner avec les retours des premiers livrables générés
 - `@legal` doit valider l'anonymisation des captures d'écran dans ST-03 (droit à l'image, données personnelles)
-- `@fullstack` doit implémenter `/api/generate/monthly` et `/api/generate/dm-rewrite` pour automatiser le pipeline (voir section 6.1 et 6.2)
+- Les routes `/api/generate/pack-mensuel` et `/api/generate/boost-mandat` sont deja implementees — les workflows 6.1 et 6.2 peuvent les utiliser directement

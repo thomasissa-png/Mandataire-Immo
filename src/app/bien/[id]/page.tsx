@@ -176,8 +176,24 @@ export default async function PropertyPageRoute({ params }: PageProps) {
  * Conversion markdown basique vers HTML.
  * Pas de dependance externe — couvre les cas du storytelling immobilier.
  */
+/** Whitelist de balises HTML autorisees apres conversion markdown */
+const ALLOWED_TAGS = new Set(["h1", "h2", "h3", "p", "strong", "em", "br", "ul", "li"])
+
+/** Supprime toutes les balises HTML non-autorisees (protection XSS) */
+function sanitizeHtml(html: string): string {
+  return html.replace(/<\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*>/gi, (match, tag) => {
+    const normalized = tag.toLowerCase()
+    if (ALLOWED_TAGS.has(normalized)) {
+      // Garder uniquement la balise sans attributs (sauf les self-closing comme <br>)
+      const isClosing = match.startsWith("</")
+      return isClosing ? `</${normalized}>` : `<${normalized}>`
+    }
+    return "" // Supprimer les balises non autorisees
+  })
+}
+
 function markdownToHtml(md: string): string {
-  return md
+  const raw = md
     .replace(/^### (.*$)/gim, "<h3>$1</h3>")
     .replace(/^## (.*$)/gim, "<h2>$1</h2>")
     .replace(/^# (.*$)/gim, "<h1>$1</h1>")
@@ -189,4 +205,5 @@ function markdownToHtml(md: string): string {
     .replace(/<p><\/p>/gim, "")
     .replace(/<p><h([1-3])>/gim, "<h$1>")
     .replace(/<\/h([1-3])><\/p>/gim, "</h$1>")
+  return sanitizeHtml(raw)
 }

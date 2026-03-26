@@ -13,6 +13,13 @@ export async function GET(
 ) {
   const key = decodeURIComponent(params.key)
 
+  // Securite : valider que le key cible un prefixe autorise
+  const ALLOWED_PREFIXES = ["properties/"]
+  const isAllowed = ALLOWED_PREFIXES.some((prefix) => key.startsWith(prefix))
+  if (!isAllowed || key.includes("..") || key.includes("//")) {
+    return NextResponse.json({ error: "Invalid key" }, { status: 400 })
+  }
+
   const content = await getFileContent(key)
   if (!content) {
     return NextResponse.json({ error: "Image not found" }, { status: 404 })

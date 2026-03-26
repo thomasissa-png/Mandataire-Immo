@@ -15,6 +15,7 @@ export default defineConfig({
       include: [
         "src/app/api/**/*.ts",
         "src/components/landing/**/*.tsx",
+        "src/lib/enrich-property.ts",
       ],
       exclude: ["src/__tests__/**"],
       thresholds: {
