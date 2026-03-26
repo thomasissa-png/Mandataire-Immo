@@ -9,7 +9,7 @@
 // Types
 // ---------------------------------------------------------------------------
 
-export type PackId = "lancement" | "mensuel" | "boost"
+export type PackId = "lancement" | "mensuel" | "mensuel-trimestriel" | "boost"
 
 export interface Pack {
   id: PackId
@@ -36,6 +36,14 @@ export interface Pack {
   badge?: string
   /** Liste des features incluses */
   features: readonly string[]
+  /** Engagement en mois (ex: 3 pour trimestriel) */
+  engagementMonths?: number
+  /** Prix total pour la période d'engagement (en euros TTC) */
+  totalPrice?: number
+  /** Montant total en centimes pour Stripe */
+  totalStripeCents?: number
+  /** Pourcentage d'économie par rapport au mensuel sans engagement */
+  savings?: string
 }
 
 // ---------------------------------------------------------------------------
@@ -108,30 +116,36 @@ export const PACK_BOOST: Pack = {
   ],
 } as const
 
-/** Les 3 packs indexés par id */
-export const PACKS: Record<PackId, Pack> = {
-  lancement: PACK_LANCEMENT,
-  mensuel: PACK_MENSUEL,
-  boost: PACK_BOOST,
-} as const
-
-/** Les 2 packs principaux affichés côte à côte dans la grille Pricing */
-export const MAIN_PACKS = [PACK_LANCEMENT, PACK_MENSUEL] as const
-
 // ---------------------------------------------------------------------------
-// Option trimestrielle (prête, désactivée)
+// Option trimestrielle — même pack mensuel, engagement 3 mois, -10%
 // ---------------------------------------------------------------------------
 
-export const PACK_MENSUEL_TRIMESTRIEL: Pack & { enabled: false } = {
+export const PACK_MENSUEL_TRIMESTRIEL: Pack = {
   ...PACK_MENSUEL,
-  id: "mensuel", // même id logique, variante de billing
+  id: "mensuel-trimestriel",
   price: 135,
   stripeCents: 13_500,
   unit: "/mois",
   subtitle: "135€/mois — engagement 3 mois, économise 45€.",
   mention: "Engagement 3 mois. Résiliation à chaque échéance.",
-  enabled: false,
+  cta: "Commencer ce trimestre",
+  ctaHref: "/api/checkout?pack=mensuel-trimestriel",
+  engagementMonths: 3,
+  totalPrice: 405,
+  totalStripeCents: 40_500,
+  savings: "10%",
 } as const
+
+/** Les 4 packs indexés par id */
+export const PACKS: Record<PackId, Pack> = {
+  lancement: PACK_LANCEMENT,
+  mensuel: PACK_MENSUEL,
+  "mensuel-trimestriel": PACK_MENSUEL_TRIMESTRIEL,
+  boost: PACK_BOOST,
+} as const
+
+/** Les 2 packs principaux affichés côte à côte dans la grille Pricing */
+export const MAIN_PACKS = [PACK_LANCEMENT, PACK_MENSUEL] as const
 
 // ---------------------------------------------------------------------------
 // Helpers

@@ -33,12 +33,12 @@ describe("Pricing", () => {
 
   it("displays correct prices", () => {
     render(<Pricing />)
-    const priceElements = screen.getAllByText(/\d+\u20AC/)
+    const priceElements = screen.getAllByText(/\d+€/)
     const priceTexts = priceElements.map((el) => el.textContent)
-    expect(priceTexts).toContain("400\u20AC")
-    expect(priceTexts).toContain("150\u20AC")
+    expect(priceTexts).toContain(`${PACK_LANCEMENT.price}€`)
+    expect(priceTexts).toContain(`${PACK_MENSUEL.price}€`)
     // Boost price is in inline text "Boost Mandat · 100€/bien", not a separate price element
-    expect(screen.getByText(/100\u20AC\/bien/i)).toBeInTheDocument()
+    expect(screen.getByText(new RegExp(`${PACK_BOOST.price}€${PACK_BOOST.unit}`, "i"))).toBeInTheDocument()
   })
 
   it("shows the badge on Pack Mensuel", () => {

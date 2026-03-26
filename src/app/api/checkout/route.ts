@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
 
   if (!pack || !(pack in STRIPE_PRICES)) {
     return NextResponse.json(
-      { error: "Invalid pack. Must be one of: mensuel, lancement, boost" },
+      { error: "Invalid pack. Must be one of: mensuel, mensuel-trimestriel, lancement, boost" },
       { status: 400 }
     )
   }
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://immocrew.fr"
 
   // Determine payment mode based on pack type
-  const isSubscription = pack === "mensuel"
+  const isSubscription = pack === "mensuel" || pack === "mensuel-trimestriel"
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -33,6 +33,7 @@ export async function GET(request: NextRequest) {
       cancel_url: `${appUrl}/#pricing`,
       metadata: {
         pack,
+        ...(pack === "mensuel-trimestriel" && { engagement_months: "3" }),
       },
       allow_promotion_codes: true,
       billing_address_collection: "required",

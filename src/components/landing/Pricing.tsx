@@ -1,6 +1,7 @@
-import { MAIN_PACKS, PACK_BOOST, PACK_MENSUEL, formatPrice } from "@/lib/pricing"
+import { PACK_LANCEMENT, PACK_BOOST, PACK_MENSUEL, formatPrice } from "@/lib/pricing"
 import { PricingTracker } from "./PricingTracker"
 import { CTAButton } from "./CTAButton"
+import { MensuelPricingCard } from "./MensuelPricingCard"
 
 const CHECK_ICON = (
   <svg
@@ -40,137 +41,70 @@ export function Pricing() {
 
         {/* 2 packs principaux */}
         <div className="grid gap-6 tablet:grid-cols-2 items-stretch max-w-4xl mx-auto">
-          {MAIN_PACKS.map((pack, index) => (
-            <div
-              key={index}
-              className={`rounded-xl p-8 flex flex-col ${
-                pack.featured
-                  ? "bg-primary text-white shadow-xl tablet:scale-[1.02]"
-                  : "bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-[box-shadow,transform] duration-normal"
-              }`}
-            >
-              {/* Badge */}
-              {pack.featured && "badge" in pack && (
-                <span className="inline-block px-3 py-1 mb-4 rounded-full bg-secondary text-white text-body-sm font-bold">
-                  {pack.badge}
+          {/* Pack Lancement */}
+          <div className="rounded-xl p-8 flex flex-col bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-[box-shadow,transform] duration-normal">
+            {/* Name */}
+            <h3 className="font-display text-h3 mb-1 text-primary">
+              {PACK_LANCEMENT.name}
+            </h3>
+
+            {/* Subtitle */}
+            <p className="text-body-sm mb-6 text-neutral-500">
+              {PACK_LANCEMENT.subtitle}
+            </p>
+
+            {/* Price */}
+            <div className="mb-6">
+              <span className="font-display text-display-lg font-extrabold text-primary">
+                {PACK_LANCEMENT.price}€
+              </span>
+              {PACK_LANCEMENT.unit && (
+                <span className="text-body-sm ml-1 text-neutral-400">
+                  {PACK_LANCEMENT.unit}
                 </span>
               )}
-
-              {/* Name */}
-              <h3
-                className={`font-display text-h3 mb-1 ${
-                  pack.featured ? "text-white" : "text-primary"
-                }`}
-              >
-                {pack.name}
-              </h3>
-
-              {/* Subtitle */}
-              <p
-                className={`text-body-sm mb-6 ${
-                  pack.featured ? "text-primary-200" : "text-neutral-500"
-                }`}
-              >
-                {pack.subtitle}
+              <p className="text-caption font-medium mt-1 text-neutral-400">
+                TTC
               </p>
-
-              {/* Price */}
-              <div className="mb-6">
-                <span
-                  className={`font-display text-display-lg font-extrabold ${
-                    pack.featured ? "text-secondary" : "text-primary"
-                  }`}
-                >
-                  {pack.price}€
-                </span>
-                {pack.unit && (
-                  <span
-                    className={`text-body-sm ml-1 ${
-                      pack.featured ? "text-primary-100" : "text-neutral-400"
-                    }`}
-                  >
-                    {pack.unit}
-                  </span>
-                )}
-                <p
-                  className={`text-caption font-medium mt-1 ${
-                    pack.featured ? "text-primary-100" : "text-neutral-400"
-                  }`}
-                >
-                  TTC
-                </p>
-              </div>
-
-              {/* Separator */}
-              <div
-                className={`h-px mb-6 ${
-                  pack.featured ? "bg-primary-300" : "bg-neutral-200"
-                }`}
-              />
-
-              {/* Reassurance — AVANT le CTA */}
-              <p
-                className={`text-body-sm font-medium mb-4 ${
-                  pack.featured ? "text-primary-200" : "text-neutral-500"
-                }`}
-              >
-                {pack.mention}
-              </p>
-
-              {/* Features — flex-grow pushes CTA to bottom */}
-              <ul className="space-y-3 mb-8 flex-grow">
-                {pack.features.map((feature, fIndex) => (
-                  <li key={fIndex} className="flex items-start gap-2">
-                    {pack.featured ? (
-                      <svg
-                        className="w-4 h-4 text-success-300 flex-shrink-0 mt-0.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    ) : (
-                      CHECK_ICON
-                    )}
-                    <span
-                      className={`text-body-sm ${
-                        pack.featured ? "text-primary-100" : "text-neutral-600"
-                      }`}
-                    >
-                      {feature}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
-              {/* CTA — mt-auto pushes to bottom for equal card height */}
-              <div className="mt-auto">
-                <CTAButton
-                  href={pack.ctaHref}
-                  label={`${pack.cta} →`}
-                  location={`pricing_${pack.name.toLowerCase().replace(/\s+/g, "_")}`}
-                  variant={pack.featured ? "primary" : "secondary"}
-                  className="w-full"
-                />
-
-                {/* Micro-reassurance sous CTA */}
-                <p
-                  className={`text-caption text-center mt-3 ${
-                    pack.featured ? "text-primary-200" : "text-neutral-400"
-                  }`}
-                >
-                  Paiement sécurisé via Stripe
-                </p>
-              </div>
             </div>
-          ))}
+
+            {/* Separator */}
+            <div className="h-px mb-6 bg-neutral-200" />
+
+            {/* Reassurance */}
+            <p className="text-body-sm font-medium mb-4 text-neutral-500">
+              {PACK_LANCEMENT.mention}
+            </p>
+
+            {/* Features */}
+            <ul className="space-y-3 mb-8 flex-grow">
+              {PACK_LANCEMENT.features.map((feature, fIndex) => (
+                <li key={fIndex} className="flex items-start gap-2">
+                  {CHECK_ICON}
+                  <span className="text-body-sm text-neutral-600">
+                    {feature}
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            {/* CTA */}
+            <div className="mt-auto">
+              <CTAButton
+                href={PACK_LANCEMENT.ctaHref}
+                label={`${PACK_LANCEMENT.cta} →`}
+                location="pricing_pack_lancement"
+                variant="secondary"
+                className="w-full"
+              />
+              <p className="text-caption text-center mt-3 text-neutral-400">
+                Paiement sécurisé via Stripe
+              </p>
+            </div>
+          </div>
+
+          {/* Pack Mensuel avec toggle trimestriel */}
+          <MensuelPricingCard />
         </div>
 
         {/* Boost Mandat — upsell separe */}

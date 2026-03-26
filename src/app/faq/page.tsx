@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
 import { JsonLd } from "@/components/JsonLd"
+import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice, formatPriceTTC } from "@/lib/pricing"
 
 export const metadata: Metadata = {
   title: "FAQ ImmoCrew \u2014 Toutes les r\u00e9ponses pour les mandataires immobiliers",
@@ -33,7 +34,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Combien co\u00fbte ImmoCrew ?",
     answer:
-      "ImmoCrew propose trois formules. Le Pack Mensuel \u00e0 150\u20ac TTC par mois (sans engagement) inclut le contenu mensuel complet : 12 posts, 4 scripts vid\u00e9o, 2 articles SEO, 4 annonces, 1 newsletter, 1 email de prospection. Le Pack Lancement \u00e0 400\u20ac TTC (one-shot) fournit un kit de d\u00e9marrage complet avec 20 posts, 5 articles SEO, 10 scripts Reels et un calendrier \u00e9ditorial sur 30 jours. Le Boost Mandat \u00e0 100\u20ac TTC par bien met un bien sp\u00e9cifique en avant avec une annonce storytelling, 3 posts d\u00e9di\u00e9s, 1 Reel, 1 mini landing page et 1 email blast.",
+      `ImmoCrew propose trois formules. Le ${PACK_MENSUEL.name} à ${formatPriceTTC(PACK_MENSUEL)} par mois (sans engagement) inclut le contenu mensuel complet : 12 posts, 4 scripts vidéo, 2 articles SEO, 4 annonces, 1 newsletter, 1 email de prospection. Le ${PACK_LANCEMENT.name} à ${formatPriceTTC(PACK_LANCEMENT)} (one-shot) fournit un kit de démarrage complet avec 20 posts, 5 articles SEO, 10 scripts Reels et un calendrier éditorial sur 30 jours. Le ${PACK_BOOST.name} à ${formatPriceTTC(PACK_BOOST)} par bien met un bien spécifique en avant avec une annonce storytelling, 3 posts dédiés, 1 Reel, 1 mini landing page et 1 email blast.`,
   },
   {
     question: "Qui utilise ImmoCrew ?",
@@ -43,7 +44,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Quelle est la diff\u00e9rence entre ImmoCrew et un community manager freelance ?",
     answer:
-      "Un community manager freelance facture g\u00e9n\u00e9ralement entre 500\u20ac et 800\u20ac par mois pour du contenu souvent g\u00e9n\u00e9rique, avec des d\u00e9lais variables et un r\u00e9sultat d\u00e9pendant de la personne. ImmoCrew est un service productis\u00e9 \u00e0 prix fixe (150\u20ac/mois) avec un volume de livrables garanti chaque mois, personnalis\u00e9s pour la zone g\u00e9ographique exacte du mandataire. Le mandataire sait exactement ce qu\u2019il re\u00e7oit, quand il le re\u00e7oit, et combien \u00e7a co\u00fbte.",
+      `Un community manager freelance facture généralement entre 500€ et 800€ par mois pour du contenu souvent générique, avec des délais variables et un résultat dépendant de la personne. ImmoCrew est un service productisé à prix fixe (${formatPrice(PACK_MENSUEL)}) avec un volume de livrables garanti chaque mois, personnalisés pour la zone géographique exacte du mandataire. Le mandataire sait exactement ce qu'il reçoit, quand il le reçoit, et combien ça coûte.`,
   },
   {
     question: "Quelle est la diff\u00e9rence entre ImmoCrew et une plateforme SaaS de marketing ?",
@@ -73,7 +74,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Qu\u2019est-ce qu\u2019un Boost Mandat ?",
     answer:
-      "Le Boost Mandat est une prestation ponctuelle \u00e0 100\u20ac TTC par bien, en compl\u00e9ment du Pack Mensuel. Il met un bien sp\u00e9cifique en avant avec : 1 annonce storytelling qui sort du lot, 3 posts d\u00e9di\u00e9s au bien et 1 Reel, 1 mini landing page du bien, et 1 email blast vers la base d\u2019acheteurs du mandataire. C\u2019est con\u00e7u pour acc\u00e9l\u00e9rer la vente d\u2019un mandat pr\u00e9cis.",
+      `Le ${PACK_BOOST.name} est une prestation ponctuelle à ${PACK_BOOST.price}€ TTC par bien, en complément du ${PACK_MENSUEL.name}. Il met un bien spécifique en avant avec : 1 annonce storytelling qui sort du lot, 3 posts dédiés au bien et 1 Reel, 1 mini landing page du bien, et 1 email blast vers la base d'acheteurs du mandataire. C'est conçu pour accélérer la vente d'un mandat précis.`,
   },
   {
     question: "ImmoCrew fonctionne-t-il pour tous les r\u00e9seaux de mandataires ?",
