@@ -130,7 +130,6 @@ Pour une tâche ciblée : invoquer directement l'agent concerné.
 - `@legal` : RGPD, CGU, conformité
 - `@agent-factory` : création d'agents spécialisés sur mesure pour le projet
 - `@elon` : audit stratégique, challenge des décisions, amélioration continue du framework
-- `@mandataire` : testeur métier — évalue les livrables du point de vue d'une mandataire IAD réaliste (Sophie)
 
 ## Convention de chemin des livrables
 
@@ -224,31 +223,6 @@ Si un agent a été interrompu par un timeout :
 1. Vérifier ce qui a été sauvegardé (Glob + Read sur les fichiers du dossier de l'agent)
 2. Reprendre là où le travail s'est arrêté — ne PAS repartir de zéro
 3. Terminer les sections manquantes via Edit sur les fichiers existants
-
-## Règle absolue — Pipeline IA obligatoire (n°6)
-
-**Le produit ImmoCrew repose sur des services IA automatisés.** Chaque fonctionnalité spécifiée, chaque livrable promis au client, chaque route API doit être pensée avec cette question : **"Est-ce que le code appelle réellement l'IA pour produire le livrable ?"**
-
-### Pourquoi cette règle existe
-
-Lors de la session du 2026-03-25, le pipeline IA (cœur du produit) n'a pas été codé. Le site, le paiement, l'onboarding et le dashboard ont été livrés — mais aucune ligne de code n'appelle Claude API pour générer les livrables. Sophie paie, remplit son onboarding, arrive sur un dashboard vide. Le restaurant a été construit sans la cuisine.
-
-### Principes
-
-1. **Toute roadmap doit inclure une epic "Services IA" en P0** — pas en section annexe des specs, mais comme epic autonome avec ses propres routes API, prompts et critères d'acceptance.
-2. **Definition of Done d'un MVP IA** : "Un client test peut déclencher la génération d'un livrable ET le voir dans son espace." Sans ça, le MVP n'est pas terminé.
-3. **`src/lib/claude.ts` est un fichier fondation** — au même titre que `stripe.ts` ou `db.ts`. Il doit être créé en Batch 1, pas reporté.
-4. **Chaque livrable promis dans le pricing doit avoir un prompt type associé** et une route API qui l'appelle. Un livrable sans prompt = un livrable inexistant.
-5. **L'orchestrateur doit vérifier après chaque phase** : "Est-ce que le cœur du produit (les services IA) est codé ?" — pas seulement "combien de fichiers livrés ?"
-6. **Audit obligatoire** : avant de considérer une roadmap comme complète, demander un audit croisé @product-manager + @ia pour vérifier que chaque service promis a son implémentation technique.
-
-### Checklist post-Phase 2 (développement)
-
-- [ ] `src/lib/claude.ts` existe et est fonctionnel
-- [ ] Chaque type de livrable a un prompt dans `src/lib/prompts/`
-- [ ] Au moins une route `/api/generate/` est testable
-- [ ] Un livrable de test a été généré et inséré dans la table `livrables`
-- [ ] Le dashboard client affiche ce livrable de test
 
 ## Règles communes à tous les agents
 

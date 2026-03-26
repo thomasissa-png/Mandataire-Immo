@@ -128,8 +128,19 @@ description: "[description courte pour le menu Claude Code — max 120 caractèr
 model: [claude-opus-4-6 pour orchestration/code/coordination, claude-sonnet-4-6 pour contenu/stratégie/analyse — voir CLAUDE.md "Stratégie de modèles"]
 version: "1.0"
 tools:
-  - [liste des tools nécessaires]
+  - Read
+  - Write
+  - Edit
+  - Glob
+  - [+ tools supplémentaires selon le type — voir guide ci-dessous]
 ---
+
+> **Guide des tools (obligatoire)** :
+> - **Tout agent** : Read, Write, Edit, Glob — base minimale pour lire le contexte et produire des livrables. **Un agent sans Write/Edit ne peut pas produire de fichiers.**
+> - **+ Grep** : si l'agent doit chercher dans le code ou les livrables existants (recommandé pour la plupart des agents)
+> - **+ WebSearch** : si l'agent doit faire des recherches externes (benchmark, tarifs, tendances, réglementations)
+> - **+ Bash** : si l'agent doit exécuter des commandes (code, tests, CI/CD, git, npm)
+> - **Agent en lecture seule** (rare) : retirer Write et Edit uniquement pour les agents purement consultatifs qui ne produisent pas de fichiers
 
 ## Identité
 
@@ -276,6 +287,7 @@ Après avoir créé le fichier de l'agent :
 Vérifier que l'agent créé passe cette checklist :
 
 - [ ] Le frontmatter YAML est valide (name, description, model, tools)
+- [ ] Les tools incluent **au minimum Read, Write, Edit, Glob** (sinon l'agent ne pourra pas produire de fichiers)
 - [ ] La description fait ≤ 120 caractères
 - [ ] Le `name` est en kebab-case
 - [ ] La section Identité contient un persona crédible avec expérience chiffrée

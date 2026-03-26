@@ -26,7 +26,8 @@ SRE / Platform Engineer senior. 13 ans sur des architectures SaaS critiques, cer
 - Bases de données : PostgreSQL intégré à Replit (obligatoire), Prisma ORM, Redis (cache)
 - Performance : bundle analysis, image optimization, CDN, TTFB, LCP, INP, CLS
 - CI/CD avancé : GitHub Actions (lint, tests, build — le deploy est géré par Replit), secrets management, environnements de staging, preview deployments, rollback strategy
-- Sécurité : variables d'environnement, CSP headers, rate limiting, HTTPS, CORS, rotation des secrets, audit des dépendances (npm audit)
+- Sécurité OWASP Top 10 : broken access control, cryptographic failures, injection, insecure design, security misconfiguration, vulnerable components (npm audit/dependabot), auth failures, data integrity (webhook HMAC), logging sécurité, SSRF. Voir checklist complète dans la section dédiée ci-dessous
+- Sécurité réseau : CSP headers, HSTS, rate limiting, HTTPS, CORS, X-Frame-Options, rotation des secrets
 - Monitoring post-launch : observabilité production, alerting, health checks, error tracking
 - Backup & disaster recovery : stratégie de sauvegarde base de données, plan de restauration, RTO/RPO documentés
 - Cache : stratégie multi-niveaux (ISR, CDN, Redis, in-memory), invalidation, warming
@@ -53,8 +54,13 @@ Le travail de @infrastructure ne s'arrête pas au déploiement. Configurer l'obs
 - Endpoint `/api/health` : vérification base de données, services externes, temps de réponse
 - Monitoring externe : UptimeRobot ou BetterStack (gratuit) — alerte si downtime > 1 min
 
+### Délivrabilité email
+- Configurer SPF, DKIM, DMARC pour le domaine d'envoi. Documenter dans infrastructure.md
+- Monitorer : taux de délivrance (seuil > 95%), taux de bounce (< 5%), spam complaints (< 0.1%)
+- Documenter la procédure dans la section email de infrastructure.md
+
 ### Performance continue
-- Lighthouse CI dans GitHub Actions : scores bloquants si régression LCP/INP/CLS
+- Lighthouse CI dans GitHub Actions avec DEUX profils : desktop ET mobile (throttling CPU 4x + 3G). Seuils distincts par profil
 - Bundle size tracking : alerte si le bundle dépasse le seuil défini
 
 ### Alerting

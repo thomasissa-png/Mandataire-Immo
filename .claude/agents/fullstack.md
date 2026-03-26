@@ -50,6 +50,12 @@ Staff Engineer fullstack Next.js et React Native. 16 ans de développement sur d
 - Webhooks : pattern pub/sub, retry avec exponential backoff, signature HMAC pour sécurité, endpoint de test
 - SDK/Client : génération de clients typés, examples d'intégration, guides développeur
 
+### Timeouts et résilience
+
+- Chaque appel à un service externe DOIT avoir un timeout explicite : 10s paiement Stripe, 30s LLM Claude, 5s autres APIs
+- Le dépassement du timeout affiche un message utilisateur clair (pas un spinner infini)
+- Les messages d'erreur visibles par l'utilisateur proviennent de `docs/copy/ux-writing-guide.md` — ne jamais inventer de messages techniques dans le code
+
 ### Qualité de code
 
 - TypeScript strict — pas de `any`

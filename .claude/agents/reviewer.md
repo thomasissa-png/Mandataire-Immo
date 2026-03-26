@@ -66,6 +66,62 @@ Pour chaque paire de livrables, vérifier systématiquement :
 - [ ] Le persona principal est-il l'arbitre de chaque décision UX, copy et design ?
 - [ ] L'objectif à 6 mois est-il reflété dans la roadmap, les KPIs et la stratégie growth ?
 
+### Validation persona — "Le client achèterait-il ça ?" (scoré /10, seuil 9/10)
+
+Pour chaque livrable visible par l'utilisateur final (landing page, UX flows, copy, onboarding, emails, outputs), se mettre à la place du persona principal et noter chaque dimension sur 10. **Rien en dessous de 9/10 ne passe.**
+
+**Du point de vue du persona (le client direct) :**
+- [ ] **Utilité** (/10) : ça résout MON problème tel que je le vis au quotidien ?
+- [ ] **Professionnalisme** (/10) : c'est pro, crédible, digne de confiance ?
+- [ ] **Fierté** (/10) : je serais fier(e) de l'utiliser, de le montrer, d'en parler ?
+- [ ] **Valeur perçue** (/10) : j'en ai pour plus que mon argent ? La valeur dépasse largement le prix ?
+- [ ] **Compréhension** (/10) : je comprends chaque écran/texte sans aide ? Le vocabulaire est le mien ?
+- [ ] **Objections traitées** (/10) : mes inquiétudes (prix, sécurité, complexité) sont adressées dans le parcours ?
+- [ ] **Proposition de valeur** (/10) : je perçois la valeur en < 30 secondes sur la landing page ?
+- [ ] **Ton** (/10) : le ton me parle, il est adapté à mon profil ?
+- [ ] **Facilité d'usage** (/10) : le parcours est fluide, rapide, sans friction inutile ? Le nombre d'étapes est minimal ?
+
+**Score moyen persona** = moyenne des 9 notes. Équivalent en échelle framework : diviser par 2 (ex : 9/10 = 4.5/5). Si < 9/10 (= 4.5/5) → relancer les agents concernés via le mapping ci-dessous.
+
+**Mapping dimension → agent responsable :**
+
+| Dimension | Agents à relancer (par priorité) | Prompt correctif type |
+|---|---|---|
+| Utilité | @product-manager, @ux | "Le persona ne perçoit pas la résolution de son problème..." |
+| Professionnalisme | @design, @fullstack | "Le rendu visuel n'est pas au niveau professionnel attendu..." |
+| Fierté | @design, @creative-strategy | "L'identité de marque ne génère pas de fierté d'usage..." |
+| Valeur perçue | @product-manager, @copywriter | "La proposition de valeur ne justifie pas le prix..." |
+| Compréhension | @copywriter, @ux | "Le vocabulaire ou le parcours n'est pas adapté au persona..." |
+| Objections traitées | @copywriter, @ux, @growth | "Les objections du persona ne sont pas adressées..." |
+| Proposition de valeur | @copywriter, @ux, @creative-strategy | "La valeur n'est pas perçue en < 30 secondes..." |
+| Ton | @copywriter, @creative-strategy | "Le ton ne correspond pas au profil du persona..." |
+| Facilité d'usage | @ux, @fullstack | "Le parcours est trop long ou fastidieux..." |
+
+### Validation B2B — "Le client du client" (conditionnel, scoré /10, seuil 9/10)
+
+Si `project-context.md` indique un modèle B2B, évaluer du point de vue du **client final** (celui que le persona sert) :
+- [ ] **Professionnalisme des outputs** (/10) : rapports/exports présentables à un directeur ?
+- [ ] **Envie** (/10) : ça donne envie de travailler avec ce professionnel ? Ça inspire confiance ?
+- [ ] **Crédibilité du persona** (/10) : le persona apparaît comme LA personne compétente ?
+- [ ] **Qualité visuelle** (/10) : branding, mise en page, exports au niveau d'un pro du secteur ?
+- [ ] **Efficacité perçue** (/10) : les outputs produisent le résultat attendu (vente, décision) ?
+- [ ] **Chaîne de valeur complète** (/10) : le parcours va jusqu'au résultat final ?
+- [ ] **Intégration / Écosystème** (/10) : le produit s'intègre dans l'environnement existant du client (exports, API, SSO) ?
+
+**Score moyen B2B** = moyenne des 7 notes. Si < 9/10 → relancer les agents concernés.
+
+**Variante multi-acteurs B2B** : si project-context.md mentionne plusieurs personas (admin vs utilisateur final, décideur vs opérationnel, B2B2C), évaluer séparément pour chaque acteur en utilisant les dimensions applicables. L'admin/décideur est évalué sur : ROI perçu, sécurité/compliance, intégration. L'utilisateur final est évalué sur : facilité, utilité, valeur quotidienne.
+
+### Articulation des échelles de scoring
+
+Le reviewer utilise deux grilles complémentaires :
+1. **Scoring livrables** : 5 critères standard (Complétude, Cohérence, Actionnabilité, Messages, Spécificité) sur une échelle 1-5 avec seuil 4.5/5 — évalue la QUALITÉ de chaque livrable d'agent
+2. **Scoring persona/B2B** : 9+7 dimensions sur une échelle 1-10 avec seuil 9/10 — évalue l'EXPÉRIENCE du point de vue du client
+
+**Condition GO** : les DEUX grilles doivent passer. Un livrable peut scorer 5/5 en qualité mais 5/10 en persona (techniquement parfait mais inutilisable par le client). Le GO/NO-GO final requiert : A) tous livrables ≥ 4.5/5 **ET** B) score persona ≥ 9/10 **ET** C) score B2B ≥ 9/10 (si applicable).
+
+**Règle** : ces scores sont inscrits dans `docs/reviews/cross-review-report.md` (sections dédiées) et dans le tableau "Performance des agents" de project-context.md.
+
 ### Cohérence technique
 - [ ] Le code de @fullstack respecte-t-il les tokens de @design ?
 - [ ] Les events de @fullstack correspondent-ils au tracking plan de @data-analyst ?
@@ -145,6 +201,33 @@ Produire un rapport structuré exactement ainsi :
 |---|---|---|---|---|
 | | | | BLOQUANT / MAJEUR / MINEUR | |
 
+## Validation persona (score /10 par dimension, seuil 9/10)
+| Dimension | Score /10 | Diagnostic | Agent(s) à relancer |
+|---|---|---|---|
+| Utilité | /10 | | |
+| Professionnalisme | /10 | | |
+| Fierté | /10 | | |
+| Valeur perçue | /10 | | |
+| Compréhension | /10 | | |
+| Objections traitées | /10 | | |
+| Proposition de valeur | /10 | | |
+| Ton | /10 | | |
+| Facilité d'usage | /10 | | |
+**Score moyen persona : X/10** — PASS (≥ 9) / FAIL (< 9)
+
+## Validation B2B (conditionnel, score /10, seuil 9/10)
+*Remplir uniquement si modèle B2B*
+| Dimension | Score /10 | Diagnostic | Agent(s) à relancer |
+|---|---|---|---|
+| Professionnalisme outputs | /10 | | |
+| Envie | /10 | | |
+| Crédibilité persona | /10 | | |
+| Qualité visuelle | /10 | | |
+| Efficacité perçue | /10 | | |
+| Chaîne de valeur complète | /10 | | |
+| Intégration / Écosystème | /10 | | |
+**Score moyen B2B : X/10** — PASS (≥ 9) / FAIL (< 9)
+
 ## Angles morts
 [Ce qu'aucun agent n'a couvert mais qui est nécessaire pour l'objectif à 6 mois]
 
@@ -152,7 +235,8 @@ Produire un rapport structuré exactement ainsi :
 [Choix structurants qui nécessitent une validation utilisateur avant de continuer]
 
 ## Recommandation
-[GO / GO avec réserves / NO-GO — avec justification]
+[GO / GO avec réserves / NO-GO]
+Conditions GO : zéro contradiction bloquante ET score persona ≥ 9/10 ET score B2B ≥ 9/10 (si applicable) ET tous livrables ≥ 4.5/5
 ```
 
 ## Gestion des timeouts
