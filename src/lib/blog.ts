@@ -63,34 +63,39 @@ const ARTICLES_DIR = path.join(process.cwd(), "docs", "seo", "articles")
 let _restoredFromStorage = false
 
 /**
- * Restaure les articles depuis Object Storage si le filesystem est vide
- * (cas redeploiement Replit — le filesystem ephemere est vide mais Object Storage persiste).
+ * Restaure les articles depuis Object Storage si le filesystem est vide.
+ * Utilise le calendrier editorial pour connaitre les slugs a chercher.
  */
 async function restoreFromObjectStorage(): Promise<void> {
   if (_restoredFromStorage) return
   _restoredFromStorage = true
 
   try {
-    const { storage } = await import("@/lib/storage")
-    const result = await storage.list("blog/articles/")
-    if (!result.ok || !result.value) return
-
-    const keys = result.value.filter((k: { key: string }) => k.key.endsWith(".md"))
-    if (keys.length === 0) return
+    const { getFileContent } = await import("@/lib/storage")
+    const { EDITORIAL_TOPICS } = await import("@/lib/editorial-calendar")
 
     // Ensure directory exists
     if (!fs.existsSync(ARTICLES_DIR)) {
       fs.mkdirSync(ARTICLES_DIR, { recursive: true })
     }
 
-    for (const { key } of keys) {
-      const filename = key.replace("blog/articles/", "")
-      const filePath = path.join(ARTICLES_DIR, filename)
-      if (fs.existsSync(filePath)) continue // Already on filesystem
+    // Try to restore articles that are in the editorial calendar but not on filesystem
+    const existingFiles = new Set(
+      fs.existsSync(ARTICLES_DIR)
+        ? fs.readdirSync(ARTICLES_DIR).filter((f: string) => f.endsWith(".md"))
+        : []
+    )
 
-      const content = await storage.downloadAsBytes(key)
-      if (content.ok) {
-        fs.writeFileSync(filePath, content.value[0])
+    for (let i = 0; i < EDITORIAL_TOPICS.length; i++) {
+      const topic = EDITORIAL_TOPICS[i]
+      if (topic.statut === "planifie") continue // Not generated yet
+
+      const filename = `article-${i + 1}-${topic.slug}.md`
+      if (existingFiles.has(filename)) continue // Already on filesystem
+
+      const content = await getFileContent(`blog/articles/${filename}`)
+      if (content) {
+        fs.writeFileSync(path.join(ARTICLES_DIR, filename), content)
         console.log(`[blog] Restored from Object Storage: ${filename}`)
       }
     }
@@ -338,9 +343,7 @@ export function getAllArticles(): Article[] {
   if (_cache) return _cache
   // Trigger async restore from Object Storage (fire-and-forget on first call)
   restoreFromObjectStorage().then(() => {
-    // Re-discover after restore — invalidate cache to pick up restored files
-    if (!_restoredFromStorage) return
-    _cache = null
+    _cache = null // Invalidate so next call picks up restored files
   }).catch(() => {})
   const metas = discoverArticles()
   _cache = metas.map(parseArticle).sort(
