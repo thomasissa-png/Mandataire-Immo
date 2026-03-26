@@ -22,7 +22,7 @@ export function CTAButton({
 
   const variantStyles = {
     primary:
-      "bg-secondary text-primary shadow-sm hover:bg-secondary-600 hover:shadow-md",
+      "bg-secondary text-primary shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md",
     secondary:
       "bg-primary text-white shadow-sm hover:bg-primary-600 hover:shadow-md",
     outline:

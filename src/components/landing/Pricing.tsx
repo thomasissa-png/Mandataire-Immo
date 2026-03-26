@@ -101,7 +101,7 @@ export function Pricing() {
             >
               {/* Badge */}
               {pack.featured && "badge" in pack && (
-                <span className="inline-block px-3 py-1 mb-4 rounded-full bg-secondary text-white text-body-sm font-bold">
+                <span className="inline-block px-3 py-1 mb-4 rounded-full bg-secondary text-primary text-body-sm font-bold">
                   {pack.badge}
                 </span>
               )}
