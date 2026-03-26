@@ -17,13 +17,12 @@ export default function SignUpPage() {
     setError("")
 
     if (password.length < 8) {
-      setError("Le mot de passe doit contenir au moins 8 caracteres.")
+      setError("Le mot de passe doit contenir au moins 8 caract\u00E8res.")
       setIsLoading(false)
       return
     }
 
     try {
-      // 1. Creer le compte via l'API
       const res = await fetch("/api/auth/sign-up", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -38,12 +37,11 @@ export default function SignUpPage() {
       const data = await res.json()
 
       if (!res.ok) {
-        setError(data.error || "Erreur lors de la creation du compte.")
+        setError(data.error || "Erreur lors de la cr\u00E9ation du compte.")
         setIsLoading(false)
         return
       }
 
-      // 2. Connecter automatiquement apres inscription
       const result = await signIn("credentials", {
         email: email.toLowerCase().trim(),
         password,
@@ -52,13 +50,12 @@ export default function SignUpPage() {
       })
 
       if (result?.error) {
-        // Compte cree mais login echoue — rediriger vers sign-in
         window.location.href = "/sign-in"
       } else if (result?.url) {
         window.location.href = result.url
       }
     } catch {
-      setError("Une erreur est survenue. Reessaie dans quelques instants.")
+      setError("Une erreur est survenue. R\u00E9essaie dans quelques instants.")
       setIsLoading(false)
     }
   }
@@ -68,11 +65,11 @@ export default function SignUpPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <a href="/" className="font-display text-display-lg font-bold text-primary">
+          <a href="/" className="font-display text-display-lg font-bold text-primary hover:opacity-80 transition-opacity">
             ImmoCrew
           </a>
           <p className="text-body text-neutral-500 mt-2">
-            Cree ton espace en 30 secondes
+            Cr&eacute;e ton espace en 30 secondes
           </p>
         </div>
 
@@ -86,7 +83,7 @@ export default function SignUpPage() {
                   htmlFor="firstName"
                   className="block text-caption font-medium text-neutral-600 mb-1"
                 >
-                  Prenom
+                  Pr&eacute;nom
                 </label>
                 <input
                   id="firstName"
@@ -138,7 +135,7 @@ export default function SignUpPage() {
                 className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
               />
               <p className="text-caption text-neutral-400 mt-1">
-                Utilise la meme adresse que pour ton paiement
+                Utilise la m&ecirc;me adresse que pour ton paiement
               </p>
             </div>
 
@@ -158,7 +155,7 @@ export default function SignUpPage() {
                 minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="8 caracteres minimum"
+                placeholder="8 caract\u00E8res minimum"
                 className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
               />
             </div>
@@ -174,16 +171,16 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-12 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+              className="w-full h-12 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
             >
-              {isLoading ? "Creation du compte..." : "Creer mon compte"}
+              {isLoading ? "Cr\u00E9ation du compte..." : "Cr\u00E9er mon compte"}
             </button>
           </form>
 
           {/* Divider */}
           <div className="mt-6 pt-6 border-t border-border text-center">
             <p className="text-body-sm text-neutral-500">
-              Tu as deja un compte ?{" "}
+              Tu as d&eacute;j&agrave; un compte ?{" "}
               <a
                 href="/sign-in"
                 className="text-secondary font-semibold hover:underline"
@@ -200,7 +197,7 @@ export default function SignUpPage() {
             href="/"
             className="text-body-sm text-neutral-400 hover:text-neutral-600 transition-colors duration-normal"
           >
-            Retour au site
+            &larr; Retour au site
           </a>
         </div>
       </div>

@@ -43,11 +43,11 @@ export default function SignInPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <a href="/" className="font-display text-display-lg font-bold text-primary">
+          <a href="/" className="font-display text-display-lg font-bold text-primary hover:opacity-80 transition-opacity">
             ImmoCrew
           </a>
           <p className="text-body text-neutral-500 mt-2">
-            Connecte-toi a ton espace
+            Connecte-toi &agrave; ton espace
           </p>
         </div>
 
@@ -89,7 +89,7 @@ export default function SignInPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="8 caracteres minimum"
+                placeholder="8 caract&egrave;res minimum"
                 className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
               />
             </div>
@@ -105,7 +105,7 @@ export default function SignInPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-12 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+              className="w-full h-12 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
             >
               {isLoading ? "Connexion..." : "Se connecter"}
             </button>
@@ -119,7 +119,7 @@ export default function SignInPage() {
                 href="/sign-up"
                 className="text-secondary font-semibold hover:underline"
               >
-                Creer un compte
+                Cr&eacute;er un compte
               </a>
             </p>
           </div>
@@ -131,7 +131,7 @@ export default function SignInPage() {
             href="/"
             className="text-body-sm text-neutral-400 hover:text-neutral-600 transition-colors duration-normal"
           >
-            Retour au site
+            &larr; Retour au site
           </a>
         </div>
       </div>
