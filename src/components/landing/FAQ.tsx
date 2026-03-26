@@ -21,7 +21,7 @@ const FAQ_ITEMS = [
   {
     question: "197\u20AC/mois, c'est rentable ?",
     answer:
-      "Fais le calcul : ta commission moyenne sur une vente, c'est combien ? 3 000\u20AC ? 5 000\u20AC ? Il suffit d'UN mandat entrant supplementaire par an grace a ta visibilite en ligne pour rembourser l'abonnement annuel — et tout le reste, c'est du bonus. Aujourd'hui, combien de vendeurs te trouvent sur Google ou Instagram ? Si la reponse est zero, tu sais deja que c'est rentable.",
+      "Fais le calcul autrement. Combien d'heures passes-tu sur ton marketing par mois — entre Canva, les idees de posts, les annonces a rediger ? Si c'est 10 heures, c'est 10 heures que tu ne passes pas en prospection ou en visites. 197\u20AC/mois, c'est te racheter ces heures-la. Et si en plus ca t'amene un contact vendeur de plus dans l'annee — et ca arrive, parce que tu es enfin visible sur Google — ta commission rembourse 12 mois d'abonnement. Mais meme sans ca : ton temps vaut plus que 6,50\u20AC par jour.",
   },
   {
     question: "Je n'ai vraiment pas le temps de publier, meme du contenu tout fait.",

@@ -21,7 +21,7 @@ const PACKS = [
     unit: "",
     subtitle: "L'equivalent de 2 000\u20AC de prestations marketing — en une semaine.",
     mention: "Satisfait ou rembourse 14 jours. Zero risque.",
-    cta: "Lancer mon marketing",
+    cta: "Je veux mon kit de d\u00E9marrage",
     ctaHref: "/api/checkout?pack=lancement",
     featured: false,
     features: [
@@ -39,9 +39,9 @@ const PACKS = [
     name: "Pack Mensuel",
     price: "197",
     unit: "/mois",
-    subtitle: "Ton equipe marketing dediee — pour le prix de 4 cafes par semaine.",
+    subtitle: "12 posts, 4 scripts, 2 articles, 4 annonces — pr\u00EAts \u00E0 publier le 1er du mois.",
     mention: "Sans engagement. Resiliation libre en 1 clic.",
-    cta: "Commencer maintenant",
+    cta: "Recevoir mes premiers posts",
     ctaHref: "/api/checkout?pack=mensuel",
     featured: true,
     badge: "Recommand\u00E9",
@@ -235,8 +235,9 @@ export function Pricing() {
             </div>
           </div>
           <p className="text-center text-body text-neutral-600 mt-4">
-            Une seule vente suppl&eacute;mentaire dans l&apos;ann&eacute;e rembourse ton abonnement —
-            <strong>et ta commission moyenne, c&apos;est 3 000 &agrave; 5 000&euro;</strong>.
+            197&euro;/mois — moins de 2h de ton temps.
+            Et on t&apos;en &eacute;conomise 30 chaque mois.
+            <strong>Une seule vente suppl&eacute;mentaire dans l&apos;ann&eacute;e rembourse l&apos;abonnement entier.</strong>
           </p>
         </div>
         <p className="text-center text-body-sm text-neutral-400 mt-4">
