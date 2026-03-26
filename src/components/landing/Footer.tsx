@@ -24,7 +24,7 @@ export function Footer() {
               <ul className="space-y-2">
                 <li>
                   <a
-                    href="#piliers"
+                    href="/#piliers"
                     className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
                   >
                     Comment &ccedil;a marche
@@ -32,18 +32,10 @@ export function Footer() {
                 </li>
                 <li>
                   <a
-                    href="#pricing"
+                    href="/#pricing"
                     className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
                   >
                     Tarifs
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#faq"
-                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
-                  >
-                    FAQ
                   </a>
                 </li>
                 <li>

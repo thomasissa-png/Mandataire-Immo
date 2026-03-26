@@ -12,16 +12,16 @@ import { Footer } from "@/components/landing/Footer"
 import { JsonLd } from "@/components/JsonLd"
 
 export const metadata: Metadata = {
-  title: "ImmoCrew — Marketing pour mandataires immobiliers | 197€/mois",
+  title: "ImmoCrew \u2014 Marketing pour mandataires immobiliers | 150\u20AC/mois",
   description:
-    "Externalise ton marketing immobilier. Chaque mois : 12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo — 100% personnalisés pour ta zone. À partir de 197€/mois.",
+    "Externalise ton marketing immobilier. Chaque mois : 12 posts, 2 articles SEO, 4 annonces, 4 scripts vid\u00E9o \u2014 100% personnalis\u00E9s pour ta zone. \u00C0 partir de 150\u20AC/mois.",
   alternates: {
     canonical: "https://immocrew.fr",
   },
   openGraph: {
-    title: "ImmoCrew — Marketing pour mandataires immobiliers | 197€/mois",
+    title: "ImmoCrew \u2014 Marketing pour mandataires immobiliers | 150\u20AC/mois",
     description:
-      "12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo par mois. 100% personnalisés pour ta zone. Tu publies, on fait le reste.",
+      "12 posts, 2 articles SEO, 4 annonces, 4 scripts vid\u00E9o par mois. 100% personnalis\u00E9s pour ta zone. Tu publies, on fait le reste.",
     url: "https://immocrew.fr",
   },
 }
@@ -47,7 +47,7 @@ const serviceJsonLd = {
         name: "Pack Mensuel",
         description:
           "12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo, 1 newsletter, 1 email prospection — par mois",
-        price: "197",
+        price: "150",
         priceCurrency: "EUR",
       },
       {
@@ -55,7 +55,7 @@ const serviceJsonLd = {
         name: "Pack Lancement",
         description:
           "Positionnement, bio optimisée, 5 templates annonces, 5 articles SEO local, calendrier éditorial 30j, 20 posts, 10 scripts Reels, kit graphique",
-        price: "497",
+        price: "400",
         priceCurrency: "EUR",
       },
       {
@@ -63,7 +63,7 @@ const serviceJsonLd = {
         name: "Boost Mandat",
         description:
           "Annonce storytelling, 3 posts + 1 Reel dédiés, mini landing page, email blast acheteurs",
-        price: "97",
+        price: "100",
         priceCurrency: "EUR",
       },
     ],
