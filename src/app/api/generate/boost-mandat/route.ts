@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { currentUser } from "@clerk/nextjs/server"
+import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { generateJSON } from "@/lib/claude"
 import { getClientContext } from "@/lib/client-context"
@@ -36,9 +36,9 @@ interface DeliverableRow {
  * Admin-only.
  */
 export async function POST(request: NextRequest) {
-  const user = await currentUser()
+  const user = await getSessionUser()
   const adminEmail = process.env.ADMIN_EMAIL
-  const userEmail = user?.emailAddresses[0]?.emailAddress
+  const userEmail = user?.email
   if (!userEmail || userEmail !== adminEmail) {
     return NextResponse.json({ error: "Acces refuse" }, { status: 403 })
   }

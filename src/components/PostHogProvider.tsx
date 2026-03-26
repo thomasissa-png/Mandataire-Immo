@@ -3,10 +3,10 @@
 import posthog from "posthog-js"
 import { PostHogProvider as PHProvider } from "posthog-js/react"
 import { useEffect } from "react"
-import { useUser } from "@clerk/nextjs"
+import { useSession } from "next-auth/react"
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
-  const { user, isSignedIn } = useUser()
+  const { data: session, status } = useSession()
 
   useEffect(() => {
     if (
@@ -26,12 +26,15 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
 
   // Identify user and track login
   useEffect(() => {
-    if (isSignedIn && user && posthog.__loaded) {
-      const email = user.emailAddresses[0]?.emailAddress
-      posthog.identify(user.id, { email, name: user.fullName })
-      posthog.capture("login", { method: "clerk" })
+    if (status === "authenticated" && session?.user && posthog.__loaded) {
+      const email = session.user.email
+      posthog.identify(email || undefined, {
+        email,
+        name: session.user.name,
+      })
+      posthog.capture("login", { method: "credentials" })
     }
-  }, [isSignedIn, user])
+  }, [status, session])
 
   if (!process.env.NEXT_PUBLIC_POSTHOG_KEY) {
     return <>{children}</>

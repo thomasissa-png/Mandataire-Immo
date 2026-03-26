@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { auth } from "@clerk/nextjs/server"
+import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { trackServer } from "@/lib/tracking"
 
@@ -46,9 +46,9 @@ interface OnboardingPayload {
 }
 
 export async function POST(request: NextRequest) {
-  const { userId } = await auth()
+  const user = await getSessionUser()
 
-  if (!userId) {
+  if (!user) {
     return NextResponse.json({ error: "Non authentifie" }, { status: 401 })
   }
 
@@ -126,17 +126,17 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // UPSERT : si le client existe (par clerk_user_id), update client_context.
+    // UPSERT : si le client existe (par email), update client_context.
     // Sinon, creer une nouvelle ligne.
     await query(
-      `INSERT INTO clients (clerk_user_id, first_name, last_name, client_context, created_at)
+      `INSERT INTO clients (email, first_name, last_name, client_context, created_at)
        VALUES ($1, $2, $3, $4, NOW())
-       ON CONFLICT (clerk_user_id) DO UPDATE SET
+       ON CONFLICT (email) DO UPDATE SET
          first_name = EXCLUDED.first_name,
          last_name = EXCLUDED.last_name,
          client_context = EXCLUDED.client_context`,
       [
-        userId,
+        user.email,
         clientContext.prenom,
         clientContext.nom,
         JSON.stringify(clientContext),
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Track onboarding_complete server-side
-  await trackServer("onboarding_complete", userId, {
+  await trackServer("onboarding_complete", user.id, {
     ville: clientContext.ville,
     reseau: clientContext.reseau,
   })

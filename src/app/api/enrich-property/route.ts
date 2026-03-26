@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { currentUser } from "@clerk/nextjs/server"
+import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { enrichProperty } from "@/lib/enrich-property"
 
@@ -12,10 +12,10 @@ interface EnrichBody {
  * POST /api/enrich-property
  * Geocode une adresse et recupere le prix median au m2 via APIs publiques.
  * Si client_id est fourni, met a jour donnees_locales.prix_m2_moyen dans le client_context.
- * Protege par Clerk (utilisateur connecte requis).
+ * Protege par NextAuth (utilisateur connecte requis).
  */
 export async function POST(request: NextRequest) {
-  const user = await currentUser()
+  const user = await getSessionUser()
   if (!user) {
     return NextResponse.json({ error: "Connexion requise" }, { status: 401 })
   }

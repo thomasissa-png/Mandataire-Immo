@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server"
+import { getSessionUser } from "@/lib/getSessionUser"
 import { redirect, notFound } from "next/navigation"
 import { query } from "@/lib/db"
 import { TriggerProductionButton } from "@/components/admin/TriggerProductionButton"
@@ -41,9 +41,9 @@ export default async function AdminClientDetailPage({
 }: {
   params: { id: string }
 }) {
-  const user = await currentUser()
+  const user = await getSessionUser()
   const adminEmail = process.env.ADMIN_EMAIL
-  const userEmail = user?.emailAddresses[0]?.emailAddress
+  const userEmail = user?.email
 
   if (!userEmail || userEmail !== adminEmail) {
     redirect("/dashboard")
@@ -134,9 +134,9 @@ export default async function AdminClientDetailPage({
               </p>
             </div>
             <div>
-              <p className="text-caption text-neutral-500">Clerk ID</p>
+              <p className="text-caption text-neutral-500">ID interne</p>
               <p className="text-body-sm text-foreground font-mono">
-                {clientData.clerk_user_id || "—"}
+                {clientData.id}
               </p>
             </div>
           </div>

@@ -53,7 +53,7 @@ export default function ConfidentialitePage() {
                   <tbody>
                     <DataRow
                       treatment="Cr&eacute;ation de compte"
-                      data="Nom, pr&eacute;nom, email, mot de passe (hash&eacute; via Clerk)"
+                      data="Nom, pr&eacute;nom, email, mot de passe (hash&eacute; via bcrypt)"
                       basis="Ex&eacute;cution du contrat (Art. 6.1.b RGPD)"
                     />
                     <DataRow
@@ -103,12 +103,6 @@ export default function ConfidentialitePage() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td className="p-3 border border-primary-200 font-semibold">Clerk</td>
-                      <td className="p-3 border border-primary-200">Authentification, gestion des sessions</td>
-                      <td className="p-3 border border-primary-200">USA</td>
-                      <td className="p-3 border border-primary-200">EU-US Data Privacy Framework (DPF) + Clauses Contractuelles Types (SCC)</td>
-                    </tr>
                     <tr className="bg-primary-50/50">
                       <td className="p-3 border border-primary-200 font-semibold">Stripe</td>
                       <td className="p-3 border border-primary-200">Paiement, facturation</td>
@@ -140,13 +134,13 @@ export default function ConfidentialitePage() {
 
             <Section title="4. Transferts de donn&eacute;es hors Union europ&eacute;enne">
               <p>
-                Certains de nos sous-traitants (Clerk, Stripe, Replit, Anthropic) sont
+                Certains de nos sous-traitants (Stripe, Replit, Anthropic) sont
                 situ&eacute;s aux &Eacute;tats-Unis. Ces transferts sont encadr&eacute;s par :
               </p>
               <ul className="list-disc pl-6 mt-3 space-y-2">
                 <li>
                   Le <strong>EU-US Data Privacy Framework (DPF)</strong> pour les sous-traitants certifi&eacute;s
-                  (Clerk, Stripe).
+                  (Stripe).
                 </li>
                 <li>
                   Les <strong>Clauses Contractuelles Types (SCC)</strong> adopt&eacute;es par la Commission
@@ -268,7 +262,7 @@ export default function ConfidentialitePage() {
             <Section title="7. Cookies">
               <p className="font-semibold">Cookies strictement n&eacute;cessaires</p>
               <p>
-                Les cookies d&rsquo;authentification (Clerk) sont indispensables au fonctionnement du
+                Les cookies d&rsquo;authentification (NextAuth) sont indispensables au fonctionnement du
                 service. Ils ne n&eacute;cessitent pas votre consentement.
               </p>
 
@@ -299,7 +293,7 @@ export default function ConfidentialitePage() {
               </p>
               <ul className="list-disc pl-6 mt-3 space-y-1">
                 <li>Chiffrement des communications (HTTPS/TLS)</li>
-                <li>Mots de passe hash&eacute;s (via Clerk)</li>
+                <li>Mots de passe hash&eacute;s (bcrypt, stockage local)</li>
                 <li>Donn&eacute;es bancaires g&eacute;r&eacute;es exclusivement par Stripe (certifi&eacute; PCI-DSS)</li>
                 <li>Acc&egrave;s aux donn&eacute;es restreint au strict n&eacute;cessaire</li>
               </ul>

@@ -85,10 +85,9 @@ export default defineConfig({
       /* Test environment variables — override real services */
       NODE_ENV: "test",
       NEXT_PUBLIC_APP_URL: "http://localhost:5000",
-      /* Clerk test mode — publishable key for test instance */
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-        process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || "pk_test_placeholder",
-      CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY || "sk_test_placeholder",
+      /* NextAuth test mode */
+      NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || "test-secret-do-not-use-in-production",
+      NEXTAUTH_URL: "http://localhost:5000",
       /* Stripe test mode */
       STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || "sk_test_placeholder",
       NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { useUser } from "@clerk/nextjs"
+import { useSession } from "next-auth/react"
 import { track } from "@/lib/tracking"
 
 // --- Types ---
@@ -58,7 +58,8 @@ const TOTAL_STEPS = 3
 // --- Component ---
 
 export default function MonthlyUpdatePage() {
-  const { user } = useUser()
+  const { data: session } = useSession()
+  const user = session?.user
 
   const [currentStep, setCurrentStep] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)

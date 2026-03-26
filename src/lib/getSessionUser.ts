@@ -12,7 +12,7 @@ interface SessionUser {
  * Recupere l'utilisateur connecte depuis la session NextAuth.
  * Retourne null si pas de session active.
  *
- * Remplace `currentUser()` de Clerk dans toutes les routes serveur.
+ * Helper unique pour toutes les routes serveur.
  *
  * @example
  * const user = await getSessionUser()

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import { ClerkProvider } from "@clerk/nextjs"
 import { Plus_Jakarta_Sans, Inter } from "next/font/google"
+import { SessionProvider } from "@/components/SessionProvider"
 import { PostHogProvider } from "@/components/PostHogProvider"
 import { JsonLd } from "@/components/JsonLd"
 import { CookieConsent } from "@/components/CookieConsent"
@@ -83,22 +83,22 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider>
-      <html
-        lang="fr"
-        className={`${plusJakartaSans.variable} ${inter.variable}`}
-      >
-        <head>
-          <meta name="color-scheme" content="light only" />
-        </head>
-        <body>
-          <JsonLd data={organizationJsonLd} />
+    <html
+      lang="fr"
+      className={`${plusJakartaSans.variable} ${inter.variable}`}
+    >
+      <head>
+        <meta name="color-scheme" content="light only" />
+      </head>
+      <body>
+        <JsonLd data={organizationJsonLd} />
+        <SessionProvider>
           <PostHogProvider>
             {children}
             <CookieConsent />
           </PostHogProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </SessionProvider>
+      </body>
+    </html>
   )
 }

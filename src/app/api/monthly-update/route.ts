@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { currentUser } from "@clerk/nextjs/server"
+import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { trackServer } from "@/lib/tracking"
 
@@ -27,15 +27,12 @@ interface MonthlyUpdatePayload {
  * Retourne les biens existants depuis client_context.
  */
 export async function GET(request: NextRequest) {
-  const user = await currentUser()
+  const user = await getSessionUser()
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const email = user.emailAddresses[0]?.emailAddress
-  if (!email) {
-    return NextResponse.json({ error: "No email" }, { status: 400 })
-  }
+  const email = user.email
 
   const action = request.nextUrl.searchParams.get("action")
 
@@ -92,15 +89,12 @@ export async function GET(request: NextRequest) {
  * Ne pas ecraser les autres champs -- merge uniquement les champs recurrents.
  */
 export async function POST(request: NextRequest) {
-  const user = await currentUser()
+  const user = await getSessionUser()
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const email = user.emailAddresses[0]?.emailAddress
-  if (!email) {
-    return NextResponse.json({ error: "No email" }, { status: 400 })
-  }
+  const email = user.email
 
   let body: MonthlyUpdatePayload
   try {
@@ -160,7 +154,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Track server-side
-  await trackServer("monthly_update_completed", user.id, {
+  await trackServer("monthly_update_completed", email, {
     nb_biens: cleanBiens.length,
     has_anecdote: body.anecdote_mois.trim() !== "",
     nb_sujets: body.sujets_prioritaires.length,

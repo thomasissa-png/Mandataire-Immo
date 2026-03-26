@@ -1,4 +1,4 @@
-import { UserButton } from "@clerk/nextjs"
+import { UserMenu } from "@/components/dashboard/UserMenu"
 
 export default function DashboardLayout({
   children,
@@ -20,7 +20,7 @@ export default function DashboardLayout({
             >
               Mes livrables
             </a>
-            <UserButton afterSignOutUrl="/" />
+            <UserMenu />
           </div>
         </div>
       </header>

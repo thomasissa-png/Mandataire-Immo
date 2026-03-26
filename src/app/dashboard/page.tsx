@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server"
+import { getSessionUser } from "@/lib/getSessionUser"
 import { DeliverableCard } from "@/components/dashboard/DeliverableCard"
 import { query } from "@/lib/db"
 
@@ -63,13 +63,13 @@ const TYPE_COLORS: Record<DeliverableType, string> = {
 }
 
 export default async function DashboardPage() {
-  const user = await currentUser()
+  const user = await getSessionUser()
 
   if (!user) {
     return null
   }
 
-  const primaryEmail = user.emailAddresses[0]?.emailAddress
+  const primaryEmail = user.email
 
   // Fetch client info (include client_context for monthly update check)
   const { rows: clientRows } = await query<ClientRow>(
@@ -172,7 +172,7 @@ export default async function DashboardPage() {
       {/* Welcome */}
       <div className="mb-8">
         <h1 className="font-display text-h1 text-primary mb-2">
-          Bonjour {user.firstName || ""}
+          Bonjour {user.firstName || user.name || ""}
         </h1>
         <p className="text-body text-neutral-500">
           {client?.pack === "mensuel"

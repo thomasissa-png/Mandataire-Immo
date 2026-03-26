@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server"
+import { getSessionUser } from "@/lib/getSessionUser"
 import { redirect } from "next/navigation"
 import { query } from "@/lib/db"
 import { getNextPlannedTopic } from "@/lib/editorial-calendar"
@@ -23,11 +23,11 @@ const STATUS_BADGES: Record<string, string> = {
 }
 
 export default async function AdminPage() {
-  const user = await currentUser()
+  const user = await getSessionUser()
 
   // Basic admin check — only ADMIN_EMAIL can access
   const adminEmail = process.env.ADMIN_EMAIL
-  const userEmail = user?.emailAddresses[0]?.emailAddress
+  const userEmail = user?.email
 
   if (!userEmail || userEmail !== adminEmail) {
     redirect("/dashboard")

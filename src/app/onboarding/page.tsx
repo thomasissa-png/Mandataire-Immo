@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useUser } from "@clerk/nextjs"
+import { useSession } from "next-auth/react"
 import { track } from "@/lib/tracking"
 
 const STEPS = [
@@ -251,7 +251,8 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
 const MAX_BIENS = 5
 
 export default function OnboardingPage() {
-  const { user } = useUser()
+  const { data: session } = useSession()
+  const user = session?.user
   // Restore state from sessionStorage on mount
   const [currentStep, setCurrentStep] = useState(() => {
     if (typeof window !== "undefined") {
@@ -380,7 +381,7 @@ export default function OnboardingPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            email: user?.emailAddresses[0]?.emailAddress,
+            email: user?.email,
             name: `${data.prenom || ""} ${data.nom || ""}`.trim(),
             city: data.ville,
             source: "onboarding",

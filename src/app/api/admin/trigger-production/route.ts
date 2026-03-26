@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { currentUser } from "@clerk/nextjs/server"
+import { getSessionUser } from "@/lib/getSessionUser"
 import { trackServer } from "@/lib/tracking"
 
 interface TriggerBody {
@@ -24,9 +24,9 @@ interface TriggerBody {
  */
 export async function POST(request: NextRequest) {
   // Admin check
-  const user = await currentUser()
+  const user = await getSessionUser()
   const adminEmail = process.env.ADMIN_EMAIL
-  const userEmail = user?.emailAddresses[0]?.emailAddress
+  const userEmail = user?.email
   if (!userEmail || userEmail !== adminEmail) {
     return NextResponse.json({ error: "Acces refuse" }, { status: 403 })
   }
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Forward la requete vers la route de generation
-  // On passe les cookies pour maintenir l'auth Clerk
+  // On passe les cookies pour maintenir l'auth NextAuth
   try {
     const cookieHeader = request.headers.get("cookie") || ""
     const response = await fetch(targetUrl, {

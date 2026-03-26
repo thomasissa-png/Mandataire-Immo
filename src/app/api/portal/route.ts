@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { currentUser } from "@clerk/nextjs/server"
+import { getSessionUser } from "@/lib/getSessionUser"
 import { stripe } from "@/lib/stripe"
 import { query } from "@/lib/db"
 
@@ -10,10 +10,10 @@ interface ClientRow {
 /**
  * GET /api/portal
  * Cree une session Stripe Customer Portal et redirige le client.
- * Protege par Clerk — le client doit etre authentifie.
+ * Protege par NextAuth — le client doit etre authentifie.
  */
 export async function GET() {
-  const user = await currentUser()
+  const user = await getSessionUser()
 
   if (!user) {
     return NextResponse.redirect(
@@ -21,7 +21,7 @@ export async function GET() {
     )
   }
 
-  const primaryEmail = user.emailAddresses[0]?.emailAddress
+  const primaryEmail = user.email
   if (!primaryEmail) {
     return NextResponse.redirect(
       new URL("/dashboard", process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000")
