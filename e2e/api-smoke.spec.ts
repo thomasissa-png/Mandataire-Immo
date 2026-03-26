@@ -153,15 +153,4 @@ test.describe("API — webhook endpoints reject unsigned requests", () => {
     // Must return 400 — accepting unsigned webhooks is a security vulnerability
     expect(response.status()).toBe(400)
   })
-
-  test("/api/webhooks/clerk rejects request without svix headers", async ({
-    request,
-  }) => {
-    const response = await request.post("/api/webhooks/clerk", {
-      data: { type: "user.created" },
-    })
-
-    // Must return 400 — missing svix-id, svix-timestamp, svix-signature headers
-    expect(response.status()).toBe(400)
-  })
 })

@@ -46,7 +46,7 @@
 - **Frontend** : [x] Next.js  [ ] React  [ ] Expo/React Native  [ ] Autre :
 - **Backend** : API Routes Next.js + Server Actions
 - **Base de données** : Replit PostgreSQL + Replit Object Storage (décision 2026-03-25 : remplace Supabase pour simplifier la stack et réduire les coûts)
-- **Authentification** : Clerk
+- **Authentification** : NextAuth.js (email/password credentials, JWT sessions) — migration depuis Clerk effectuee le 2026-03-26
 - **Hébergement** : Replit (Deployments)
 - **Outils IA utilisés** : Claude API (génération de contenu personnalisé via le framework Gradient Agents — 19 agents coordonnés : @copywriter, @seo, @geo, @social, @design, @creative-strategy)
 - **Budget IA mensuel (tokens)** : À définir (estimation : 50-100€/mois pour 30 clients)

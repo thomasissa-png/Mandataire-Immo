@@ -3,16 +3,12 @@ import { test as base, expect } from "@playwright/test"
 /**
  * Extended test fixtures for ImmoCrew E2E tests.
  *
- * Why this file exists:
- * - Centralizes Clerk auth bypass so every test doesn't repeat the mock setup
- * - Provides reusable helpers for common assertions (section visibility, etc.)
- * - Allows future extension (authenticated user fixture, seeded DB fixture)
- *
- * Clerk bypass strategy:
- * Since Clerk middleware protects /dashboard, /onboarding, /admin,
- * and we cannot run a real Clerk auth flow in E2E without a test Clerk instance,
- * the protected route tests use route-level mocking via page.route() to intercept
- * Clerk's auth checks. For landing page tests (public routes), no bypass needed.
+ * Auth strategy (NextAuth.js):
+ * Protected routes (/dashboard, /onboarding, /admin) are guarded by
+ * NextAuth JWT middleware. For E2E tests on public routes (landing, blog,
+ * legal pages), no auth bypass is needed. For protected route tests,
+ * the middleware redirects to /sign-in — tests verify redirect behavior
+ * rather than accessing the authenticated content directly.
  */
 
 export const test = base.extend<{
@@ -60,10 +56,10 @@ export const SOPHIE_ONBOARDING = {
 
 /**
  * Expected pricing data — must match PACKS in Pricing.tsx
- * If these values change in the component, the test MUST fail.
+ * Updated 2026-03-26: prix ronds (400/150/100)
  */
 export const EXPECTED_PACKS = [
-  { name: "Pack Lancement", price: "497", href: "/api/checkout?pack=lancement" },
-  { name: "Pack Mensuel", price: "197", href: "/api/checkout?pack=mensuel" },
-  { name: "Boost Mandat", price: "97", href: "/api/checkout?pack=boost" },
+  { name: "Pack Lancement", price: "400", href: "/api/checkout?pack=lancement" },
+  { name: "Pack Mensuel", price: "150", href: "/api/checkout?pack=mensuel" },
+  { name: "Boost Mandat", price: "100", href: "/api/checkout?pack=boost" },
 ] as const
