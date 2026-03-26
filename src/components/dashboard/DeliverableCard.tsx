@@ -60,7 +60,7 @@ export function DeliverableCard({
             </span>
             {status === "draft" && (
               <span className="inline-block px-2 py-0.5 rounded-full text-caption font-semibold bg-warning-50 text-warning-800">
-                En pr&eacute;paration &middot; livraison sous 24-48h
+                En cours de rédaction
               </span>
             )}
           </div>
