@@ -281,6 +281,21 @@ export default function OnboardingPage() {
   const step = STEPS[currentStep]
   const progress = ((currentStep + 1) / STEPS.length) * 100
 
+  // Pre-fill prenom/nom from session (sign-up already collected these)
+  useEffect(() => {
+    if (!user) return
+    setData((prev) => {
+      const updates: Partial<OnboardingData> = {}
+      if (!prev.prenom && user.firstName) updates.prenom = user.firstName
+      if (!prev.nom && user.name) {
+        const parts = user.name.split(" ")
+        if (parts.length > 1 && !prev.nom) updates.nom = parts.slice(1).join(" ")
+      }
+      if (Object.keys(updates).length === 0) return prev
+      return { ...prev, ...updates }
+    })
+  }, [user])
+
   // Persist state to sessionStorage on every change
   useEffect(() => {
     sessionStorage.setItem("immocrew_onboarding_step", String(currentStep))
