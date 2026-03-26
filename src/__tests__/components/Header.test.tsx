@@ -12,6 +12,12 @@ vi.mock("next-auth/react", () => ({
   SessionProvider: ({ children }: { children: React.ReactNode }) => children,
 }))
 
+// Mock next/navigation — AuthModal uses useSearchParams() and useRouter()
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => new URLSearchParams(),
+  useRouter: () => ({ push: vi.fn() }),
+}))
+
 describe("Header", () => {
   it("renders the ImmoCrew logo", () => {
     render(<Header />)

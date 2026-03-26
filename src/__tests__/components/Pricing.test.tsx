@@ -35,7 +35,8 @@ describe("Pricing", () => {
     const priceTexts = priceElements.map((el) => el.textContent)
     expect(priceTexts).toContain("400\u20AC")
     expect(priceTexts).toContain("150\u20AC")
-    expect(priceTexts).toContain("100\u20AC")
+    // Boost price is in inline text "Boost Mandat · 100€/bien", not a separate price element
+    expect(screen.getByText(/100\u20AC\/bien/i)).toBeInTheDocument()
   })
 
   it("shows the badge on Pack Mensuel", () => {
