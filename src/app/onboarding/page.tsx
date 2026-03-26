@@ -328,7 +328,20 @@ export default function OnboardingPage() {
     })
   }
 
+  const [validationError, setValidationError] = useState("")
+
   const handleNext = () => {
+    // Validate required fields on non-optional steps
+    if (!step.optional) {
+      const emptyRequired = step.fields.filter(
+        (f: string) => f !== "__biens__" && !(data[f] || "").trim()
+      )
+      if (emptyRequired.length > 0) {
+        setValidationError("Merci de remplir tous les champs avant de continuer.")
+        return
+      }
+    }
+    setValidationError("")
     if (currentStep < STEPS.length - 1) {
       track("onboarding_step_complete", {
         step: currentStep + 1,
@@ -674,10 +687,15 @@ export default function OnboardingPage() {
               <button
                 type="button"
                 onClick={handleNext}
-                className="h-12 px-8 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
+                className="h-12 px-8 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
               >
                 Suivant
               </button>
+              {validationError && (
+                <p className="text-body-sm text-error mt-2" role="alert">
+                  {validationError}
+                </p>
+              )}
             </div>
           ) : (
             <button

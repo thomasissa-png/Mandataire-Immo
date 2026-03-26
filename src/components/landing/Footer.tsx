@@ -7,9 +7,9 @@ export function Footer() {
         <div className="desktop:flex desktop:items-start desktop:justify-between desktop:gap-12">
           {/* Logo + tagline */}
           <div className="mb-8 desktop:mb-0">
-            <span className="font-display text-h2 font-bold text-background">
+            <a href="/" className="font-display text-h2 font-bold text-background hover:opacity-80 transition-opacity duration-normal">
               ImmoCrew
-            </span>
+            </a>
             <p className="text-body-sm text-primary-200 mt-2 max-w-xs">
               L&apos;&eacute;quipe marketing des mandataires immobiliers.
             </p>
