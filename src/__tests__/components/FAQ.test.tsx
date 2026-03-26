@@ -92,7 +92,7 @@ describe("FAQ", () => {
 
     // The answer text for the first question should be visible
     expect(
-      screen.getByText(/equipe marketing externalisee/i)
+      screen.getByText(/\u00e9quipe marketing externalis\u00e9e/i)
     ).toBeInTheDocument()
   })
 })

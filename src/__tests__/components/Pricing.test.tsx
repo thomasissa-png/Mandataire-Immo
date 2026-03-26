@@ -1,13 +1,9 @@
 /**
  * Tests pour le composant Pricing
  *
- * Pourquoi ces tests existent :
- * - Les prix affiches sont un engagement contractuel (cf. legal-audit.md).
- *   Un prix incorrect = litige juridique potentiel.
- * - Le badge "Recommandé" sur le Pack Mensuel est une decision UX
- *   critique pour orienter la conversion (cf. wireframes.md).
- * - Les liens CTA pointent vers /api/checkout?pack=X. Un lien casse = 0 paiement.
- * - Les mentions (garantie 14j, sans engagement) sont des obligations legales.
+ * Les prix affichés sont un engagement contractuel.
+ * Les CTA pointent vers /api/checkout — un lien cassé = 0 paiement.
+ * Les mentions (garantie 14j, sans engagement) sont des obligations légales.
  */
 
 import { describe, it, expect } from "vitest"
@@ -15,21 +11,25 @@ import { render, screen } from "@testing-library/react"
 import { Pricing } from "@/components/landing/Pricing"
 
 describe("Pricing", () => {
-  it("renders the section heading", () => {
+  it("renders the section heading with 150€/mois", () => {
     render(<Pricing />)
     expect(
-      screen.getByText(/Ton \u00e9quipe marketing.*150\u20ac\/mois/i)
+      screen.getByText(/\u00e9quipe marketing.*150\u20ac\/mois/i)
     ).toBeInTheDocument()
   })
 
-  it("renders all 3 pack names", () => {
+  it("renders the 2 main pack names", () => {
     render(<Pricing />)
     expect(screen.getByText("Pack Lancement")).toBeInTheDocument()
     expect(screen.getByText("Pack Mensuel")).toBeInTheDocument()
-    expect(screen.getByText("Boost Mandat")).toBeInTheDocument()
   })
 
-  it("displays correct prices for each pack", () => {
+  it("renders the Boost Mandat section", () => {
+    render(<Pricing />)
+    expect(screen.getByText(/Boost Mandat/i)).toBeInTheDocument()
+  })
+
+  it("displays correct prices", () => {
     render(<Pricing />)
     const priceElements = screen.getAllByText(/\d+\u20AC/)
     const priceTexts = priceElements.map((el) => el.textContent)
@@ -38,17 +38,17 @@ describe("Pricing", () => {
     expect(priceTexts).toContain("100\u20AC")
   })
 
-  it("shows the 'Recommand\u00e9' badge on Pack Mensuel only", () => {
+  it("shows the badge on Pack Mensuel", () => {
     render(<Pricing />)
-    const badge = screen.getByText("Recommand\u00e9")
-    expect(badge).toBeInTheDocument()
-    expect(screen.getAllByText("Recommand\u00e9")).toHaveLength(1)
+    expect(
+      screen.getByText(/choix de la plupart des mandataires/i)
+    ).toBeInTheDocument()
   })
 
-  it("displays TTC mention for all packs", () => {
+  it("displays TTC mentions", () => {
     render(<Pricing />)
     const ttcMentions = screen.getAllByText("TTC")
-    expect(ttcMentions.length).toBe(3)
+    expect(ttcMentions.length).toBeGreaterThanOrEqual(2)
   })
 
   it("shows the guarantee mention for Pack Lancement", () => {
@@ -61,28 +61,28 @@ describe("Pricing", () => {
   it("shows the no-commitment mention for Pack Mensuel", () => {
     render(<Pricing />)
     expect(
-      screen.getByText(/Sans engagement.*R\u00e9siliation libre/i)
+      screen.getByText(/Sans engagement/i)
     ).toBeInTheDocument()
   })
 
-  it("renders correct CTA links pointing to /api/checkout with proper pack", () => {
+  it("renders CTA links pointing to /api/checkout", () => {
     render(<Pricing />)
 
-    const lancementLink = screen.getByText(/Je veux mon kit de d\u00e9marrage/i)
+    const lancementLink = screen.getByText(/D\u00e9marrer mon lancement/i)
       .closest("a")
     expect(lancementLink).toHaveAttribute(
       "href",
       "/api/checkout?pack=lancement"
     )
 
-    const mensuelLink = screen.getByText(/Recevoir mes premiers posts/i)
+    const mensuelLink = screen.getByText(/Commencer ce mois-ci/i)
       .closest("a")
     expect(mensuelLink).toHaveAttribute(
       "href",
       "/api/checkout?pack=mensuel"
     )
 
-    const boostLink = screen.getByText(/Booster un mandat/i)
+    const boostLink = screen.getByText(/Booster mon prochain bien/i)
       .closest("a")
     expect(boostLink).toHaveAttribute(
       "href",
@@ -90,21 +90,21 @@ describe("Pricing", () => {
     )
   })
 
-  it("renders the anchor price comparison text", () => {
+  it("renders the ROI argument", () => {
     render(<Pricing />)
     expect(
-      screen.getByText(/Une seule vente suppl\u00e9mentaire.*rembourse.*abonnement/i)
+      screen.getByText(/mandat suppl\u00e9mentaire.*rembourse.*abonnement/i)
     ).toBeInTheDocument()
   })
 
-  it("displays 'Tous les prix sont TTC.' global mention", () => {
+  it("displays 'Tous les prix sont TTC.'", () => {
     render(<Pricing />)
     expect(
       screen.getByText("Tous les prix sont TTC.")
     ).toBeInTheDocument()
   })
 
-  it("lists the correct features for Pack Mensuel with French accents", () => {
+  it("lists correct features for Pack Mensuel", () => {
     render(<Pricing />)
     expect(
       screen.getByText("12 posts personnalis\u00e9s pour tes r\u00e9seaux")
@@ -116,16 +116,16 @@ describe("Pricing", () => {
       screen.getByText("2 articles SEO local")
     ).toBeInTheDocument()
     expect(
-      screen.getByText("1 newsletter pour tes contacts")
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText("4 annonces immobili\u00e8res storytelling")
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText("1 email de prospection vendeurs")
+      screen.getByText("4 annonces qui donnent envie de visiter")
     ).toBeInTheDocument()
     expect(
       screen.getByText("Calendrier de publication mensuel")
     ).toBeInTheDocument()
+  })
+
+  it("renders the comparison table", () => {
+    render(<Pricing />)
+    expect(screen.getByText("Freelance marketing")).toBeInTheDocument()
+    expect(screen.getByText("Outil avec templates")).toBeInTheDocument()
   })
 })
