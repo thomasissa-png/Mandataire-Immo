@@ -4,6 +4,7 @@ const CHECK_ICON = (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
+    aria-hidden="true"
   >
     <path
       strokeLinecap="round"
@@ -14,7 +15,7 @@ const CHECK_ICON = (
   </svg>
 )
 
-const PACKS = [
+const MAIN_PACKS = [
   {
     name: "Pack Lancement",
     price: "400",
@@ -29,7 +30,7 @@ const PACKS = [
       "Bio optimis\u00E9e pour tous tes profils",
       "5 annonces r\u00E9dig\u00E9es pour mettre en valeur chaque bien",
       "5 articles SEO local (quartier + ville)",
-      "Plan de publication sur 30 jours — tu sais quoi poster et quand",
+      "Plan de publication sur 30 jours",
       "20 posts pr\u00EAts \u00E0 publier",
       "10 scripts Reels",
       "Charte visuelle : couleurs, police, mise en page",
@@ -44,31 +45,15 @@ const PACKS = [
     cta: "Commencer ce mois-ci",
     ctaHref: "/api/checkout?pack=mensuel",
     featured: true,
-    badge: "Recommand\u00E9",
+    badge: "Le choix de la plupart des mandataires",
     features: [
       "12 posts personnalis\u00E9s pour tes r\u00E9seaux",
       "4 scripts vid\u00E9o pour tes Reels",
       "2 articles SEO local",
       "1 newsletter pour tes contacts",
-      "4 annonces immobili\u00E8res qui donnent envie de visiter",
+      "4 annonces qui donnent envie de visiter",
       "1 email de prospection vendeurs",
       "Calendrier de publication mensuel",
-    ],
-  },
-  {
-    name: "Boost Mandat",
-    price: "100",
-    unit: "/bien",
-    subtitle: "D\u00E9j\u00E0 abonn\u00E9 ? Ton nouveau bien m\u00E9rite ses propres posts.",
-    mention: "R\u00E9serv\u00E9 aux abonn\u00E9s Pack Mensuel. Sans engagement suppl\u00E9mentaire.",
-    cta: "Booster mon prochain bien",
-    ctaHref: "/api/checkout?pack=boost",
-    featured: false,
-    features: [
-      "1 annonce qui raconte l'histoire du bien",
-      "3 posts d\u00E9di\u00E9s au bien + 1 Reel",
-      "1 page d\u00E9di\u00E9e au bien \u00E0 partager",
-      "1 email envoy\u00E9 \u00E0 tes acheteurs potentiels",
     ],
   },
 ] as const
@@ -84,24 +69,31 @@ export function Pricing() {
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-3">
           Ton &eacute;quipe marketing, &agrave; partir de 150&euro;/mois.
         </h2>
-        <p className="text-center text-body-lg text-neutral-500 mb-10 desktop:mb-16 max-w-xl mx-auto">
-          Un freelance facture 500 &agrave; 800&euro; pour des posts g&eacute;n&eacute;riques.
-          Ici, tu re&ccedil;ois du sur-mesure pour ta zone — pour moins cher.
+        <p className="text-center text-body-lg text-neutral-500 mb-4 max-w-xl mx-auto">
+          Un seul mandat suppl&eacute;mentaire dans l&apos;ann&eacute;e rembourse
+          ton abonnement entier. Et ta commission moyenne, c&apos;est 3 000 &agrave; 5 000&euro;.
         </p>
 
-        <div className="grid gap-6 tablet:grid-cols-3 items-start max-w-5xl mx-auto overflow-x-clip">
-          {PACKS.map((pack, index) => (
+        {/* Guidage decisionnel */}
+        <p className="text-center text-body-sm text-neutral-400 mb-10 desktop:mb-16">
+          Nouvelle sur ImmoCrew ? &rarr; Pack Lancement.
+          D&eacute;j&agrave; pr&ecirc;te &agrave; t&apos;abonner ? &rarr; Pack Mensuel.
+        </p>
+
+        {/* 2 packs principaux */}
+        <div className="grid gap-6 tablet:grid-cols-2 items-start max-w-4xl mx-auto">
+          {MAIN_PACKS.map((pack, index) => (
             <div
               key={index}
               className={`rounded-xl p-8 ${
                 pack.featured
-                  ? "bg-primary text-white shadow-xl tablet:scale-[1.03] order-first tablet:order-none"
-                  : "bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-normal"
+                  ? "bg-primary text-white shadow-xl tablet:scale-[1.02]"
+                  : "bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-[box-shadow,transform] duration-normal"
               }`}
             >
               {/* Badge */}
               {pack.featured && "badge" in pack && (
-                <span className="inline-block px-3 py-1 mb-4 rounded-full bg-secondary-700 text-white text-body-sm font-bold">
+                <span className="inline-block px-3 py-1 mb-4 rounded-full bg-secondary text-white text-body-sm font-bold">
                   {pack.badge}
                 </span>
               )}
@@ -143,7 +135,7 @@ export function Pricing() {
                   </span>
                 )}
                 <p
-                  className={`text-caption mt-1 ${
+                  className={`text-caption font-medium mt-1 ${
                     pack.featured ? "text-primary-100" : "text-neutral-400"
                   }`}
                 >
@@ -154,9 +146,18 @@ export function Pricing() {
               {/* Separator */}
               <div
                 className={`h-px mb-6 ${
-                  pack.featured ? "bg-primary-400" : "bg-neutral-200"
+                  pack.featured ? "bg-primary-300" : "bg-neutral-200"
                 }`}
               />
+
+              {/* Reassurance — AVANT le CTA */}
+              <p
+                className={`text-body-sm font-medium mb-4 ${
+                  pack.featured ? "text-primary-200" : "text-neutral-500"
+                }`}
+              >
+                {pack.mention}
+              </p>
 
               {/* Features */}
               <ul className="space-y-3 mb-8">
@@ -168,6 +169,7 @@ export function Pricing() {
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
+                        aria-hidden="true"
                       >
                         <path
                           strokeLinecap="round"
@@ -195,30 +197,63 @@ export function Pricing() {
                 href={pack.ctaHref}
                 label={`${pack.cta} \u2192`}
                 location={`pricing_${pack.name.toLowerCase().replace(/\s+/g, "_")}`}
-                variant={pack.featured ? "primary" : "outline"}
+                variant={pack.featured ? "primary" : "secondary"}
                 className="w-full"
               />
 
-              {/* Mention */}
+              {/* Micro-reassurance sous CTA */}
               <p
                 className={`text-caption text-center mt-3 ${
-                  pack.featured ? "text-primary-100" : "text-neutral-400"
+                  pack.featured ? "text-primary-200" : "text-neutral-400"
                 }`}
               >
-                {pack.mention}
+                Paiement s&eacute;curis&eacute; via Stripe
               </p>
             </div>
           ))}
         </div>
 
+        {/* Boost Mandat — upsell separe */}
+        <div className="mt-10 max-w-4xl mx-auto rounded-xl bg-background border border-border p-6 desktop:p-8">
+          <div className="tablet:flex tablet:items-center tablet:justify-between tablet:gap-8">
+            <div className="mb-4 tablet:mb-0">
+              <h3 className="font-display text-h3 text-primary mb-1">
+                Boost Mandat &middot; 100&euro;/bien
+              </h3>
+              <p className="text-body-sm text-neutral-500">
+                D&eacute;j&agrave; abonn&eacute; ? Ton nouveau bien m&eacute;rite ses propres posts.
+              </p>
+              <ul className="mt-3 space-y-1">
+                <li className="flex items-center gap-2 text-body-sm text-neutral-600">
+                  {CHECK_ICON} 1 annonce + 3 posts + 1 Reel
+                </li>
+                <li className="flex items-center gap-2 text-body-sm text-neutral-600">
+                  {CHECK_ICON} 1 page web du bien + 1 email acheteurs
+                </li>
+              </ul>
+            </div>
+            <div className="flex-shrink-0">
+              <CTAButton
+                href="/api/checkout?pack=boost"
+                label="Booster mon prochain bien \u2192"
+                location="pricing_boost_mandat"
+                variant="secondary"
+              />
+              <p className="text-caption text-neutral-400 text-center mt-2">
+                R&eacute;serv&eacute; aux abonn&eacute;s Pack Mensuel
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Ancrage comparatif */}
-        <div className="mt-12 max-w-2xl mx-auto rounded-xl bg-background border border-border p-6 desktop:p-8">
+        <div className="mt-10 max-w-2xl mx-auto rounded-xl bg-background border border-border p-6 desktop:p-8">
           <p className="font-display text-h3 text-primary text-center mb-4">
             150&euro;/mois. La d&eacute;cision la plus simple de ta semaine.
           </p>
           <div className="grid grid-cols-1 tablet:grid-cols-3 gap-4 text-center">
             <div className="p-4 rounded-lg bg-error-50">
-              <p className="font-display text-h2 text-error-700 line-through">500-800&euro;</p>
+              <p className="font-display text-h2 text-error line-through">500-800&euro;</p>
               <p className="text-body-sm text-neutral-600 mt-1">Freelance marketing</p>
               <p className="text-caption text-neutral-400">R&eacute;sultat g&eacute;n&eacute;rique</p>
             </div>
@@ -230,13 +265,9 @@ export function Pricing() {
             <div className="p-4 rounded-lg bg-success-50 ring-2 ring-success">
               <p className="font-display text-h2 text-success-800">150&euro;</p>
               <p className="text-body-sm text-neutral-600 mt-1 font-semibold">ImmoCrew</p>
-              <p className="text-caption text-neutral-400">Tes posts, articles et annonces — personnalis&eacute;s pour ta zone</p>
+              <p className="text-caption text-neutral-400">Tes posts, articles et annonces — personnalis&eacute;s</p>
             </div>
           </div>
-          <p className="text-center text-body text-neutral-600 mt-4">
-            150&euro;/mois — tu y passes moins de 2h. On s&apos;occupe du reste.
-            <strong> Un seul mandat suppl&eacute;mentaire dans l&apos;ann&eacute;e rembourse ton abonnement entier.</strong>
-          </p>
         </div>
         <p className="text-center text-body-sm text-neutral-400 mt-4">
           Tous les prix sont TTC.
