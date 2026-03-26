@@ -36,13 +36,12 @@ const STEPS = [
     ],
   },
   {
-    title: "Ton histoire",
+    title: "Ton profil",
     subtitle:
-      "Facultatif — mais ca rend tes livrables beaucoup plus personnels",
+      "Facultatif — mais ça rend tes livrables beaucoup plus personnels",
     fields: [
-      "parcours_avant_immo",
-      "pourquoi_immobilier",
-      "anecdote_memorable",
+      "linkedin_url",
+      "bio_personnelle",
     ],
     optional: true,
   },
@@ -78,6 +77,7 @@ interface BienData {
   surface: string
   pieces: string
   points_forts: string
+  lien_annonce: string
 }
 
 const EMPTY_BIEN: BienData = {
@@ -88,13 +88,15 @@ const EMPTY_BIEN: BienData = {
   surface: "",
   pieces: "",
   points_forts: "",
+  lien_annonce: "",
 }
 
 interface FieldConfig {
   label: string
   placeholder: string
-  type: "text" | "textarea" | "select"
+  type: "text" | "textarea" | "select" | "url" | "photo"
   options?: { value: string; label: string }[]
+  helper?: string
 }
 
 const FIELD_LABELS: Record<string, FieldConfig> = {
@@ -194,23 +196,23 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
       "Ex: La Doutre c'est le quartier boheme d'Angers. Rues pavees, maisons a colombages, bistrots. Les gens qui s'y installent ne repartent plus.",
     type: "textarea",
   },
-  parcours_avant_immo: {
-    label: "Que faisais-tu avant l'immobilier ?",
-    placeholder:
-      "Ex: Assistante de direction pendant 8 ans dans une PME",
-    type: "text",
+  linkedin_url: {
+    label: "Ton profil LinkedIn (optionnel)",
+    placeholder: "https://linkedin.com/in/sophie-martin",
+    type: "url",
+    helper: "On utilise ton profil pour mieux comprendre ton parcours et personnaliser tes textes.",
   },
-  pourquoi_immobilier: {
-    label: "Pourquoi tu as choisi ce metier ?",
-    placeholder:
-      "Ex: J'ai eu un coup de foudre pour l'immobilier quand j'ai achete mon premier appart. J'ai adore le processus.",
+  bio_personnelle: {
+    label: "Ton parcours en quelques lignes",
+    placeholder: "Ex: Avant l'immobilier, j'étais dans la restauration. J'ai choisi ce métier parce que j'aime les gens et les belles maisons. Mon meilleur souvenir : une famille qui a trouvé son bonheur en 3 visites.",
     type: "textarea",
+    helper: "Si tu as renseigné ton LinkedIn, tu peux laisser ce champ vide — on s'en inspire.",
   },
-  anecdote_memorable: {
-    label: "Une anecdote qui te definit comme mandataire",
-    placeholder:
-      "Ex: Un couple qui cherchait depuis 1 an m'a remerciee en pleurant le jour de la signature. C'est la que j'ai su.",
-    type: "textarea",
+  photo_profil: {
+    label: "Ta photo de profil",
+    placeholder: "",
+    type: "photo",
+    helper: "Ta photo apparaîtra dans tes livrables et ton profil.",
   },
   confort_camera: {
     label: "Ton rapport a la video",
