@@ -9,6 +9,10 @@ type DeliverableType =
   | "script_video"
   | "newsletter"
   | "email_prospection"
+  | "bio"
+  | "brief_graphique"
+  | "calendrier"
+  | "positionnement"
 
 interface Deliverable {
   id: string
@@ -35,6 +39,10 @@ const TYPE_LABELS: Record<DeliverableType, string> = {
   script_video: "Script video",
   newsletter: "Newsletter",
   email_prospection: "Email prospection",
+  bio: "Bio",
+  brief_graphique: "Brief graphique",
+  calendrier: "Calendrier",
+  positionnement: "Positionnement",
 }
 
 const TYPE_COLORS: Record<DeliverableType, string> = {
@@ -44,6 +52,10 @@ const TYPE_COLORS: Record<DeliverableType, string> = {
   script_video: "bg-warning-50 text-warning-800",
   newsletter: "bg-primary-50 text-primary",
   email_prospection: "bg-error-50 text-error-700",
+  bio: "bg-primary-50 text-primary-700",
+  brief_graphique: "bg-neutral-100 text-neutral-700",
+  calendrier: "bg-info-50 text-info-700",
+  positionnement: "bg-secondary-50 text-secondary-700",
 }
 
 export default async function DashboardPage() {

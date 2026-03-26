@@ -63,6 +63,7 @@ export function buildArticleSeoPrompt(input: ArticleSeoInput): {
 - Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
 - L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
 - Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+- VARIATION PRIX : ne pas citer le prix au m2 exact a chaque paragraphe. Varier entre fourchettes, tendances qualitatives ("quartier accessible", "en hausse"), et references sans chiffre. Maximum 2 mentions chiffrees du prix/m2 par article.
 
 REGLES EDITORIALES :
 - Chaque article fait entre ${wordRange} mots${isLinkedin ? ' — format LinkedIn, pas de frontmatter SEO' : ' — assez long pour le SEO, assez concis pour etre lu'}

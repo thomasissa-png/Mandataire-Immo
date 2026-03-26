@@ -65,6 +65,7 @@ export function buildAnnonceStorytellingPrompt(input: AnnonceStorytellingInput):
 - NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
 - L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
 - Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+- VARIATION PRIX : ne pas systematiquement citer le prix au m2. Varier entre "quartier prisé", fourchette de prix, ou simplement le prix du bien sans reference au m2.
 - OBLIGATOIRE DPE : chaque annonce DOIT contenir une mention DPE. Si le DPE est fourni dans les donnees du bien, l'afficher clairement (ex: "DPE : C"). Si le DPE n'est pas fourni, ecrire en fin d'annonce : "[DPE : information en cours — sera communique avant publication]". Ne JAMAIS ecrire "DPE : non communique" (formulation illegale depuis 2021).
 
 REGLES EDITORIALES :

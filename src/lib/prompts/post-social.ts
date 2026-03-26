@@ -60,6 +60,7 @@ export function buildPostSocialPrompt(input: PostSocialInput): {
 - L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
 - Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
 - Les hashtags ne doivent contenir aucune espace. Ecrire '#SophieImmoAngers' et non '#Sophie ImmoAngers'. Pas de caractere special ni espace dans un hashtag.
+- VARIATION PRIX : ne pas citer le prix au m2 exact dans chaque post. Varier les formulations : "autour de X", "entre X et Y", ou ne pas mentionner le prix du tout. Maximum 1 post sur 3 peut citer un chiffre de prix.
 
 REGLES EDITORIALES :
 - Tu tutoies toujours le lecteur du post (le prospect/abonne, pas le mandataire)

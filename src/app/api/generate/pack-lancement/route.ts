@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
     const posId = await insertDeliverable({
       clientEmail,
       clientId: client_id,
-      type: "article_seo",
+      type: "positionnement",
       title: `Positionnement — ${ctx.prenom} ${ctx.nom}`,
       content: posData.positionnement,
       metadata: { sub_type: "positioning_statement", accroche_principale: posData.accroche_principale, proposition_valeur: posData.proposition_valeur, piliers: posData.piliers_differenciation },
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
     const bioId = await insertDeliverable({
       clientEmail,
       clientId: client_id,
-      type: "post",
+      type: "bio",
       title: `Bio optimisee — ${ctx.prenom} ${ctx.nom}`,
       content: bioContent,
       metadata: { sub_type: "bio_multiformat", instagram: bioData.instagram, linkedin: bioData.linkedin, google: bioData.google },
@@ -219,7 +219,7 @@ export async function POST(request: NextRequest) {
     const calendarId = await insertDeliverable({
       clientEmail,
       clientId: client_id,
-      type: "post",
+      type: "calendrier",
       title: `Calendrier editorial 30 jours — ${ctx.prenom} ${ctx.nom}`,
       content: calendarContent,
       metadata: { sub_type: "editorial_calendar", entries_count: calendarResult.data.calendrier.length },
@@ -231,7 +231,7 @@ export async function POST(request: NextRequest) {
     const designBriefId = await insertDeliverable({
       clientEmail,
       clientId: client_id,
-      type: "post",
+      type: "brief_graphique",
       title: `Brief graphique — ${ctx.prenom} ${ctx.nom}`,
       content: `Brief pour kit graphique personalise.\nPositionnement: ${posData.accroche_principale}\nProposition de valeur: ${posData.proposition_valeur}\nReseau: ${ctx.reseau}\nZone: ${ctx.zone_geo.ville}\nTon: ${ctx.ton}\nValeurs: ${ctx.valeurs}`,
       metadata: { sub_type: "design_brief" },
