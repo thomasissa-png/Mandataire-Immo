@@ -69,14 +69,20 @@ export function DeliverableCard({
             {content}
           </p>
           <div className="flex items-center gap-4 mt-3">
-            <button
-              type="button"
-              aria-label={`Copier le texte : ${title}`}
-              className="text-body-sm text-secondary font-semibold hover:text-secondary-600 transition-colors"
-              onClick={handleCopy}
-            >
-              {copied ? "\u2713 Copi\u00E9 !" : "Copier le texte"}
-            </button>
+            {status === "delivered" ? (
+              <button
+                type="button"
+                aria-label={`Copier le texte : ${title}`}
+                className="text-body-sm text-secondary font-semibold hover:text-secondary-600 transition-colors"
+                onClick={handleCopy}
+              >
+                {copied ? "\u2713 Copi\u00E9 !" : "Copier le texte"}
+              </button>
+            ) : (
+              <span className="text-body-sm text-neutral-400">
+                Bient\u00F4t disponible
+              </span>
+            )}
             <button
               type="button"
               className="text-caption text-neutral-400 hover:text-secondary transition-colors"

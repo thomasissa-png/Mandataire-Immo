@@ -6,11 +6,11 @@ import { track } from "@/lib/tracking"
 
 const STEPS = [
   {
-    title: "Ton identite",
+    title: "Ton identité",
     fields: ["prenom", "nom", "telephone"],
   },
   {
-    title: "Ton reseau",
+    title: "Ton réseau",
     fields: ["reseau", "experience_annees", "nb_transactions_an"],
   },
   {
@@ -18,7 +18,7 @@ const STEPS = [
     fields: ["ville", "quartiers", "departement"],
   },
   {
-    title: "Ta specialite",
+    title: "Ta spécialité",
     fields: ["type_biens", "gamme_prix", "cible_clients"],
   },
   {
@@ -26,7 +26,7 @@ const STEPS = [
     fields: ["ton_communication", "valeurs", "ce_qui_te_differencie"],
   },
   {
-    title: "Ton quartier en detail",
+    title: "Ton quartier en détail",
     fields: [
       "prix_m2_moyen",
       "commerces_reference",
@@ -53,8 +53,8 @@ const STEPS = [
     optional: true,
   },
   {
-    title: "La video",
-    subtitle: "Facultatif — permet d'adapter les scripts video a ton niveau",
+    title: "La vidéo",
+    subtitle: "Facultatif — permet d'adapter les scripts vidéo à ton niveau",
     fields: ["confort_camera"],
     optional: true,
   },
@@ -111,7 +111,7 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
     type: "text",
   },
   experience_annees: {
-    label: "Annees d'experience",
+    label: "Années d'expérience",
     placeholder: "2",
     type: "text",
   },
@@ -122,12 +122,12 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
   },
   ville: { label: "Ville principale", placeholder: "Angers", type: "text" },
   quartiers: {
-    label: "Quartiers ou tu travailles",
+    label: "Quartiers où tu travailles",
     placeholder: "La Doutre, Centre-ville, Doutre...",
     type: "textarea",
   },
   departement: {
-    label: "Departement",
+    label: "Département",
     placeholder: "49 - Maine-et-Loire",
     type: "text",
   },

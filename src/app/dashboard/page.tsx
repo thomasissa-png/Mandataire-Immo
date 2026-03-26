@@ -100,13 +100,23 @@ export default async function DashboardPage() {
   }
 
   // Check if monthly update is needed (absent or older than 25 days)
-  let showMonthlyBanner = true
+  // Don't show on first access — wait until client has had time to receive livrables
+  let showMonthlyBanner = false
   if (client?.client_context) {
     const lastUpdate = client.client_context.last_monthly_update
-    if (typeof lastUpdate === "string") {
-      const updateDate = new Date(lastUpdate)
-      const daysSince = (Date.now() - updateDate.getTime()) / (1000 * 60 * 60 * 24)
-      showMonthlyBanner = daysSince > 25
+    const paidAt = client.client_context.paid_at || client.client_context.created_at
+    const accountAgeDays = paidAt
+      ? (Date.now() - new Date(String(paidAt)).getTime()) / (1000 * 60 * 60 * 24)
+      : 0
+
+    if (accountAgeDays > 25) {
+      // Account is old enough — check if monthly update is due
+      if (typeof lastUpdate === "string") {
+        const daysSince = (Date.now() - new Date(lastUpdate).getTime()) / (1000 * 60 * 60 * 24)
+        showMonthlyBanner = daysSince > 25
+      } else {
+        showMonthlyBanner = true // Never filled, account > 25 days
+      }
     }
   }
 
