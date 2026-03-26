@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { stripe, STRIPE_PRICES, type StripePriceKey } from "@/lib/stripe"
 import { trackServer } from "@/lib/tracking"
+import { getPackPrice } from "@/lib/pricing"
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
 
     await trackServer("checkout_start", session.customer_email || session.id, {
       pack,
-      price: pack === "mensuel" ? 150 : pack === "lancement" ? 400 : 100,
+      price: getPackPrice(pack),
       currency: "eur",
       source_page: "pricing",
       stripe_session_id: session.id,

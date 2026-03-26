@@ -1,3 +1,7 @@
+import { MAIN_PACKS, PACK_BOOST, PACK_MENSUEL, formatPrice } from "@/lib/pricing"
+import { PricingTracker } from "./PricingTracker"
+import { CTAButton } from "./CTAButton"
+
 const CHECK_ICON = (
   <svg
     className="w-4 h-4 text-success flex-shrink-0 mt-0.5"
@@ -15,59 +19,13 @@ const CHECK_ICON = (
   </svg>
 )
 
-const MAIN_PACKS = [
-  {
-    name: "Pack Lancement",
-    price: "400",
-    unit: "",
-    subtitle: "Ce qu'un freelance te facturerait 2 000€ — livré en une semaine.",
-    mention: "Satisfait ou remboursé 14 jours. Zéro risque.",
-    cta: "Démarrer mon lancement",
-    ctaHref: "/api/checkout?pack=lancement",
-    featured: false,
-    features: [
-      "Ce qui te rend unique sur ta zone — formulé clairement",
-      "Bio optimisée pour tous tes profils",
-      "5 annonces rédigées pour mettre en valeur chaque bien",
-      "5 articles SEO local (quartier + ville)",
-      "Plan de publication sur 30 jours",
-      "20 posts prêts à publier",
-      "10 scripts Reels",
-      "Charte visuelle : couleurs, police, mise en page",
-    ],
-  },
-  {
-    name: "Pack Mensuel",
-    price: "150",
-    unit: "/mois",
-    subtitle: "12 posts, 4 scripts, 2 articles, 4 annonces — prêts à publier le 1er du mois.",
-    mention: "Sans engagement. Résiliation libre en 1 clic.",
-    cta: "Commencer ce mois-ci",
-    ctaHref: "/api/checkout?pack=mensuel",
-    featured: true,
-    badge: "Le choix de la plupart des mandataires",
-    features: [
-      "12 posts personnalisés pour tes réseaux",
-      "4 scripts vidéo pour tes Reels",
-      "2 articles SEO local",
-      "1 newsletter pour tes contacts",
-      "4 annonces qui donnent envie de visiter",
-      "1 email de prospection vendeurs",
-      "Calendrier de publication mensuel",
-    ],
-  },
-] as const
-
-import { PricingTracker } from "./PricingTracker"
-import { CTAButton } from "./CTAButton"
-
 export function Pricing() {
   return (
     <section className="section-padding bg-white" id="pricing">
       <PricingTracker />
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-3">
-          Ton &eacute;quipe marketing, &agrave; partir de 150&euro;/mois.
+          Ton &eacute;quipe marketing, &agrave; partir de {formatPrice(PACK_MENSUEL)}.
         </h2>
         <p className="text-center text-body-lg text-neutral-500 mb-4 max-w-xl mx-auto">
           Un seul mandat suppl&eacute;mentaire dans l&apos;ann&eacute;e rembourse
@@ -123,7 +81,7 @@ export function Pricing() {
                     pack.featured ? "text-secondary" : "text-primary"
                   }`}
                 >
-                  {pack.price}&euro;
+                  {pack.price}€
                 </span>
                 {pack.unit && (
                   <span
@@ -220,29 +178,28 @@ export function Pricing() {
           <div className="tablet:flex tablet:items-center tablet:justify-between tablet:gap-8">
             <div className="mb-4 tablet:mb-0">
               <h3 className="font-display text-h3 text-primary mb-1">
-                Boost Mandat &middot; 100&euro;/bien
+                {PACK_BOOST.name} &middot; {formatPrice(PACK_BOOST)}
               </h3>
               <p className="text-body-sm text-neutral-500">
-                D&eacute;j&agrave; abonn&eacute; ? Ton nouveau bien m&eacute;rite ses propres posts.
+                {PACK_BOOST.subtitle}
               </p>
               <ul className="mt-3 space-y-1">
-                <li className="flex items-center gap-2 text-body-sm text-neutral-600">
-                  {CHECK_ICON} 1 annonce + 3 posts + 1 Reel
-                </li>
-                <li className="flex items-center gap-2 text-body-sm text-neutral-600">
-                  {CHECK_ICON} 1 page web du bien + 1 email acheteurs
-                </li>
+                {PACK_BOOST.features.map((feature) => (
+                  <li key={feature} className="flex items-center gap-2 text-body-sm text-neutral-600">
+                    {CHECK_ICON} {feature}
+                  </li>
+                ))}
               </ul>
             </div>
             <div className="flex-shrink-0">
               <CTAButton
-                href="/api/checkout?pack=boost"
-                label="Booster mon prochain bien →"
+                href={PACK_BOOST.ctaHref}
+                label={`${PACK_BOOST.cta} →`}
                 location="pricing_boost_mandat"
                 variant="secondary"
               />
               <p className="text-caption text-neutral-400 text-center mt-2">
-                R&eacute;serv&eacute; aux abonn&eacute;s Pack Mensuel
+                {PACK_BOOST.mention}
               </p>
             </div>
           </div>
@@ -251,7 +208,7 @@ export function Pricing() {
         {/* Ancrage comparatif */}
         <div className="mt-10 max-w-2xl mx-auto rounded-xl bg-background border border-border p-6 desktop:p-8">
           <p className="font-display text-h3 text-primary text-center mb-4">
-            150&euro;/mois. La d&eacute;cision la plus simple de ta semaine.
+            {formatPrice(PACK_MENSUEL)}. La d&eacute;cision la plus simple de ta semaine.
           </p>
           <div className="grid grid-cols-1 tablet:grid-cols-3 gap-4 text-center">
             <div className="p-4 rounded-lg bg-error-50">
@@ -265,7 +222,7 @@ export function Pricing() {
               <p className="text-caption text-neutral-400">&Agrave; adapter toi-m&ecirc;me</p>
             </div>
             <div className="p-4 rounded-lg bg-success-50 ring-2 ring-success">
-              <p className="font-display text-h2 text-success-800">150&euro;</p>
+              <p className="font-display text-h2 text-success-800">{PACK_MENSUEL.price}€</p>
               <p className="text-body-sm text-neutral-600 mt-1 font-semibold">ImmoCrew</p>
               <p className="text-caption text-neutral-400">Tes posts, articles et annonces — personnalis&eacute;s</p>
             </div>

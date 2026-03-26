@@ -3,18 +3,19 @@ import Link from "next/link"
 import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
 import { JsonLd } from "@/components/JsonLd"
+import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice } from "@/lib/pricing"
 
 export const metadata: Metadata = {
   title: "Qu'est-ce qu'ImmoCrew ? Service marketing pour mandataires immobiliers",
   description:
-    "ImmoCrew est un service de marketing cl\u00e9 en main pour mandataires immobiliers ind\u00e9pendants. Chaque mois : 12 posts, 2 articles SEO, 4 annonces, 4 scripts vid\u00e9o. 150\u20ac/mois, sans engagement.",
+    `ImmoCrew est un service de marketing clé en main pour mandataires immobiliers indépendants. Chaque mois : 12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo. ${formatPrice(PACK_MENSUEL)}, sans engagement.`,
   alternates: {
     canonical: "https://immocrew.fr/a-propos",
   },
   openGraph: {
     title: "Qu'est-ce qu'ImmoCrew ? Service marketing pour mandataires immobiliers",
     description:
-      "Service de marketing cl\u00e9 en main pour mandataires immobiliers ind\u00e9pendants. 12 posts, 2 articles SEO, 4 annonces, 4 scripts vid\u00e9o par mois. 150\u20ac/mois.",
+      `Service de marketing clé en main pour mandataires immobiliers indépendants. 12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo par mois. ${formatPrice(PACK_MENSUEL)}.`,
     url: "https://immocrew.fr/a-propos",
   },
 }
@@ -88,49 +89,49 @@ const STEPS = [
 
 const PACKS = [
   {
-    name: "Pack Lancement",
-    price: "400\u20ac",
+    name: PACK_LANCEMENT.name,
+    price: formatPrice(PACK_LANCEMENT),
     type: "One-shot",
-    description: "Le kit de d\u00e9marrage complet pour lancer ta pr\u00e9sence en ligne.",
+    description: "Le kit de démarrage complet pour lancer ta présence en ligne.",
     items: [
       "Positionnement et mise en avant de ton expertise",
-      "Bio optimis\u00e9e pour tous tes profils",
-      "20 posts pr\u00eats \u00e0 publier",
+      "Bio optimisée pour tous tes profils",
+      "20 posts prêts à publier",
       "10 scripts Reels",
       "5 articles SEO local",
-      "5 templates d\u2019annonces storytelling",
-      "Calendrier \u00e9ditorial sur 30 jours",
-      "Brief d\u2019identit\u00e9 visuelle personnalis\u00e9",
+      "5 templates d'annonces storytelling",
+      "Calendrier éditorial sur 30 jours",
+      "Brief d'identité visuelle personnalisé",
     ],
   },
   {
-    name: "Pack Mensuel",
-    price: "150\u20ac/mois",
+    name: PACK_MENSUEL.name,
+    price: formatPrice(PACK_MENSUEL),
     type: "Abonnement sans engagement",
     description:
-      "Tout ton marketing mensuel, livr\u00e9 pr\u00eat \u00e0 publier le 1er du mois.",
+      "Tout ton marketing mensuel, livré prêt à publier le 1er du mois.",
     featured: true,
     items: [
-      "12 posts personnalis\u00e9s pour tes r\u00e9seaux",
-      "4 scripts vid\u00e9o pour tes Reels",
+      "12 posts personnalisés pour tes réseaux",
+      "4 scripts vidéo pour tes Reels",
       "2 articles SEO local",
-      "4 annonces immobili\u00e8res storytelling",
+      "4 annonces immobilières storytelling",
       "1 newsletter pour tes contacts",
       "1 email de prospection vendeurs",
       "Calendrier de publication mensuel",
     ],
   },
   {
-    name: "Boost Mandat",
-    price: "100\u20ac/bien",
+    name: PACK_BOOST.name,
+    price: formatPrice(PACK_BOOST),
     type: "Ponctuel",
     description:
-      "Un pack d\u00e9di\u00e9 pour mettre en avant un bien sp\u00e9cifique.",
+      "Un pack dédié pour mettre en avant un bien spécifique.",
     items: [
       "1 annonce storytelling du bien",
-      "3 posts d\u00e9di\u00e9s au bien + 1 Reel",
+      "3 posts dédiés au bien + 1 Reel",
       "1 mini landing page du bien",
-      "1 email blast vers ta base d\u2019acheteurs",
+      "1 email blast vers ta base d'acheteurs",
     ],
   },
 ] as const
@@ -254,7 +255,7 @@ export default function AProposPage() {
                 Ce qu&rsquo;on livre chaque mois
               </h2>
               <p className="text-body text-foreground leading-relaxed mb-6">
-                Avec le Pack Mensuel &agrave; 150&euro;/mois, chaque mandataire re&ccedil;oit :
+                Avec le {PACK_MENSUEL.name} &agrave; {formatPrice(PACK_MENSUEL)}, chaque mandataire re&ccedil;oit :
               </p>
               <div className="rounded-xl bg-card border border-border p-6 desktop:p-8">
                 <ul className="space-y-3">

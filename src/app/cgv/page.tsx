@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
+import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice } from "@/lib/pricing"
 
 export const metadata: Metadata = {
   title: "Conditions Générales de Vente — ImmoCrew",
@@ -86,8 +87,8 @@ export default function CGVPage() {
 
               <div className="space-y-6">
                 <OfferCard
-                  name="Pack Lancement"
-                  price="400 &euro; TTC"
+                  name={PACK_LANCEMENT.name}
+                  price={`${PACK_LANCEMENT.price} &euro; TTC`}
                   type="Paiement unique"
                   items={[
                     "Positionnement et strat\u00e9gie de personal branding",
@@ -102,8 +103,8 @@ export default function CGVPage() {
                 />
 
                 <OfferCard
-                  name="Pack Mensuel"
-                  price="150 &euro; TTC / mois"
+                  name={PACK_MENSUEL.name}
+                  price={`${PACK_MENSUEL.price} &euro; TTC / mois`}
                   type="Abonnement mensuel sans engagement"
                   items={[
                     "12 posts r\u00e9seaux sociaux par mois",
@@ -116,8 +117,8 @@ export default function CGVPage() {
                 />
 
                 <OfferCard
-                  name="Boost Mandat"
-                  price="100 &euro; TTC"
+                  name={PACK_BOOST.name}
+                  price={`${PACK_BOOST.price} &euro; TTC`}
                   type="Paiement unique, par mandat"
                   items={[
                     "Annonce storytelling d\u00e9di\u00e9e au bien",

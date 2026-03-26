@@ -10,18 +10,19 @@ import { FAQ } from "@/components/landing/FAQ"
 import { CTAFinal } from "@/components/landing/CTAFinal"
 import { Footer } from "@/components/landing/Footer"
 import { JsonLd } from "@/components/JsonLd"
+import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice } from "@/lib/pricing"
 
 export const metadata: Metadata = {
-  title: "ImmoCrew \u2014 Marketing pour mandataires immobiliers | 150\u20AC/mois",
+  title: `ImmoCrew — Marketing pour mandataires immobiliers | ${formatPrice(PACK_MENSUEL)}`,
   description:
-    "Externalise ton marketing immobilier. Chaque mois : 12 posts, 2 articles SEO, 4 annonces, 4 scripts vid\u00E9o \u2014 100% personnalis\u00E9s pour ta zone. \u00C0 partir de 150\u20AC/mois.",
+    `Externalise ton marketing immobilier. Chaque mois : 12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo — 100% personnalisés pour ta zone. À partir de ${formatPrice(PACK_MENSUEL)}.`,
   alternates: {
     canonical: "https://immocrew.fr",
   },
   openGraph: {
-    title: "ImmoCrew \u2014 Marketing pour mandataires immobiliers | 150\u20AC/mois",
+    title: `ImmoCrew — Marketing pour mandataires immobiliers | ${formatPrice(PACK_MENSUEL)}`,
     description:
-      "12 posts, 2 articles SEO, 4 annonces, 4 scripts vid\u00E9o par mois. 100% personnalis\u00E9s pour ta zone. Tu publies, on fait le reste.",
+      "12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo par mois. 100% personnalisés pour ta zone. Tu publies, on fait le reste.",
     url: "https://immocrew.fr",
   },
 }
@@ -44,26 +45,26 @@ const serviceJsonLd = {
     itemListElement: [
       {
         "@type": "Offer",
-        name: "Pack Mensuel",
+        name: PACK_MENSUEL.name,
         description:
           "12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo, 1 newsletter, 1 email prospection — par mois",
-        price: "150",
+        price: String(PACK_MENSUEL.price),
         priceCurrency: "EUR",
       },
       {
         "@type": "Offer",
-        name: "Pack Lancement",
+        name: PACK_LANCEMENT.name,
         description:
           "Positionnement, bio optimisée, 5 templates annonces, 5 articles SEO local, calendrier éditorial 30j, 20 posts, 10 scripts Reels, kit graphique",
-        price: "400",
+        price: String(PACK_LANCEMENT.price),
         priceCurrency: "EUR",
       },
       {
         "@type": "Offer",
-        name: "Boost Mandat",
+        name: PACK_BOOST.name,
         description:
           "Annonce storytelling, 3 posts + 1 Reel dédiés, mini landing page, email blast acheteurs",
-        price: "100",
+        price: String(PACK_BOOST.price),
         priceCurrency: "EUR",
       },
     ],

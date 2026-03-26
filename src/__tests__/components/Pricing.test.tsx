@@ -9,12 +9,14 @@
 import { describe, it, expect } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { Pricing } from "@/components/landing/Pricing"
+import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice } from "@/lib/pricing"
 
 describe("Pricing", () => {
-  it("renders the section heading with 150€/mois", () => {
+  it(`renders the section heading with ${formatPrice(PACK_MENSUEL)}`, () => {
     render(<Pricing />)
+    const pricePattern = new RegExp(`équipe marketing.*${PACK_MENSUEL.price}€${PACK_MENSUEL.unit.replace("/", "/")}`, "i")
     expect(
-      screen.getByText(/\u00e9quipe marketing.*150\u20ac\/mois/i)
+      screen.getByText(pricePattern)
     ).toBeInTheDocument()
   })
 
