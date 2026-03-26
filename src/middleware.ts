@@ -1,16 +1,39 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
+import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
+import { getToken } from "next-auth/jwt"
 
-const isProtectedRoute = createRouteMatcher([
-  "/dashboard(.*)",
-  "/onboarding(.*)",
-  "/admin(.*)",
-])
+/**
+ * Routes protegees par authentification.
+ * Redirige vers /sign-in si pas de session JWT valide.
+ */
+const PROTECTED_PREFIXES = ["/dashboard", "/onboarding", "/admin"]
 
-export default clerkMiddleware((auth, req) => {
-  if (isProtectedRoute(req)) {
-    auth().protect()
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // Verifier si la route est protegee
+  const isProtected = PROTECTED_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(prefix + "/")
+  )
+
+  if (!isProtected) {
+    return NextResponse.next()
   }
-})
+
+  // Recuperer le token JWT NextAuth
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  })
+
+  if (!token) {
+    const signInUrl = new URL("/sign-in", request.url)
+    signInUrl.searchParams.set("callbackUrl", pathname)
+    return NextResponse.redirect(signInUrl)
+  }
+
+  return NextResponse.next()
+}
 
 export const config = {
   matcher: [
