@@ -100,16 +100,16 @@ interface FieldConfig {
 }
 
 const FIELD_LABELS: Record<string, FieldConfig> = {
-  prenom: { label: "Prenom", placeholder: "Sophie", type: "text" },
+  prenom: { label: "Prénom", placeholder: "Sophie", type: "text" },
   nom: { label: "Nom", placeholder: "Martin", type: "text" },
   telephone: {
-    label: "Telephone",
+    label: "Téléphone",
     placeholder: "06 12 34 56 78",
     type: "text",
   },
   reseau: {
     label: "Ton reseau",
-    placeholder: "IAD, SAFTI, Capifrance, independant...",
+    placeholder: "IAD, SAFTI, Capifrance, indépendant...",
     type: "text",
   },
   experience_annees: {
@@ -150,22 +150,22 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
   },
   ton_communication: {
     label:
-      "Comment tu parles a tes clients — donne un exemple de phrase que tu utilises souvent",
+      "Comment tu parles à tes clients — donne un exemple de phrase que tu utilises souvent",
     placeholder:
       "Ex: Je suis directe mais bienveillante. Quand un bien ne correspond pas, je le dis. Je tutoie mes clients.",
     type: "textarea",
   },
   valeurs: {
-    label: "Tes 3 valeurs les plus importantes dans ton metier",
+    label: "Tes 3 valeurs les plus importantes dans ton métier",
     placeholder:
-      "Ex: Transparence sur les prix, disponibilite 7j/7, honnetete meme quand ca ne plait pas",
+      "Ex: Transparence sur les prix, disponibilité 7j/7, honnêteté même quand ca ne plait pas",
     type: "text",
   },
   ce_qui_te_differencie: {
     label:
       "Ce que tes clients disent de toi que les autres mandataires n'ont pas",
     placeholder:
-      "Ex: Je connais chaque rue de La Doutre, j'y vis depuis 10 ans. Mes clients disent que je reponds en moins d'1h.",
+      "Ex: Je connais chaque rue de La Doutre, j'y vis depuis 10 ans. Mes clients disent que je réponds en moins d'1h.",
     type: "textarea",
   },
   prix_m2_moyen: {
@@ -180,7 +180,7 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
     type: "textarea",
   },
   ecoles_reference: {
-    label: "Les ecoles et colleges du coin",
+    label: "Les écoles et collèges du coin",
     placeholder: "Ex: Ecole Dacier, college Chevreul, lycee Bergson",
     type: "textarea",
   },
@@ -191,7 +191,7 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
     type: "textarea",
   },
   ambiance_quartier: {
-    label: "Decris l'ambiance de ton quartier en 2-3 phrases",
+    label: "Décris l'ambiance de ton quartier en 2-3 phrases",
     placeholder:
       "Ex: La Doutre c'est le quartier boheme d'Angers. Rues pavees, maisons a colombages, bistrots. Les gens qui s'y installent ne repartent plus.",
     type: "textarea",
@@ -215,7 +215,7 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
     helper: "Ta photo apparaîtra dans tes livrables et ton profil.",
   },
   confort_camera: {
-    label: "Ton rapport a la video",
+    label: "Ton rapport à la vidéo",
     placeholder: "",
     type: "select",
     options: [
@@ -225,7 +225,7 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
         label: "Je n'ai jamais fait de video — ca me stresse",
       },
       { value: "a_laise", label: "J'ai deja fait quelques videos, ca va" },
-      { value: "expert", label: "Je suis a l'aise devant la camera" },
+      { value: "expert", label: "Je suis à l'aise devant la caméra" },
     ],
   },
   instagram: {

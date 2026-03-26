@@ -34,6 +34,9 @@ vi.mock("@/lib/stripe", () => ({
     webhooks: {
       constructEvent: (...args: unknown[]) => mockConstructEvent(...args),
     },
+    customers: {
+      retrieve: vi.fn().mockResolvedValue({ deleted: false, email: "test@example.com" }),
+    },
   },
 }))
 

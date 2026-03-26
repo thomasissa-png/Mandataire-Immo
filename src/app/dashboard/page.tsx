@@ -38,7 +38,7 @@ const TYPE_LABELS: Record<DeliverableType, string> = {
   post: "Post",
   article_seo: "Article SEO",
   annonce: "Annonce",
-  script_video: "Script video",
+  script_video: "Script vidéo",
   newsletter: "Newsletter",
   email_prospection: "Email prospection",
   bio: "Bio",
