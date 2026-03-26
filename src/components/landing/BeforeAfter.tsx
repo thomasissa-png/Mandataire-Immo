@@ -2,21 +2,21 @@ const EXAMPLES = [
   {
     title: "Appartement T3, quartier La Doutre, Angers",
     before:
-      'Bel appartement T3 lumineux de 68m\u00B2, 2 chambres, s\u00E9jour traversant, cuisine \u00E9quip\u00E9e, balcon, cave et parking. Proche commerces et transports. Copropri\u00E9t\u00E9 calme. 145 000\u20AC. Honoraires charge vendeur.',
+      'Bel appartement T3 lumineux de 68m², 2 chambres, séjour traversant, cuisine équipée, balcon, cave et parking. Proche commerces et transports. Copropriété calme. 145 000€. Honoraires charge vendeur.',
     after: [
-      "Ce T3 de 68m\u00B2 \u00E0 La Doutre, c'est le caf\u00E9 du samedi matin sur le balcon plein sud, face au parc de la Garenne. L'\u00E9cole Montessori est \u00E0 400m, le march\u00E9 couvert \u00E0 5 minutes \u00E0 pied, et le tramway ligne A \u00E0 deux rues.",
-      "Deux vraies chambres (pas des \"coins nuit\"), un s\u00E9jour traversant qui prend la lumi\u00E8re des deux c\u00F4t\u00E9s, une cuisine refaite en 2024. Cave et parking inclus. Copropri\u00E9t\u00E9 de 12 lots, charges ma\u00EEtris\u00E9es (120\u20AC/mois).",
-      "145 000\u20AC — soit 2 132\u20AC/m\u00B2, en dessous de la moyenne du quartier (2 350\u20AC). Les biens \u00E0 La Doutre partent en 45 jours. Celui-ci ne fera pas exception.",
+      "Ce T3 de 68m² à La Doutre, c'est le café du samedi matin sur le balcon plein sud, face au parc de la Garenne. L'école Montessori est à 400m, le marché couvert à 5 minutes à pied, et le tramway ligne A à deux rues.",
+      "Deux vraies chambres (pas des \"coins nuit\"), un séjour traversant qui prend la lumière des deux côtés, une cuisine refaite en 2024. Cave et parking inclus. Copropriété de 12 lots, charges maîtrisées (120€/mois).",
+      "145 000€ — soit 2 132€/m², en dessous de la moyenne du quartier (2 350€). Les biens à La Doutre partent en 45 jours. Celui-ci ne fera pas exception.",
     ],
   },
   {
     title: "Maison T4, quartier Aiguelongue, Montpellier",
     before:
-      'Maison T4 avec jardin, 95m\u00B2, 3 chambres, garage. Quartier r\u00E9sidentiel calme, proche \u00E9coles et commerces. Bon \u00E9tat g\u00E9n\u00E9ral. 320 000\u20AC.',
+      'Maison T4 avec jardin, 95m², 3 chambres, garage. Quartier résidentiel calme, proche écoles et commerces. Bon état général. 320 000€.',
     after: [
-      "Une maison familiale \u00E0 Aiguelongue, \u00E0 10 minutes \u00E0 v\u00E9lo de la Place de la Com\u00E9die. Le jardin de 250m\u00B2 donne sur les vignes du Domaine de M\u00E9ric — pas sur le mur du voisin.",
-      "3 chambres \u00E0 l'\u00E9tage (dont une parentale avec placard int\u00E9gr\u00E9), un s\u00E9jour de 35m\u00B2 ouvert sur la cuisine, un garage reconvertible en bureau. L'\u00E9cole primaire Sib\u00E9lius est \u00E0 600m, le coll\u00E8ge Les Aiguerelles \u00E0 1,2 km.",
-      "320 000\u20AC pour 95m\u00B2 \u00E0 Aiguelongue, c'est 3 368\u20AC/m\u00B2 — le quartier affiche 3 600\u20AC/m\u00B2 en moyenne. Derni\u00E8re maison vendue dans la rue : 345 000\u20AC en f\u00E9vrier.",
+      "Une maison familiale à Aiguelongue, à 10 minutes à vélo de la Place de la Comédie. Le jardin de 250m² donne sur les vignes du Domaine de Méric — pas sur le mur du voisin.",
+      "3 chambres à l'étage (dont une parentale avec placard intégré), un séjour de 35m² ouvert sur la cuisine, un garage reconvertible en bureau. L'école primaire Sibélius est à 600m, le collège Les Aiguerelles à 1,2 km.",
+      "320 000€ pour 95m² à Aiguelongue, c'est 3 368€/m² — le quartier affiche 3 600€/m² en moyenne. Dernière maison vendue dans la rue : 345 000€ en février.",
     ],
   },
 ] as const

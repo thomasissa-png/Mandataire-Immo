@@ -14,7 +14,7 @@ export function CTAFinal() {
         <div className="flex flex-col items-center gap-4">
           <CTAButton
             href="/api/checkout?pack=mensuel"
-            label="Commencer — Pack Mensuel 150\u20AC/mois \u2192"
+            label="Commencer — Pack Mensuel 150€/mois →"
             location="cta_final"
           />
 

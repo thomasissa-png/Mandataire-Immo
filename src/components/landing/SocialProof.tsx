@@ -1,26 +1,26 @@
 {/*
-  NOTE : T\u00e9moignages pr\u00e9-lancement.
-  Ces t\u00e9moignages repr\u00e9sentent des retours collect\u00e9s lors de la phase beta.
-  \u00c0 remplacer/compl\u00e9ter avec des t\u00e9moignages clients r\u00e9els d\u00e8s le mois 1-2.
+  NOTE : Témoignages pré-lancement.
+  Ces témoignages représentent des retours collectés lors de la phase beta.
+  À remplacer/compléter avec des témoignages clients réels dès le mois 1-2.
 */}
 
 const TESTIMONIALS = [
   {
-    quote: "J'ai re\u00E7u mes 12 posts le 3 du mois. Le 15, j'avais d\u00E9j\u00E0 un vendeur qui m'a contact\u00E9e via Instagram. En 2 ans chez IAD, c'\u00E9tait une premi\u00E8re.",
+    quote: "J'ai reçu mes 12 posts le 3 du mois. Le 15, j'avais déjà un vendeur qui m'a contactée via Instagram. En 2 ans chez IAD, c'était une première.",
     name: "Audrey M.",
-    detail: "Mandataire IAD \u2014 Angers",
+    detail: "Mandataire IAD — Angers",
     metric: "1er contact entrant en 12 jours",
   },
   {
     quote: "Je passais 1h par soir sur Canva pour un truc bof. Maintenant je copie-colle en 3 minutes et les gens me disent que mes posts sont super pros.",
     name: "Karim B.",
-    detail: "Mandataire SAFTI \u2014 Lyon",
-    metric: "1h/soir \u2192 3 min/jour",
+    detail: "Mandataire SAFTI — Lyon",
+    metric: "1h/soir → 3 min/jour",
   },
   {
-    quote: "Mon annonce r\u00E9\u00E9crite par ImmoCrew a ramen\u00E9 6 appels en une semaine. Mon annonce classique en avait ramen\u00E9 1 en un mois.",
-    name: "St\u00E9phanie L.",
-    detail: "Mandataire Capifrance \u2014 Bordeaux",
+    quote: "Mon annonce réécrite par ImmoCrew a ramené 6 appels en une semaine. Mon annonce classique en avait ramené 1 en un mois.",
+    name: "Stéphanie L.",
+    detail: "Mandataire Capifrance — Bordeaux",
     metric: "6 appels vs 1 en un mois",
   },
 ] as const
@@ -28,11 +28,11 @@ const TESTIMONIALS = [
 const METRICS = [
   {
     value: "48h",
-    label: "D\u00E9lai de livraison de tes premiers posts",
+    label: "Délai de livraison de tes premiers posts",
   },
   {
     value: "12",
-    label: "Posts pr\u00EAts \u00E0 publier chaque mois",
+    label: "Posts prêts à publier chaque mois",
   },
   {
     value: "15 min",
@@ -40,7 +40,7 @@ const METRICS = [
   },
   {
     value: "100%",
-    label: "Personnalis\u00E9 pour ta zone et ton style",
+    label: "Personnalisé pour ta zone et ton style",
   },
 ] as const
 

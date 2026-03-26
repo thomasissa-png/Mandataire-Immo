@@ -21,7 +21,7 @@ export function Hero() {
             {/* CTA principal → exemples (basse friction) */}
             <CTAButton
               href="#avant-apres"
-              label="Voir un exemple concret \u2192"
+              label="Voir un exemple concret →"
               location="hero_primary"
             />
 

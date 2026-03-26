@@ -76,11 +76,11 @@ export function DeliverableCard({
                 className="text-body-sm text-secondary font-semibold hover:text-secondary-600 transition-colors"
                 onClick={handleCopy}
               >
-                {copied ? "\u2713 Copi\u00E9 !" : "Copier le texte"}
+                {copied ? "✓ Copié !" : "Copier le texte"}
               </button>
             ) : (
               <span className="text-body-sm text-neutral-400">
-                Bient\u00F4t disponible
+                Bientôt disponible
               </span>
             )}
             <button
@@ -91,7 +91,7 @@ export function DeliverableCard({
                 setExpanded(!expanded)
               }}
             >
-              {expanded ? "R\u00E9duire" : "Lire en entier"}
+              {expanded ? "Réduire" : "Lire en entier"}
             </button>
           </div>
         </div>

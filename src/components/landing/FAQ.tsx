@@ -19,9 +19,9 @@ const FAQ_ITEMS = [
       "Quand tu commences, on te pose une vingtaine de questions : ta ville, ton quartier précis, ta spécialité (appartements, maisons, neuf, ancien), ton ton de communication, tes biens en cours. À partir de là, chaque texte intègre des données locales réelles — les écoles du quartier, les commerces, les prix au m², les transports, l'ambiance. Pas juste le nom de ta ville en gras.",
   },
   {
-    question: "150\u20AC/mois, c'est rentable ?",
+    question: "150€/mois, c'est rentable ?",
     answer:
-      "Fais le calcul autrement. Combien d'heures passes-tu sur ton marketing par mois — entre Canva, les idées de posts, les annonces à rédiger ? Si c'est 10 heures, c'est 10 heures que tu ne passes pas en prospection ou en visites. 150\u20AC/mois, c'est te racheter ces heures-là. Et si en plus ça t'amène un contact vendeur de plus dans l'année — et ça arrive, parce que tu es enfin visible sur Google — ta commission rembourse 12 mois d'abonnement. Mais même sans ça : ton temps vaut plus que 5\u20AC par jour.",
+      "Fais le calcul autrement. Combien d'heures passes-tu sur ton marketing par mois — entre Canva, les idées de posts, les annonces à rédiger ? Si c'est 10 heures, c'est 10 heures que tu ne passes pas en prospection ou en visites. 150€/mois, c'est te racheter ces heures-là. Et si en plus ça t'amène un contact vendeur de plus dans l'année — et ça arrive, parce que tu es enfin visible sur Google — ta commission rembourse 12 mois d'abonnement. Mais même sans ça : ton temps vaut plus que 5€ par jour.",
   },
   {
     question: "Je n'ai vraiment pas le temps de publier, même du contenu tout fait.",
@@ -36,7 +36,7 @@ const FAQ_ITEMS = [
   {
     question: "J'ai déjà essayé un community manager freelance et c'était décevant.",
     answer:
-      "On comprend. Le problème des freelances, c'est qu'ils ne connaissent pas l'immobilier. Ils postent des trucs génériques avec des hashtags au hasard. ImmoCrew est fait uniquement pour les mandataires. Nos rédacteurs connaissent ton métier, tes frustrations, tes clients. Et à 150\u20AC/mois au lieu de 500-800\u20AC, le risque est nettement plus faible.",
+      "On comprend. Le problème des freelances, c'est qu'ils ne connaissent pas l'immobilier. Ils postent des trucs génériques avec des hashtags au hasard. ImmoCrew est fait uniquement pour les mandataires. Nos rédacteurs connaissent ton métier, tes frustrations, tes clients. Et à 150€/mois au lieu de 500-800€, le risque est nettement plus faible.",
   },
   {
     question: "Comment je reçois mes posts et articles ?",

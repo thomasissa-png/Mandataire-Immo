@@ -20,18 +20,18 @@ const MAIN_PACKS = [
     name: "Pack Lancement",
     price: "400",
     unit: "",
-    subtitle: "Ce qu'un freelance te facturerait 2 000\u20AC — livr\u00E9 en une semaine.",
-    mention: "Satisfait ou rembours\u00E9 14 jours. Z\u00E9ro risque.",
-    cta: "D\u00E9marrer mon lancement",
+    subtitle: "Ce qu'un freelance te facturerait 2 000€ — livré en une semaine.",
+    mention: "Satisfait ou remboursé 14 jours. Zéro risque.",
+    cta: "Démarrer mon lancement",
     ctaHref: "/api/checkout?pack=lancement",
     featured: false,
     features: [
-      "Ce qui te rend unique sur ta zone — formul\u00E9 clairement",
-      "Bio optimis\u00E9e pour tous tes profils",
-      "5 annonces r\u00E9dig\u00E9es pour mettre en valeur chaque bien",
+      "Ce qui te rend unique sur ta zone — formulé clairement",
+      "Bio optimisée pour tous tes profils",
+      "5 annonces rédigées pour mettre en valeur chaque bien",
       "5 articles SEO local (quartier + ville)",
       "Plan de publication sur 30 jours",
-      "20 posts pr\u00EAts \u00E0 publier",
+      "20 posts prêts à publier",
       "10 scripts Reels",
       "Charte visuelle : couleurs, police, mise en page",
     ],
@@ -40,15 +40,15 @@ const MAIN_PACKS = [
     name: "Pack Mensuel",
     price: "150",
     unit: "/mois",
-    subtitle: "12 posts, 4 scripts, 2 articles, 4 annonces — pr\u00EAts \u00E0 publier le 1er du mois.",
-    mention: "Sans engagement. R\u00E9siliation libre en 1 clic.",
+    subtitle: "12 posts, 4 scripts, 2 articles, 4 annonces — prêts à publier le 1er du mois.",
+    mention: "Sans engagement. Résiliation libre en 1 clic.",
     cta: "Commencer ce mois-ci",
     ctaHref: "/api/checkout?pack=mensuel",
     featured: true,
     badge: "Le choix de la plupart des mandataires",
     features: [
-      "12 posts personnalis\u00E9s pour tes r\u00E9seaux",
-      "4 scripts vid\u00E9o pour tes Reels",
+      "12 posts personnalisés pour tes réseaux",
+      "4 scripts vidéo pour tes Reels",
       "2 articles SEO local",
       "1 newsletter pour tes contacts",
       "4 annonces qui donnent envie de visiter",
@@ -81,11 +81,11 @@ export function Pricing() {
         </p>
 
         {/* 2 packs principaux */}
-        <div className="grid gap-6 tablet:grid-cols-2 items-start max-w-4xl mx-auto">
+        <div className="grid gap-6 tablet:grid-cols-2 items-stretch max-w-4xl mx-auto">
           {MAIN_PACKS.map((pack, index) => (
             <div
               key={index}
-              className={`rounded-xl p-8 ${
+              className={`rounded-xl p-8 flex flex-col ${
                 pack.featured
                   ? "bg-primary text-white shadow-xl tablet:scale-[1.02]"
                   : "bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-[box-shadow,transform] duration-normal"
@@ -159,8 +159,8 @@ export function Pricing() {
                 {pack.mention}
               </p>
 
-              {/* Features */}
-              <ul className="space-y-3 mb-8">
+              {/* Features — flex-grow pushes CTA to bottom */}
+              <ul className="space-y-3 mb-8 flex-grow">
                 {pack.features.map((feature, fIndex) => (
                   <li key={fIndex} className="flex items-start gap-2">
                     {pack.featured ? (
@@ -192,23 +192,25 @@ export function Pricing() {
                 ))}
               </ul>
 
-              {/* CTA */}
-              <CTAButton
-                href={pack.ctaHref}
-                label={`${pack.cta} \u2192`}
-                location={`pricing_${pack.name.toLowerCase().replace(/\s+/g, "_")}`}
-                variant={pack.featured ? "primary" : "secondary"}
-                className="w-full"
-              />
+              {/* CTA — mt-auto pushes to bottom for equal card height */}
+              <div className="mt-auto">
+                <CTAButton
+                  href={pack.ctaHref}
+                  label={`${pack.cta} →`}
+                  location={`pricing_${pack.name.toLowerCase().replace(/\s+/g, "_")}`}
+                  variant={pack.featured ? "primary" : "secondary"}
+                  className="w-full"
+                />
 
-              {/* Micro-reassurance sous CTA */}
-              <p
-                className={`text-caption text-center mt-3 ${
-                  pack.featured ? "text-primary-200" : "text-neutral-400"
-                }`}
-              >
-                Paiement s&eacute;curis&eacute; via Stripe
-              </p>
+                {/* Micro-reassurance sous CTA */}
+                <p
+                  className={`text-caption text-center mt-3 ${
+                    pack.featured ? "text-primary-200" : "text-neutral-400"
+                  }`}
+                >
+                  Paiement sécurisé via Stripe
+                </p>
+              </div>
             </div>
           ))}
         </div>
@@ -235,7 +237,7 @@ export function Pricing() {
             <div className="flex-shrink-0">
               <CTAButton
                 href="/api/checkout?pack=boost"
-                label="Booster mon prochain bien \u2192"
+                label="Booster mon prochain bien →"
                 location="pricing_boost_mandat"
                 variant="secondary"
               />

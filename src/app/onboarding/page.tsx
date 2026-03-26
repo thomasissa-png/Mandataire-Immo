@@ -462,7 +462,7 @@ export default function OnboardingPage() {
               )}
             </div>
             <span className="text-caption text-neutral-500">
-              \u00C9tape {currentStep + 1} sur {STEPS.length} &middot; ~8 min
+              Étape {currentStep + 1} sur {STEPS.length} &middot; ~8 min
             </span>
           </div>
           <div className="h-1.5 bg-neutral-200 rounded-full overflow-hidden">
@@ -562,7 +562,7 @@ export default function OnboardingPage() {
                     </div>
                     <div>
                       <label htmlFor={`bien-${index}-surface`} className="block text-caption font-medium text-neutral-600 mb-1">
-                        Surface (m\u00B2)
+                        Surface (m²)
                       </label>
                       <input
                         id={`bien-${index}-surface`}
@@ -577,7 +577,7 @@ export default function OnboardingPage() {
                     </div>
                     <div>
                       <label htmlFor={`bien-${index}-pieces`} className="block text-caption font-medium text-neutral-600 mb-1">
-                        Nombre de pi\u00E8ces
+                        Nombre de pièces
                       </label>
                       <input
                         id={`bien-${index}-pieces`}
