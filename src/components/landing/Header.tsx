@@ -43,13 +43,21 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Desktop CTA */}
-        <a
-          href="#pricing"
-          className="hidden tablet:inline-flex items-center justify-center h-12 px-6 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
-        >
-          Commencer
-        </a>
+        {/* Desktop: Mon espace + CTA */}
+        <div className="hidden tablet:flex items-center gap-4">
+          <a
+            href="/dashboard"
+            className="text-body font-medium text-foreground hover:text-secondary transition-colors duration-normal"
+          >
+            Mon espace
+          </a>
+          <a
+            href="#pricing"
+            className="inline-flex items-center justify-center h-12 px-6 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+          >
+            Commencer
+          </a>
+        </div>
 
         {/* Mobile hamburger */}
         <button
@@ -103,6 +111,13 @@ export function Header() {
               {link.label}
             </a>
           ))}
+          <a
+            href="/dashboard"
+            onClick={() => setIsMenuOpen(false)}
+            className="flex items-center h-12 px-4 rounded-lg text-h4 font-semibold text-secondary hover:bg-secondary-50 transition-colors duration-normal"
+          >
+            Mon espace
+          </a>
           <div className="mt-4 px-4">
             <a
               href="#pricing"
