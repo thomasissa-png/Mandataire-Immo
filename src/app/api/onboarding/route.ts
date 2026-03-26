@@ -30,10 +30,11 @@ interface OnboardingPayload {
   ecoles_reference: string
   transports: string
   ambiance_quartier: string
-  // Etape 7 — Histoire (facultatif)
-  parcours_avant_immo: string
-  pourquoi_immobilier: string
-  anecdote_memorable: string
+  // Etape 7 — Profil (facultatif)
+  linkedin_url: string
+  bio_personnelle: string
+  // Photo (cle Object Storage)
+  photo_profil_key: string
   // Etape 8 — Biens (facultatif, JSON string)
   biens: string
   // Etape 9 — Video (facultatif)
@@ -110,10 +111,11 @@ export async function POST(request: NextRequest) {
     ecoles_reference: body.ecoles_reference?.trim() || "",
     transports: body.transports?.trim() || "",
     ambiance_quartier: body.ambiance_quartier?.trim() || "",
-    // Histoire
-    parcours_avant_immo: body.parcours_avant_immo?.trim() || "",
-    pourquoi_immobilier: body.pourquoi_immobilier?.trim() || "",
-    anecdote_memorable: body.anecdote_memorable?.trim() || "",
+    // Profil
+    linkedin_url: body.linkedin_url?.trim() || "",
+    bio_personnelle: body.bio_personnelle?.trim() || "",
+    // Photo
+    photo_profil_key: body.photo_profil_key?.trim() || "",
     // Biens (array structure)
     biens: parsedBiens,
     // Video

@@ -281,6 +281,24 @@ export default function OnboardingPage() {
   const [isComplete, setIsComplete] = useState(false)
   const [submitError, setSubmitError] = useState("")
 
+  // Photo upload state
+  const [photoPreview, setPhotoPreview] = useState<string | null>(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("immocrew_onboarding_photo") || null
+    }
+    return null
+  })
+  const [photoUploading, setPhotoUploading] = useState(false)
+  const photoInputRef = useRef<HTMLInputElement>(null)
+
+  // Address autocomplete state
+  const [addressSuggestions, setAddressSuggestions] = useState<
+    Record<number, Array<{ label: string; context: string }>>
+  >({})
+  const [activeAddressIndex, setActiveAddressIndex] = useState<number | null>(null)
+  const debounceTimerRef = useRef<Record<number, NodeJS.Timeout>>({})
+  const addressDropdownRef = useRef<HTMLDivElement>(null)
+
   const step = STEPS[currentStep]
   const progress = ((currentStep + 1) / STEPS.length) * 100
 
@@ -288,7 +306,7 @@ export default function OnboardingPage() {
   useEffect(() => {
     if (!user) return
     setData((prev) => {
-      const updates: Partial<OnboardingData> = {}
+      const updates: OnboardingData = {}
       if (!prev.prenom && user.firstName) updates.prenom = user.firstName
       if (!prev.nom && user.name) {
         const parts = user.name.split(" ")
@@ -305,6 +323,40 @@ export default function OnboardingPage() {
     sessionStorage.setItem("immocrew_onboarding_data", JSON.stringify(data))
     sessionStorage.setItem("immocrew_onboarding_biens", JSON.stringify(biens))
   }, [currentStep, data, biens])
+
+  // Persist photo to sessionStorage
+  useEffect(() => {
+    if (photoPreview) {
+      sessionStorage.setItem("immocrew_onboarding_photo", photoPreview)
+    } else {
+      sessionStorage.removeItem("immocrew_onboarding_photo")
+    }
+  }, [photoPreview])
+
+  // Close address dropdown on click outside or Escape
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        addressDropdownRef.current &&
+        !addressDropdownRef.current.contains(e.target as Node)
+      ) {
+        setActiveAddressIndex(null)
+        setAddressSuggestions({})
+      }
+    }
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setActiveAddressIndex(null)
+        setAddressSuggestions({})
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("keydown", handleEscape)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleEscape)
+    }
+  }, [])
 
   useEffect(() => {
     track("onboarding_start")
@@ -347,13 +399,95 @@ export default function OnboardingPage() {
     })
   }
 
+  // Photo upload handler
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("La photo dépasse 5 Mo. Choisis une image plus légère.")
+      return
+    }
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"]
+    if (!allowedTypes.includes(file.type)) {
+      alert("Format non supporté. Utilise JPG, PNG ou WebP.")
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const base64 = event.target?.result as string
+      setPhotoPreview(base64)
+      setData((prev) => ({ ...prev, photo_profil: base64 }))
+    }
+    reader.readAsDataURL(file)
+  }
+
+  // Address autocomplete with debounce
+  const searchAddress = useCallback(
+    (query: string, bienIndex: number) => {
+      // Clear previous timer for this index
+      if (debounceTimerRef.current[bienIndex]) {
+        clearTimeout(debounceTimerRef.current[bienIndex])
+      }
+
+      if (query.trim().length < 3) {
+        setAddressSuggestions((prev) => {
+          const next = { ...prev }
+          delete next[bienIndex]
+          return next
+        })
+        setActiveAddressIndex(null)
+        return
+      }
+
+      debounceTimerRef.current[bienIndex] = setTimeout(async () => {
+        try {
+          const res = await fetch(
+            `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=5`,
+            { signal: AbortSignal.timeout(5000) }
+          )
+          if (!res.ok) return
+          const json = await res.json()
+          const suggestions = (
+            json.features as Array<{
+              properties: { label: string; context: string }
+            }>
+          ).map((f) => ({
+            label: f.properties.label,
+            context: f.properties.context,
+          }))
+          setAddressSuggestions((prev) => ({ ...prev, [bienIndex]: suggestions }))
+          setActiveAddressIndex(bienIndex)
+        } catch {
+          // Silently fail — l'utilisateur peut taper manuellement
+        }
+      }, 300)
+    },
+    []
+  )
+
+  const selectAddress = (bienIndex: number, label: string) => {
+    updateBien(bienIndex, "adresse", label)
+    setAddressSuggestions((prev) => {
+      const next = { ...prev }
+      delete next[bienIndex]
+      return next
+    })
+    setActiveAddressIndex(null)
+  }
+
   const [validationError, setValidationError] = useState("")
 
   const handleNext = () => {
     // Validate required fields on non-optional steps
     if (!("optional" in step && step.optional)) {
       const emptyRequired = step.fields.filter(
-        (f: string) => f !== "__biens__" && !(data[f] || "").trim()
+        (f: string) =>
+          f !== "__biens__" &&
+          f !== "photo_profil" &&
+          !(data[f] || "").trim()
       )
       if (emptyRequired.length > 0) {
         setValidationError("Merci de remplir tous les champs avant de continuer.")
@@ -380,9 +514,36 @@ export default function OnboardingPage() {
     setIsSubmitting(true)
     setSubmitError("")
     try {
+      // Upload photo if present
+      let photoKey = ""
+      if (photoPreview && user?.email) {
+        setPhotoUploading(true)
+        try {
+          const photoRes = await fetch("/api/upload-photo", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              photo: photoPreview,
+              email: user.email,
+            }),
+          })
+          if (photoRes.ok) {
+            const photoData = await photoRes.json()
+            photoKey = photoData.key || ""
+          }
+        } catch {
+          // Photo upload non bloquant — on continue
+        } finally {
+          setPhotoUploading(false)
+        }
+      }
+
       // Serialize biens into data before sending
-      const submitData = {
-        ...data,
+      // Exclude base64 photo from submit (too large for JSON payload)
+      const { photo_profil: _photo, ...dataWithoutPhoto } = data
+      const submitData: Record<string, string> = {
+        ...dataWithoutPhoto,
+        photo_profil_key: photoKey,
         biens: JSON.stringify(
           biens.filter((b) => b.titre.trim() !== "")
         ),
@@ -415,6 +576,7 @@ export default function OnboardingPage() {
         sessionStorage.removeItem("immocrew_onboarding_step")
         sessionStorage.removeItem("immocrew_onboarding_data")
         sessionStorage.removeItem("immocrew_onboarding_biens")
+        sessionStorage.removeItem("immocrew_onboarding_photo")
         setIsComplete(true)
         // Production déclenchée manuellement par l'admin depuis /admin
         // Route /api/auto-produce disponible pour automatiser plus tard
@@ -553,7 +715,7 @@ export default function OnboardingPage() {
                         className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
                       />
                     </div>
-                    <div>
+                    <div className="relative" ref={activeAddressIndex === index ? addressDropdownRef : undefined}>
                       <label htmlFor={`bien-${index}-adresse`} className="block text-caption font-medium text-neutral-600 mb-1">
                         Adresse ou quartier
                       </label>
@@ -561,12 +723,31 @@ export default function OnboardingPage() {
                         id={`bien-${index}-adresse`}
                         type="text"
                         value={bien.adresse}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           updateBien(index, "adresse", e.target.value)
-                        }
+                          searchAddress(e.target.value, index)
+                        }}
                         placeholder="12 rue Beaurepaire, La Doutre"
+                        autoComplete="off"
                         className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
                       />
+                      {activeAddressIndex === index &&
+                        addressSuggestions[index] &&
+                        addressSuggestions[index].length > 0 && (
+                          <div className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-neutral-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+                            {addressSuggestions[index].map((suggestion, sIdx) => (
+                              <button
+                                key={sIdx}
+                                type="button"
+                                onClick={() => selectAddress(index, suggestion.label)}
+                                className="w-full text-left px-4 py-2.5 text-body-sm text-foreground hover:bg-neutral-50 transition-colors border-b border-neutral-100 last:border-b-0"
+                              >
+                                <span className="block font-medium">{suggestion.label}</span>
+                                <span className="block text-caption text-neutral-400">{suggestion.context}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
                     </div>
                   </div>
                   <div className="grid grid-cols-2 tablet:grid-cols-3 gap-3">
@@ -631,6 +812,24 @@ export default function OnboardingPage() {
                       className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast resize-y"
                     />
                   </div>
+                  <div>
+                    <label htmlFor={`bien-${index}-lien_annonce`} className="block text-caption font-medium text-neutral-600 mb-1">
+                      Lien vers ton annonce (optionnel)
+                    </label>
+                    <input
+                      id={`bien-${index}-lien_annonce`}
+                      type="url"
+                      value={bien.lien_annonce}
+                      onChange={(e) =>
+                        updateBien(index, "lien_annonce", e.target.value)
+                      }
+                      placeholder="https://www.seloger.com/annonces/..."
+                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                    />
+                    <p className="text-caption text-neutral-400 mt-1">
+                      Optionnel — on récupère les infos de l&apos;annonce pour mieux rédiger la tienne.
+                    </p>
+                  </div>
                 </div>
               ))}
               {biens.length < MAX_BIENS && (
@@ -648,6 +847,77 @@ export default function OnboardingPage() {
             step.fields.map((field) => {
               const config = FIELD_LABELS[field]
               if (!config) return null
+
+              // Photo upload field
+              if (config.type === "photo") {
+                const initials =
+                  (data.prenom?.[0] || "").toUpperCase() +
+                  (data.nom?.[0] || "").toUpperCase()
+                return (
+                  <div key={field}>
+                    <label className="block text-caption font-medium text-neutral-600 mb-2">
+                      {config.label}
+                    </label>
+                    <div className="flex items-center gap-4">
+                      {photoPreview ? (
+                        <img
+                          src={photoPreview}
+                          alt="Aperçu photo de profil"
+                          className="w-20 h-20 rounded-full object-cover border-2 border-neutral-200"
+                        />
+                      ) : (
+                        <div className="w-20 h-20 rounded-full bg-neutral-100 border-2 border-dashed border-neutral-300 flex items-center justify-center">
+                          {initials ? (
+                            <span className="font-display text-h3 text-neutral-400">
+                              {initials}
+                            </span>
+                          ) : (
+                            <svg className="w-8 h-8 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                          )}
+                        </div>
+                      )}
+                      <div className="flex flex-col gap-2">
+                        <button
+                          type="button"
+                          onClick={() => photoInputRef.current?.click()}
+                          className="h-10 px-4 rounded-md border border-neutral-300 text-body-sm text-neutral-600 hover:border-secondary hover:text-secondary transition-colors"
+                        >
+                          {photoPreview ? "Changer la photo" : "Ajouter ta photo"}
+                        </button>
+                        {photoPreview && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setPhotoPreview(null)
+                              setData((prev) => {
+                                const { photo_profil: _, ...rest } = prev
+                                return rest
+                              })
+                            }}
+                            className="text-body-sm text-neutral-400 hover:text-red-500 transition-colors text-left"
+                          >
+                            Supprimer
+                          </button>
+                        )}
+                      </div>
+                      <input
+                        ref={photoInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={handlePhotoChange}
+                        className="hidden"
+                      />
+                    </div>
+                    {config.helper && (
+                      <p className="text-caption text-neutral-400 mt-2">
+                        {config.helper}
+                      </p>
+                    )}
+                  </div>
+                )
+              }
 
               return (
                 <div key={field}>
@@ -682,12 +952,17 @@ export default function OnboardingPage() {
                   ) : (
                     <input
                       id={field}
-                      type="text"
+                      type={config.type === "url" ? "url" : "text"}
                       value={data[field] || ""}
                       onChange={(e) => updateField(field, e.target.value)}
                       placeholder={config.placeholder}
                       className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
                     />
+                  )}
+                  {config.helper && (
+                    <p className="text-caption text-neutral-400 mt-1">
+                      {config.helper}
+                    </p>
                   )}
                 </div>
               )
