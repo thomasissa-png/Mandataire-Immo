@@ -39,21 +39,9 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: "https://immocrew.fr",
     siteName: "ImmoCrew",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "ImmoCrew — L'équipe marketing des mandataires immobiliers",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ImmoCrew — L'équipe marketing des mandataires immobiliers",
-    description:
-      "Posts, articles SEO, annonces storytelling. 100% personnalisés. À partir de 197€/mois.",
-    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
