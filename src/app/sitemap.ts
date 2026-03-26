@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next"
+import { getAllArticles } from "@/lib/blog"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://immocrew.fr"
@@ -9,6 +10,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.7,
     },
     {
       url: `${baseUrl}/cgv`,
@@ -30,5 +37,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  return staticPages
+  const articles = getAllArticles()
+  const blogPages: MetadataRoute.Sitemap = articles.map((article) => ({
+    url: `${baseUrl}/blog/${article.slug}`,
+    lastModified: new Date(article.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }))
+
+  return [...staticPages, ...blogPages]
 }

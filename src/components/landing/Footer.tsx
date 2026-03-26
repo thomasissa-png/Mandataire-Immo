@@ -46,6 +46,14 @@ export function Footer() {
                     FAQ
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="/blog"
+                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
+                  >
+                    Blog
+                  </a>
+                </li>
               </ul>
             </div>
 

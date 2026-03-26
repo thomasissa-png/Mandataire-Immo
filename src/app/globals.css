@@ -38,4 +38,50 @@
   .section-padding {
     @apply py-12 tablet:py-16 desktop:py-24;
   }
+
+  /* Prose styles for blog article content */
+  .prose-immocrew {
+    @apply text-body text-foreground leading-relaxed;
+  }
+
+  .prose-immocrew h2 {
+    @apply font-display text-h2 font-bold text-foreground mt-10 mb-4;
+  }
+
+  .prose-immocrew h3 {
+    @apply font-display text-h3 font-semibold text-foreground mt-8 mb-3;
+  }
+
+  .prose-immocrew p {
+    @apply mb-5;
+  }
+
+  .prose-immocrew ul,
+  .prose-immocrew ol {
+    @apply mb-5 pl-6;
+  }
+
+  .prose-immocrew ul {
+    @apply list-disc;
+  }
+
+  .prose-immocrew ol {
+    @apply list-decimal;
+  }
+
+  .prose-immocrew li {
+    @apply mb-2;
+  }
+
+  .prose-immocrew a {
+    @apply text-secondary font-medium underline underline-offset-2 hover:text-secondary-600 transition-colors duration-normal;
+  }
+
+  .prose-immocrew strong {
+    @apply font-semibold text-foreground;
+  }
+
+  .prose-immocrew blockquote {
+    @apply border-l-4 border-secondary pl-4 italic text-neutral-500 my-6;
+  }
 }

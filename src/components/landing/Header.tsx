@@ -6,6 +6,7 @@ const NAV_LINKS = [
   { label: "Comment \u00E7a marche", href: "#piliers" },
   { label: "Avant / Apr\u00E8s", href: "#avant-apres" },
   { label: "Tarifs", href: "#pricing" },
+  { label: "Blog", href: "/blog" },
   { label: "FAQ", href: "#faq" },
 ] as const
 
