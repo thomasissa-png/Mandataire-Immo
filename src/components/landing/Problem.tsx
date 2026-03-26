@@ -1,24 +1,24 @@
 const PROBLEMS = [
   {
     problem: "Tu postes 2 semaines, puis plus rien pendant 3 mois.",
-    solution: "12 posts prets chaque mois. Tu n'as qu'a publier.",
+    solution: "12 posts pr\u00EAts chaque mois. Tu n'as qu'\u00E0 publier.",
   },
   {
     problem:
       'Tes annonces disent toutes "bel appartement lumineux, proche commerces".',
     solution:
-      "Des annonces qui racontent une histoire — avec le nom de ton quartier, les ecoles, les commerces, l'ambiance.",
+      "Des annonces qui racontent une histoire — avec le nom de ton quartier, les \u00E9coles, les commerces, l'ambiance.",
   },
   {
-    problem: '45 minutes devant Canva le soir pour un resultat "bof".',
+    problem: '45 minutes devant Canva le soir pour un r\u00E9sultat "bof".',
     solution:
-      "Tout est fait. Tu ouvres, tu copies, tu colles, tu publies. 3 minutes, c'est regle.",
+      "Tout est fait. Tu ouvres, tu copies, tu colles, tu publies. 3 minutes, c'est r\u00E9gl\u00E9.",
   },
   {
     problem:
-      "Zero mandat entrant via le digital. Tout passe par le porte-a-porte.",
+      "Z\u00E9ro mandat entrant via le digital. Tout passe par le porte-\u00E0-porte.",
     solution:
-      "Tes articles SEO te font apparaitre sur Google. Tes posts te rendent visible sur Instagram. Les vendeurs te trouvent.",
+      "Tes articles SEO te font appara\u00EEtre sur Google. Tes posts te rendent visible sur Instagram. Les vendeurs te trouvent.",
   },
 ] as const
 
@@ -44,6 +44,7 @@ export function Problem() {
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -66,6 +67,7 @@ export function Problem() {
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"

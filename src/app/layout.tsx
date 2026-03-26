@@ -100,6 +100,9 @@ export default function RootLayout({
         lang="fr"
         className={`${plusJakartaSans.variable} ${inter.variable}`}
       >
+        <head>
+          <meta name="color-scheme" content="light only" />
+        </head>
         <body>
           <JsonLd data={organizationJsonLd} />
           <PostHogProvider>

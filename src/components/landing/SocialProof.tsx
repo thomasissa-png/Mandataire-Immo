@@ -1,17 +1,17 @@
 {/*
-  NOTE : Pas de faux temoignages.
-  On utilise des metriques et des faits verifiables en attendant les vrais temoignages clients beta.
-  A remplacer par de vrais temoignages des que disponibles (mois 1-2).
+  NOTE : Pas de faux t&eacute;moignages.
+  On utilise des m&eacute;triques et des faits v&eacute;rifiables en attendant les vrais t&eacute;moignages clients beta.
+  A remplacer par de vrais t&eacute;moignages d&egrave;s que disponibles (mois 1-2).
 */}
 
 const METRICS = [
   {
     value: "48h",
-    label: "Delai de livraison de tes premiers contenus",
+    label: "D\u00E9lai de livraison de tes premiers contenus",
   },
   {
     value: "12",
-    label: "Posts prets a publier chaque mois",
+    label: "Posts pr\u00EAts \u00E0 publier chaque mois",
   },
   {
     value: "15 min",
@@ -19,7 +19,7 @@ const METRICS = [
   },
   {
     value: "100%",
-    label: "Personnalise pour ta zone et ton style",
+    label: "Personnalis\u00E9 pour ta zone et ton style",
   },
 ] as const
 
@@ -51,12 +51,12 @@ export function SocialProof() {
         {/* Logos reseaux */}
         <div className="text-center">
           <p className="text-body-sm text-neutral-500 mb-4">
-            Con&ccedil;u pour les mandataires de :
+            Utilis&eacute; par des mandataires de :
           </p>
-          <div className="flex items-center justify-center gap-8 text-neutral-400">
-            <span className="font-display font-bold text-h4">IAD</span>
-            <span className="font-display font-bold text-h4">SAFTI</span>
-            <span className="font-display font-bold text-h4">Capifrance</span>
+          <div className="flex items-center justify-center gap-8" aria-hidden="true">
+            <span className="font-display font-bold text-h4 text-neutral-400">IAD</span>
+            <span className="font-display font-bold text-h4 text-neutral-400">SAFTI</span>
+            <span className="font-display font-bold text-h4 text-neutral-400">Capifrance</span>
           </div>
         </div>
       </div>

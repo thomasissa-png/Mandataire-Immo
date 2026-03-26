@@ -224,7 +224,7 @@ export async function POST(request: NextRequest) {
       annees_experience: ctx.annees_experience || 2,
       cible_clients: ctx.cible_clients || "acheteurs et vendeurs",
     })
-    const calendarData = await generateJSON(calendarPrompt.system, calendarPrompt.user)
+    const calendarData = await generateJSON(calendarPrompt)
     const calendarId = await insertDeliverable({
       clientEmail: userEmail,
       clientId: client_id,

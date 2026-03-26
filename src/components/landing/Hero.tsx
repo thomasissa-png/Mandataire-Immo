@@ -17,12 +17,20 @@ export function Hero() {
               fait le reste.
             </p>
 
-            {/* CTA */}
+            {/* CTA principal → pricing */}
             <CTAButton
-              href="#avant-apres"
-              label="Voir des exemples concrets →"
-              location="hero"
+              href="#pricing"
+              label="D\u00E9couvrir les packs \u2192"
+              location="hero_primary"
             />
+
+            {/* CTA secondaire → exemples */}
+            <a
+              href="#avant-apres"
+              className="mt-3 block text-body-sm text-neutral-500 hover:text-secondary underline transition-colors duration-normal"
+            >
+              Voir un exemple pour ta zone &rarr;
+            </a>
 
             {/* Mention rassurante */}
             <p className="mt-4 text-body-sm text-neutral-500">

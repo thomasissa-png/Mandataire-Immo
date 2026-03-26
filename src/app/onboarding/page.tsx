@@ -527,7 +527,7 @@ export default function OnboardingPage() {
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 tablet:grid-cols-3 gap-3">
                     <div>
                       <label className="block text-caption font-medium text-neutral-600 mb-1">
                         Prix

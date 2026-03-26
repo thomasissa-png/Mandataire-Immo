@@ -60,11 +60,13 @@ function FAQItem({
   answer,
   isOpen,
   onToggle,
+  index,
 }: {
   question: string
   answer: string
   isOpen: boolean
   onToggle: () => void
+  index: number
 }) {
   return (
     <div
@@ -79,6 +81,7 @@ function FAQItem({
         onClick={onToggle}
         className="flex items-center justify-between w-full text-left px-6 py-4 min-h-[56px]"
         aria-expanded={isOpen}
+        aria-controls={`faq-panel-${index}`}
       >
         <span className="font-display text-h4 text-primary pr-4">
           {question}
@@ -101,6 +104,7 @@ function FAQItem({
       </button>
 
       <div
+        id={`faq-panel-${index}`}
         className={`overflow-hidden transition-all duration-slow ${
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
@@ -132,6 +136,7 @@ export function FAQ() {
               question={item.question}
               answer={item.answer}
               isOpen={openIndex === index}
+              index={index}
               onToggle={() =>
                 setOpenIndex(openIndex === index ? null : index)
               }
