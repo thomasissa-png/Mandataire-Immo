@@ -183,7 +183,8 @@ export async function POST(request: NextRequest) {
       ...ctx,
       nombre_scripts: 10,
       format: "mix",
-      confort_camera: "debutant",
+      confort_camera: ctx.confort_camera || "debutant",
+      type_video: "face_camera",
     })
     const scriptsResult = await generateJSON<{ scripts: Array<{ titre: string; format: string; duree_cible: string; scenes: Array<{ numero: number; duree: string; voix_off: string; indication_visuelle: string }>; musique_suggeree: string; hook: string }> }>(
       { ...scriptsPrompt, maxTokens: 8192 }

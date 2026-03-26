@@ -137,7 +137,8 @@ export async function POST(request: NextRequest) {
       ...ctx,
       nombre_scripts: 1,
       format: "reel",
-      confort_camera: "debutant",
+      confort_camera: ctx.confort_camera || "debutant",
+      type_video: "face_camera",
       bien_unique: bien,
       biens: [bien],
     })
@@ -167,6 +168,7 @@ export async function POST(request: NextRequest) {
       bien,
       annonce_storytelling: annonceText,
       email_contact: clientEmail,
+      telephone_contact: ctx.telephone || undefined,
     })
     const landingResult = await generateJSON<{ titre_page: string; meta_description: string; html: string }>(
       { ...landingPrompt, maxTokens: 8192 }
@@ -188,6 +190,8 @@ export async function POST(request: NextRequest) {
       type_email: "blast_acheteurs",
       bien_a_promouvoir: bien,
       biens: [bien],
+      email_contact: clientEmail,
+      telephone_contact: ctx.telephone,
     })
     const emailResult = await generateJSON<{ objet_email: string; html: string; texte_brut: string; cta_principal: string }>(
       { ...emailPrompt, maxTokens: 2048 }

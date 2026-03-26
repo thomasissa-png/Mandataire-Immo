@@ -41,6 +41,7 @@ export interface ClientContext {
     anecdote_memorable: string
   }
   confort_camera: "debutant" | "a_laise" | "expert" | ""
+  telephone: string
 }
 
 interface ClientRow {
@@ -216,5 +217,6 @@ function parseClientContext(raw: Record<string, unknown>): ClientContext {
     donnees_locales,
     histoire,
     confort_camera,
+    telephone: getString("telephone"),
   }
 }
