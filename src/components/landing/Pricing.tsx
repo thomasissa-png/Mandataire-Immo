@@ -19,20 +19,20 @@ const PACKS = [
     name: "Pack Lancement",
     price: "400",
     unit: "",
-    subtitle: "L'\u00E9quivalent de 2 000\u20AC de prestations marketing — en une semaine.",
+    subtitle: "Ce qu'un freelance te facturerait 2 000\u20AC — livr\u00E9 en une semaine.",
     mention: "Satisfait ou rembours\u00E9 14 jours. Z\u00E9ro risque.",
-    cta: "Je veux mon kit de d\u00E9marrage",
+    cta: "D\u00E9marrer mon lancement",
     ctaHref: "/api/checkout?pack=lancement",
     featured: false,
     features: [
-      "Positionnement et mise en avant de ton expertise",
+      "Ce qui te rend unique sur ta zone — formul\u00E9 clairement",
       "Bio optimis\u00E9e pour tous tes profils",
-      "5 templates d'annonces storytelling",
+      "5 annonces r\u00E9dig\u00E9es pour mettre en valeur chaque bien",
       "5 articles SEO local (quartier + ville)",
-      "Calendrier \u00E9ditorial sur 30 jours",
+      "Plan de publication sur 30 jours — tu sais quoi poster et quand",
       "20 posts pr\u00EAts \u00E0 publier",
       "10 scripts Reels",
-      "Guide visuel personnalis\u00E9 pour ton image",
+      "Charte visuelle : couleurs, police, mise en page",
     ],
   },
   {
@@ -41,7 +41,7 @@ const PACKS = [
     unit: "/mois",
     subtitle: "12 posts, 4 scripts, 2 articles, 4 annonces — pr\u00EAts \u00E0 publier le 1er du mois.",
     mention: "Sans engagement. R\u00E9siliation libre en 1 clic.",
-    cta: "Recevoir mes premiers posts",
+    cta: "Commencer ce mois-ci",
     ctaHref: "/api/checkout?pack=mensuel",
     featured: true,
     badge: "Recommand\u00E9",
@@ -50,7 +50,7 @@ const PACKS = [
       "4 scripts vid\u00E9o pour tes Reels",
       "2 articles SEO local",
       "1 newsletter pour tes contacts",
-      "4 annonces immobili\u00E8res storytelling",
+      "4 annonces immobili\u00E8res qui donnent envie de visiter",
       "1 email de prospection vendeurs",
       "Calendrier de publication mensuel",
     ],
@@ -59,9 +59,9 @@ const PACKS = [
     name: "Boost Mandat",
     price: "100",
     unit: "/bien",
-    subtitle: "D\u00E9j\u00E0 abonn\u00E9 ? Mets ton nouveau bien sous les projecteurs.",
-    mention: "Ponctuel, en compl\u00E9ment de ton Pack Mensuel.",
-    cta: "Booster un mandat",
+    subtitle: "D\u00E9j\u00E0 abonn\u00E9 ? Ton nouveau bien m\u00E9rite ses propres posts.",
+    mention: "R\u00E9serv\u00E9 aux abonn\u00E9s Pack Mensuel. Sans engagement suppl\u00E9mentaire.",
+    cta: "Booster mon prochain bien",
     ctaHref: "/api/checkout?pack=boost",
     featured: false,
     features: [
@@ -85,8 +85,8 @@ export function Pricing() {
           Ton &eacute;quipe marketing, &agrave; partir de 150&euro;/mois.
         </h2>
         <p className="text-center text-body-lg text-neutral-500 mb-10 desktop:mb-16 max-w-xl mx-auto">
-          Un freelance facture 500 &agrave; 800&euro; pour du contenu g&eacute;n&eacute;rique.
-          Ici, tu re&ccedil;ois du sur-mesure pour ta zone — pour moins cher. Choisis ton pack.
+          Un freelance facture 500 &agrave; 800&euro; pour des posts g&eacute;n&eacute;riques.
+          Ici, tu re&ccedil;ois du sur-mesure pour ta zone — pour moins cher.
         </p>
 
         <div className="grid gap-6 tablet:grid-cols-3 items-start max-w-5xl mx-auto overflow-x-clip">
@@ -214,7 +214,7 @@ export function Pricing() {
         {/* Ancrage comparatif */}
         <div className="mt-12 max-w-2xl mx-auto rounded-xl bg-background border border-border p-6 desktop:p-8">
           <p className="font-display text-h3 text-primary text-center mb-4">
-            Pourquoi 150&euro;/mois, c&apos;est une &eacute;vidence ?
+            150&euro;/mois. La d&eacute;cision la plus simple de ta semaine.
           </p>
           <div className="grid grid-cols-1 tablet:grid-cols-3 gap-4 text-center">
             <div className="p-4 rounded-lg bg-error-50">
@@ -230,13 +230,12 @@ export function Pricing() {
             <div className="p-4 rounded-lg bg-success-50 ring-2 ring-success">
               <p className="font-display text-h2 text-success-800">150&euro;</p>
               <p className="text-body-sm text-neutral-600 mt-1 font-semibold">ImmoCrew</p>
-              <p className="text-caption text-neutral-400">Tes posts finis, personnalis&eacute;s pour ta zone</p>
+              <p className="text-caption text-neutral-400">Tes posts, articles et annonces — personnalis&eacute;s pour ta zone</p>
             </div>
           </div>
           <p className="text-center text-body text-neutral-600 mt-4">
-            150&euro;/mois — moins de 2h de ton temps.
-            Et on t&apos;en &eacute;conomise 30 chaque mois.
-            <strong> Une seule vente suppl&eacute;mentaire dans l&apos;ann&eacute;e rembourse l&apos;abonnement entier.</strong>
+            150&euro;/mois — tu y passes moins de 2h. On s&apos;occupe du reste.
+            <strong> Un seul mandat suppl&eacute;mentaire dans l&apos;ann&eacute;e rembourse ton abonnement entier.</strong>
           </p>
         </div>
         <p className="text-center text-body-sm text-neutral-400 mt-4">
