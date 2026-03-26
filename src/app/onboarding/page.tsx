@@ -414,14 +414,8 @@ export default function OnboardingPage() {
         sessionStorage.removeItem("immocrew_onboarding_data")
         sessionStorage.removeItem("immocrew_onboarding_biens")
         setIsComplete(true)
-
-        // Déclencher la production automatiquement en arrière-plan
-        // Sophie est redirigée vers le dashboard sans attendre la fin
-        fetch("/api/auto-produce", {
-          method: "POST",
-        }).catch(() => {
-          console.log("[onboarding] Auto-production trigger sent")
-        })
+        // Production déclenchée manuellement par l'admin depuis /admin
+        // Route /api/auto-produce disponible pour automatiser plus tard
       } else {
         const errorData = await onboardingResponse.json().catch(() => ({}))
         setSubmitError(errorData.error || "Erreur lors de la sauvegarde. Réessaie dans quelques instants.")
@@ -458,7 +452,7 @@ export default function OnboardingPage() {
           </h1>
           <p className="text-body text-neutral-600 mb-8">
             On a tout ce qu&apos;il nous faut. Ton &eacute;quipe se met au travail.
-            Tes premiers livrables arrivent dans quelques minutes.
+            Tu recevras tes premiers livrables sous 24h.
           </p>
           <a
             href="/dashboard"

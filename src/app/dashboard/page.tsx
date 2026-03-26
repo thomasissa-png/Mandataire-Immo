@@ -201,7 +201,7 @@ export default async function DashboardPage() {
             Bienvenue dans ton espace !
           </h2>
           <p className="text-body text-neutral-600 mb-4">
-            Ton &eacute;quipe est au travail. Tes premiers livrables arrivent dans quelques minutes.
+            Ton &eacute;quipe est au travail. Tu recevras tes premiers livrables sous 24h.
           </p>
           <div className="rounded-lg bg-background p-4 mb-4 text-left">
             <p className="text-body-sm text-neutral-500 font-semibold mb-2">
