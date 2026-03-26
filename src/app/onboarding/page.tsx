@@ -333,7 +333,7 @@ export default function OnboardingPage() {
 
   const handleNext = () => {
     // Validate required fields on non-optional steps
-    if (!step.optional) {
+    if (!("optional" in step && step.optional)) {
       const emptyRequired = step.fields.filter(
         (f: string) => f !== "__biens__" && !(data[f] || "").trim()
       )

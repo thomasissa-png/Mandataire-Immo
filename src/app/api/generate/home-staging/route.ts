@@ -110,6 +110,7 @@ export async function POST(request: NextRequest) {
         style: item.style as HomeStagingInput["style"],
         contraintes: {
           lumiere_naturelle: "moderee",
+          forme_piece: "rectangulaire",
           elements_fixes: [],
         },
       }
