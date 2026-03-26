@@ -419,7 +419,7 @@ export default function OnboardingPage() {
           </p>
           <a
             href="/dashboard"
-            className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-secondary text-white font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
+            className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
           >
             Voir mon espace client
           </a>
@@ -448,7 +448,7 @@ export default function OnboardingPage() {
               )}
             </div>
             <span className="text-caption text-neutral-500">
-              Etape {currentStep + 1} sur {STEPS.length}
+              \u00C9tape {currentStep + 1} sur {STEPS.length} &middot; ~8 min
             </span>
           </div>
           <div className="h-1.5 bg-neutral-200 rounded-full overflow-hidden">
@@ -674,7 +674,7 @@ export default function OnboardingPage() {
               <button
                 type="button"
                 onClick={handleNext}
-                className="h-12 px-8 rounded-full bg-secondary text-white font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
+                className="h-12 px-8 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
               >
                 Suivant
               </button>

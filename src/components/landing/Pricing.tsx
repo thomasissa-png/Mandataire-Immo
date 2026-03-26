@@ -17,57 +17,56 @@ const CHECK_ICON = (
 const PACKS = [
   {
     name: "Pack Lancement",
-    price: "497",
+    price: "400",
     unit: "",
-    subtitle: "L'equivalent de 2 000\u20AC de prestations marketing — en une semaine.",
-    mention: "Satisfait ou rembourse 14 jours. Zero risque.",
+    subtitle: "L'\u00E9quivalent de 2 000\u20AC de prestations marketing — en une semaine.",
+    mention: "Satisfait ou rembours\u00E9 14 jours. Z\u00E9ro risque.",
     cta: "Je veux mon kit de d\u00E9marrage",
     ctaHref: "/api/checkout?pack=lancement",
     featured: false,
     features: [
       "Positionnement et mise en avant de ton expertise",
-      "Bio optimisee pour tous tes profils",
+      "Bio optimis\u00E9e pour tous tes profils",
       "5 templates d'annonces storytelling",
       "5 articles SEO local (quartier + ville)",
-      "Calendrier editorial sur 30 jours",
-      "20 posts prets a publier",
+      "Calendrier \u00E9ditorial sur 30 jours",
+      "20 posts pr\u00EAts \u00E0 publier",
       "10 scripts Reels",
-      "Brief d'identite visuelle personnalise",
+      "Brief d'identit\u00E9 visuelle personnalis\u00E9",
     ],
   },
   {
     name: "Pack Mensuel",
-    price: "197",
+    price: "150",
     unit: "/mois",
     subtitle: "12 posts, 4 scripts, 2 articles, 4 annonces — pr\u00EAts \u00E0 publier le 1er du mois.",
-    mention: "Sans engagement. Resiliation libre en 1 clic.",
+    mention: "Sans engagement. R\u00E9siliation libre en 1 clic.",
     cta: "Recevoir mes premiers posts",
     ctaHref: "/api/checkout?pack=mensuel",
     featured: true,
     badge: "Recommand\u00E9",
-    badgeSub: "par nos premiers utilisateurs",
     features: [
-      "12 posts personnalises pour tes reseaux",
-      "4 scripts video pour tes Reels",
+      "12 posts personnalis\u00E9s pour tes r\u00E9seaux",
+      "4 scripts vid\u00E9o pour tes Reels",
       "2 articles SEO local",
       "1 newsletter pour tes contacts",
-      "4 annonces immobilieres storytelling",
+      "4 annonces immobili\u00E8res storytelling",
       "1 email de prospection vendeurs",
       "Calendrier de publication mensuel",
     ],
   },
   {
     name: "Boost Mandat",
-    price: "97",
+    price: "100",
     unit: "/bien",
-    subtitle: "Deja abonne ? Mets ton nouveau bien sous les projecteurs.",
-    mention: "Ponctuel, en complement de ton Pack Mensuel.",
+    subtitle: "D\u00E9j\u00E0 abonn\u00E9 ? Mets ton nouveau bien sous les projecteurs.",
+    mention: "Ponctuel, en compl\u00E9ment de ton Pack Mensuel.",
     cta: "Booster un mandat",
     ctaHref: "/api/checkout?pack=boost",
     featured: false,
     features: [
       "1 annonce storytelling qui sort du lot",
-      "3 posts dedies au bien + 1 Reel",
+      "3 posts d\u00E9di\u00E9s au bien + 1 Reel",
       "1 mini landing page du bien",
       "1 email blast vers ta base d'acheteurs",
     ],
@@ -83,7 +82,7 @@ export function Pricing() {
       <PricingTracker />
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-3">
-          Ton &eacute;quipe marketing, &agrave; partir de 197&euro;/mois.
+          Ton &eacute;quipe marketing, &agrave; partir de 150&euro;/mois.
         </h2>
         <p className="text-center text-body-lg text-neutral-500 mb-10 desktop:mb-16 max-w-xl mx-auto">
           Un freelance facture 500 &agrave; 800&euro; pour du contenu g&eacute;n&eacute;rique.
@@ -102,7 +101,7 @@ export function Pricing() {
             >
               {/* Badge */}
               {pack.featured && "badge" in pack && (
-                <span className="inline-block px-3 py-1 mb-4 rounded-full bg-secondary text-white text-caption font-semibold">
+                <span className="inline-block px-3 py-1 mb-4 rounded-full bg-secondary text-primary text-caption font-semibold">
                   {pack.badge}
                 </span>
               )}
@@ -194,7 +193,7 @@ export function Pricing() {
               {/* CTA */}
               <CTAButton
                 href={pack.ctaHref}
-                label={`${pack.cta} →`}
+                label={`${pack.cta} \u2192`}
                 location={`pricing_${pack.name.toLowerCase().replace(/\s+/g, "_")}`}
                 variant={pack.featured ? "primary" : "outline"}
                 className="w-full"
@@ -215,7 +214,7 @@ export function Pricing() {
         {/* Ancrage comparatif */}
         <div className="mt-12 max-w-2xl mx-auto rounded-xl bg-background border border-border p-6 desktop:p-8">
           <p className="font-display text-h3 text-primary text-center mb-4">
-            Pourquoi 197&euro;/mois, c&apos;est une &eacute;vidence ?
+            Pourquoi 150&euro;/mois, c&apos;est une &eacute;vidence ?
           </p>
           <div className="grid grid-cols-1 tablet:grid-cols-3 gap-4 text-center">
             <div className="p-4 rounded-lg bg-error-50">
@@ -229,15 +228,15 @@ export function Pricing() {
               <p className="text-caption text-neutral-400">Templates &agrave; adapter toi-m&ecirc;me</p>
             </div>
             <div className="p-4 rounded-lg bg-success-50 ring-2 ring-success">
-              <p className="font-display text-h2 text-success-800">197&euro;</p>
+              <p className="font-display text-h2 text-success-800">150&euro;</p>
               <p className="text-body-sm text-neutral-600 mt-1 font-semibold">ImmoCrew</p>
               <p className="text-caption text-neutral-400">Contenu fini, personnalis&eacute; pour ta zone</p>
             </div>
           </div>
           <p className="text-center text-body text-neutral-600 mt-4">
-            197&euro;/mois — moins de 2h de ton temps.
+            150&euro;/mois — moins de 2h de ton temps.
             Et on t&apos;en &eacute;conomise 30 chaque mois.
-            <strong>Une seule vente suppl&eacute;mentaire dans l&apos;ann&eacute;e rembourse l&apos;abonnement entier.</strong>
+            <strong> Une seule vente suppl&eacute;mentaire dans l&apos;ann&eacute;e rembourse l&apos;abonnement entier.</strong>
           </p>
         </div>
         <p className="text-center text-body-sm text-neutral-400 mt-4">

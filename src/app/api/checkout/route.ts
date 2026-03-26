@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
 
     await trackServer("checkout_start", session.customer_email || session.id, {
       pack,
-      price: pack === "mensuel" ? 197 : pack === "lancement" ? 497 : 97,
+      price: pack === "mensuel" ? 150 : pack === "lancement" ? 400 : 100,
       currency: "eur",
       source_page: "pricing",
       stripe_session_id: session.id,

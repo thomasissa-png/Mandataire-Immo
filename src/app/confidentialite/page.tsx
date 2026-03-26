@@ -16,10 +16,10 @@ export default function ConfidentialitePage() {
       <main className="bg-background min-h-screen">
         <div className="container-immocrew py-12 desktop:py-20">
           <article className="max-w-3xl mx-auto">
-            <h1 className="font-display text-h1 font-bold text-primary-900 mb-2">
+            <h1 className="font-display text-h1 font-bold text-primary mb-2">
               Politique de confidentialit&eacute;
             </h1>
-            <p className="text-caption text-primary-400 mb-10">
+            <p className="text-caption text-neutral-500 mb-10">
               Derni&egrave;re mise &agrave; jour : 25 mars 2026
             </p>
 
@@ -242,7 +242,7 @@ export default function ConfidentialitePage() {
                 Pour exercer vos droits, adressez votre demande &agrave; :{" "}
                 <a
                   href="mailto:dpo@immocrew.fr"
-                  className="text-secondary font-semibold underline underline-offset-2 hover:text-secondary/80 transition-colors"
+                  className="text-secondary font-semibold underline underline-offset-2 hover:text-secondary-700 transition-colors"
                 >
                   dpo@immocrew.fr
                 </a>
@@ -258,7 +258,7 @@ export default function ConfidentialitePage() {
                   href="https://www.cnil.fr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-secondary underline underline-offset-2 hover:text-secondary/80 transition-colors"
+                  className="text-secondary underline underline-offset-2 hover:text-secondary-700 transition-colors"
                 >
                   www.cnil.fr
                 </a>
@@ -321,7 +321,7 @@ export default function ConfidentialitePage() {
             <div className="mt-12 pt-8 border-t border-primary-100">
               <Link
                 href="/"
-                className="text-secondary font-semibold hover:text-secondary/80 transition-colors"
+                className="text-secondary font-semibold hover:text-secondary-700 transition-colors"
               >
                 &larr; Retour &agrave; l&rsquo;accueil
               </Link>

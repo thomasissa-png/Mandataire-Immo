@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { track } from "@/lib/tracking"
 
 interface DeliverableCardProps {
@@ -21,14 +22,32 @@ export function DeliverableCard({
   content,
   status = "delivered",
 }: DeliverableCardProps) {
+  const [copied, setCopied] = useState(false)
+  const [expanded, setExpanded] = useState(false)
+
+  const handleCopy = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    navigator.clipboard.writeText(content).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+      track("deliverable_download", {
+        deliverable_id: id,
+        type,
+        method: "copy",
+      })
+    })
+  }
+
   return (
-    <div
-      className="rounded-lg bg-card border border-border p-6 hover:shadow-md transition-shadow duration-normal cursor-pointer"
+    <button
+      type="button"
+      className="w-full text-left rounded-lg bg-card border border-border p-6 hover:shadow-md transition-shadow duration-normal cursor-pointer"
       onClick={() => {
         track("deliverable_view", {
           deliverable_id: id,
           type,
         })
+        setExpanded(!expanded)
       }}
     >
       <div className="flex items-start justify-between gap-4">
@@ -41,30 +60,36 @@ export function DeliverableCard({
             </span>
             {status === "draft" && (
               <span className="inline-block px-2 py-0.5 rounded-full text-caption font-semibold bg-warning-50 text-warning-800">
-                En preparation
+                En pr&eacute;paration &middot; livraison sous 24-48h
               </span>
             )}
           </div>
           <h3 className="font-display text-h4 text-primary mb-2">{title}</h3>
-          <p className="text-body-sm text-neutral-600 line-clamp-3">
+          <p className={`text-body-sm text-neutral-600 ${expanded ? "" : "line-clamp-3"}`}>
             {content}
           </p>
-          <button
-            className="mt-3 text-body-sm text-secondary font-semibold hover:text-secondary-600 transition-colors"
-            onClick={(e) => {
-              e.stopPropagation()
-              navigator.clipboard.writeText(content)
-              track("deliverable_download", {
-                deliverable_id: id,
-                type,
-                method: "copy",
-              })
-            }}
-          >
-            Copier le texte
-          </button>
+          <div className="flex items-center gap-4 mt-3">
+            <button
+              type="button"
+              aria-label={`Copier le texte : ${title}`}
+              className="text-body-sm text-secondary font-semibold hover:text-secondary-600 transition-colors"
+              onClick={handleCopy}
+            >
+              {copied ? "\u2713 Copi\u00E9 !" : "Copier le texte"}
+            </button>
+            <button
+              type="button"
+              className="text-caption text-neutral-400 hover:text-secondary transition-colors"
+              onClick={(e) => {
+                e.stopPropagation()
+                setExpanded(!expanded)
+              }}
+            >
+              {expanded ? "R\u00E9duire" : "Lire en entier"}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </button>
   )
 }

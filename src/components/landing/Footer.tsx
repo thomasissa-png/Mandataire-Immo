@@ -101,7 +101,7 @@ export function Footer() {
 
         {/* Separator + Copyright */}
         <div className="mt-10 pt-6 border-t border-primary-600">
-          <p className="text-caption text-primary-300 text-center">
+          <p className="text-caption text-primary-200 text-center">
             &copy; {currentYear} ImmoCrew. Tous droits r&eacute;serv&eacute;s.
           </p>
         </div>

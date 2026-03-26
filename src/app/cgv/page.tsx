@@ -16,10 +16,10 @@ export default function CGVPage() {
       <main className="bg-background min-h-screen">
         <div className="container-immocrew py-12 desktop:py-20">
           <article className="max-w-3xl mx-auto">
-            <h1 className="font-display text-h1 font-bold text-primary-900 mb-2">
+            <h1 className="font-display text-h1 font-bold text-primary mb-2">
               Conditions G&eacute;n&eacute;rales de Vente
             </h1>
-            <p className="text-caption text-primary-400 mb-10">
+            <p className="text-caption text-neutral-500 mb-10">
               Derni&egrave;re mise &agrave; jour : 25 mars 2026
             </p>
 
@@ -87,7 +87,7 @@ export default function CGVPage() {
               <div className="space-y-6">
                 <OfferCard
                   name="Pack Lancement"
-                  price="497 &euro; TTC"
+                  price="400 &euro; TTC"
                   type="Paiement unique"
                   items={[
                     "Positionnement et strat\u00e9gie de personal branding",
@@ -103,7 +103,7 @@ export default function CGVPage() {
 
                 <OfferCard
                   name="Pack Mensuel"
-                  price="197 &euro; TTC / mois"
+                  price="150 &euro; TTC / mois"
                   type="Abonnement mensuel sans engagement"
                   items={[
                     "12 posts r\u00e9seaux sociaux par mois",
@@ -117,7 +117,7 @@ export default function CGVPage() {
 
                 <OfferCard
                   name="Boost Mandat"
-                  price="97 &euro; TTC"
+                  price="100 &euro; TTC"
                   type="Paiement unique, par mandat"
                   items={[
                     "Annonce storytelling d\u00e9di\u00e9e au bien",
@@ -322,7 +322,7 @@ export default function CGVPage() {
                 personnelles sont d&eacute;taill&eacute;es dans la{" "}
                 <Link
                   href="/confidentialite"
-                  className="text-secondary font-semibold underline underline-offset-2 hover:text-secondary/80 transition-colors"
+                  className="text-secondary font-semibold underline underline-offset-2 hover:text-secondary-700 transition-colors"
                 >
                   Politique de Confidentialit&eacute;
                 </Link>{" "}
@@ -369,7 +369,7 @@ export default function CGVPage() {
             <div className="mt-12 pt-8 border-t border-primary-100">
               <Link
                 href="/"
-                className="text-secondary font-semibold hover:text-secondary/80 transition-colors"
+                className="text-secondary font-semibold hover:text-secondary-700 transition-colors"
               >
                 &larr; Retour &agrave; l&rsquo;accueil
               </Link>
@@ -425,7 +425,7 @@ function OfferCard({
           dangerouslySetInnerHTML={{ __html: price }}
         />
       </div>
-      <p className="text-caption text-primary-400 mb-3">{type}</p>
+      <p className="text-caption text-neutral-500 mb-3">{type}</p>
       <ul className="list-disc pl-5 space-y-1 text-body-sm text-foreground">
         {items.map((item) => (
           <li key={item}>{item}</li>
