@@ -92,10 +92,10 @@ const faqJsonLd = {
     },
     {
       "@type": "Question",
-      name: "Quelle est la différence avec Cocoon-Immo ?",
+      name: "Quelle est la différence avec une plateforme marketing SaaS ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Cocoon-Immo est une plateforme — un outil que tu utilises toi-même. ImmoCrew, c'est une équipe qui fait le travail à ta place. Tu reçois tes posts, articles et annonces déjà rédigés, prêts à publier. De plus, ImmoCrew est conçu spécifiquement pour les mandataires indépendants, pas pour les agences.",
+        text: "Les plateformes marketing te donnent des outils — des templates, un planificateur, un tableau de bord. Tu fais le travail toi-même. ImmoCrew, c'est une équipe qui fait le travail à ta place. Tu reçois tes posts, articles et annonces déjà rédigés, prêts à publier. De plus, tout est personnalisé pour ta zone et ton expertise — pas des templates génériques.",
       },
     },
     {

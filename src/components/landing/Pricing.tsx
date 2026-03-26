@@ -86,8 +86,8 @@ export function Pricing() {
           Ton &eacute;quipe marketing, &agrave; partir de 197&euro;/mois.
         </h2>
         <p className="text-center text-body-lg text-neutral-500 mb-10 desktop:mb-16 max-w-xl mx-auto">
-          L&agrave; o&ugrave; un CM freelance facture 500 &agrave; 800&euro; pour du contenu g&eacute;n&eacute;rique,
-          ImmoCrew te livre du sur-mesure pour ta zone. Choisis ton pack.
+          Un freelance facture 500 &agrave; 800&euro; pour du contenu g&eacute;n&eacute;rique.
+          Ici, tu re&ccedil;ois du sur-mesure pour ta zone — pour moins cher. Choisis ton pack.
         </p>
 
         <div className="grid gap-6 tablet:grid-cols-3 items-start max-w-5xl mx-auto overflow-x-hidden">
@@ -220,18 +220,18 @@ export function Pricing() {
           <div className="grid grid-cols-1 tablet:grid-cols-3 gap-4 text-center">
             <div className="p-4 rounded-lg bg-error-50">
               <p className="font-display text-h2 text-error-700 line-through">500-800&euro;</p>
-              <p className="text-body-sm text-neutral-600 mt-1">CM freelance</p>
+              <p className="text-body-sm text-neutral-600 mt-1">Freelance marketing</p>
               <p className="text-caption text-neutral-400">R&eacute;sultat g&eacute;n&eacute;rique</p>
             </div>
             <div className="p-4 rounded-lg bg-warning-50">
-              <p className="font-display text-h2 text-warning-800">269&euro;</p>
-              <p className="text-body-sm text-neutral-600 mt-1">Cocoon&#8209;Immo cl&eacute; en main</p>
-              <p className="text-caption text-neutral-400">Templates &agrave; adapter</p>
+              <p className="font-display text-h2 text-warning-800">250-300&euro;</p>
+              <p className="text-body-sm text-neutral-600 mt-1">Plateforme SaaS cl&eacute; en main</p>
+              <p className="text-caption text-neutral-400">Templates &agrave; adapter toi-m&ecirc;me</p>
             </div>
             <div className="p-4 rounded-lg bg-success-50 ring-2 ring-success">
               <p className="font-display text-h2 text-success-800">197&euro;</p>
               <p className="text-body-sm text-neutral-600 mt-1 font-semibold">ImmoCrew</p>
-              <p className="text-caption text-neutral-400">Contenu fini, personnalis&eacute;</p>
+              <p className="text-caption text-neutral-400">Contenu fini, personnalis&eacute; pour ta zone</p>
             </div>
           </div>
           <p className="text-center text-body text-neutral-600 mt-4">
