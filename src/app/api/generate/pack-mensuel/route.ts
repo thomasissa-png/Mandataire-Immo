@@ -10,6 +10,7 @@ import { buildArticleSeoPrompt } from "@/lib/prompts/article-seo"
 import { buildScriptVideoPrompt } from "@/lib/prompts/script-video"
 import { buildNewsletterPrompt } from "@/lib/prompts/newsletter"
 import { buildEmailProspectionPrompt } from "@/lib/prompts/email-prospection"
+import { buildEditorialCalendarPrompt } from "@/lib/prompts/editorial-calendar"
 
 interface PackMensuelBody {
   client_id: string
@@ -215,6 +216,25 @@ export async function POST(request: NextRequest) {
       month: mois,
     })
     deliverableIds.push(emailId)
+
+    // M7 : 1 calendrier de publication mensuel (quand et ou publier chaque livrable)
+    const calendarPrompt = buildEditorialCalendarPrompt({
+      ...ctx,
+      nb_transactions_an: ctx.nb_transactions_an || 5,
+      annees_experience: ctx.annees_experience || 2,
+      cible_clients: ctx.cible_clients || "acheteurs et vendeurs",
+    })
+    const calendarData = await generateJSON(calendarPrompt.system, calendarPrompt.user)
+    const calendarId = await insertDeliverable({
+      clientEmail: userEmail,
+      clientId: client_id,
+      type: "calendrier",
+      title: `Calendrier de publication — ${formatMoisLabel(mois)}`,
+      content: JSON.stringify(calendarData, null, 2),
+      metadata: { mois, type_calendrier: "mensuel" },
+      month: mois,
+    })
+    deliverableIds.push(calendarId)
 
   } catch (err) {
     console.error("Error generating pack mensuel:", err)

@@ -13,6 +13,7 @@ type DeliverableType =
   | "brief_graphique"
   | "calendrier"
   | "positionnement"
+  | "landing_page"
 
 interface Deliverable {
   id: string
@@ -43,6 +44,7 @@ const TYPE_LABELS: Record<DeliverableType, string> = {
   brief_graphique: "Brief graphique",
   calendrier: "Calendrier",
   positionnement: "Positionnement",
+  landing_page: "Landing page",
 }
 
 const TYPE_COLORS: Record<DeliverableType, string> = {
@@ -56,6 +58,7 @@ const TYPE_COLORS: Record<DeliverableType, string> = {
   brief_graphique: "bg-neutral-100 text-neutral-700",
   calendrier: "bg-info-50 text-info-700",
   positionnement: "bg-secondary-50 text-secondary-700",
+  landing_page: "bg-success-50 text-success-700",
 }
 
 export default async function DashboardPage() {

@@ -97,7 +97,7 @@ export default function CGVPage() {
                     "Calendrier \u00e9ditorial sur 30 jours",
                     "20 posts r\u00e9seaux sociaux",
                     "10 scripts Reels / vid\u00e9os courtes",
-                    "Kit graphique (palette, polices, guide visuel)",
+                    "Brief d'identit\u00E9 visuelle personnalis\u00E9 (positionnement, palette couleurs, style recommand\u00E9)",
                   ]}
                 />
 

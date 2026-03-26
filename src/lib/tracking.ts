@@ -23,6 +23,7 @@ type TrackingEvent =
   | "monthly_update_completed"
   | "home_staging_started"
   | "home_staging_completed"
+  | "subscription_upgrade"
 
 interface TrackingProperties {
   [key: string]: string | number | boolean | null | undefined

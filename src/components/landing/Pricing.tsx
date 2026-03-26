@@ -19,9 +19,9 @@ const PACKS = [
     name: "Pack Lancement",
     price: "497",
     unit: "",
-    subtitle: "Ton marketing cle en main en 7 jours.",
-    mention: "Satisfait ou rembourse 14 jours.",
-    cta: "Demarrer mon lancement",
+    subtitle: "L'equivalent de 2 000\u20AC de prestations marketing — en une semaine.",
+    mention: "Satisfait ou rembourse 14 jours. Zero risque.",
+    cta: "Lancer mon marketing",
     ctaHref: "/api/checkout?pack=lancement",
     featured: false,
     features: [
@@ -32,19 +32,20 @@ const PACKS = [
       "Calendrier editorial sur 30 jours",
       "20 posts prets a publier",
       "10 scripts Reels",
-      "Kit graphique personnalise",
+      "Brief d'identite visuelle personnalise",
     ],
   },
   {
     name: "Pack Mensuel",
     price: "197",
     unit: "/mois",
-    subtitle: "Ton equipe marketing, chaque mois.",
-    mention: "Sans engagement. Resiliation libre.",
+    subtitle: "Ton equipe marketing dediee — pour le prix de 4 cafes par semaine.",
+    mention: "Sans engagement. Resiliation libre en 1 clic.",
     cta: "Commencer maintenant",
     ctaHref: "/api/checkout?pack=mensuel",
     featured: true,
-    badge: "Le plus populaire",
+    badge: "Recommand\u00E9",
+    badgeSub: "par nos premiers utilisateurs",
     features: [
       "12 posts personnalises pour tes reseaux",
       "4 scripts video pour tes Reels",
@@ -52,14 +53,15 @@ const PACKS = [
       "1 newsletter pour tes contacts",
       "4 annonces immobilieres storytelling",
       "1 email de prospection vendeurs",
+      "Calendrier de publication mensuel",
     ],
   },
   {
     name: "Boost Mandat",
     price: "97",
     unit: "/bien",
-    subtitle: "Fais briller ton nouveau bien.",
-    mention: "Ponctuel, a la demande.",
+    subtitle: "Deja abonne ? Mets ton nouveau bien sous les projecteurs.",
+    mention: "Ponctuel, en complement de ton Pack Mensuel.",
     cta: "Booster un mandat",
     ctaHref: "/api/checkout?pack=boost",
     featured: false,
@@ -80,9 +82,13 @@ export function Pricing() {
     <section className="section-padding bg-white" id="pricing">
       <PricingTracker />
       <div className="container-immocrew">
-        <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-10 desktop:mb-16">
-          Choisis ton pack.
+        <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-3">
+          Ton &eacute;quipe marketing, &agrave; partir de 197&euro;/mois.
         </h2>
+        <p className="text-center text-body-lg text-neutral-500 mb-10 desktop:mb-16 max-w-xl mx-auto">
+          L&agrave; o&ugrave; un CM freelance facture 500 &agrave; 800&euro; pour du contenu g&eacute;n&eacute;rique,
+          ImmoCrew te livre du sur-mesure pour ta zone. Choisis ton pack.
+        </p>
 
         <div className="grid gap-6 tablet:grid-cols-3 items-start max-w-5xl mx-auto overflow-x-hidden">
           {PACKS.map((pack, index) => (
@@ -206,12 +212,34 @@ export function Pricing() {
           ))}
         </div>
 
-        {/* Phrase d'ancrage */}
-        <p className="text-center text-body-lg text-neutral-600 mt-10 max-w-xl mx-auto">
-          197&euro;/mois. Une vente de plus dans l&apos;ann&eacute;e,
-          c&apos;est rembours&eacute; — largement.
-        </p>
-        <p className="text-center text-body-sm text-neutral-400 mt-2">
+        {/* Ancrage comparatif */}
+        <div className="mt-12 max-w-2xl mx-auto rounded-xl bg-background border border-border p-6 desktop:p-8">
+          <p className="font-display text-h3 text-primary text-center mb-4">
+            Pourquoi 197&euro;/mois, c&apos;est une &eacute;vidence ?
+          </p>
+          <div className="grid grid-cols-1 tablet:grid-cols-3 gap-4 text-center">
+            <div className="p-4 rounded-lg bg-error-50">
+              <p className="font-display text-h2 text-error-700 line-through">500-800&euro;</p>
+              <p className="text-body-sm text-neutral-600 mt-1">CM freelance</p>
+              <p className="text-caption text-neutral-400">R&eacute;sultat g&eacute;n&eacute;rique</p>
+            </div>
+            <div className="p-4 rounded-lg bg-warning-50">
+              <p className="font-display text-h2 text-warning-800">269&euro;</p>
+              <p className="text-body-sm text-neutral-600 mt-1">Cocoon&#8209;Immo cl&eacute; en main</p>
+              <p className="text-caption text-neutral-400">Templates &agrave; adapter</p>
+            </div>
+            <div className="p-4 rounded-lg bg-success-50 ring-2 ring-success">
+              <p className="font-display text-h2 text-success-800">197&euro;</p>
+              <p className="text-body-sm text-neutral-600 mt-1 font-semibold">ImmoCrew</p>
+              <p className="text-caption text-neutral-400">Contenu fini, personnalis&eacute;</p>
+            </div>
+          </div>
+          <p className="text-center text-body text-neutral-600 mt-4">
+            Une seule vente suppl&eacute;mentaire dans l&apos;ann&eacute;e rembourse ton abonnement —
+            <strong>et ta commission moyenne, c&apos;est 3 000 &agrave; 5 000&euro;</strong>.
+          </p>
+        </div>
+        <p className="text-center text-body-sm text-neutral-400 mt-4">
           Tous les prix sont TTC.
         </p>
       </div>

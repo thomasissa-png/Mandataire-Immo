@@ -90,6 +90,20 @@ export async function POST(request: Request) {
           currency: session.currency || "eur",
         })
 
+        // Track upgrade Lancement → Mensuel if client had a previous lancement pack
+        if (pack === "mensuel") {
+          const { rows: prevRows } = await query<{ pack: string }>(
+            "SELECT pack FROM clients WHERE email = $1 LIMIT 1",
+            [session.customer_email]
+          )
+          if (prevRows[0]?.pack === "lancement") {
+            await trackServer("subscription_upgrade", session.customer_email, {
+              from_pack: "lancement",
+              to_pack: "mensuel",
+            })
+          }
+        }
+
         console.log(
           `Checkout completed for ${session.customer_email} — pack: ${pack}`
         )
@@ -182,8 +196,16 @@ export async function POST(request: Request) {
           ["churned", customerId]
         )
 
-        await trackServer("subscription_cancel", customerId, {
+        // Resolve customer email for proper PostHog identity linking
+        const cancelCustomer = await stripe.customers.retrieve(customerId)
+        const cancelEmail = (!cancelCustomer.deleted && cancelCustomer.email) || customerId
+
+        await trackServer("subscription_cancel", cancelEmail, {
           subscription_id: subscription.id,
+          stripe_customer_id: customerId,
+          months_subscribed: Math.round(
+            (Date.now() / 1000 - subscription.created) / (30 * 24 * 3600)
+          ),
         })
         break
       }

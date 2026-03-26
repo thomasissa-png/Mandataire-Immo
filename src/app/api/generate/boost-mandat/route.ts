@@ -176,7 +176,7 @@ export async function POST(request: NextRequest) {
     const landingId = await insertDeliverable({
       clientEmail,
       clientId: client_id,
-      type: "annonce",
+      type: "landing_page",
       title: `Landing page — ${bien.titre}`,
       content: landingResult.data.html,
       metadata: { sub_type: "landing_bien", titre_page: landingResult.data.titre_page, meta_description: landingResult.data.meta_description, boost: true, bien_titre: bien.titre },

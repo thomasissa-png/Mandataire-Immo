@@ -39,7 +39,13 @@ export async function GET(request: NextRequest) {
       locale: "fr",
     })
 
-    await trackServer("checkout_start", session.id, { pack })
+    await trackServer("checkout_start", session.customer_email || session.id, {
+      pack,
+      price: pack === "mensuel" ? 197 : pack === "lancement" ? 497 : 97,
+      currency: "eur",
+      source_page: "pricing",
+      stripe_session_id: session.id,
+    })
 
     if (!session.url) {
       return NextResponse.json(
