@@ -277,6 +277,7 @@ export default function OnboardingPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
+  const [submitError, setSubmitError] = useState("")
 
   const step = STEPS[currentStep]
   const progress = ((currentStep + 1) / STEPS.length) * 100
@@ -375,6 +376,7 @@ export default function OnboardingPage() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
+    setSubmitError("")
     try {
       // Serialize biens into data before sending
       const submitData = {
@@ -412,9 +414,13 @@ export default function OnboardingPage() {
         sessionStorage.removeItem("immocrew_onboarding_data")
         sessionStorage.removeItem("immocrew_onboarding_biens")
         setIsComplete(true)
+      } else {
+        const errorData = await onboardingResponse.json().catch(() => ({}))
+        setSubmitError(errorData.error || "Erreur lors de la sauvegarde. Réessaie dans quelques instants.")
       }
     } catch (err) {
       console.error("Onboarding submit error:", err)
+      setSubmitError("Impossible de contacter le serveur. Vérifie ta connexion et réessaie.")
     } finally {
       setIsSubmitting(false)
     }
@@ -729,6 +735,11 @@ export default function OnboardingPage() {
             >
               {isSubmitting ? "Envoi..." : "Terminer"}
             </button>
+          )}
+          {submitError && (
+            <p className="text-body-sm text-error mt-3 text-center" role="alert">
+              {submitError}
+            </p>
           )}
         </div>
       </div>
