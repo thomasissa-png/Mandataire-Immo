@@ -126,7 +126,7 @@ export default async function DashboardPage() {
       {showMonthlyBanner && (
         <a
           href="/dashboard/monthly-update"
-          className="block mb-6 p-4 rounded-lg border border-secondary/30 bg-secondary-50 hover:bg-secondary-100 transition-colors duration-normal"
+          className="block mb-6 p-4 rounded-xl border border-secondary/30 bg-secondary-50 hover:bg-secondary-100 transition-colors duration-normal"
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0">
@@ -247,7 +247,7 @@ export default async function DashboardPage() {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="rounded-lg bg-card border border-border p-4 text-center"
+              className="rounded-xl bg-card border border-border p-4 text-center"
             >
               <p className="font-display text-display-lg text-primary">
                 {stat.value}

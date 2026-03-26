@@ -120,7 +120,7 @@ function SignInForm({
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full h-12 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+          className="w-full h-12 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
         >
           {isLoading ? "Connexion..." : "Se connecter"}
         </button>
@@ -270,7 +270,7 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
             placeholder="sophie@exemple.fr"
             className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
           />
-          <p className="text-caption text-neutral-400 mt-1">
+          <p className="text-caption text-neutral-500 mt-1">
             Utilise la même adresse que pour ton paiement
           </p>
         </div>
@@ -304,7 +304,7 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full h-12 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+          className="w-full h-12 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
         >
           {isLoading ? "Création du compte..." : "Créer mon compte"}
         </button>

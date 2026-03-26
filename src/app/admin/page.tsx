@@ -53,7 +53,7 @@ export default async function AdminPage() {
             <a href="/" className="font-display text-h3 font-bold">
               ImmoCrew
             </a>
-            <span className="text-caption bg-secondary px-2 py-0.5 rounded-full">
+            <span className="text-caption bg-secondary text-primary font-semibold px-2 py-0.5 rounded-full">
               Admin
             </span>
           </div>
@@ -69,25 +69,25 @@ export default async function AdminPage() {
       <main className="container-immocrew py-8">
         {/* Stats */}
         <div className="grid grid-cols-2 tablet:grid-cols-4 gap-4 mb-8">
-          <div className="rounded-lg bg-card border border-border p-4 text-center">
+          <div className="rounded-xl bg-card border border-border p-4 text-center">
             <p className="font-display text-display-lg text-primary">
               {totalClients}
             </p>
             <p className="text-caption text-neutral-500">Total clients</p>
           </div>
-          <div className="rounded-lg bg-card border border-border p-4 text-center">
+          <div className="rounded-xl bg-card border border-border p-4 text-center">
             <p className="font-display text-display-lg text-success">
               {activeClients}
             </p>
             <p className="text-caption text-neutral-500">Actifs</p>
           </div>
-          <div className="rounded-lg bg-card border border-border p-4 text-center">
+          <div className="rounded-xl bg-card border border-border p-4 text-center">
             <p className="font-display text-display-lg text-secondary">
               {clientList.filter((c) => c.pack === "mensuel").length}
             </p>
             <p className="text-caption text-neutral-500">Mensuels</p>
           </div>
-          <div className="rounded-lg bg-card border border-border p-4 text-center">
+          <div className="rounded-xl bg-card border border-border p-4 text-center">
             <p className="font-display text-display-lg text-primary">
               {clientList.filter((c) => c.pack === "lancement").length}
             </p>

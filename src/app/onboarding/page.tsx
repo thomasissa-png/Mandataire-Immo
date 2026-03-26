@@ -481,7 +481,7 @@ export default function OnboardingPage() {
               {biens.map((bien, index) => (
                 <div
                   key={index}
-                  className="p-4 rounded-md border border-neutral-200 bg-white space-y-3"
+                  className="p-4 rounded-xl border border-neutral-200 bg-white space-y-3"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-display text-body-sm font-semibold text-primary">
@@ -678,7 +678,7 @@ export default function OnboardingPage() {
             disabled={currentStep === 0}
             className="h-12 px-6 rounded-full border-2 border-primary text-primary font-display font-semibold text-body hover:bg-primary-50 active:scale-[0.97] transition-all duration-normal disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            Precedent
+            Précédent
           </button>
 
           {currentStep < STEPS.length - 1 ? (

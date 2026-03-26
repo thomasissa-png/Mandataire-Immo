@@ -284,7 +284,7 @@ export default function MonthlyUpdatePage() {
               {existingBiens.map((bien, index) => (
                 <div
                   key={`existing-${index}`}
-                  className="p-4 rounded-md border border-neutral-200 bg-white shadow-xs"
+                  className="p-4 rounded-xl border border-neutral-200 bg-white shadow-xs"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1 min-w-0">
@@ -578,7 +578,7 @@ export default function MonthlyUpdatePage() {
               {SUJETS_OPTIONS.map((sujet) => (
                 <label
                   key={sujet}
-                  className="flex items-center gap-3 p-3 rounded-md border border-neutral-200 bg-white cursor-pointer hover:border-secondary/50 transition-colors"
+                  className="flex items-center gap-3 p-3 rounded-xl border border-neutral-200 bg-white cursor-pointer hover:border-secondary/50 transition-colors"
                 >
                   <input
                     type="checkbox"
@@ -590,14 +590,14 @@ export default function MonthlyUpdatePage() {
                 </label>
               ))}
               {/* Autre */}
-              <div className="flex items-center gap-3 p-3 rounded-md border border-neutral-200 bg-white">
+              <div className="flex items-center gap-3 p-3 rounded-xl border border-neutral-200 bg-white">
                 <span className="text-body-sm text-neutral-500">Autre :</span>
                 <input
                   type="text"
                   value={sujetAutre}
                   onChange={(e) => setSujetAutre(e.target.value)}
                   placeholder="Un sujet specifique..."
-                  className="flex-1 h-10 px-3 rounded-md border border-neutral-300 bg-white text-body-sm text-foreground placeholder:text-neutral-400 focus:border-secondary focus:outline-none transition-all duration-fast"
+                  className="flex-1 h-12 px-4 rounded-md border border-neutral-300 bg-white text-body-sm text-foreground placeholder:text-neutral-400 focus:border-secondary focus:outline-none transition-all duration-fast"
                 />
               </div>
             </div>
@@ -613,7 +613,7 @@ export default function MonthlyUpdatePage() {
           </p>
 
           {/* Biens recap */}
-          <div className="p-4 rounded-md border border-neutral-200 bg-white shadow-xs">
+          <div className="p-4 rounded-xl border border-neutral-200 bg-white shadow-xs">
             <p className="text-caption font-medium text-neutral-500 mb-1">
               Biens en portefeuille
             </p>
@@ -623,7 +623,7 @@ export default function MonthlyUpdatePage() {
           </div>
 
           {/* Anecdote recap */}
-          <div className="p-4 rounded-md border border-neutral-200 bg-white shadow-xs">
+          <div className="p-4 rounded-xl border border-neutral-200 bg-white shadow-xs">
             <p className="text-caption font-medium text-neutral-500 mb-1">
               Anecdote du mois
             </p>
@@ -637,7 +637,7 @@ export default function MonthlyUpdatePage() {
           </div>
 
           {/* Evenements recap */}
-          <div className="p-4 rounded-md border border-neutral-200 bg-white shadow-xs">
+          <div className="p-4 rounded-xl border border-neutral-200 bg-white shadow-xs">
             <p className="text-caption font-medium text-neutral-500 mb-1">
               Evenements locaux
             </p>
@@ -647,7 +647,7 @@ export default function MonthlyUpdatePage() {
           </div>
 
           {/* Tendance recap */}
-          <div className="p-4 rounded-md border border-neutral-200 bg-white shadow-xs">
+          <div className="p-4 rounded-xl border border-neutral-200 bg-white shadow-xs">
             <p className="text-caption font-medium text-neutral-500 mb-1">
               Tendance marche
             </p>
@@ -660,7 +660,7 @@ export default function MonthlyUpdatePage() {
           </div>
 
           {/* Sujets recap */}
-          <div className="p-4 rounded-md border border-neutral-200 bg-white shadow-xs">
+          <div className="p-4 rounded-xl border border-neutral-200 bg-white shadow-xs">
             <p className="text-caption font-medium text-neutral-500 mb-1">
               Focus du mois
             </p>
@@ -685,14 +685,14 @@ export default function MonthlyUpdatePage() {
           disabled={currentStep === 0}
           className="h-12 px-6 rounded-full border-2 border-primary text-primary font-display font-semibold text-body hover:bg-primary-50 active:scale-[0.97] transition-all duration-normal disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          Precedent
+          Précédent
         </button>
 
         {currentStep < TOTAL_STEPS - 1 ? (
           <button
             type="button"
             onClick={handleNext}
-            className="h-12 px-8 rounded-full bg-secondary text-white font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
+            className="h-12 px-8 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
           >
             Suivant
           </button>

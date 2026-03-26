@@ -45,7 +45,7 @@ export function UserMenu() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-9 h-9 rounded-full bg-secondary text-primary font-display font-bold text-body-sm flex items-center justify-center hover:bg-secondary-600 hover:text-white transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+        className="w-11 h-11 rounded-full bg-secondary text-primary font-display font-bold text-body-sm flex items-center justify-center hover:bg-secondary-600 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
         aria-label="Menu utilisateur"
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -71,7 +71,7 @@ export function UserMenu() {
             type="button"
             role="menuitem"
             onClick={() => signOut({ callbackUrl: "/" })}
-            className="w-full text-left px-4 py-3 text-body-sm text-foreground hover:bg-neutral-50 transition-colors duration-fast"
+            className="w-full text-left px-4 py-3 text-body-sm text-foreground hover:bg-neutral-50 transition-colors duration-fast focus-visible:outline-none focus-visible:bg-neutral-100"
           >
             Se d&eacute;connecter
           </button>

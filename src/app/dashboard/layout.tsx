@@ -16,7 +16,7 @@ export default function DashboardLayout({
           <div className="flex items-center gap-4">
             <a
               href="/dashboard"
-              className="text-body-sm font-medium text-foreground hover:text-secondary transition-colors duration-normal"
+              className="text-body-sm font-medium text-foreground hover:text-secondary transition-colors duration-normal py-2"
             >
               Mes livrables
             </a>
