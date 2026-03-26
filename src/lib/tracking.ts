@@ -21,6 +21,8 @@ type TrackingEvent =
   | "deliverable_generated"
   | "monthly_update_started"
   | "monthly_update_completed"
+  | "home_staging_started"
+  | "home_staging_completed"
 
 interface TrackingProperties {
   [key: string]: string | number | boolean | null | undefined

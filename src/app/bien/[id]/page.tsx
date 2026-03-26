@@ -1,0 +1,192 @@
+import { Metadata } from "next"
+import { notFound } from "next/navigation"
+import { query } from "@/lib/db"
+import type { PropertyPage } from "@/types/property"
+import { PropertyGallery } from "@/components/property/PropertyGallery"
+import { PropertyMap } from "@/components/property/PropertyMap"
+import { PropertyDVF } from "@/components/property/PropertyDVF"
+import { PropertyDPE } from "@/components/property/PropertyDPE"
+import { PropertyContact } from "@/components/property/PropertyContact"
+
+interface PageProps {
+  params: { id: string }
+}
+
+async function getProperty(id: string): Promise<PropertyPage | null> {
+  const { rows } = await query<PropertyPage>(
+    `SELECT * FROM property_pages WHERE (id = $1 OR slug = $1) AND status = 'published'`,
+    [id]
+  )
+  return rows[0] || null
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const property = await getProperty(params.id)
+  if (!property) {
+    return { title: "Bien non trouve" }
+  }
+
+  const title = property.titre_annonce || property.titre
+  const description =
+    property.accroche_courte ||
+    `${property.type_bien} ${property.pieces} pieces - ${property.surface}m2 a ${property.city || property.adresse} - ${property.prix.toLocaleString("fr-FR")} EUR`
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      locale: "fr_FR",
+      images:
+        property.photos_staging.length > 0
+          ? [{ url: property.photos_staging[0].url, width: 1024, height: 1024 }]
+          : property.photos_originales.length > 0
+            ? [{ url: property.photos_originales[0].url, width: 1024, height: 1024 }]
+            : [],
+    },
+  }
+}
+
+export default async function PropertyPageRoute({ params }: PageProps) {
+  const property = await getProperty(params.id)
+  if (!property) notFound()
+
+  const hasStaging = property.photos_staging.length > 0
+  const hasOriginals = property.photos_originales.length > 0
+  const hasDVF = property.dvf_prix_m2_moyen !== null
+  const hasDPE = property.dpe_classe !== null
+  const hasMap = property.lat !== null && property.lon !== null
+
+  return (
+    <main className="min-h-screen bg-background">
+      {/* Header du bien */}
+      <section className="bg-primary text-white section-padding">
+        <div className="container-immocrew">
+          <p className="text-caption uppercase tracking-wider text-secondary-300 mb-2">
+            {property.type_bien} &middot; {property.pieces} pieces &middot; {property.surface}m&sup2;
+          </p>
+          <h1 className="text-display-lg tablet:text-display-xl text-white mb-4">
+            {property.titre_annonce || property.titre}
+          </h1>
+          <p className="text-body-lg text-neutral-300">
+            {property.city ? `${property.city} (${property.postcode})` : property.adresse}
+          </p>
+          <p className="text-h2 text-secondary mt-4">
+            {property.prix.toLocaleString("fr-FR")} &euro;
+          </p>
+        </div>
+      </section>
+
+      {/* Galerie avant/apres */}
+      {(hasStaging || hasOriginals) && (
+        <section className="section-padding">
+          <div className="container-immocrew">
+            <h2 className="text-h2 mb-8">
+              {hasStaging ? "Visuels du bien" : "Photos"}
+            </h2>
+            <PropertyGallery
+              originales={property.photos_originales}
+              staging={property.photos_staging}
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Annonce storytelling */}
+      {property.annonce_longue && (
+        <section className="section-padding bg-card">
+          <div className="container-immocrew max-w-3xl">
+            <h2 className="text-h2 mb-8">Decouvrir ce bien</h2>
+            <div
+              className="prose prose-lg max-w-none text-foreground"
+              dangerouslySetInnerHTML={{
+                __html: markdownToHtml(property.annonce_longue),
+              }}
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Donnees DVF + DPE + Carte — grille */}
+      {(hasDVF || hasDPE || hasMap) && (
+        <section className="section-padding">
+          <div className="container-immocrew">
+            <h2 className="text-h2 mb-8">Informations du quartier</h2>
+            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-6">
+              {hasMap && (
+                <div className="tablet:col-span-2">
+                  <PropertyMap lat={property.lat!} lon={property.lon!} titre={property.titre} />
+                </div>
+              )}
+              {hasDVF && (
+                <PropertyDVF
+                  prix_m2_moyen={property.dvf_prix_m2_moyen!}
+                  transactions={property.dvf_transactions}
+                />
+              )}
+              {hasDPE && (
+                <PropertyDPE
+                  classe={property.dpe_classe!}
+                  ges_classe={property.dpe_ges_classe}
+                  valeur_energie={property.dpe_valeur_energie}
+                  valeur_ges={property.dpe_valeur_ges}
+                />
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* CTA Contact */}
+      <section className="section-padding bg-primary">
+        <div className="container-immocrew">
+          <PropertyContact
+            nom={property.nom_mandataire}
+            email={property.email_contact}
+            telephone={property.telephone_contact}
+            titre_bien={property.titre}
+          />
+        </div>
+      </section>
+
+      {/* Mentions legales */}
+      <footer className="py-6 bg-neutral-100">
+        <div className="container-immocrew text-center">
+          <p className="text-small text-neutral-500">
+            Les prix s&apos;entendent frais d&apos;agence inclus.
+            {hasDPE && property.dpe_classe && (
+              <> DPE : {property.dpe_classe}.</>
+            )}
+          </p>
+          {hasStaging && (
+            <p className="text-small text-neutral-500 mt-1">
+              Home staging virtuel — les visuels meubls sont des projections non contractuelles.
+              Le bien est livre dans son etat actuel (photos originales disponibles ci-dessus).
+            </p>
+          )}
+        </div>
+      </footer>
+    </main>
+  )
+}
+
+/**
+ * Conversion markdown basique vers HTML.
+ * Pas de dependance externe — couvre les cas du storytelling immobilier.
+ */
+function markdownToHtml(md: string): string {
+  return md
+    .replace(/^### (.*$)/gim, "<h3>$1</h3>")
+    .replace(/^## (.*$)/gim, "<h2>$1</h2>")
+    .replace(/^# (.*$)/gim, "<h1>$1</h1>")
+    .replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>")
+    .replace(/\*(.*?)\*/gim, "<em>$1</em>")
+    .replace(/\n\n/gim, "</p><p>")
+    .replace(/\n/gim, "<br>")
+    .replace(/^(.+)$/gim, "<p>$1</p>")
+    .replace(/<p><\/p>/gim, "")
+    .replace(/<p><h([1-3])>/gim, "<h$1>")
+    .replace(/<\/h([1-3])><\/p>/gim, "</h$1>")
+}
