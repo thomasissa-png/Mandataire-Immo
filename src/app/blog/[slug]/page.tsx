@@ -222,7 +222,7 @@ export default async function BlogArticlePage({
             </div>
 
             {/* CTA */}
-            <div className="mt-12 p-8 bg-primary-50 rounded-2xl text-center">
+            <div className="mt-12 p-8 bg-primary-50 rounded-xl text-center">
               <p className="font-display text-h3 font-bold text-foreground mb-2">
                 Tu veux que ton marketing soit fait pour toi ?
               </p>
@@ -253,7 +253,7 @@ export default async function BlogArticlePage({
                   <Link
                     key={related.slug}
                     href={`/blog/${related.slug}`}
-                    className="group flex flex-col bg-white rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal overflow-hidden"
+                    className="group flex flex-col bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal overflow-hidden"
                   >
                     <div className="aspect-[16/9] bg-primary-50 flex items-center justify-center">
                       <span className="text-primary-200 text-caption font-medium uppercase tracking-widest">

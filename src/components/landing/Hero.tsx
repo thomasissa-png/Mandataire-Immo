@@ -12,24 +12,25 @@ export function Hero() {
               soir&eacute;es sur Canva.
             </h1>
             <p className="text-body-lg text-neutral-600 mb-8 max-w-xl">
-              Chaque mois, re&ccedil;ois tes posts, tes articles et tes
-              annonces — 100% personnalis&eacute;s pour ta zone. Tu publies, on
+              On n&apos;est pas un outil de plus &agrave; apprendre. On est ton &eacute;quipe
+              marketing : chaque mois, tes posts, tes articles et tes annonces
+              arrivent pr&ecirc;ts — 100% personnalis&eacute;s pour ta zone. Tu publies, on
               fait le reste.
             </p>
 
-            {/* CTA principal → pricing */}
+            {/* CTA principal → exemples (basse friction) */}
             <CTAButton
-              href="#pricing"
-              label="D\u00E9couvrir les packs \u2192"
+              href="#avant-apres"
+              label="Voir un exemple concret \u2192"
               location="hero_primary"
             />
 
-            {/* CTA secondaire → exemples */}
+            {/* CTA secondaire → pricing */}
             <a
-              href="#avant-apres"
-              className="mt-3 block text-body-sm text-neutral-500 hover:text-secondary underline transition-colors duration-normal"
+              href="#pricing"
+              className="mt-3 inline-block text-body-sm text-neutral-500 hover:text-secondary underline transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded"
             >
-              Voir un exemple pour ta zone &rarr;
+              Voir les tarifs &rarr;
             </a>
 
             {/* Mention rassurante */}

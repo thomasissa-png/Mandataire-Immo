@@ -60,7 +60,7 @@ export function SocialProof() {
           {TESTIMONIALS.map((t, index) => (
             <div
               key={index}
-              className="rounded-2xl bg-card border border-border p-6 shadow-sm"
+              className="rounded-xl bg-card border border-border p-6 shadow-sm"
             >
               <p className="text-body text-neutral-600 leading-relaxed mb-4 italic">
                 &laquo;&nbsp;{t.quote}&nbsp;&raquo;
@@ -94,7 +94,7 @@ export function SocialProof() {
           {METRICS.map((metric, index) => (
             <div
               key={index}
-              className="rounded-2xl bg-card border border-border p-6 text-center shadow-sm hover:shadow-md transition-shadow duration-normal"
+              className="rounded-xl bg-card border border-border p-6 text-center shadow-sm hover:shadow-md transition-shadow duration-normal"
             >
               <p className="font-display text-display-lg font-extrabold text-secondary mb-2">
                 {metric.value}

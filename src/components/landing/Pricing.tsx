@@ -96,12 +96,12 @@ export function Pricing() {
               className={`rounded-xl p-8 ${
                 pack.featured
                   ? "bg-primary text-white shadow-xl tablet:scale-[1.03] order-first tablet:order-none"
-                  : "bg-card border border-border shadow-sm"
+                  : "bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-normal"
               }`}
             >
               {/* Badge */}
               {pack.featured && "badge" in pack && (
-                <span className="inline-block px-3 py-1 mb-4 rounded-full bg-secondary text-primary text-body-sm font-bold">
+                <span className="inline-block px-3 py-1 mb-4 rounded-full bg-secondary-700 text-white text-body-sm font-bold">
                   {pack.badge}
                 </span>
               )}

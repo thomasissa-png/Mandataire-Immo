@@ -47,7 +47,7 @@ export default function BlogPage() {
                 <Link
                   key={article.slug}
                   href={`/blog/${article.slug}`}
-                  className="group flex flex-col bg-white rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal overflow-hidden"
+                  className="group flex flex-col bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal overflow-hidden"
                 >
                   {/* Image placeholder */}
                   <div className="aspect-[16/9] bg-primary-50 flex items-center justify-center">

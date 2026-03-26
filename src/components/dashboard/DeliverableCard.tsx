@@ -41,7 +41,7 @@ export function DeliverableCard({
   return (
     <div
       role="article"
-      className="w-full text-left rounded-2xl bg-card border border-border p-6 hover:shadow-md hover:border-secondary/30 transition-all duration-normal cursor-pointer"
+      className="w-full text-left rounded-xl bg-card border border-border p-6 hover:shadow-md hover:border-secondary/30 transition-all duration-normal cursor-pointer"
       onClick={() => {
         track("deliverable_view", {
           deliverable_id: id,

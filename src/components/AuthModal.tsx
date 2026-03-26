@@ -434,13 +434,13 @@ export function AuthModal({ isOpen, onClose, defaultMode = "sign-in" }: AuthModa
       {/* Modal card */}
       <div
         ref={modalRef}
-        className="relative z-10 w-full max-w-md rounded-2xl bg-card border border-border p-8 shadow-xl animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto"
+        className="relative z-10 w-full max-w-md rounded-xl bg-card border border-border p-8 shadow-xl animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto"
       >
         {/* Close button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 flex items-center justify-center w-9 h-9 rounded-lg text-neutral-400 hover:text-foreground hover:bg-neutral-100 transition-colors duration-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+          className="absolute top-3 right-3 flex items-center justify-center w-11 h-11 rounded-lg text-neutral-400 hover:text-foreground hover:bg-neutral-100 transition-colors duration-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
           aria-label="Fermer"
         >
           <svg

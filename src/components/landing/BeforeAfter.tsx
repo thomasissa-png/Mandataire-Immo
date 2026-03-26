@@ -39,7 +39,7 @@ export function BeforeAfter() {
 
                 <div className="grid gap-6 tablet:grid-cols-2">
                   {/* AVANT */}
-                  <div className="rounded-2xl bg-neutral-100 border-l-4 border-error p-6">
+                  <div className="rounded-xl bg-neutral-100 border-l-4 border-error p-6">
                     <span className="text-overline text-error uppercase tracking-widest mb-3 block">
                       Avant
                     </span>
@@ -49,7 +49,7 @@ export function BeforeAfter() {
                   </div>
 
                   {/* APRES */}
-                  <div className="rounded-2xl bg-white border-l-4 border-success p-6 shadow-sm">
+                  <div className="rounded-xl bg-white border-l-4 border-success p-6 shadow-sm">
                     <span className="text-overline text-success uppercase tracking-widest mb-3 block">
                       Apr&egrave;s (version ImmoCrew)
                     </span>

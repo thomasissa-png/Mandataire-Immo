@@ -79,7 +79,7 @@ function FAQItem({
       <button
         type="button"
         onClick={onToggle}
-        className="flex items-center justify-between w-full text-left px-6 py-4 min-h-[56px]"
+        className="flex items-center justify-between w-full text-left px-6 py-4 min-h-[56px] hover:bg-neutral-50 transition-colors duration-fast rounded-t-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
         aria-expanded={isOpen}
         aria-controls={`faq-panel-${index}`}
       >
