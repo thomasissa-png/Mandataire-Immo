@@ -17,7 +17,7 @@ Le problème, c'est rarement le bien. C'est l'annonce. Et plus précisément : c
 
 Tape "appartement à vendre" sur SeLoger ou LeBonCoin. Lis les 10 premières annonces. Tu vas trouver : "bel appartement lumineux", "cuisine ouverte sur séjour", "proche commerces et transports", "idéal pour une famille".
 
-Ce n't est pas ce que les acheteurs lisent — c'est ce qu'ils ignorent.
+Ce n'est pas ce que les acheteurs lisent — c'est ce qu'ils ignorent.
 
 Ces formules sont devenues invisibles à force d'être répétées. L'acheteur lit en diagonale, retient le prix et la surface, et passe à la suivante. Ton annonce est noyée dans la masse.
 

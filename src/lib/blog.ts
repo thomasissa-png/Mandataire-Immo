@@ -21,6 +21,10 @@ interface ArticleMeta {
   category: string
 }
 
+/**
+ * Articles declares manuellement (legacy) — sert de fallback pour les metadonnees
+ * date et category quand le fichier markdown ne les contient pas.
+ */
 const ARTICLE_MAP: ArticleMeta[] = [
   {
     slug: "comment-rediger-annonce-immobiliere",
@@ -54,30 +58,129 @@ const ARTICLE_MAP: ArticleMeta[] = [
   },
 ]
 
+const ARTICLES_DIR = path.join(process.cwd(), "docs", "seo", "articles")
+
+/**
+ * Scanne le dossier docs/seo/articles/ pour trouver tous les fichiers article-*.md.
+ * Fusionne avec ARTICLE_MAP pour les metadonnees legacy.
+ * Les nouveaux articles generes sont detectes automatiquement par leur nom de fichier.
+ */
+function discoverArticles(): ArticleMeta[] {
+  const legacyByFile = new Map(ARTICLE_MAP.map((m) => [m.file, m]))
+
+  let files: string[]
+  try {
+    files = fs
+      .readdirSync(ARTICLES_DIR)
+      .filter((f) => f.startsWith("article-") && f.endsWith(".md"))
+      .sort()
+  } catch {
+    // Dossier introuvable — retourner la liste legacy
+    return ARTICLE_MAP
+  }
+
+  const result: ArticleMeta[] = []
+
+  for (const file of files) {
+    const legacy = legacyByFile.get(file)
+    if (legacy) {
+      result.push(legacy)
+      continue
+    }
+
+    // Nouveau fichier genere — extraire slug et date depuis le contenu
+    const slug = extractSlugFromFilename(file)
+    const filePath = path.join(ARTICLES_DIR, file)
+    const raw = fs.readFileSync(filePath, "utf-8")
+    const date = extractDateFromContent(raw, file)
+    const category = extractCategoryFromContent(raw)
+
+    result.push({ slug, file, date, category })
+  }
+
+  return result
+}
+
+/**
+ * Extrait le slug depuis le nom de fichier.
+ * Format attendu : article-{N}-{slug}.md
+ */
+function extractSlugFromFilename(filename: string): string {
+  // article-6-instagram-mandataire-immobilier-guide.md -> instagram-mandataire-immobilier-guide
+  const match = filename.match(/^article-\d+-(.+)\.md$/)
+  if (match) return match[1]
+  // Fallback : retirer l'extension
+  return filename.replace(/\.md$/, "")
+}
+
+/**
+ * Extrait la date depuis le contenu markdown (ligne "> Date : YYYY-MM-DD").
+ * Fallback : date de modification du fichier.
+ */
+function extractDateFromContent(raw: string, filename: string): string {
+  const dateMatch = raw.match(/^>\s*Date\s*:\s*(\d{4}-\d{2}-\d{2})/m)
+  if (dateMatch) return dateMatch[1]
+
+  // Fallback : utiliser la date de modification du fichier
+  try {
+    const stat = fs.statSync(path.join(ARTICLES_DIR, filename))
+    return stat.mtime.toISOString().split("T")[0]
+  } catch {
+    return new Date().toISOString().split("T")[0]
+  }
+}
+
+/**
+ * Extrait la categorie depuis le contenu markdown (ligne "> Categorie : ...").
+ * Fallback : "Blog"
+ */
+function extractCategoryFromContent(raw: string): string {
+  const catMatch = raw.match(/^>\s*Cat[eé]gorie\s*:\s*(.+)/m)
+  if (catMatch) return catMatch[1].trim()
+  return "Blog"
+}
+
 /**
  * Convert simple markdown to HTML.
- * Handles: h2, h3, paragraphs, bold, links, lists, blockquotes, hrs.
+ * Handles: h2, h3, paragraphs, bold, links, lists, blockquotes, hrs, tables.
  */
 function markdownToHtml(md: string): string {
   const lines = md.split("\n")
   const html: string[] = []
   let inList = false
   let listType: "ul" | "ol" = "ul"
+  let inTable = false
 
   for (const line of lines) {
     const trimmed = line.trim()
 
     // Skip empty lines
     if (!trimmed) {
-      if (inList) {
-        html.push(listType === "ul" ? "</ul>" : "</ol>")
-        inList = false
-      }
+      if (inList) { html.push(listType === "ul" ? "</ul>" : "</ol>"); inList = false }
+      if (inTable) { html.push("</tbody></table>"); inTable = false }
       continue
     }
 
     // Skip horizontal rules
     if (trimmed === "---") continue
+
+    // Table rows
+    if (trimmed.startsWith("|") && trimmed.endsWith("|")) {
+      if (/^\|[\s\-:|]+\|$/.test(trimmed)) continue // skip separator
+      const cells = trimmed.split("|").filter((c) => c.trim() !== "").map((c) => formatInline(c.trim()))
+      if (!inTable) {
+        html.push('<table class="w-full text-body-sm border-collapse my-4"><thead><tr>')
+        cells.forEach((c) => html.push(`<th class="border border-border px-3 py-2 text-left font-semibold bg-neutral-50">${c}</th>`))
+        html.push("</tr></thead><tbody>")
+        inTable = true
+        continue
+      }
+      html.push("<tr>")
+      cells.forEach((c) => html.push(`<td class="border border-border px-3 py-2">${c}</td>`))
+      html.push("</tr>")
+      continue
+    }
+    if (inTable) { html.push("</tbody></table>"); inTable = false }
 
     // H2
     if (trimmed.startsWith("## ")) {
@@ -120,6 +223,7 @@ function markdownToHtml(md: string): string {
   }
 
   if (inList) html.push(listType === "ul" ? "</ul>" : "</ol>")
+  if (inTable) html.push("</tbody></table>")
   return html.join("\n")
 }
 
@@ -132,7 +236,7 @@ function formatInline(text: string): string {
 }
 
 function parseArticle(meta: ArticleMeta): Article {
-  const filePath = path.join(process.cwd(), "docs", "seo", "articles", meta.file)
+  const filePath = path.join(ARTICLES_DIR, meta.file)
   const raw = fs.readFileSync(filePath, "utf-8")
 
   // Extract frontmatter from > lines
@@ -186,9 +290,15 @@ function parseArticle(meta: ArticleMeta): Article {
 
 let _cache: Article[] | null = null
 
+/** Invalide le cache — a appeler apres generation d'un nouvel article */
+export function invalidateArticleCache(): void {
+  _cache = null
+}
+
 export function getAllArticles(): Article[] {
   if (_cache) return _cache
-  _cache = ARTICLE_MAP.map(parseArticle).sort(
+  const metas = discoverArticles()
+  _cache = metas.map(parseArticle).sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   )
   return _cache
