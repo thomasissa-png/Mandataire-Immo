@@ -30,10 +30,10 @@ export default function CGVPage() {
                 r&eacute;gissent les relations contractuelles entre :
               </p>
               <p className="mt-3">
-                <strong>[NOM DE LA SOCI&Eacute;T&Eacute;]</strong>, [forme juridique], au capital de [MONTANT] euros,
-                immatricul&eacute;e au RCS de [VILLE] sous le num&eacute;ro SIRET [NUM&Eacute;RO SIRET],
-                dont le si&egrave;ge social est situ&eacute; au [ADRESSE COMPL&Egrave;TE],
-                num&eacute;ro de TVA intracommunautaire : [NUM&Eacute;RO TVA],
+                <strong>VERSI</strong>, SAS, au capital social selon statuts,
+                immatricul&eacute;e au RCS de Nanterre sous le num&eacute;ro SIRET 91286261200013,
+                dont le si&egrave;ge social est situ&eacute; au 54 rue Henri Barbusse, 92000 Nanterre,
+                num&eacute;ro de TVA intracommunautaire : FR91912862612,
                 ci-apr&egrave;s d&eacute;nomm&eacute;e &laquo; ImmoCrew &raquo; ou &laquo; le Prestataire &raquo;,
               </p>
               <p className="mt-3">et</p>
@@ -361,7 +361,7 @@ export default function CGVPage() {
               </p>
               <p className="mt-3">
                 &Agrave; d&eacute;faut de r&eacute;solution amiable, tout litige sera soumis &agrave; la comp&eacute;tence
-                exclusive des tribunaux de <strong>[VILLE DU SI&Egrave;GE SOCIAL]</strong>.
+                exclusive des tribunaux de <strong>Nanterre</strong>.
               </p>
             </Section>
 

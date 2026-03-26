@@ -29,14 +29,14 @@ export default function MentionsLegalesPage() {
                 Le site <strong>immocrew.fr</strong> est &eacute;dit&eacute; par :
               </p>
               <dl className="mt-4 space-y-2">
-                <InfoRow label="Raison sociale" value="[NOM DE LA SOCI&Eacute;T&Eacute;]" />
-                <InfoRow label="Forme juridique" value="[FORME JURIDIQUE — ex. : SASU]" />
-                <InfoRow label="Capital social" value="[MONTANT] euros" />
-                <InfoRow label="Si&egrave;ge social" value="[ADRESSE COMPL&Egrave;TE]" />
-                <InfoRow label="SIRET" value="[NUM&Eacute;RO SIRET]" />
-                <InfoRow label="RCS" value="[VILLE] B [NUM&Eacute;RO]" />
-                <InfoRow label="Num&eacute;ro de TVA intracommunautaire" value="[NUM&Eacute;RO TVA]" />
-                <InfoRow label="T&eacute;l&eacute;phone" value="[NUM&Eacute;RO DE T&Eacute;L&Eacute;PHONE]" />
+                <InfoRow label="Raison sociale" value="VERSI" />
+                <InfoRow label="Forme juridique" value="SAS" />
+                <InfoRow label="Capital social" value="Selon statuts" />
+                <InfoRow label="Si&egrave;ge social" value="54 rue Henri Barbusse, 92000 Nanterre" />
+                <InfoRow label="SIRET" value="91286261200013" />
+                <InfoRow label="RCS" value="Nanterre B 912862612" />
+                <InfoRow label="Num&eacute;ro de TVA intracommunautaire" value="FR91912862612" />
+                <InfoRow label="T&eacute;l&eacute;phone" value="contact@immocrew.fr" />
                 <InfoRow label="Email" value="contact@immocrew.fr" />
               </dl>
             </Section>
@@ -44,7 +44,7 @@ export default function MentionsLegalesPage() {
             {/* Directeur publication */}
             <Section title="2. Directeur de la publication">
               <p>
-                <strong>[PR&Eacute;NOM NOM]</strong>, en qualit&eacute; de [FONCTION — ex. : Pr&eacute;sident].
+                <strong>Thomas Issa</strong>, en qualit&eacute; de Pr&eacute;sident.
               </p>
               <p className="mt-2">
                 Contact : <a href="mailto:contact@immocrew.fr" className="text-secondary underline underline-offset-2 hover:text-secondary/80 transition-colors">contact@immocrew.fr</a>
@@ -65,7 +65,7 @@ export default function MentionsLegalesPage() {
               <p>
                 L&rsquo;ensemble du contenu du site immocrew.fr (textes, images, graphismes, logo,
                 ic&ocirc;nes, mise en page, logiciels) est la propri&eacute;t&eacute; exclusive de
-                [NOM DE LA SOCI&Eacute;T&Eacute;] ou de ses partenaires, et est prot&eacute;g&eacute;
+                VERSI ou de ses partenaires, et est prot&eacute;g&eacute;
                 par les lois fran&ccedil;aises et internationales relatives &agrave; la propri&eacute;t&eacute;
                 intellectuelle.
               </p>
@@ -73,7 +73,7 @@ export default function MentionsLegalesPage() {
                 Toute reproduction, repr&eacute;sentation, modification, publication, transmission ou
                 d&eacute;naturation, totale ou partielle, du site ou de son contenu, par quelque
                 proc&eacute;d&eacute; que ce soit, et sur quelque support que ce soit, est interdite
-                sans l&rsquo;autorisation &eacute;crite pr&eacute;alable de [NOM DE LA SOCI&Eacute;T&Eacute;].
+                sans l&rsquo;autorisation &eacute;crite pr&eacute;alable de VERSI.
               </p>
             </Section>
 

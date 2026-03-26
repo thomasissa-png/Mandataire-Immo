@@ -125,19 +125,31 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
   - Contrastes WCAG AA corrigés (3 corrections)
   - aria-hidden sur éléments décoratifs
 
-### Phase 6 — Pipeline IA (NON COMMENCÉE)
-- **Agents** : @fullstack, @ia
-- **Statut** : SPÉCIFIÉ, NON CODÉ — c'est le CHANTIER CRITIQUE
-- **Spec** : docs/product/ai-services-roadmap.md (23 livrables cartographiés, architecture 9 fichiers, estimation 25h MVP)
-- **Livrables attendus** :
-  - src/lib/claude.ts — client Anthropic
-  - src/lib/client-context.ts — compiler données onboarding → prompt context
-  - src/lib/prompts/*.ts — 8+ fichiers de prompts par type de livrable
-  - src/app/api/generate/pack-mensuel/route.ts — génération pack mensuel
-  - src/app/api/generate/pack-lancement/route.ts — génération pack lancement
-  - src/app/api/generate/boost-mandat/route.ts — génération boost mandat
+### Phase 6 — Pipeline IA (TERMINÉE)
+- **Agents** : @fullstack, @ia, @product-manager, @mandataire, @reviewer
+- **Statut** : TERMINÉ — 9.2/10 revue V3, GO avec reserves mineures corrigees
+- **Livrables livres** :
+  - src/lib/claude.ts — client Anthropic avec retry backoff
+  - src/lib/client-context.ts — compilation donnees onboarding (interface etendue : donnees_locales, histoire, confort_camera)
+  - src/lib/enrich-property.ts — enrichissement auto via API Adresse gouv + DVF
+  - src/lib/prompts/*.ts — 10 fichiers de prompts (ameliores anti-hallucination, scores 9/10)
+  - src/app/api/generate/pack-mensuel/route.ts — 6 types livrables
+  - src/app/api/generate/pack-lancement/route.ts — 9 types livrables
+  - src/app/api/generate/boost-mandat/route.ts — 5 types livrables
   - src/app/api/admin/trigger-production/route.ts — bouton admin
-  - Persistance complète onboarding en base (contexte client)
+  - src/app/api/onboarding/route.ts — persistance complete 10 etapes
+  - src/app/api/monthly-update/route.ts — formulaire mensuel
+  - src/app/api/portal/route.ts — Stripe Customer Portal
+  - src/app/api/enrich-property/route.ts — enrichissement auto
+  - src/app/dashboard/monthly-update/page.tsx — formulaire mensuel UI
+  - src/components/admin/TriggerProductionButton.tsx — bouton trigger
+  - sql/003_ai_pipeline.sql — migration DB
+  - src/app/icon.svg — favicon
+  - docs/ia/onboarding-requirements.md — rapport infos onboarding
+  - docs/product/pipeline-audit.md — audit couverture pricing
+  - docs/reviews/ — 7 rapports d'audit (Sophie v1+v2, Marc v1+v2, V3, preferences, comparaison Versiroom)
+- **Scores qualite** : Sophie 9.06/10, Marc 9.1/10, Reviewer V3 9.2/10
+- **Infos VERSI** : SIRET 91286261200013, 54 rue Henri Barbusse, 92000 Nanterre — renseignees dans CGV, mentions legales, confidentialite
 
 ---
 

@@ -26,9 +26,9 @@ export default function ConfidentialitePage() {
             <Section title="1. Responsable du traitement">
               <p>Le responsable du traitement des donn&eacute;es personnelles est :</p>
               <dl className="mt-4 space-y-2">
-                <InfoRow label="Raison sociale" value="[NOM DE LA SOCI&Eacute;T&Eacute;]" />
-                <InfoRow label="Si&egrave;ge social" value="[ADRESSE COMPL&Egrave;TE]" />
-                <InfoRow label="SIRET" value="[NUM&Eacute;RO SIRET]" />
+                <InfoRow label="Raison sociale" value="VERSI" />
+                <InfoRow label="Si&egrave;ge social" value="54 rue Henri Barbusse, 92000 Nanterre" />
+                <InfoRow label="SIRET" value="91286261200013" />
                 <InfoRow label="Contact DPO" value="dpo@immocrew.fr" />
               </dl>
             </Section>
@@ -313,7 +313,7 @@ export default function ConfidentialitePage() {
               <dl className="mt-4 space-y-2">
                 <InfoRow label="Email DPO" value="dpo@immocrew.fr" />
                 <InfoRow label="Email g&eacute;n&eacute;ral" value="contact@immocrew.fr" />
-                <InfoRow label="Adresse postale" value="[ADRESSE COMPL&Egrave;TE]" />
+                <InfoRow label="Adresse postale" value="54 rue Henri Barbusse, 92000 Nanterre" />
               </dl>
             </Section>
 
