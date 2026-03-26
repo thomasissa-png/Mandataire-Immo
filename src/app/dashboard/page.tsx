@@ -29,6 +29,7 @@ interface ClientRow {
   id: string
   email: string
   pack: string | null
+  status: string | null
   stripe_customer_id: string | null
   client_context: Record<string, unknown> | null
 }
@@ -72,10 +73,31 @@ export default async function DashboardPage() {
 
   // Fetch client info (include client_context for monthly update check)
   const { rows: clientRows } = await query<ClientRow>(
-    "SELECT id, email, pack, stripe_customer_id, client_context FROM clients WHERE email = $1 LIMIT 1",
+    "SELECT id, email, pack, status, stripe_customer_id, client_context FROM clients WHERE email = $1 LIMIT 1",
     [primaryEmail]
   )
   const client = clientRows[0] || null
+
+  // If client has churned, show resubscribe message
+  if (client?.status === "churned") {
+    return (
+      <div className="rounded-xl bg-card border border-border p-10 text-center max-w-lg mx-auto mt-12">
+        <h2 className="font-display text-h2 text-primary mb-3">
+          Ton abonnement est termin&eacute;
+        </h2>
+        <p className="text-body text-neutral-600 mb-6">
+          Tu n&apos;as plus acc&egrave;s &agrave; tes livrables. Pour retrouver ton espace
+          et recevoir de nouveaux contenus chaque mois, r&eacute;abonne-toi.
+        </p>
+        <a
+          href="/#pricing"
+          className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md transition-all duration-normal"
+        >
+          D&eacute;couvrir les packs &rarr;
+        </a>
+      </div>
+    )
+  }
 
   // Check if monthly update is needed (absent or older than 25 days)
   let showMonthlyBanner = true

@@ -60,6 +60,45 @@ const ARTICLE_MAP: ArticleMeta[] = [
 
 const ARTICLES_DIR = path.join(process.cwd(), "docs", "seo", "articles")
 
+let _restoredFromStorage = false
+
+/**
+ * Restaure les articles depuis Object Storage si le filesystem est vide
+ * (cas redeploiement Replit — le filesystem ephemere est vide mais Object Storage persiste).
+ */
+async function restoreFromObjectStorage(): Promise<void> {
+  if (_restoredFromStorage) return
+  _restoredFromStorage = true
+
+  try {
+    const { storage } = await import("@/lib/storage")
+    const result = await storage.list("blog/articles/")
+    if (!result.ok || !result.value) return
+
+    const keys = result.value.filter((k: { key: string }) => k.key.endsWith(".md"))
+    if (keys.length === 0) return
+
+    // Ensure directory exists
+    if (!fs.existsSync(ARTICLES_DIR)) {
+      fs.mkdirSync(ARTICLES_DIR, { recursive: true })
+    }
+
+    for (const { key } of keys) {
+      const filename = key.replace("blog/articles/", "")
+      const filePath = path.join(ARTICLES_DIR, filename)
+      if (fs.existsSync(filePath)) continue // Already on filesystem
+
+      const content = await storage.downloadAsBytes(key)
+      if (content.ok) {
+        fs.writeFileSync(filePath, content.value[0])
+        console.log(`[blog] Restored from Object Storage: ${filename}`)
+      }
+    }
+  } catch {
+    // Object Storage not available — no-op
+  }
+}
+
 /**
  * Scanne le dossier docs/seo/articles/ pour trouver tous les fichiers article-*.md.
  * Fusionne avec ARTICLE_MAP pour les metadonnees legacy.
@@ -297,6 +336,12 @@ export function invalidateArticleCache(): void {
 
 export function getAllArticles(): Article[] {
   if (_cache) return _cache
+  // Trigger async restore from Object Storage (fire-and-forget on first call)
+  restoreFromObjectStorage().then(() => {
+    // Re-discover after restore — invalidate cache to pick up restored files
+    if (!_restoredFromStorage) return
+    _cache = null
+  }).catch(() => {})
   const metas = discoverArticles()
   _cache = metas.map(parseArticle).sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()

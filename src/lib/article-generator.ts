@@ -7,6 +7,7 @@ import {
 } from "@/lib/editorial-calendar"
 import type { EditorialTopic } from "@/lib/editorial-calendar"
 import { invalidateArticleCache } from "@/lib/blog"
+import { uploadFile } from "@/lib/storage"
 
 interface ArticleGenerated {
   articles: Array<{
@@ -129,10 +130,18 @@ CONSIGNES :
 
 ${article.contenu_markdown}`
 
-  // Sauvegarder le fichier
+  // Sauvegarder le fichier (filesystem + Object Storage pour persistance)
   const filename = `article-${nextNumber}-${topic.slug}.md`
   const filePath = path.join(articlesDir, filename)
   fs.writeFileSync(filePath, markdownContent, "utf-8")
+
+  // Persister dans Object Storage (survit aux redeploiements)
+  try {
+    await uploadFile(`blog/articles/${filename}`, markdownContent)
+    console.log(`[generate-article] Persisted to Object Storage: blog/articles/${filename}`)
+  } catch (storageErr) {
+    console.error("[generate-article] Object Storage upload failed:", storageErr)
+  }
 
   // Invalider le cache du blog pour que le nouvel article soit servi
   invalidateArticleCache()
