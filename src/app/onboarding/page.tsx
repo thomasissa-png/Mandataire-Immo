@@ -1,13 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import { track } from "@/lib/tracking"
 
 const STEPS = [
   {
     title: "Ton identité",
-    fields: ["prenom", "nom", "telephone"],
+    fields: ["prenom", "nom", "telephone", "photo_profil"],
   },
   {
     title: "Ton réseau",
