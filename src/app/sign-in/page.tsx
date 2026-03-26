@@ -67,7 +67,7 @@ function SignInForm() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="8 caract\u00E8res minimum"
+            placeholder="8 caractères minimum"
             className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
           />
         </div>
@@ -86,7 +86,7 @@ function SignInForm() {
         <p className="text-body-sm text-neutral-500">
           Pas encore de compte ?{" "}
           <a href="/sign-up" className="text-secondary font-semibold hover:underline">
-            Cr&eacute;er un compte
+            Créer un compte
           </a>
         </p>
       </div>
@@ -103,7 +103,7 @@ export default function SignInPage() {
             ImmoCrew
           </a>
           <p className="text-body text-neutral-500 mt-2">
-            Connecte-toi &agrave; ton espace
+            Connecte-toi à ton espace
           </p>
         </div>
         <Suspense fallback={<div className="rounded-2xl bg-card border border-border p-8 shadow-sm animate-pulse h-80" />}>
@@ -111,7 +111,7 @@ export default function SignInPage() {
         </Suspense>
         <div className="text-center mt-6">
           <a href="/" className="text-body-sm text-neutral-400 hover:text-neutral-600 transition-colors duration-normal">
-            &larr; Retour au site
+            ← Retour au site
           </a>
         </div>
       </div>

@@ -17,7 +17,7 @@ export default function SignUpPage() {
     setError("")
 
     if (password.length < 8) {
-      setError("Le mot de passe doit contenir au moins 8 caract\u00E8res.")
+      setError("Le mot de passe doit contenir au moins 8 caractères.")
       setIsLoading(false)
       return
     }
@@ -37,7 +37,7 @@ export default function SignUpPage() {
       const data = await res.json()
 
       if (!res.ok) {
-        setError(data.error || "Erreur lors de la cr\u00E9ation du compte.")
+        setError(data.error || "Erreur lors de la création du compte.")
         setIsLoading(false)
         return
       }
@@ -55,7 +55,7 @@ export default function SignUpPage() {
         window.location.href = result.url
       }
     } catch {
-      setError("Une erreur est survenue. R\u00E9essaie dans quelques instants.")
+      setError("Une erreur est survenue. Réessaie dans quelques instants.")
       setIsLoading(false)
     }
   }
@@ -69,7 +69,7 @@ export default function SignUpPage() {
             ImmoCrew
           </a>
           <p className="text-body text-neutral-500 mt-2">
-            Cr&eacute;e ton espace en 30 secondes
+            Crée ton espace en 30 secondes
           </p>
         </div>
 
@@ -83,7 +83,7 @@ export default function SignUpPage() {
                   htmlFor="firstName"
                   className="block text-caption font-medium text-neutral-600 mb-1"
                 >
-                  Pr&eacute;nom
+                  Prénom
                 </label>
                 <input
                   id="firstName"
@@ -135,7 +135,7 @@ export default function SignUpPage() {
                 className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
               />
               <p className="text-caption text-neutral-400 mt-1">
-                Utilise la m&ecirc;me adresse que pour ton paiement
+                Utilise la même adresse que pour ton paiement
               </p>
             </div>
 
@@ -155,7 +155,7 @@ export default function SignUpPage() {
                 minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="8 caract\u00E8res minimum"
+                placeholder="8 caractères minimum"
                 className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
               />
             </div>
@@ -173,14 +173,14 @@ export default function SignUpPage() {
               disabled={isLoading}
               className="w-full h-12 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
             >
-              {isLoading ? "Cr\u00E9ation du compte..." : "Cr\u00E9er mon compte"}
+              {isLoading ? "Création du compte..." : "Créer mon compte"}
             </button>
           </form>
 
           {/* Divider */}
           <div className="mt-6 pt-6 border-t border-border text-center">
             <p className="text-body-sm text-neutral-500">
-              Tu as d&eacute;j&agrave; un compte ?{" "}
+              Tu as déjà un compte ?{" "}
               <a
                 href="/sign-in"
                 className="text-secondary font-semibold hover:underline"
@@ -197,7 +197,7 @@ export default function SignUpPage() {
             href="/"
             className="text-body-sm text-neutral-400 hover:text-neutral-600 transition-colors duration-normal"
           >
-            &larr; Retour au site
+            ← Retour au site
           </a>
         </div>
       </div>
