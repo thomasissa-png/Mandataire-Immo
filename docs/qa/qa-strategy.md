@@ -57,17 +57,20 @@ Toutes les dependances externes sont mockees dans les tests unitaires :
 5. Tests Webhook Clerk (creation comptes = onboarding)
 6. Tests Pricing (prix affiches = engagement contractuel)
 
-### P1 -- Semaine 2
-7. Tests FAQ (composant interactif)
-8. Tests Header (navigation mobile)
-9. Pipeline CI GitHub Actions (lint + typecheck + test)
-10. Tests E2E Playwright (parcours complet landing -> checkout)
+### P1 -- Semaine 2 -- FAIT (2026-03-26)
+7. Tests FAQ (composant interactif) -- FAIT
+8. Tests Header (navigation mobile) -- FAIT
+9. Pipeline CI GitHub Actions (lint + typecheck + test) -- A FAIRE
+10. Tests E2E Playwright (parcours complet landing -> checkout) -- FAIT (e2e/landing.spec.ts, e2e/api-smoke.spec.ts)
+11. Tests E2E Playwright onboarding wizard -- FAIT (e2e/onboarding.spec.ts)
+12. Tests E2E Playwright dashboard + auth protection -- FAIT (e2e/dashboard.spec.ts)
+13. Tests E2E pages legales -- FAIT (e2e/legal-pages.spec.ts)
 
 ### P2 -- Phase Beta (semaine 3-4)
-11. Tests E2E Playwright dashboard + onboarding
-12. Tests de performance Lighthouse CI
-13. Tests d'accessibilite axe-core
-14. Tests de regression visuelle (screenshots)
+14. Tests de performance Lighthouse CI
+15. Tests d'accessibilite axe-core integres aux tests E2E
+16. Tests de regression visuelle (screenshots)
+17. Tests E2E dashboard avec Clerk test instance (empty state + deliverables)
 
 ---
 

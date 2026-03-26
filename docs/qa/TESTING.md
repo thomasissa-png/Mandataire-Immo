@@ -23,6 +23,27 @@ npm run test:watch
 
 # Lancer les tests avec rapport de couverture
 npm run test:coverage
+
+# --- Tests E2E Playwright ---
+
+# Prerequis : installer les navigateurs Playwright (une seule fois)
+npx playwright install --with-deps chromium
+
+# Lancer tous les tests E2E
+npm run test:e2e
+
+# Lancer en mode graphique (debug)
+npm run test:e2e:ui
+
+# Lancer avec navigateur visible
+npm run test:e2e:headed
+
+# Voir le rapport HTML apres execution
+npm run test:e2e:report
+
+# Lancer un fichier E2E specifique
+npx playwright test e2e/landing.spec.ts
+npx playwright test e2e/api-smoke.spec.ts
 ```
 
 ### Lancer un fichier de test specifique
@@ -52,6 +73,20 @@ src/__tests__/
 ```
 
 **Total : 66 tests couvrant les chemins critiques du MVP.**
+
+### Tests E2E Playwright
+
+```
+e2e/
+  fixtures.ts                             # Fixtures partagees (auth bypass, test data Sophie)
+  landing.spec.ts                         # Landing page : sections, pricing, FAQ, header, footer, SEO (20+ tests)
+  legal-pages.spec.ts                     # Pages legales : CGV, mentions, confidentialite (13 tests)
+  onboarding.spec.ts                      # Wizard onboarding : navigation, persistence, biens (8 tests)
+  dashboard.spec.ts                       # Dashboard : auth protection, empty state (5 tests)
+  api-smoke.spec.ts                       # API smoke : checkout, leads, webhooks, portal (10 tests)
+```
+
+**Total E2E : ~56 tests couvrant les parcours complets du persona.**
 
 ---
 
@@ -138,6 +173,11 @@ stripe trigger invoice.payment_failed
 - [x] 66 tests unitaires passent (`npm test`)
 - [ ] Coverage > 80% sur les chemins critiques (`npm run test:coverage`)
 - [ ] Aucun test flaky (lancer `npm test` 3 fois de suite)
+- [ ] Tests E2E Playwright passent (`npm run test:e2e`)
+- [ ] Landing page : sections, pricing, FAQ, header, footer, SEO
+- [ ] Pages legales : CGV, mentions, confidentialite
+- [ ] API smoke : checkout validation, leads validation, webhooks signature check
+- [ ] Auth protection : /dashboard, /onboarding, /admin redirigent sans session Clerk
 
 ### Stripe
 - [ ] Checkout fonctionne pour les 3 packs (lancement, mensuel, boost)
