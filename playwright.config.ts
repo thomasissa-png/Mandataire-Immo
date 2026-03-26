@@ -4,7 +4,7 @@ import { defineConfig, devices } from "@playwright/test"
  * Playwright E2E configuration for ImmoCrew.
  *
  * Why these choices:
- * - baseURL: localhost:3000 (Next.js dev server, started by webServer below)
+ * - baseURL: localhost:5000 (Next.js dev server, started by webServer below)
  * - Chromium only in CI (speed), 3 browsers locally (thoroughness)
  * - Clerk auth is bypassed via route mocking — no real auth in E2E
  * - Timeouts calibrated for Next.js SSR cold start (30s action, 60s nav)
@@ -32,7 +32,7 @@ export default defineConfig({
 
   /* Shared settings for all projects */
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: "http://localhost:5000",
 
     /* Collect trace on first retry — invaluable for debugging CI failures */
     trace: "on-first-retry",
@@ -76,7 +76,7 @@ export default defineConfig({
   /* Start Next.js dev server before tests */
   webServer: {
     command: "npm run dev",
-    url: "http://localhost:3000",
+    url: "http://localhost:5000",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
     stdout: "pipe",
@@ -84,7 +84,7 @@ export default defineConfig({
     env: {
       /* Test environment variables — override real services */
       NODE_ENV: "test",
-      NEXT_PUBLIC_APP_URL: "http://localhost:3000",
+      NEXT_PUBLIC_APP_URL: "http://localhost:5000",
       /* Clerk test mode — publishable key for test instance */
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
         process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || "pk_test_placeholder",

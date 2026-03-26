@@ -27,10 +27,10 @@ describe("Header", () => {
 
   it("renders navigation links", () => {
     render(<Header />)
-    expect(screen.getByText("Comment ca marche")).toBeInTheDocument()
-    expect(screen.getByText("Avant / Apres")).toBeInTheDocument()
-    expect(screen.getByText("Tarifs")).toBeInTheDocument()
-    expect(screen.getByText("FAQ")).toBeInTheDocument()
+    expect(screen.getAllByText("Comment \u00E7a marche").length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText("Avant / Apr\u00E8s").length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText("Tarifs").length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText("FAQ").length).toBeGreaterThanOrEqual(1)
   })
 
   it("renders the hamburger button with correct initial aria-label", () => {

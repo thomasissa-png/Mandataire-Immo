@@ -43,7 +43,7 @@ describe("FAQ", () => {
   it("renders the pricing question", () => {
     render(<FAQ />)
     expect(
-      screen.getByText(/197.*mois.*rentable/i)
+      screen.getByText(/150.*mois.*rentable/i)
     ).toBeInTheDocument()
   })
 
