@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getSessionUser } from "@/lib/getSessionUser"
+import { isAdminAuthenticated } from "@/lib/admin-auth"
 import {
   getNextPlannedTopic,
   getTopicByIndex,
@@ -18,15 +18,9 @@ interface GenerateArticleBody {
  * Admin-only.
  */
 export async function POST(request: NextRequest) {
-  const user = await getSessionUser()
-  if (!user) {
-    return NextResponse.json({ error: "Non authentifie" }, { status: 401 })
-  }
-
-  const adminEmail = process.env.ADMIN_EMAIL
-  const userEmail = user.email
-  if (adminEmail && userEmail !== adminEmail) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 403 })
+  const authenticated = await isAdminAuthenticated()
+  if (!authenticated) {
+    return NextResponse.json({ error: "Accès refusé" }, { status: 403 })
   }
 
   try {

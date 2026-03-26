@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getSessionUser } from "@/lib/getSessionUser"
+import { isAdminAuthenticated } from "@/lib/admin-auth"
 import { trackServer } from "@/lib/tracking"
 
 interface TriggerBody {
@@ -23,12 +23,10 @@ interface TriggerBody {
  * Admin-only.
  */
 export async function POST(request: NextRequest) {
-  // Admin check
-  const user = await getSessionUser()
-  const adminEmail = process.env.ADMIN_EMAIL
-  const userEmail = user?.email
-  if (!userEmail || userEmail !== adminEmail) {
-    return NextResponse.json({ error: "Acces refuse" }, { status: 403 })
+  // Admin check via cookie mot de passe
+  const authenticated = await isAdminAuthenticated()
+  if (!authenticated) {
+    return NextResponse.json({ error: "Accès refusé" }, { status: 403 })
   }
 
   let body: TriggerBody
@@ -60,7 +58,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  await trackServer("admin_trigger_production", userEmail, {
+  await trackServer("admin_trigger_production", "admin", {
     client_id,
     pack_type,
     mois: mois || null,
@@ -112,7 +110,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       ...data,
-      triggered_by: userEmail,
+      triggered_by: "admin",
       pack_type,
     })
   } catch (err) {

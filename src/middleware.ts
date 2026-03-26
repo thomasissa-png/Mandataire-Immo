@@ -6,7 +6,7 @@ import { getToken } from "next-auth/jwt"
  * Routes protegees par authentification.
  * Redirige vers /sign-in si pas de session JWT valide.
  */
-const PROTECTED_PREFIXES = ["/dashboard", "/onboarding", "/admin"]
+const PROTECTED_PREFIXES = ["/dashboard", "/onboarding"]
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl

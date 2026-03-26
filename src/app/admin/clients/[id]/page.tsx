@@ -1,5 +1,4 @@
-import { getSessionUser } from "@/lib/getSessionUser"
-import { redirect, notFound } from "next/navigation"
+import { notFound } from "next/navigation"
 import { query } from "@/lib/db"
 import { TriggerProductionButton } from "@/components/admin/TriggerProductionButton"
 
@@ -41,13 +40,7 @@ export default async function AdminClientDetailPage({
 }: {
   params: { id: string }
 }) {
-  const user = await getSessionUser()
-  const adminEmail = process.env.ADMIN_EMAIL
-  const userEmail = user?.email
-
-  if (!userEmail || userEmail !== adminEmail) {
-    redirect("/dashboard")
-  }
+  // Auth gérée par le layout admin (cookie ADMIN_PASSWORD)
 
   const { rows: clientRows } = await query<ClientDetail>(
     "SELECT * FROM clients WHERE id = $1 LIMIT 1",

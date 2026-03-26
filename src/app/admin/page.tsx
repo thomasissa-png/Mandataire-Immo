@@ -1,5 +1,3 @@
-import { getSessionUser } from "@/lib/getSessionUser"
-import { redirect } from "next/navigation"
 import { query } from "@/lib/db"
 import { getNextPlannedTopic } from "@/lib/editorial-calendar"
 import GenerateArticleButton from "@/components/admin/GenerateArticleButton"
@@ -23,15 +21,7 @@ const STATUS_BADGES: Record<string, string> = {
 }
 
 export default async function AdminPage() {
-  const user = await getSessionUser()
-
-  // Basic admin check — only ADMIN_EMAIL can access
-  const adminEmail = process.env.ADMIN_EMAIL
-  const userEmail = user?.email
-
-  if (!userEmail || userEmail !== adminEmail) {
-    redirect("/dashboard")
-  }
+  // Auth gérée par le layout admin (cookie ADMIN_PASSWORD)
 
   const { rows: clientList } = await query<Client>(
     "SELECT * FROM clients ORDER BY created_at DESC"
