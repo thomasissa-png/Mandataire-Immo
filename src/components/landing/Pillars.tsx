@@ -16,7 +16,7 @@ const PILLARS = [
     title: "Personnalis\u00E9 pour ta zone, tes biens, ton style.",
     text: "Tes posts parlent de ton quartier — pas \"de ta ville\". Tes articles SEO mentionnent les \u00E9coles \u00E0 500m, le march\u00E9 du samedi, le prix au m\u00B2 de ta rue. Tes annonces racontent l'histoire du bien, pas une fiche technique. Tes voisins vont croire que tu as \u00E9crit tout \u00E7a toi-m\u00EAme. Sauf que toi, tu aurais mis 3 heures.",
     verbatim:
-      "On dirait que c'est moi qui l'ai \u00E9crit. Sauf que moi, j'aurais mis 3 heures et \u00E7a aurait \u00E9t\u00E9 moins bien.",
+      "Mes clients me demandent si j'ai pris un r\u00E9dacteur. Non — j'ai pris ImmoCrew.",
     icon: (
       <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -27,7 +27,7 @@ const PILLARS = [
   {
     label: "C'est malin",
     title: "Une vraie strat\u00E9gie, pas des posts au hasard.",
-    text: "Poster 3 fois la m\u00EAme annonce, \u00E7a ne sert \u00E0 rien. Ton calendrier \u00E9ditorial est pens\u00E9 pour varier : posts expertise, posts humains, posts quartier, posts mandats. Tes articles SEO ciblent les requ\u00EAtes que les vendeurs tapent vraiment sur Google. Tout est calcul\u00E9 pour que tu sois visible l\u00E0 o\u00F9 \u00E7a compte.",
+    text: "Poster 3 fois la m\u00EAme annonce, \u00E7a ne sert \u00E0 rien. Ton calendrier \u00E9ditorial est pens\u00E9 pour varier : posts expertise, posts humains, posts quartier, posts mandats. Tes articles SEO ciblent les requ\u00EAtes que les vendeurs tapent vraiment sur Google. Tout est pens\u00E9 pour que tu sois visible l\u00E0 o\u00F9 \u00E7a compte.",
     verbatim:
       "Avant, je postais quand j'y pensais. Maintenant j'ai un vrai plan, et les gens me disent qu'ils me voient partout.",
     icon: (
@@ -43,7 +43,7 @@ export function Pillars() {
     <section className="section-padding bg-background" id="piliers">
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-10 desktop:mb-16">
-          Ce qu&apos;ImmoCrew change pour toi.
+          Voil&agrave; ce qui change d&egrave;s le 1er mois.
         </h2>
 
         <div className="grid gap-8 tablet:grid-cols-3">

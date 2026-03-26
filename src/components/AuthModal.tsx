@@ -120,7 +120,7 @@ function SignInForm({
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full h-12 rounded-full bg-secondary-700 text-white font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+          className="w-full h-12 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
         >
           {isLoading ? "Connexion..." : "Se connecter"}
         </button>
@@ -304,7 +304,7 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full h-12 rounded-full bg-secondary-700 text-white font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+          className="w-full h-12 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
         >
           {isLoading ? "Création du compte..." : "Créer mon compte"}
         </button>

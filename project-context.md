@@ -66,9 +66,9 @@
 
 | Offre | Prix | Contenu | Cible |
 |-------|------|---------|-------|
-| Pack Lancement (one-shot) | 497€ | Positionnement, bio optimisée, 5 templates annonces, 5 articles SEO local, calendrier éditorial 30j, 20 posts, 10 scripts Reels, kit graphique | Nouveaux clients — onboarding |
-| Pack Mensuel | 197€/mois | 12 posts/mois, 4 scripts vidéo, 2 articles SEO, 1 newsletter, 4 annonces personnalisées, 1 email prospection | Récurrent — cœur du business |
-| Boost Mandat (upsell) | 97€/mandat | Annonce storytelling, 3 posts + 1 Reel dédiés, mini landing page, email blast acheteurs | Ponctuel — par bien à vendre |
+| Pack Lancement (one-shot) | 400€ | Ce qui te rend unique, bio optimisée, 5 annonces, 5 articles SEO local, plan de publication 30j, 20 posts, 10 scripts Reels, charte visuelle | Nouveaux clients — onboarding |
+| Pack Mensuel | 150€/mois | 12 posts/mois, 4 scripts vidéo, 2 articles SEO, 1 newsletter, 4 annonces, 1 email prospection, calendrier mensuel | Récurrent — cœur du business |
+| Boost Mandat (upsell) | 100€/bien | Annonce rédigée, 3 posts + 1 Reel, page web du bien, email acheteurs | Réservé abonnés Pack Mensuel |
 
 ### Scénario de revenus (objectif 5K/mois)
 

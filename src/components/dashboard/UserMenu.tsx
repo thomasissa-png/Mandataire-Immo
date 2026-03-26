@@ -45,7 +45,7 @@ export function UserMenu() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-9 h-9 rounded-full bg-secondary-700 text-white font-display font-bold text-body-sm flex items-center justify-center hover:bg-secondary-600 hover:text-white transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+        className="w-9 h-9 rounded-full bg-secondary text-primary font-display font-bold text-body-sm flex items-center justify-center hover:bg-secondary-600 hover:text-white transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
         aria-label="Menu utilisateur"
         aria-expanded={isOpen}
         aria-haspopup="true"

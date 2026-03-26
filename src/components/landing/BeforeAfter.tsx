@@ -75,10 +75,9 @@ export function BeforeAfter() {
           ))}
         </div>
 
-        {/* Mention IA legale */}
+        {/* Mention legale */}
         <p className="mt-8 text-center text-caption text-neutral-400">
-          Contenu produit avec assistance IA — relu et valid&eacute; par
-          l&apos;&eacute;quipe ImmoCrew.
+          R&eacute;dig&eacute; par l&apos;&eacute;quipe ImmoCrew &agrave; partir de donn&eacute;es locales r&eacute;elles.
         </p>
       </div>
     </section>
