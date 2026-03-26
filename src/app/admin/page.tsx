@@ -1,6 +1,8 @@
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 import { query } from "@/lib/db"
+import { getNextPlannedTopic } from "@/lib/editorial-calendar"
+import GenerateArticleButton from "@/components/admin/GenerateArticleButton"
 
 interface Client {
   id: string
@@ -38,6 +40,9 @@ export default async function AdminPage() {
   // Stats
   const activeClients = clientList.filter((c) => c.status === "active").length
   const totalClients = clientList.length
+
+  // Prochain article SEO a generer
+  const nextTopic = getNextPlannedTopic()
 
   return (
     <div className="min-h-screen bg-background">
@@ -88,6 +93,15 @@ export default async function AdminPage() {
             </p>
             <p className="text-caption text-neutral-500">Lancements</p>
           </div>
+        </div>
+
+        {/* Generate SEO article */}
+        <div className="mb-8">
+          <GenerateArticleButton
+            nextTopicTitle={nextTopic?.titre ?? null}
+            nextTopicSlug={nextTopic?.slug ?? null}
+            nextTopicCategory={nextTopic?.categorie ?? null}
+          />
         </div>
 
         <h1 className="font-display text-h1 text-primary mb-6">
