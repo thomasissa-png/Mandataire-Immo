@@ -34,7 +34,7 @@ export function Problem() {
           {PROBLEMS.map((item, index) => (
             <div
               key={index}
-              className="rounded-lg bg-card border border-border p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-normal"
+              className="rounded-2xl bg-card border border-border p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-normal"
             >
               {/* Probleme */}
               <div className="flex items-start gap-3 mb-4">

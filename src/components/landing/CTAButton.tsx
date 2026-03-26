@@ -18,7 +18,7 @@ export function CTAButton({
   className = "",
 }: CTAButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center h-12 px-8 rounded-full font-display font-semibold text-body transition-all duration-normal active:scale-[0.97]"
+    "inline-flex items-center justify-center h-12 px-8 rounded-full font-display font-semibold text-body transition-all duration-normal active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
 
   const variantStyles = {
     primary:
@@ -29,12 +29,9 @@ export function CTAButton({
       "border-2 border-secondary text-secondary hover:bg-secondary-50",
   }
 
-  const isApiRoute = href.startsWith("/api/")
-
   return (
     <a
       href={href}
-      role={isApiRoute ? "button" : undefined}
       className={`${baseStyles} ${variantStyles[variant]} ${className}`}
       onClick={() => {
         track("cta_click", {

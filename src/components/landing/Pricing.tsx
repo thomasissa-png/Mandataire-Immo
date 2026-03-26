@@ -89,7 +89,7 @@ export function Pricing() {
           Ici, tu re&ccedil;ois du sur-mesure pour ta zone — pour moins cher. Choisis ton pack.
         </p>
 
-        <div className="grid gap-6 tablet:grid-cols-3 items-start max-w-5xl mx-auto overflow-x-hidden">
+        <div className="grid gap-6 tablet:grid-cols-3 items-start max-w-5xl mx-auto overflow-x-clip">
           {PACKS.map((pack, index) => (
             <div
               key={index}
@@ -101,7 +101,7 @@ export function Pricing() {
             >
               {/* Badge */}
               {pack.featured && "badge" in pack && (
-                <span className="inline-block px-3 py-1 mb-4 rounded-full bg-secondary text-primary text-caption font-semibold">
+                <span className="inline-block px-3 py-1 mb-4 rounded-full bg-secondary text-white text-body-sm font-bold">
                   {pack.badge}
                 </span>
               )}

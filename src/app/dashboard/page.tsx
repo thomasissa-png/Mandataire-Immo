@@ -52,13 +52,13 @@ const TYPE_COLORS: Record<DeliverableType, string> = {
   article_seo: "bg-info-50 text-info-700",
   annonce: "bg-success-50 text-success-800",
   script_video: "bg-warning-50 text-warning-800",
-  newsletter: "bg-primary-50 text-primary",
+  newsletter: "bg-primary-100 text-primary",
   email_prospection: "bg-error-50 text-error-700",
-  bio: "bg-primary-50 text-primary-700",
-  brief_graphique: "bg-neutral-100 text-neutral-700",
-  calendrier: "bg-info-50 text-info-700",
-  positionnement: "bg-secondary-50 text-secondary-700",
-  landing_page: "bg-success-50 text-success-700",
+  bio: "bg-secondary-100 text-secondary-700",
+  brief_graphique: "bg-neutral-200 text-neutral-800",
+  calendrier: "bg-warning-100 text-warning-700",
+  positionnement: "bg-primary-50 text-primary-700",
+  landing_page: "bg-success-100 text-success-700",
 }
 
 export default async function DashboardPage() {
@@ -258,7 +258,7 @@ export default async function DashboardPage() {
             href="/api/portal"
             className="text-body-sm text-neutral-500 hover:text-secondary underline transition-colors duration-normal"
           >
-            Gerer mon abonnement
+            G&eacute;rer mon abonnement
           </a>
         </div>
       )}

@@ -39,9 +39,9 @@ export function DeliverableCard({
   }
 
   return (
-    <button
-      type="button"
-      className="w-full text-left rounded-lg bg-card border border-border p-6 hover:shadow-md transition-shadow duration-normal cursor-pointer"
+    <div
+      role="article"
+      className="w-full text-left rounded-2xl bg-card border border-border p-6 hover:shadow-md hover:border-secondary/30 transition-all duration-normal cursor-pointer"
       onClick={() => {
         track("deliverable_view", {
           deliverable_id: id,
@@ -90,6 +90,6 @@ export function DeliverableCard({
           </div>
         </div>
       </div>
-    </button>
+    </div>
   )
 }
