@@ -66,7 +66,7 @@ function HeaderInner() {
             </a>
             <a
               href="#pricing"
-              className="inline-flex items-center justify-center h-12 px-6 rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+              className="inline-flex items-center justify-center h-12 px-6 rounded-full bg-secondary-700 text-white font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
             >
               Commencer
             </a>
@@ -135,7 +135,7 @@ function HeaderInner() {
               <a
                 href="#pricing"
                 onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-center h-12 w-full rounded-full bg-secondary text-primary font-display font-semibold text-body shadow-sm hover:bg-secondary-600 transition-all duration-normal"
+                className="flex items-center justify-center h-12 w-full rounded-full bg-secondary-700 text-white font-display font-bold text-body shadow-sm hover:bg-secondary-600 transition-all duration-normal"
               >
                 Commencer
               </a>
