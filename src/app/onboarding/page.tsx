@@ -497,10 +497,11 @@ export default function OnboardingPage() {
                     )}
                   </div>
                   <div>
-                    <label className="block text-caption font-medium text-neutral-600 mb-1">
+                    <label htmlFor={`bien-${index}-titre`} className="block text-caption font-medium text-neutral-600 mb-1">
                       Titre du bien
                     </label>
                     <input
+                      id={`bien-${index}-titre`}
                       type="text"
                       value={bien.titre}
                       onChange={(e) =>
@@ -512,10 +513,11 @@ export default function OnboardingPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-caption font-medium text-neutral-600 mb-1">
+                      <label htmlFor={`bien-${index}-type`} className="block text-caption font-medium text-neutral-600 mb-1">
                         Type
                       </label>
                       <input
+                        id={`bien-${index}-type`}
                         type="text"
                         value={bien.type}
                         onChange={(e) =>
@@ -526,10 +528,11 @@ export default function OnboardingPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-caption font-medium text-neutral-600 mb-1">
+                      <label htmlFor={`bien-${index}-adresse`} className="block text-caption font-medium text-neutral-600 mb-1">
                         Adresse ou quartier
                       </label>
                       <input
+                        id={`bien-${index}-adresse`}
                         type="text"
                         value={bien.adresse}
                         onChange={(e) =>
@@ -542,10 +545,11 @@ export default function OnboardingPage() {
                   </div>
                   <div className="grid grid-cols-2 tablet:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-caption font-medium text-neutral-600 mb-1">
+                      <label htmlFor={`bien-${index}-prix`} className="block text-caption font-medium text-neutral-600 mb-1">
                         Prix
                       </label>
                       <input
+                        id={`bien-${index}-prix`}
                         type="text"
                         value={bien.prix}
                         onChange={(e) =>
@@ -556,10 +560,11 @@ export default function OnboardingPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-caption font-medium text-neutral-600 mb-1">
-                        Surface (m2)
+                      <label htmlFor={`bien-${index}-surface`} className="block text-caption font-medium text-neutral-600 mb-1">
+                        Surface (m\u00B2)
                       </label>
                       <input
+                        id={`bien-${index}-surface`}
                         type="text"
                         value={bien.surface}
                         onChange={(e) =>
@@ -570,10 +575,11 @@ export default function OnboardingPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-caption font-medium text-neutral-600 mb-1">
-                        Nombre de pieces
+                      <label htmlFor={`bien-${index}-pieces`} className="block text-caption font-medium text-neutral-600 mb-1">
+                        Nombre de pi\u00E8ces
                       </label>
                       <input
+                        id={`bien-${index}-pieces`}
                         type="text"
                         value={bien.pieces}
                         onChange={(e) =>
@@ -585,10 +591,11 @@ export default function OnboardingPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-caption font-medium text-neutral-600 mb-1">
+                    <label htmlFor={`bien-${index}-points_forts`} className="block text-caption font-medium text-neutral-600 mb-1">
                       Points forts (2-3 phrases)
                     </label>
                     <textarea
+                      id={`bien-${index}-points_forts`}
                       value={bien.points_forts}
                       onChange={(e) =>
                         updateBien(index, "points_forts", e.target.value)
