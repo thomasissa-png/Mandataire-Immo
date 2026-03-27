@@ -74,10 +74,12 @@ export async function POST(request: NextRequest) {
     mois: mois || null,
   })
 
-  // Construire l'URL interne depuis la requête entrante (pas de variable d'env requise)
-  const proto = request.headers.get("x-forwarded-proto") || "https"
-  const host = request.headers.get("host") || "localhost:3000"
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${proto}://${host}`
+  // URL INTERNE localhost — bypass le proxy Replit qui coupe les requêtes longues
+  // Le proxy externe (Replit/Cloudflare) a un timeout de ~30-60s.
+  // Un pack lancement = 7 appels Claude = 3-7 min → le proxy coupe et retourne "upstream request timeout".
+  // En passant par localhost, on reste dans le process Node.js sans proxy.
+  const port = process.env.PORT || "3000"
+  const baseUrl = `http://127.0.0.1:${port}`
 
   let targetUrl: string
   let targetBody: Record<string, unknown>
@@ -103,9 +105,9 @@ export async function POST(request: NextRequest) {
   }
 
   // Forward la requete vers la route de generation
-  // Timeout 5 min : un pack lancement = 7 appels Claude = 3-7 minutes
+  // Timeout 10 min : un pack lancement = 7 appels Claude = 3-7 minutes
   const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), 5 * 60 * 1000)
+  const timeoutId = setTimeout(() => controller.abort(), 10 * 60 * 1000)
 
   try {
     const cookieHeader = request.headers.get("cookie") || ""
@@ -119,7 +121,22 @@ export async function POST(request: NextRequest) {
       signal: controller.signal,
     })
 
-    const data = await response.json()
+    // Protéger contre les réponses non-JSON (proxy error, HTML error pages)
+    const responseText = await response.text()
+    let data: Record<string, unknown>
+    try {
+      data = JSON.parse(responseText)
+    } catch {
+      console.error("[trigger-production] Non-JSON response:", responseText.slice(0, 500))
+      return NextResponse.json(
+        {
+          error: "La route de génération a retourné une réponse invalide.",
+          details: responseText.slice(0, 200),
+          hint: `URL appelée : ${targetUrl}`,
+        },
+        { status: 502 }
+      )
+    }
 
     if (!response.ok) {
       return NextResponse.json(data, { status: response.status })
@@ -132,10 +149,10 @@ export async function POST(request: NextRequest) {
     })
   } catch (err) {
     if (err instanceof DOMException && err.name === "AbortError") {
-      console.error("Production timeout after 5 minutes:", targetUrl)
+      console.error("Production timeout after 10 minutes:", targetUrl)
       return NextResponse.json(
         {
-          error: "La génération a dépassé le délai maximum de 5 minutes. Réessaie ou vérifie les logs serveur.",
+          error: "La génération a dépassé le délai maximum de 10 minutes. Réessaie ou vérifie les logs serveur.",
         },
         { status: 504 }
       )
