@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { track } from "@/lib/tracking"
 
 const STEPS = [
@@ -216,6 +217,7 @@ const MAX_BIENS = 5
 
 export default function OnboardingPage() {
   const { data: session } = useSession()
+  const router = useRouter()
   const user = session?.user
   // Restore state from sessionStorage on mount
   const [currentStep, setCurrentStep] = useState(() => {
@@ -546,9 +548,28 @@ export default function OnboardingPage() {
     }
   }
 
+  const handleContinueLater = () => {
+    // Les donnees sont deja persistees en sessionStorage via le useEffect
+    track("onboarding_step_abandon", {
+      step: currentStep + 1,
+      step_name: STEPS[currentStep].title,
+      reason: "continue_later",
+    })
+    router.push("/dashboard")
+  }
+
   if (isComplete) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white">
+        {/* Header minimal */}
+        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-sm border-b border-neutral-100">
+          <div className="max-w-xl mx-auto px-4 h-14 flex items-center">
+            <a href="/" className="font-display text-h3 text-primary font-bold tracking-tight">
+              ImmoCrew
+            </a>
+          </div>
+        </header>
+        <div className="flex items-center justify-center px-4" style={{ minHeight: "calc(100vh - 3.5rem)" }}>
         <div className="max-w-md text-center">
           <div className="w-16 h-16 rounded-full bg-success-50 flex items-center justify-center mx-auto mb-6">
             <svg
@@ -579,6 +600,7 @@ export default function OnboardingPage() {
             Voir mon espace client
           </a>
         </div>
+        </div>
       </div>
     )
   }
@@ -587,8 +609,24 @@ export default function OnboardingPage() {
   const isBiensStep = STEPS[currentStep]?.fields[0] === "__biens__"
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container-immocrew max-w-xl py-8 desktop:py-16">
+    <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white">
+      {/* Header minimal sticky */}
+      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-sm border-b border-neutral-100">
+        <div className="max-w-xl mx-auto px-4 h-14 flex items-center justify-between">
+          <a href="/" className="font-display text-h3 text-primary font-bold tracking-tight">
+            ImmoCrew
+          </a>
+          <button
+            type="button"
+            onClick={handleContinueLater}
+            className="text-body-sm text-neutral-500 hover:text-primary transition-colors font-medium"
+          >
+            Continuer plus tard
+          </button>
+        </div>
+      </header>
+
+      <div className="max-w-xl mx-auto px-4 py-8 desktop:py-16">
         {/* Progress */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
