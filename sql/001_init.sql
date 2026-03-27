@@ -53,6 +53,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_clients_clerk_user_id ON clients (clerk_us
 CREATE INDEX IF NOT EXISTS idx_deliverables_client_id ON deliverables (client_id);
 CREATE INDEX IF NOT EXISTS idx_deliverables_client_email_status ON deliverables (client_email, status);
 CREATE INDEX IF NOT EXISTS idx_deliverables_month ON deliverables (month);
+-- Ajouter email a payments si absent (tables existantes peuvent ne pas l'avoir)
+ALTER TABLE payments ADD COLUMN IF NOT EXISTS email TEXT;
 CREATE INDEX IF NOT EXISTS idx_payments_email ON payments (email);
 
 -- 5. Table verification_tokens (NextAuth magic links)

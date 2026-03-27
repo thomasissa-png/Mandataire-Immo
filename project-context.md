@@ -252,6 +252,12 @@ ImmoCrew n'est PAS un outil. C'est une ÉQUIPE. Le mandataire rêve d'avoir un d
 | @fullstack+@ia | 2026-03-26 | Integration Versiroom | 5 | 5 | 5 | 5 | 5 | **5/5** V5: failles corrigees, sanitize+SRI+validation |
 | @qa | 2026-03-26 | Tests /bien + enrich-property | 5 | 5 | 5 | 5 | 5 | **5/5** 7 E2E + 17 unitaires, angles morts V4 combles |
 | @orchestrator | 2026-03-26 | Audit pricing (5 agents) + corrections P0 | 5 | 5 | 5 | 5 | 5 | **5/5** 6 P0 corriges, ancrage comparatif, tracking fixe, calendrier mensuel |
+| @orchestrator | 2026-03-27 | Reprise session 6, diagnostic, plan d'action | 5 | 5 | 5 | 5 | 5 | **5/5** Diagnostic complet, 3 actions priorisees |
+| @fullstack | 2026-03-27 | Centralisation prix src/lib/pricing.ts | 5 | 5 | 5 | 5 | 5 | **5/5** 8 fichiers, 77/77 tests, 0 prix hardcode |
+| @fullstack | 2026-03-27 | Admin simplifie (mot de passe seul) | 5 | 5 | 5 | 5 | 5 | **5/5** 9 fichiers, cookie HMAC, AdminGate |
+| @fullstack | 2026-03-27 | Fix async params + migration 006 type | 5 | 5 | 5 | 5 | 5 | **5/5** 2 pages dynamiques + migration corrigee |
+| @fullstack | 2026-03-27 | Onboarding simplifie (etape 6 supprimee, enrichissement auto DVF) | 5 | 5 | 5 | 5 | 5 | **5/5** 3 fichiers, migration 001_init.sql, LinkedIn dedup |
+| @fullstack | 2026-03-27 | Adaptation 7 prompts IA au format DVF | 5 | 5 | 5 | 5 | 5 | **5/5** 7 prompts migres, 4 inchanges (interfaces locales) |
 
 ---
 
@@ -272,24 +278,31 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 
 ## Memo de reprise — derniere session
 
-- **Date de cloture** : 2026-03-26, session 5
+- **Date de cloture** : 2026-03-27, session 6
 - **Branche** : `claude/update-gradient-agents-59Rnz`
-- **Resume de la session** : Session massive d'audit et d'iteration. 6 chantiers : (1) Audit pricing complet + migration prix ronds 400/150/100 EUR, (2) Audit design/UX section par section jusqu'a 9/10, (3) Blog SEO complet avec 5 articles + pipeline automatise 22 sujets, (4) Migration Clerk → NextAuth.js (18 fichiers), (5) Audit PostgreSQL + corrections persistance, (6) Onboarding enrichi (LinkedIn, photo, autocompletion). 40+ agents lances, ~50 commits, ~100 fichiers modifies.
+- **Resume de la session** : Session de correction et simplification. 7 chantiers : (1) Mise a jour Gradient Agents depuis Agent-Team upstream, (2) Centralisation des prix dans src/lib/pricing.ts (P0 resolu), (3) Admin simplifie par mot de passe seul (plus de NextAuth), (4) Fix async params Next.js 14.2+ sur pages dynamiques, (5) Suppression etape 6 onboarding + enrichissement auto DVF, (6) Migration 001_init.sql creee (tables manquantes), (7) Adaptation 7 prompts IA au format DVF. ~10 commits, ~25 fichiers modifies.
+- **Travaux termines cette session** :
+  - Prix centralises dans src/lib/pricing.ts — 0 prix hardcode residuel
+  - /admin protege par ADMIN_PASSWORD (cookie HMAC, plus de NextAuth)
+  - Reset password deja existant (verifie)
+  - Option trimestrielle deja existante (toggle 135€/mois)
+  - Etape "Ton quartier en detail" supprimee — enrichissement auto (API DVF + API Adresse)
+  - LinkedIn dedup (supprime de l'etape Comptes)
+  - Lien annonce en champ principal du formulaire bien
+  - 7 prompts IA adaptes au format donnees_locales DVF
 - **Travaux en cours** :
-  - **Onboarding enrichi** : @fullstack a implemente LinkedIn URL, photo profil, autocompletion adresse, lien annonce. A tester en production.
-  - **Option trimestrielle** : documentee dans la strategie (135€/mois engagement 3 mois), non implementee (necessite produit Stripe).
   - **Sequence email Lancement → Mensuel** : specifiee (J+2, J+7, J+14), non codee.
-  - **Lien "Mot de passe oublie"** : absent du modal auth (necessite une route de reset password).
+  - **Deploiement** : fondateur doit executer sql/001_init.sql sur PostgreSQL Replit et configurer les Secrets.
 - **Prochaines actions recommandees** :
-  1. **Fondateur : Deployer et tester** — executer les migrations SQL (003, 004, 005), configurer les Secrets Replit (NEXTAUTH_SECRET, NEXTAUTH_URL, ADMIN_EMAIL, ADMIN_PASSWORD, ANTHROPIC_API_KEY, DATABASE_URL), visiter /api/setup-admin, tester le flow complet sign-up → onboarding → admin trigger → dashboard.
-  2. **@fullstack : Route reset password** — ajouter /api/auth/reset-password + lien "Mot de passe oublie" dans AuthModal. Critique pour la retention.
-  3. **@fullstack : Option trimestrielle Stripe** — creer le produit Stripe 135€/mois engagement 3 mois, ajouter toggle dans Pricing.tsx.
+  1. **Fondateur : Deployer et tester** — executer `psql $DATABASE_URL -f sql/001_init.sql`, configurer les Secrets Replit (NEXTAUTH_SECRET, NEXTAUTH_URL, ADMIN_PASSWORD, ANTHROPIC_API_KEY, DATABASE_URL), tester le flow complet sign-up → onboarding → admin → trigger production.
+  2. **@fullstack : Sequence email nurturing** — coder les 3 emails automatiques Lancement → Mensuel (J+2, J+7, J+14) avec triggers webhook Stripe.
+  3. **@qa : Tests de regression** — verifier que les modifications onboarding/admin/prompts n'ont rien casse. Mettre a jour les tests E2E.
 - **Blockers** :
-  - Les migrations SQL doivent etre executees avant tout test (tables clients, deliverables, payments)
+  - Migration 001_init.sql doit etre executee avant tout test (tables inexistantes sinon)
   - NEXTAUTH_SECRET et NEXTAUTH_URL obligatoires pour que l'auth fonctionne
   - Marque INPI "ImmoCrew" a verifier (collision avec SIRET 894616713 Auterive)
 - **Commande de reprise suggeree** :
 
 ```
-@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 5). Le projet est sur la branche claude/update-gradient-agents-59Rnz. Les prix sont 400/150/100 EUR (prix ronds). L'auth est NextAuth.js (plus de Clerk). Le blog a 5 articles + pipeline auto 22 sujets. Toutes les sections landing sont a 9/10+. Les prochaines priorites : (1) tester le deploiement avec les migrations SQL, (2) ajouter le reset password, (3) option trimestrielle Stripe. Ne jamais mentionner de concurrent par nom.
+@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 6). Branche claude/update-gradient-agents-59Rnz. Prix centralises 400/150/100 EUR dans src/lib/pricing.ts. Admin par mot de passe (ADMIN_PASSWORD). Onboarding simplifie 9 etapes (etape quartier supprimee, enrichissement auto DVF). Prochaines priorites : (1) deployer et tester le flow complet, (2) sequence email nurturing, (3) tests de regression.
 ```
