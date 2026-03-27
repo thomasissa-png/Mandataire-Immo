@@ -461,8 +461,46 @@ export function DashboardContent({
               )}
             </div>
           )}
+
+          {/* Modifier mes infos */}
+          <div className="mt-4 pt-4 border-t border-border flex flex-wrap items-center gap-4">
+            <a
+              href="mailto:support@immocrew.fr?subject=Modification%20de%20mes%20infos&body=Bonjour%2C%20je%20souhaite%20modifier%20mes%20infos%20(zone%2C%20biens%2C%20sp%C3%A9cialit%C3%A9)%20%3A"
+              className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors duration-normal"
+            >
+              Modifier mes infos (zone, biens, sp\u00e9cialit\u00e9)
+            </a>
+            {!photoUrl ? (
+              <a
+                href="mailto:support@immocrew.fr?subject=Ajout%20de%20ma%20photo%20de%20profil"
+                className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors duration-normal"
+              >
+                Ajouter ma photo
+              </a>
+            ) : null}
+          </div>
         </div>
       </div>
+
+      {/* CTA Passer au mensuel — visible uniquement pour Pack Lancement */}
+      {pack === "lancement" && (
+        <div className="rounded-lg bg-gradient-to-r from-primary to-primary-700 p-5 tablet:p-6 flex flex-col tablet:flex-row items-start tablet:items-center justify-between gap-4 text-white">
+          <div>
+            <p className="font-display text-h4 text-white">
+              Continue sur ta lanc\u00e9e \u2014 passe au mensuel
+            </p>
+            <p className="text-body-sm text-primary-200 mt-1">
+              Re\u00e7ois de nouveaux contenus chaque mois. 150\u20ac/mois, sans engagement.
+            </p>
+          </div>
+          <a
+            href="/api/checkout?pack=mensuel"
+            className="flex-shrink-0 px-6 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all duration-normal shadow-sm"
+          >
+            S{"'"}abonner \u2192
+          </a>
+        </div>
+      )}
 
       {/* Monthly update banner */}
       {showMonthlyBanner && (
@@ -696,6 +734,16 @@ export function DashboardContent({
                     )}
                   </div>
                 )}
+
+                {/* Ajouter un bien / Boost Mandat */}
+                <div className="px-6 pb-5 pt-4 border-t border-border">
+                  <a
+                    href="mailto:support@immocrew.fr?subject=Nouveau%20bien%20%C3%A0%20ajouter%20%2F%20Boost%20Mandat&body=Bonjour%2C%20je%20viens%20de%20signer%20un%20mandat%20pour%20%3A%0A%0AAdresse%20%3A%0AType%20(maison%2Fappart)%20%3A%0APrix%20%3A%0A%0AJe%20souhaite%20commander%20le%20Boost%20Mandat%20(100%E2%82%AC)."
+                    className="inline-flex items-center gap-2 text-body-sm font-semibold text-secondary-700 hover:text-secondary transition-colors duration-normal"
+                  >
+                    + Ajouter un bien / Commander un Boost Mandat (100\u20ac)
+                  </a>
+                </div>
               </div>
             </section>
           )}
@@ -937,7 +985,7 @@ export function DashboardContent({
             href="/api/portal"
             className="text-body-sm text-neutral-600 hover:text-secondary-700 underline transition-colors duration-normal"
           >
-            G\u00e9rer mon abonnement
+            G\u00e9rer mon abonnement (modifier, r\u00e9silier)
           </a>
         ) : null}
         <a
