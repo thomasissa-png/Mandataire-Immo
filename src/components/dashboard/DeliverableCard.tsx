@@ -65,6 +65,7 @@ export function DeliverableCard({
   status = "delivered",
 }: DeliverableCardProps) {
   const [copied, setCopied] = useState(false)
+  const [loadingCopy, setLoadingCopy] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [content, setContent] = useState<string | null>(initialContent ?? null)
   const [loadingContent, setLoadingContent] = useState(false)
@@ -74,20 +75,30 @@ export function DeliverableCard({
   const accentColor = TYPE_ACCENT_COLORS[deliverableType] || "border-l-neutral-300"
   const icon = TYPE_ICONS[deliverableType] || "📄"
 
-  const loadContent = useCallback(async () => {
-    if (content !== null || loadingContent) return
+  /**
+   * Charge le contenu si pas encore disponible.
+   * Retourne le contenu (chaîne) si chargé avec succès, null sinon.
+   * Si le contenu est déjà en mémoire, retourne directement sans fetch.
+   */
+  const loadContent = useCallback(async (): Promise<string | null> => {
+    if (content !== null) return content
+    if (loadingContent) return null
     setLoadError(false)
     setLoadingContent(true)
     try {
       const res = await fetch(`/api/deliverables/${id}`)
       if (res.ok) {
         const data = await res.json()
-        setContent(data.content ?? "")
+        const loaded = data.content ?? ""
+        setContent(loaded)
+        return loaded
       } else {
         setLoadError(true)
+        return null
       }
     } catch {
       setLoadError(true)
+      return null
     } finally {
       setLoadingContent(false)
     }
@@ -106,10 +117,13 @@ export function DeliverableCard({
 
   const handleCopy = async (e: React.MouseEvent) => {
     e.stopPropagation()
-    await loadContent()
-    // content peut être null si le fetch a échoué — l'état d'erreur est déjà affiché
-    if (content === null) return
-    const plainText = stripMarkdown(content)
+    setLoadingCopy(true)
+    // Utiliser le contenu retourné directement pour éviter le problème de closure sur le state
+    const resolvedContent = await loadContent()
+    setLoadingCopy(false)
+    // resolvedContent est null si le fetch a échoué — l'état d'erreur est déjà affiché
+    if (resolvedContent === null) return
+    const plainText = stripMarkdown(resolvedContent)
     try {
       await navigator.clipboard.writeText(plainText)
       setCopied(true)
@@ -174,10 +188,14 @@ export function DeliverableCard({
           {status === "delivered" && (
             <button
               type="button"
-              aria-label={`Copier le texte : ${title}`}
+              aria-label={copied ? "Contenu copié" : loadingCopy ? "Chargement en cours" : `Copier le texte : ${title}`}
+              aria-busy={loadingCopy}
+              disabled={loadingCopy}
               className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-body-sm font-semibold transition-all duration-normal ${
                 copied
                   ? "bg-success-50 text-success-700"
+                  : loadingCopy
+                  ? "bg-neutral-50 text-neutral-400 cursor-wait"
                   : "bg-secondary-50 text-secondary-700 hover:bg-secondary-100"
               }`}
               onClick={handleCopy}
@@ -190,6 +208,7 @@ export function DeliverableCard({
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth={2}
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -197,7 +216,12 @@ export function DeliverableCard({
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  Copié
+                  Copi{"\u00e9"} — colle-le !
+                </>
+              ) : loadingCopy ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-neutral-300 border-t-neutral-500 rounded-full animate-spin" aria-hidden="true" />
+                  Chargement...
                 </>
               ) : (
                 <>
@@ -207,6 +231,7 @@ export function DeliverableCard({
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth={2}
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -233,7 +258,7 @@ export function DeliverableCard({
           <div className="flex items-center gap-2 mt-3" aria-live="polite" aria-label="Chargement en cours">
             <div className="w-4 h-4 border-2 border-secondary/30 border-t-secondary rounded-full animate-spin" aria-hidden="true" />
             <p className="text-body-sm text-neutral-500">
-              Chargement du contenu...
+              On charge ton contenu...
             </p>
           </div>
         )}
@@ -242,13 +267,13 @@ export function DeliverableCard({
         {loadError && !loadingContent && (
           <div className="flex items-center gap-2 mt-3" role="alert">
             <p className="text-body-sm text-error-700">
-              Impossible de charger le contenu.{" "}
+              Oups, il y a eu un souci.{" "}
               <button
                 type="button"
                 className="underline font-semibold hover:text-error-900 transition-colors"
                 onClick={(e) => { e.stopPropagation(); setLoadError(false); void loadContent() }}
               >
-                Réessayer
+                R{"\u00e9"}essayer
               </button>
             </p>
           </div>

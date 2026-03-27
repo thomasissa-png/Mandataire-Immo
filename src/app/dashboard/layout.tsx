@@ -24,7 +24,7 @@ export default function DashboardLayout({
               href="mailto:support@immocrew.fr"
               className="text-body-sm text-neutral-500 hover:text-secondary transition-colors duration-normal py-2"
             >
-              Aide
+              Une question ?
             </a>
             <UserMenu />
           </div>

@@ -122,7 +122,7 @@ function detectPlatform(title: string): { icon: string; name: string } {
     return { icon: "🎵", name: "TikTok" }
   if (lower.includes("twitter") || lower.includes("x "))
     return { icon: "🐦", name: "X / Twitter" }
-  return { icon: "📱", name: "Reseaux sociaux" }
+  return { icon: "📱", name: "Réseaux sociaux" }
 }
 
 /* ------------------------------------------------------------------ */
@@ -187,6 +187,7 @@ function SectionHeader({
   count,
   isOpen,
   onToggle,
+  sectionId,
   defaultClosed,
 }: {
   icon: React.ReactNode
@@ -194,14 +195,17 @@ function SectionHeader({
   count: number
   isOpen: boolean
   onToggle: () => void
+  sectionId: string
   defaultClosed?: boolean
 }) {
   return (
     <button
       type="button"
+      id={`${sectionId}-heading`}
       className="w-full flex items-center justify-between gap-3 group"
       onClick={onToggle}
       aria-expanded={isOpen}
+      aria-controls={`${sectionId}-panel`}
     >
       <div className="flex items-center gap-3">
         <span
@@ -215,7 +219,7 @@ function SectionHeader({
           {count}
         </span>
       </div>
-      <span className="text-neutral-400 group-hover:text-primary transition-colors duration-normal">
+      <span className="text-neutral-500 group-hover:text-primary transition-colors duration-normal">
         <ChevronIcon open={isOpen} />
       </span>
     </button>
@@ -391,9 +395,10 @@ export function DashboardContent({
                   href={profile.linkedin_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-body-sm text-secondary-700 hover:text-secondary hover:underline transition-colors duration-normal"
+                  aria-label="Voir le profil LinkedIn (s'ouvre dans un nouvel onglet)"
+                  className="inline-flex items-center gap-1.5 min-h-[44px] py-2 text-body-sm text-secondary-700 hover:text-secondary hover:underline transition-colors duration-normal"
                 >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                   </svg>
                   LinkedIn
@@ -418,15 +423,15 @@ export function DashboardContent({
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-display text-h4 text-primary">
-                Mise {"\u00e0"} jour mensuelle
+                Dis-nous ce qui a chang{"\u00e9"} ce mois-ci
               </p>
               <p className="text-body-sm text-neutral-500 mt-0.5">
-                10 min pour des contenus encore plus personnalis{"\u00e9"}s ce mois-ci
+                10 min, et tes prochains contenus seront encore plus dans le mille.
               </p>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               <span className="text-body-sm font-semibold text-secondary-700 group-hover:text-secondary-800 transition-colors duration-normal">
-                Mettre {"\u00e0"} jour
+                C{"'"}est parti
               </span>
               <svg className="w-4 h-4 text-secondary-700 group-hover:translate-x-0.5 transition-transform duration-normal" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -480,10 +485,30 @@ export function DashboardContent({
         <div className="space-y-10">
 
           {/* ============================================================ */}
+          {/*  Accroche personnalisee                                        */}
+          {/* ============================================================ */}
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="font-display text-h2 text-primary">
+                Salut {profile?.prenom || userName.split(" ")[0] || userName} !
+              </h2>
+              <p className="text-body text-neutral-500 mt-1">
+                Tes contenus sont pr{"\u00ea"}ts. Tu copies, tu publies, c{"'"}est fait.
+              </p>
+            </div>
+            <span className="hidden tablet:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-success-50 text-success-700 text-caption font-semibold">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              {deliverables.filter((d) => d.status === "delivered").length} contenus pr{"\u00ea"}ts
+            </span>
+          </div>
+
+          {/* ============================================================ */}
           {/*  2. Section "Mes biens" + annonces rattachees                 */}
           {/* ============================================================ */}
           {profile && profile.biens.length > 0 && (
-            <section aria-labelledby="section-biens-heading">
+            <section id="section-biens" aria-labelledby="section-biens-heading">
               <div className="rounded-lg bg-card border border-border overflow-hidden shadow-sm">
                 <div className="px-6 py-4 border-b border-border bg-neutral-50/50">
                   <SectionHeader
@@ -492,11 +517,12 @@ export function DashboardContent({
                     count={annonces.length}
                     isOpen={!collapsedSections.has("biens")}
                     onToggle={() => toggleSection("biens")}
+                    sectionId="section-biens"
                   />
                 </div>
 
                 {!collapsedSections.has("biens") && (
-                  <div className="divide-y divide-border">
+                  <div id="section-biens-panel" className="divide-y divide-border accordion-enter">
                     {profile.biens.map((bien, i) => {
                       const bienAnnonces = matchedAnnonces.get(i) || []
                       return (
@@ -585,16 +611,17 @@ export function DashboardContent({
 
           {/* Annonces sans biens (si pas de biens dans le profil) */}
           {(!profile || profile.biens.length === 0) && annonces.length > 0 && (
-            <section aria-labelledby="section-annonces-heading">
+            <section id="section-annonces" aria-labelledby="section-annonces-heading">
               <SectionHeader
                 icon={<span>{"\ud83c\udfe0"}</span>}
                 title="Mes annonces"
                 count={annonces.length}
                 isOpen={!collapsedSections.has("annonces")}
                 onToggle={() => toggleSection("annonces")}
+                sectionId="section-annonces"
               />
               {!collapsedSections.has("annonces") && (
-                <div className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4">
+                <div id="section-annonces-panel" className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4 accordion-enter">
                   {annonces.map((d) => (
                     <DeliverableCard
                       key={d.id}
@@ -615,17 +642,22 @@ export function DashboardContent({
           {/*  3. Section "Ma timeline" — posts en flux social              */}
           {/* ============================================================ */}
           {posts.length > 0 && (
-            <section aria-labelledby="section-posts-heading">
+            <section id="section-posts" aria-labelledby="section-posts-heading">
               <SectionHeader
                 icon={<span>{"\ud83d\udcf1"}</span>}
                 title="Mes posts à publier"
                 count={posts.length}
                 isOpen={!collapsedSections.has("posts")}
                 onToggle={() => toggleSection("posts")}
+                sectionId="section-posts"
               />
 
               {!collapsedSections.has("posts") && (
-                <div className="mt-6 relative">
+                <div id="section-posts-panel" className="mt-6 relative accordion-enter">
+                  {/* Guidage action — rappel de la promesse ImmoCrew */}
+                  <p className="text-caption text-neutral-400 mb-4 pl-12">
+                    Copie, colle, publie. Ton {"\u00e9"}quipe a fait le reste.
+                  </p>
                   {/* Ligne verticale de timeline */}
                   <div className="absolute left-5 top-0 bottom-0 w-0.5 bg-gradient-to-b from-secondary/40 via-secondary/20 to-transparent" aria-hidden="true" />
 
@@ -660,17 +692,18 @@ export function DashboardContent({
           {/*  4. Section "Mes articles" — preview magazine                 */}
           {/* ============================================================ */}
           {articles.length > 0 && (
-            <section aria-labelledby="section-articles-heading">
+            <section id="section-articles" aria-labelledby="section-articles-heading">
               <SectionHeader
                 icon={<span>{"\ud83d\udcdd"}</span>}
                 title="Mes articles"
                 count={articles.length}
                 isOpen={!collapsedSections.has("articles")}
                 onToggle={() => toggleSection("articles")}
+                sectionId="section-articles"
               />
 
               {!collapsedSections.has("articles") && (
-                <div className="mt-4 space-y-4">
+                <div id="section-articles-panel" className="mt-4 space-y-4 accordion-enter">
                   {articles.map((article) => (
                     <DeliverableCard
                       key={article.id}
@@ -691,17 +724,18 @@ export function DashboardContent({
           {/*  5. Section "Mes scripts video"                               */}
           {/* ============================================================ */}
           {scripts.length > 0 && (
-            <section aria-labelledby="section-scripts-heading">
+            <section id="section-scripts" aria-labelledby="section-scripts-heading">
               <SectionHeader
                 icon={<span>{"\ud83c\udfac"}</span>}
                 title="Mes scripts vid\u00e9o"
                 count={scripts.length}
                 isOpen={!collapsedSections.has("scripts")}
                 onToggle={() => toggleSection("scripts")}
+                sectionId="section-scripts"
               />
 
               {!collapsedSections.has("scripts") && (
-                <div className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4">
+                <div id="section-scripts-panel" className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4 accordion-enter">
                   {scripts.map((script) => (
                     <DeliverableCard
                       key={script.id}
@@ -722,17 +756,18 @@ export function DashboardContent({
           {/*  6. Section "Mes emails"                                      */}
           {/* ============================================================ */}
           {emails.length > 0 && (
-            <section aria-labelledby="section-emails-heading">
+            <section id="section-emails" aria-labelledby="section-emails-heading">
               <SectionHeader
                 icon={<span>{"\ud83d\udce7"}</span>}
                 title="Mes emails"
                 count={emails.length}
                 isOpen={!collapsedSections.has("emails")}
                 onToggle={() => toggleSection("emails")}
+                sectionId="section-emails"
               />
 
               {!collapsedSections.has("emails") && (
-                <div className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4">
+                <div id="section-emails-panel" className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4 accordion-enter">
                   {emails.map((email) => (
                     <DeliverableCard
                       key={email.id}
@@ -753,17 +788,18 @@ export function DashboardContent({
           {/*  7. Section "Ma strategie" (repliee par defaut)               */}
           {/* ============================================================ */}
           {strategie.length > 0 && (
-            <section aria-labelledby="section-strategie-heading">
+            <section id="section-strategie" aria-labelledby="section-strategie-heading">
               <SectionHeader
                 icon={<span>{"\ud83d\udccb"}</span>}
                 title="Mon identité pro"
                 count={strategie.length}
                 isOpen={!collapsedSections.has("strategie")}
                 onToggle={() => toggleSection("strategie")}
+                sectionId="section-strategie"
               />
 
               {!collapsedSections.has("strategie") && (
-                <div className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4">
+                <div id="section-strategie-panel" className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4 accordion-enter">
                   {strategie.map((d) => (
                     <DeliverableCard
                       key={d.id}
