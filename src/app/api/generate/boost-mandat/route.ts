@@ -245,7 +245,7 @@ async function insertDeliverable(params: {
 }): Promise<string> {
   const { rows } = await query<DeliverableRow>(
     `INSERT INTO deliverables (client_email, client_id, type, title, content, metadata, month, status, created_at)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, 'draft', NOW())
+     VALUES ($1, $2, $3, $4, $5, $6, $7, 'delivered', NOW())
      RETURNING id`,
     [
       params.clientEmail,
