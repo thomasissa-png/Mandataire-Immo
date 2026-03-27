@@ -1,12 +1,20 @@
 import Anthropic from "@anthropic-ai/sdk"
 
-if (!process.env.ANTHROPIC_API_KEY) {
-  throw new Error("ANTHROPIC_API_KEY is not set")
-}
+// Initialisation lazy — ne crash pas au boot si la clé manque,
+// mais retourne une erreur claire à l'appel
+let _client: Anthropic | null = null
 
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-})
+function getClient(): Anthropic {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    throw new Error(
+      "ANTHROPIC_API_KEY non configurée. Ajoute cette clé dans les Secrets Replit (Onglet Secrets → New Secret → ANTHROPIC_API_KEY → ta clé)."
+    )
+  }
+  if (!_client) {
+    _client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  }
+  return _client
+}
 
 /** Modele utilise pour la generation de contenu (bon ratio qualite/cout) */
 const MODEL = "claude-sonnet-4-6" as const
@@ -40,7 +48,7 @@ export async function generate(options: GenerateOptions): Promise<GenerateResult
 
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     try {
-      const response = await client.messages.create({
+      const response = await getClient().messages.create({
         model: MODEL,
         max_tokens: maxTokens,
         temperature,

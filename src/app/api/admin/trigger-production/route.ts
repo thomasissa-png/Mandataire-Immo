@@ -29,6 +29,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Accès refusé" }, { status: 403 })
   }
 
+  // Vérifier que la clé API Claude est configurée avant de lancer
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json(
+      {
+        error: "ANTHROPIC_API_KEY non configurée. Ajoute-la dans les Secrets Replit pour générer du contenu.",
+      },
+      { status: 500 }
+    )
+  }
+
   let body: TriggerBody
   try {
     body = await request.json()
@@ -64,8 +74,11 @@ export async function POST(request: NextRequest) {
     mois: mois || null,
   })
 
-  // Construire l'URL interne de la route de generation
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  // Construire l'URL interne depuis la requête entrante (pas de variable d'env requise)
+  const proto = request.headers.get("x-forwarded-proto") || "https"
+  const host = request.headers.get("host") || "localhost:3000"
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${proto}://${host}`
+
   let targetUrl: string
   let targetBody: Record<string, unknown>
 
@@ -90,7 +103,6 @@ export async function POST(request: NextRequest) {
   }
 
   // Forward la requete vers la route de generation
-  // On passe les cookies pour maintenir l'auth NextAuth
   // Timeout 5 min : un pack lancement = 7 appels Claude = 3-7 minutes
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), 5 * 60 * 1000)
@@ -134,6 +146,7 @@ export async function POST(request: NextRequest) {
       {
         error: "Erreur lors du déclenchement de la production",
         details: err instanceof Error ? err.message : String(err),
+        hint: `URL appelée : ${targetUrl} — vérifie que NEXT_PUBLIC_APP_URL est correcte ou que le serveur est accessible.`,
       },
       { status: 500 }
     )
