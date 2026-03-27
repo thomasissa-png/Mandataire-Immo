@@ -30,6 +30,24 @@ const CATEGORY_STYLES: Record<string, CategoryStyle> = {
     icon: "M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z",
     iconViewBox: "0 0 24 24",
   },
+  "Reseaux sociaux": {
+    // Dégradé orange → secondary — univers social, engagement, communauté
+    gradient: "from-secondary-300 via-secondary-500 to-secondary-700",
+    icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z",
+    iconViewBox: "0 0 24 24",
+  },
+  "Personal branding": {
+    // Dégradé success (vert) → primary — croissance, identité, confiance
+    gradient: "from-success-400 via-success to-primary",
+    icon: "M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z",
+    iconViewBox: "0 0 24 24",
+  },
+  "Video": {
+    // Dégradé primary-600 → secondary — dynamisme, contenu vidéo, modernité
+    gradient: "from-primary-600 via-primary-400 to-secondary",
+    icon: "M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z",
+    iconViewBox: "0 0 24 24",
+  },
   Blog: {
     gradient: "from-primary-400 via-primary to-primary-700",
     icon: "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253",

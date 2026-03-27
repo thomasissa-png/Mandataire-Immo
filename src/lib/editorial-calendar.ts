@@ -43,7 +43,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
       "quoi poster instagram agent immobilier",
       "idees posts reseaux sociaux immobilier",
     ],
-    categorie: "Strategie",
+    categorie: "Stratégie",
     angle:
       "Un plan de publication concret sur 30 jours que Sophie peut copier-coller",
     priorite: 2,
@@ -59,7 +59,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
       "personal branding agent immobilier",
       "marketing immobilier sans budget",
     ],
-    categorie: "Strategie",
+    categorie: "Stratégie",
     angle:
       "Leviers de differenciation accessibles sans budget pour un mandataire solo",
     priorite: 3,
@@ -363,7 +363,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
       "mandats entrants agent immobilier",
       "generer mandats entrants immobilier",
     ],
-    categorie: "Strat\u00E9gie",
+    categorie: "Stratégie",
     angle:
       "Les 4 leviers digitaux pour recevoir des mandats au lieu d'aller les chercher — chaque levier necessite du contenu regulier",
     priorite: 6, // Haute priorite — middle funnel, requete volumineuse
