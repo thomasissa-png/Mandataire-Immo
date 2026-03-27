@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getSessionUser } from "@/lib/getSessionUser"
+import { isAdminAuthenticated } from "@/lib/admin-auth"
 import { query } from "@/lib/db"
 import { generateJSON } from "@/lib/claude"
 import { getClientContext } from "@/lib/client-context"
@@ -30,11 +30,9 @@ interface DeliverableRow {
  */
 export async function POST(request: NextRequest) {
   // Admin check
-  const user = await getSessionUser()
-  const adminEmail = process.env.ADMIN_EMAIL
-  const userEmail = user?.email
-  if (!userEmail || userEmail !== adminEmail) {
-    return NextResponse.json({ error: "Acces refuse" }, { status: 403 })
+  const authenticated = await isAdminAuthenticated()
+  if (!authenticated) {
+    return NextResponse.json({ error: "Accès refusé" }, { status: 403 })
   }
 
   let body: PackMensuelBody
@@ -71,7 +69,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Client not found" }, { status: 404 })
   }
 
-  await trackServer("production_started", userEmail, {
+  await trackServer("production_started", "admin", {
     client_id,
     pack_type: "mensuel",
     mois,
@@ -248,7 +246,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  await trackServer("production_completed", userEmail, {
+  await trackServer("production_completed", "admin", {
     client_id,
     pack_type: "mensuel",
     mois,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getSessionUser } from "@/lib/getSessionUser"
+import { isAdminAuthenticated } from "@/lib/admin-auth"
 import { query } from "@/lib/db"
 import { generateImage } from "@/lib/openai"
 import { buildHomeStagingPrompt, type HomeStagingInput } from "@/lib/prompts/home-staging"
@@ -26,11 +26,9 @@ interface HomeStagingBody {
  */
 export async function POST(request: NextRequest) {
   // ─── Auth ───────────────────────────────────────────────────────
-  const user = await getSessionUser()
-  const adminEmail = process.env.ADMIN_EMAIL
-  const userEmail = user?.email
-  if (!userEmail || userEmail !== adminEmail) {
-    return NextResponse.json({ error: "Acces refuse" }, { status: 403 })
+  const authenticated = await isAdminAuthenticated()
+  if (!authenticated) {
+    return NextResponse.json({ error: "Accès refusé" }, { status: 403 })
   }
 
   // ─── Parse body ─────────────────────────────────────────────────
@@ -86,7 +84,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  await trackServer("home_staging_started", userEmail, {
+  await trackServer("home_staging_started", "admin", {
     property_page_id,
     items_count: items.length,
   })
@@ -158,7 +156,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  await trackServer("home_staging_completed", userEmail, {
+  await trackServer("home_staging_completed", "admin", {
     property_page_id,
     generated: results.length,
     errors: errors.length,

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { query } from "@/lib/db"
 import { TriggerProductionButton } from "@/components/admin/TriggerProductionButton"
+import { ClientContextCard } from "@/components/admin/ClientContextCard"
 
 interface ClientDeliverable {
   id: string
@@ -150,14 +151,7 @@ export default async function AdminClientDetailPage({
 
         {/* Context data */}
         {clientData.client_context && (
-          <div className="rounded-xl bg-card border border-border p-6 mb-6">
-            <h2 className="font-display text-h2 text-primary mb-4">
-              Contexte client
-            </h2>
-            <pre className="text-body-sm text-neutral-600 bg-neutral-50 rounded-lg p-4 overflow-x-auto">
-              {JSON.stringify(clientData.client_context, null, 2)}
-            </pre>
-          </div>
+          <ClientContextCard context={clientData.client_context} />
         )}
 
         {/* Production trigger */}
