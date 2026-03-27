@@ -125,10 +125,10 @@ export async function POST(request: NextRequest) {
     biens: parsedBiens,
     // Video
     confort_camera: body.confort_camera?.trim() || "",
-    // Comptes
+    // Comptes (linkedin_url sert aussi de champ linkedin reseau social)
     instagram: body.instagram?.trim() || "",
     facebook: body.facebook?.trim() || "",
-    linkedin: body.linkedin?.trim() || "",
+    linkedin: body.linkedin_url?.trim() || "",
     site_web: body.site_web?.trim() || "",
   }
 

@@ -50,7 +50,7 @@ const STEPS = [
   {
     title: "Tes comptes",
     subtitle: "Optionnel — on peut travailler sans",
-    fields: ["instagram", "facebook", "linkedin", "site_web"],
+    fields: ["instagram", "facebook", "site_web"],
     optional: true,
   },
 ] as const
@@ -507,7 +507,7 @@ export default function OnboardingPage() {
         ...dataWithoutPhoto,
         photo_profil_key: photoKey,
         biens: JSON.stringify(
-          biens.filter((b) => b.titre.trim() !== "")
+          biens.filter((b) => b.titre.trim() !== "" || b.lien_annonce.trim() !== "")
         ),
       }
 
@@ -646,6 +646,28 @@ export default function OnboardingPage() {
                       </button>
                     )}
                   </div>
+                  {/* Lien d'annonce en premier — champ principal */}
+                  <div className="p-3 rounded-lg bg-secondary-50 border border-secondary-200">
+                    <label htmlFor={`bien-${index}-lien_annonce`} className="block text-body-sm font-semibold text-primary mb-1">
+                      Lien vers ton annonce
+                    </label>
+                    <input
+                      id={`bien-${index}-lien_annonce`}
+                      type="url"
+                      value={bien.lien_annonce}
+                      onChange={(e) =>
+                        updateBien(index, "lien_annonce", e.target.value)
+                      }
+                      placeholder="https://www.seloger.com/annonces/..."
+                      className="w-full h-12 px-4 rounded-md border border-secondary-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                    />
+                    <p className="text-caption text-secondary-600 mt-1">
+                      Colle le lien SeLoger, LeBonCoin, ou ton site — on récupère tout automatiquement.
+                    </p>
+                  </div>
+
+                  <p className="text-caption text-neutral-400 text-center">ou remplis manuellement</p>
+
                   <div>
                     <label htmlFor={`bien-${index}-titre`} className="block text-caption font-medium text-neutral-600 mb-1">
                       Titre du bien
@@ -773,24 +795,6 @@ export default function OnboardingPage() {
                       rows={2}
                       className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast resize-y"
                     />
-                  </div>
-                  <div>
-                    <label htmlFor={`bien-${index}-lien_annonce`} className="block text-caption font-medium text-neutral-600 mb-1">
-                      Lien vers ton annonce (optionnel)
-                    </label>
-                    <input
-                      id={`bien-${index}-lien_annonce`}
-                      type="url"
-                      value={bien.lien_annonce}
-                      onChange={(e) =>
-                        updateBien(index, "lien_annonce", e.target.value)
-                      }
-                      placeholder="https://www.seloger.com/annonces/..."
-                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
-                    />
-                    <p className="text-caption text-neutral-400 mt-1">
-                      Optionnel — on récupère les infos de l&apos;annonce pour mieux rédiger la tienne.
-                    </p>
                   </div>
                 </div>
               ))}
