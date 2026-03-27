@@ -62,13 +62,13 @@ interface DashboardContentProps {
 
 const TYPE_LABELS: Record<string, string> = {
   post: "Post",
-  article_seo: "Article SEO",
+  article_seo: "Article local",
   annonce: "Annonce",
-  script_video: "Script video",
+  script_video: "Script vidéo",
   newsletter: "Newsletter",
   email_prospection: "Email prospection",
   bio: "Bio",
-  brief_graphique: "Brief graphique",
+  brief_graphique: "Kit graphique",
   calendrier: "Calendrier",
   positionnement: "Positionnement",
   landing_page: "Landing page",
@@ -556,8 +556,11 @@ export function DashboardContent({
                     {/* Annonces non rattachees */}
                     {unmatchedAnnonces.length > 0 && (
                       <div className="p-5">
-                        <p className="text-body-sm font-semibold text-neutral-600 flex items-center gap-1.5 mb-3">
-                          {"\ud83d\udcdd"} Autres annonces
+                        <p className="text-body-sm font-semibold text-neutral-600 flex items-center gap-1.5 mb-2">
+                          📝 Annonces générales
+                        </p>
+                        <p className="text-caption text-neutral-400 mb-3">
+                          Ces annonces ne sont pas liées à un bien spécifique — elles servent pour ta communication générale.
                         </p>
                         <div className="space-y-3">
                           {unmatchedAnnonces.map((annonce) => (
@@ -615,7 +618,7 @@ export function DashboardContent({
             <section aria-labelledby="section-posts-heading">
               <SectionHeader
                 icon={<span>{"\ud83d\udcf1"}</span>}
-                title="Ma timeline"
+                title="Mes posts à publier"
                 count={posts.length}
                 isOpen={!collapsedSections.has("posts")}
                 onToggle={() => toggleSection("posts")}
@@ -753,7 +756,7 @@ export function DashboardContent({
             <section aria-labelledby="section-strategie-heading">
               <SectionHeader
                 icon={<span>{"\ud83d\udccb"}</span>}
-                title="Ma strat\u00e9gie"
+                title="Mon identité pro"
                 count={strategie.length}
                 isOpen={!collapsedSections.has("strategie")}
                 onToggle={() => toggleSection("strategie")}

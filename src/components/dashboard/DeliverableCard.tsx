@@ -175,7 +175,7 @@ export function DeliverableCard({
             <button
               type="button"
               aria-label={`Copier le texte : ${title}`}
-              className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-body-sm font-semibold transition-all duration-normal ${
+              className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-body-sm font-semibold transition-all duration-normal ${
                 copied
                   ? "bg-success-50 text-success-700"
                   : "bg-secondary-50 text-secondary-700 hover:bg-secondary-100"

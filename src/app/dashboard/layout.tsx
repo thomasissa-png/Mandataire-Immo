@@ -20,6 +20,12 @@ export default function DashboardLayout({
             >
               Mes contenus
             </a>
+            <a
+              href="mailto:support@immocrew.fr"
+              className="text-body-sm text-neutral-500 hover:text-secondary transition-colors duration-normal py-2"
+            >
+              Aide
+            </a>
             <UserMenu />
           </div>
         </div>
