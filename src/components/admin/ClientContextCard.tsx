@@ -1,5 +1,3 @@
-import type { JSX } from "react"
-
 interface ClientContextCardProps {
   context: Record<string, unknown>
 }
@@ -50,7 +48,7 @@ const SECTION_ORDER: Section[] = [
 
 function formatValue(key: string, value: unknown): string {
   if (value === null || value === undefined || value === "") return "—"
-  if (key === "prix_m2_moyen" && value) return `${value} €/m²`
+  if (key === "prix_m2_moyen" && value) return `${String(value)} €/m²`
   if (key === "confort_camera") {
     const map: Record<string, string> = {
       debutant: "Débutant",
@@ -80,133 +78,152 @@ interface BienData {
   lien_annonce?: string
 }
 
-function SectionFields({ keys, context }: { keys: string[]; context: Record<string, unknown> }) {
-  const fields: JSX.Element[] = []
-  for (const key of keys) {
-    const raw = context[key]
-    const display = formatValue(key, raw)
-    if (display === "—") continue
-    fields.push(
-      <div key={key} className="py-1">
-        <p className="text-caption text-neutral-500">{LABELS[key] || key}</p>
-        {isLink(display) ? (
-          <a href={display} target="_blank" rel="noopener noreferrer" className="text-body-sm text-secondary hover:underline break-all">
-            {display}
-          </a>
-        ) : (
-          <p className="text-body-sm text-foreground">{display}</p>
-        )}
+interface DVFTransaction {
+  type: string
+  surface: number
+  prix_m2: number
+  date: string
+}
+
+function SectionCard({ section, context }: { section: Section; context: Record<string, unknown> }) {
+  const fields = section.keys
+    .map((key) => ({ key, display: formatValue(key, context[key]) }))
+    .filter((f) => f.display !== "—")
+
+  if (fields.length === 0) return null
+
+  return (
+    <div className="rounded-xl bg-card border border-border p-5">
+      <h3 className="font-display text-body font-semibold text-primary mb-3">
+        {section.title}
+      </h3>
+      <div className="grid grid-cols-1 tablet:grid-cols-2 gap-x-6 gap-y-2">
+        {fields.map((f) => (
+          <div key={f.key} className="py-1">
+            <p className="text-caption text-neutral-500">{LABELS[f.key] || f.key}</p>
+            {isLink(f.display) ? (
+              <a href={f.display} target="_blank" rel="noopener noreferrer" className="text-body-sm text-secondary hover:underline break-all">
+                {f.display}
+              </a>
+            ) : (
+              <p className="text-body-sm text-foreground">{f.display}</p>
+            )}
+          </div>
+        ))}
       </div>
-    )
-  }
-  return <>{fields}</>
+    </div>
+  )
+}
+
+function LocalDataCard({ context }: { context: Record<string, unknown> }) {
+  const donneesLocales = typeof context.donnees_locales === "object" && context.donnees_locales !== null
+    ? (context.donnees_locales as Record<string, unknown>)
+    : null
+
+  const postcode = donneesLocales ? String(donneesLocales.postcode || "") : ""
+  const lat = donneesLocales && typeof donneesLocales.lat === "number" ? donneesLocales.lat : null
+  const lon = donneesLocales && typeof donneesLocales.lon === "number" ? donneesLocales.lon : null
+  const prixM2 = context.prix_m2_moyen ? String(context.prix_m2_moyen) : ""
+  const transactions = donneesLocales && Array.isArray(donneesLocales.dernieres_transactions)
+    ? (donneesLocales.dernieres_transactions as DVFTransaction[])
+    : []
+
+  if (!postcode && lat === null && !prixM2) return null
+
+  return (
+    <div className="rounded-xl bg-card border border-border p-5">
+      <h3 className="font-display text-body font-semibold text-primary mb-3">
+        Données locales (auto-enrichies)
+      </h3>
+      <div className="grid grid-cols-2 tablet:grid-cols-4 gap-4">
+        {postcode ? (
+          <div>
+            <p className="text-caption text-neutral-500">Code postal</p>
+            <p className="text-body-sm text-foreground">{postcode}</p>
+          </div>
+        ) : null}
+        {prixM2 ? (
+          <div>
+            <p className="text-caption text-neutral-500">Prix moyen m²</p>
+            <p className="text-body-sm font-semibold text-foreground">{prixM2} €/m²</p>
+          </div>
+        ) : null}
+        {lat !== null && lon !== null ? (
+          <div>
+            <p className="text-caption text-neutral-500">Coordonnées</p>
+            <p className="text-body-sm text-foreground font-mono text-caption">
+              {lat.toFixed(4)}, {lon.toFixed(4)}
+            </p>
+          </div>
+        ) : null}
+      </div>
+      {transactions.length > 0 ? (
+        <div className="mt-3">
+          <p className="text-caption text-neutral-500 mb-2">Dernières transactions DVF</p>
+          <div className="space-y-1">
+            {transactions.slice(0, 5).map((t, i) => (
+              <p key={i} className="text-caption text-neutral-600">
+                {t.type} {t.surface}m² — {t.prix_m2} €/m² ({t.date})
+              </p>
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+function BiensCard({ biens }: { biens: BienData[] }) {
+  if (biens.length === 0) return null
+
+  return (
+    <div className="rounded-xl bg-card border border-border p-5">
+      <h3 className="font-display text-body font-semibold text-primary mb-3">
+        Biens en cours ({biens.length})
+      </h3>
+      <div className="space-y-3">
+        {biens.map((bien, i) => (
+          <div key={i} className="p-3 rounded-lg bg-neutral-50 border border-neutral-200">
+            <p className="text-body-sm font-semibold text-foreground">
+              {bien.titre || `Bien ${i + 1}`}
+            </p>
+            {bien.lien_annonce ? (
+              <a
+                href={bien.lien_annonce}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-caption text-secondary hover:underline break-all block mt-1"
+              >
+                {bien.lien_annonce}
+              </a>
+            ) : null}
+            <div className="flex flex-wrap gap-3 mt-2 text-caption text-neutral-500">
+              {bien.type ? <span>{bien.type}</span> : null}
+              {bien.adresse ? <span>{bien.adresse}</span> : null}
+              {bien.prix ? <span>{bien.prix} €</span> : null}
+              {bien.surface ? <span>{bien.surface} m²</span> : null}
+              {bien.pieces ? <span>{bien.pieces} pièces</span> : null}
+            </div>
+            {bien.points_forts ? (
+              <p className="text-caption text-neutral-600 mt-1">{bien.points_forts}</p>
+            ) : null}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 export function ClientContextCard({ context }: ClientContextCardProps) {
   const biens = Array.isArray(context.biens) ? (context.biens as BienData[]) : []
-  const donneesLocales = context.donnees_locales as Record<string, unknown> | undefined
-
-  const visibleSections = SECTION_ORDER.filter((section) =>
-    section.keys.some((k) => {
-      const v = context[k]
-      return v !== null && v !== undefined && v !== ""
-    })
-  )
 
   return (
     <div className="space-y-4 mb-6">
-      {/* Sections principales */}
-      {visibleSections.map((section) => (
-        <div key={section.title} className="rounded-xl bg-card border border-border p-5">
-          <h3 className="font-display text-body font-semibold text-primary mb-3">
-            {section.title}
-          </h3>
-          <div className="grid grid-cols-1 tablet:grid-cols-2 gap-x-6 gap-y-2">
-            <SectionFields keys={section.keys} context={context} />
-          </div>
-        </div>
+      {SECTION_ORDER.map((section) => (
+        <SectionCard key={section.title} section={section} context={context} />
       ))}
-
-      {/* Données locales enrichies */}
-      {donneesLocales && (donneesLocales.lat || donneesLocales.postcode) && (
-        <div className="rounded-xl bg-card border border-border p-5">
-          <h3 className="font-display text-body font-semibold text-primary mb-3">
-            Données locales (auto-enrichies)
-          </h3>
-          <div className="grid grid-cols-2 tablet:grid-cols-4 gap-4">
-            {donneesLocales.postcode && (
-              <div>
-                <p className="text-caption text-neutral-500">Code postal</p>
-                <p className="text-body-sm text-foreground">{String(donneesLocales.postcode)}</p>
-              </div>
-            )}
-            {context.prix_m2_moyen && (
-              <div>
-                <p className="text-caption text-neutral-500">Prix moyen m²</p>
-                <p className="text-body-sm font-semibold text-foreground">{context.prix_m2_moyen} €/m²</p>
-              </div>
-            )}
-            {donneesLocales.lat && (
-              <div>
-                <p className="text-caption text-neutral-500">Coordonnées</p>
-                <p className="text-body-sm text-foreground font-mono text-caption">
-                  {Number(donneesLocales.lat).toFixed(4)}, {Number(donneesLocales.lon).toFixed(4)}
-                </p>
-              </div>
-            )}
-          </div>
-          {Array.isArray(donneesLocales.dernieres_transactions) && donneesLocales.dernieres_transactions.length > 0 && (
-            <div className="mt-3">
-              <p className="text-caption text-neutral-500 mb-2">Dernières transactions DVF</p>
-              <div className="space-y-1">
-                {(donneesLocales.dernieres_transactions as Array<{ type: string; surface: number; prix_m2: number; date: string }>).slice(0, 5).map((t, i) => (
-                  <p key={i} className="text-caption text-neutral-600">
-                    {t.type} {t.surface}m² — {t.prix_m2} €/m² ({t.date})
-                  </p>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Biens en cours */}
-      {biens.length > 0 && (
-        <div className="rounded-xl bg-card border border-border p-5">
-          <h3 className="font-display text-body font-semibold text-primary mb-3">
-            Biens en cours ({biens.length})
-          </h3>
-          <div className="space-y-3">
-            {biens.map((bien, i) => (
-              <div key={i} className="p-3 rounded-lg bg-neutral-50 border border-neutral-200">
-                <p className="text-body-sm font-semibold text-foreground">
-                  {bien.titre || `Bien ${i + 1}`}
-                </p>
-                {bien.lien_annonce && (
-                  <a
-                    href={bien.lien_annonce}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-caption text-secondary hover:underline break-all block mt-1"
-                  >
-                    {bien.lien_annonce}
-                  </a>
-                )}
-                <div className="flex flex-wrap gap-3 mt-2 text-caption text-neutral-500">
-                  {bien.type && <span>{bien.type}</span>}
-                  {bien.adresse && <span>{bien.adresse}</span>}
-                  {bien.prix && <span>{bien.prix} €</span>}
-                  {bien.surface && <span>{bien.surface} m²</span>}
-                  {bien.pieces && <span>{bien.pieces} pièces</span>}
-                </div>
-                {bien.points_forts && (
-                  <p className="text-caption text-neutral-600 mt-1">{bien.points_forts}</p>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      <LocalDataCard context={context} />
+      <BiensCard biens={biens} />
     </div>
   )
 }
