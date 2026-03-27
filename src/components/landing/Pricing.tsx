@@ -42,19 +42,22 @@ export function Pricing() {
         {/* 2 packs principaux */}
         <div className="grid gap-6 tablet:grid-cols-2 items-stretch max-w-4xl mx-auto">
           {/* Pack Lancement */}
-          <div className="rounded-xl p-8 flex flex-col bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-[box-shadow,transform] duration-normal">
+          <div className="rounded-xl p-8 flex flex-col bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-[box-shadow,transform] duration-normal relative pt-14">
+            {/* Spacer pour aligner avec le badge de la card Mensuel */}
+            <div className="absolute top-0 left-0 right-0 h-10" />
+
             {/* Name */}
             <h3 className="font-display text-h3 mb-1 text-primary">
               {PACK_LANCEMENT.name}
             </h3>
 
-            {/* Subtitle */}
-            <p className="text-body-sm mb-6 text-neutral-500">
+            {/* Subtitle — hauteur fixe pour alignement */}
+            <p className="text-body-sm mb-4 text-neutral-500 min-h-[3rem]">
               {PACK_LANCEMENT.subtitle}
             </p>
 
             {/* Price */}
-            <div className="mb-6">
+            <div className="mb-2">
               <span className="font-display text-display-lg font-extrabold text-primary">
                 {PACK_LANCEMENT.price}€
               </span>
@@ -69,7 +72,7 @@ export function Pricing() {
             </div>
 
             {/* Separator */}
-            <div className="h-px mb-6 bg-neutral-200" />
+            <div className="h-px mb-4 bg-neutral-200" />
 
             {/* Reassurance */}
             <p className="text-body-sm font-medium mb-4 text-neutral-500">

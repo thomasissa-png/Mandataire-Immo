@@ -26,9 +26,9 @@ export function MensuelPricingCard() {
   const pack = isTrimestriel ? PACK_MENSUEL_TRIMESTRIEL : PACK_MENSUEL
 
   return (
-    <div className="rounded-xl p-8 flex flex-col bg-primary text-white shadow-xl tablet:scale-[1.02]">
-      {/* Badge */}
-      <span className="inline-block px-3 py-1 mb-4 rounded-full bg-secondary text-white text-body-sm font-bold">
+    <div className="rounded-xl p-8 flex flex-col bg-primary text-white shadow-xl tablet:scale-[1.02] relative pt-14">
+      {/* Badge — centré en haut de la card */}
+      <span className="absolute top-4 left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-1.5 rounded-full bg-secondary text-white text-body-sm font-bold text-center">
         {PACK_MENSUEL.badge}
       </span>
 
@@ -37,13 +37,13 @@ export function MensuelPricingCard() {
         {PACK_MENSUEL.name}
       </h3>
 
-      {/* Subtitle */}
-      <p className="text-body-sm mb-4 text-primary-200">
+      {/* Subtitle — hauteur fixe pour alignement avec Pack Lancement */}
+      <p className="text-body-sm mb-4 text-primary-200 min-h-[3rem]">
         {pack.subtitle}
       </p>
 
       {/* Toggle Mensuel / Trimestriel */}
-      <div className="flex items-center gap-2 mb-6 p-1 rounded-full bg-primary-600 w-fit">
+      <div className="flex items-center gap-2 mb-4 p-1 rounded-full bg-primary-600 w-fit">
         <button
           type="button"
           onClick={() => setIsTrimestriel(false)}
@@ -69,7 +69,7 @@ export function MensuelPricingCard() {
       </div>
 
       {/* Price */}
-      <div className="mb-6">
+      <div className="mb-2">
         <div className="flex items-baseline gap-2">
           <span className="font-display text-display-lg font-extrabold text-secondary">
             {pack.price}€
@@ -99,7 +99,7 @@ export function MensuelPricingCard() {
       </div>
 
       {/* Separator */}
-      <div className="h-px mb-6 bg-primary-300" />
+      <div className="h-px mb-4 bg-primary-300" />
 
       {/* Reassurance */}
       <p className="text-body-sm font-medium mb-4 text-primary-200">

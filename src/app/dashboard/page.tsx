@@ -70,12 +70,17 @@ export default async function DashboardPage() {
 
   const primaryEmail = user.email
 
-  // Fetch client info (include client_context for monthly update check)
-  const { rows: clientRows } = await query<ClientRow>(
-    "SELECT id, email, pack, status, stripe_customer_id, client_context FROM clients WHERE email = $1 LIMIT 1",
-    [primaryEmail]
-  )
-  const client = clientRows[0] || null
+  // Fetch client info (non-bloquant)
+  let client: ClientRow | null = null
+  try {
+    const { rows: clientRows } = await query<ClientRow>(
+      "SELECT id, email, pack, status, stripe_customer_id, client_context FROM clients WHERE email = $1 LIMIT 1",
+      [primaryEmail]
+    )
+    client = clientRows[0] || null
+  } catch (err) {
+    console.error("[dashboard] Error fetching client:", err)
+  }
 
   // If client has churned, show resubscribe message
   if (client?.status === "churned") {
@@ -119,15 +124,19 @@ export default async function DashboardPage() {
     }
   }
 
-  // Fetch deliverables (draft + delivered, ordered by most recent)
-  const { rows: deliverables } = await query<Deliverable>(
-    `SELECT id, type, title, status, month, created_at FROM deliverables
-     WHERE client_email = $1 AND status IN ('draft', 'delivered')
-     ORDER BY created_at DESC`,
-    [primaryEmail]
-  )
-
-  const monthDeliverables = deliverables || []
+  // Fetch deliverables (non-bloquant)
+  let monthDeliverables: Deliverable[] = []
+  try {
+    const { rows: deliverables } = await query<Deliverable>(
+      `SELECT id, type, title, status, month, created_at FROM deliverables
+       WHERE client_email = $1 AND status IN ('draft', 'delivered')
+       ORDER BY created_at DESC`,
+      [primaryEmail]
+    )
+    monthDeliverables = deliverables || []
+  } catch (err) {
+    console.error("[dashboard] Error fetching deliverables:", err)
+  }
 
   return (
     <div>

@@ -86,7 +86,9 @@ export function TriggerProductionButton({
       } else {
         setResult({
           status: "error",
-          message: data.error || "Erreur lors de la production",
+          message: data.details
+            ? `${data.error}\n\nDétail : ${data.details}${data.hint ? `\n${data.hint}` : ""}`
+            : data.error || "Erreur lors de la production",
         })
       }
     } catch (err) {
@@ -156,7 +158,7 @@ export function TriggerProductionButton({
               : "bg-error-50 text-error-700"
           }`}
         >
-          {result.message}
+          <span className="whitespace-pre-wrap">{result.message}</span>
         </div>
       )}
 
