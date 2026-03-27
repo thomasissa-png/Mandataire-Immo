@@ -235,7 +235,11 @@ export default function OnboardingPage() {
   const [biens, setBiens] = useState<BienData[]>(() => {
     if (typeof window !== "undefined") {
       const saved = sessionStorage.getItem("immocrew_onboarding_biens")
-      return saved ? JSON.parse(saved) : [{ ...EMPTY_BIEN }]
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        // S'assurer qu'il y a toujours au moins 1 bien
+        return Array.isArray(parsed) && parsed.length > 0 ? parsed : [{ ...EMPTY_BIEN }]
+      }
     }
     return [{ ...EMPTY_BIEN }]
   })
