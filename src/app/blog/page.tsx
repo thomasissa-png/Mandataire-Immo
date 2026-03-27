@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
 import { getAllArticles } from "@/lib/blog"
+import { ArticleCover } from "@/components/blog/ArticleCover"
 
 export const metadata: Metadata = {
   title: "Blog ImmoCrew — Marketing et SEO pour mandataires immobiliers",
@@ -49,12 +50,10 @@ export default function BlogPage() {
                   href={`/blog/${article.slug}`}
                   className="group flex flex-col bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal overflow-hidden"
                 >
-                  {/* Image placeholder */}
-                  <div className="aspect-[16/9] bg-primary-50 flex items-center justify-center">
-                    <span className="text-primary-200 text-caption font-medium uppercase tracking-widest">
-                      {article.category}
-                    </span>
-                  </div>
+                  <ArticleCover
+                    category={article.category}
+                    title={article.title}
+                  />
 
                   {/* Content */}
                   <div className="flex flex-col flex-1 p-5 desktop:p-6">

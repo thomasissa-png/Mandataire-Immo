@@ -271,9 +271,10 @@ function markdownToHtml(md: string): string {
   return html.join("\n")
 }
 
-/** Format inline markdown: bold, italic, links */
+/** Format inline markdown: bold, italic, links, images */
 function formatInline(text: string): string {
   return text
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" loading="lazy" class="rounded-lg my-4 w-full" />')
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.+?)\*/g, "<em>$1</em>")
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')

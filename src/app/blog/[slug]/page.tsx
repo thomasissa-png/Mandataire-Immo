@@ -10,6 +10,7 @@ import {
   getArticleBySlug,
   getRelatedArticles,
 } from "@/lib/blog"
+import { ArticleCover } from "@/components/blog/ArticleCover"
 
 interface BlogArticlePageProps {
   params: Promise<{ slug: string }>
@@ -255,11 +256,11 @@ export default async function BlogArticlePage({
                     href={`/blog/${related.slug}`}
                     className="group flex flex-col bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal overflow-hidden"
                   >
-                    <div className="aspect-[16/9] bg-primary-50 flex items-center justify-center">
-                      <span className="text-primary-200 text-caption font-medium uppercase tracking-widest">
-                        {related.category}
-                      </span>
-                    </div>
+                    <ArticleCover
+                      category={related.category}
+                      title={related.title}
+                      size="sm"
+                    />
                     <div className="p-4">
                       <p className="text-caption text-neutral-500 mb-2">
                         {related.readingTime} de lecture
