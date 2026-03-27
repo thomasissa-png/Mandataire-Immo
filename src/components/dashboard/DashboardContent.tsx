@@ -314,8 +314,33 @@ export function DashboardContent({
 
   const packLabel = pack === "mensuel" ? "Pack Mensuel" : pack === "lancement" ? "Pack Lancement" : pack ? `Pack ${pack}` : null
 
+  const [showWelcome, setShowWelcome] = useState(() =>
+    typeof window !== "undefined" && !localStorage.getItem("immocrew_welcome_dismissed")
+  )
+
   return (
     <div className="space-y-8">
+      {/* Message d'accueil premier acces */}
+      {showWelcome && deliverables.length > 0 && (
+        <div className="rounded-lg bg-secondary-50 border border-secondary/20 p-4 flex items-start justify-between gap-3">
+          <div>
+            <p className="text-body-sm text-secondary-800 font-semibold mb-1">
+              Comment utiliser ton espace
+            </p>
+            <p className="text-body-sm text-secondary-700">
+              Clique sur une carte pour voir le contenu complet, puis <strong>Copier</strong> pour le coller directement dans ton appli. C{"'"}est tout.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => { localStorage.setItem("immocrew_welcome_dismissed", "1"); setShowWelcome(false) }}
+            className="text-secondary-400 hover:text-secondary-600 flex-shrink-0 text-xl leading-none mt-0.5"
+            aria-label="Fermer le message de bienvenue"
+          >
+            \u00d7
+          </button>
+        </div>
+      )}
       {/* ============================================================ */}
       {/*  1. Carte profil                                              */}
       {/* ============================================================ */}
@@ -505,6 +530,42 @@ export function DashboardContent({
           </div>
 
           {/* ============================================================ */}
+          {/*  Navigation rapide (ancres de section)                        */}
+          {/* ============================================================ */}
+          <nav aria-label="Aller directement à une section" className="flex flex-wrap gap-2">
+            {(profile?.biens?.length ?? 0) > 0 && annonces.length > 0 && (
+              <a href="#section-biens" className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full bg-neutral-100 hover:bg-secondary-100 text-caption font-semibold text-neutral-600 hover:text-secondary-700 transition-colors duration-normal">
+                Biens
+              </a>
+            )}
+            {(!profile || profile.biens.length === 0) && annonces.length > 0 && (
+              <a href="#section-annonces" className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full bg-neutral-100 hover:bg-secondary-100 text-caption font-semibold text-neutral-600 hover:text-secondary-700 transition-colors duration-normal">
+                Annonces
+              </a>
+            )}
+            {posts.length > 0 && (
+              <a href="#section-posts" className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full bg-neutral-100 hover:bg-secondary-100 text-caption font-semibold text-neutral-600 hover:text-secondary-700 transition-colors duration-normal">
+                Posts ({posts.length})
+              </a>
+            )}
+            {articles.length > 0 && (
+              <a href="#section-articles" className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full bg-neutral-100 hover:bg-secondary-100 text-caption font-semibold text-neutral-600 hover:text-secondary-700 transition-colors duration-normal">
+                Articles
+              </a>
+            )}
+            {scripts.length > 0 && (
+              <a href="#section-scripts" className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full bg-neutral-100 hover:bg-secondary-100 text-caption font-semibold text-neutral-600 hover:text-secondary-700 transition-colors duration-normal">
+                Scripts
+              </a>
+            )}
+            {emails.length > 0 && (
+              <a href="#section-emails" className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full bg-neutral-100 hover:bg-secondary-100 text-caption font-semibold text-neutral-600 hover:text-secondary-700 transition-colors duration-normal">
+                Emails
+              </a>
+            )}
+          </nav>
+
+          {/* ============================================================ */}
           {/*  2. Section "Mes biens" + annonces rattachees                 */}
           {/* ============================================================ */}
           {profile && profile.biens.length > 0 && (
@@ -641,11 +702,14 @@ export function DashboardContent({
           {/* ============================================================ */}
           {/*  3. Section "Ma timeline" — posts en flux social              */}
           {/* ============================================================ */}
-          {posts.length > 0 && (
+          {posts.length > 0 && (() => {
+            const currentMonth = new Date().toISOString().slice(0, 7)
+            const postsThisMonth = posts.filter(p => p.month === currentMonth || p.created_at.startsWith(currentMonth)).length
+            return (
             <section id="section-posts" aria-labelledby="section-posts-heading">
               <SectionHeader
                 icon={<span>{"\ud83d\udcf1"}</span>}
-                title="Mes posts à publier"
+                title={`Mes posts \u00e0 publier${postsThisMonth > 0 ? ` \u2014 ${postsThisMonth} ce mois` : ""}`}
                 count={posts.length}
                 isOpen={!collapsedSections.has("posts")}
                 onToggle={() => toggleSection("posts")}
@@ -671,6 +735,10 @@ export function DashboardContent({
                             {platform.icon}
                           </div>
 
+                          {/* Date du post */}
+                          <p className="text-caption text-neutral-400 mb-1">
+                            {post.month || new Date(post.created_at).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}
+                          </p>
                           <DeliverableCard
                             id={post.id}
                             type={post.type}
@@ -686,7 +754,7 @@ export function DashboardContent({
                 </div>
               )}
             </section>
-          )}
+          )})()}
 
           {/* ============================================================ */}
           {/*  4. Section "Mes articles" — preview magazine                 */}
@@ -735,18 +803,32 @@ export function DashboardContent({
               />
 
               {!collapsedSections.has("scripts") && (
-                <div id="section-scripts-panel" className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4 accordion-enter">
-                  {scripts.map((script) => (
-                    <DeliverableCard
-                      key={script.id}
-                      id={script.id}
-                      type={script.type}
-                      typeLabel={TYPE_LABELS[script.type] || script.type}
-                      typeColor={TYPE_COLORS[script.type] || "bg-warning-50 text-warning-800"}
-                      title={script.title}
-                      status={script.status}
-                    />
-                  ))}
+                <div id="section-scripts-panel" className="mt-4 accordion-enter">
+                  <p className="text-caption text-neutral-400 mb-4">
+                    Chaque script est pr\u00eat \u00e0 lire face cam\u00e9ra. Filme-toi avec ton iPhone, c{"'"}est suffisant.
+                  </p>
+                  <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
+                  {scripts.map((script) => {
+                    const titleLower = script.title.toLowerCase()
+                    const format = titleLower.includes("reel") || titleLower.includes("story") || titleLower.includes("court")
+                      ? "Reel / Story \u00b7 30-60 sec"
+                      : titleLower.includes("pr\u00e9sentation") || titleLower.includes("bien")
+                        ? "Vid\u00e9o bien \u00b7 1-2 min"
+                        : "Vid\u00e9o \u00b7 30-90 sec"
+                    return (
+                    <div key={script.id}>
+                      <p className="text-caption text-neutral-400 mb-1">{format}</p>
+                      <DeliverableCard
+                        id={script.id}
+                        type={script.type}
+                        typeLabel={TYPE_LABELS[script.type] || script.type}
+                        typeColor={TYPE_COLORS[script.type] || "bg-warning-50 text-warning-800"}
+                        title={script.title}
+                        status={script.status}
+                      />
+                    </div>
+                    )})}
+                  </div>
                 </div>
               )}
             </section>
