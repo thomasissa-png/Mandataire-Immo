@@ -24,17 +24,19 @@ export interface ArticleSeoInput {
   nombre_articles: number
   // Format : "blog" (900-1200 mots, defaut) ou "linkedin" (400-600 mots, pour mandataires sans site web)
   format?: 'blog' | 'linkedin'
-  // Donnees locales enrichies (depuis onboarding)
+  // Donnees locales enrichies (depuis API DVF)
   donnees_locales?: {
     prix_m2_moyen?: number
-    commerces?: string[]
-    ecoles?: string[]
-    transports?: string[]
-    parcs?: string[]
-    ambiance_quartier?: string
-    tendance_marche?: string
-    population?: number
-    evenements_locaux?: string[]
+    lat?: number | null
+    lon?: number | null
+    postcode?: string
+    dernieres_transactions?: Array<{
+      date: string
+      prix: number
+      surface: number
+      prix_m2: number
+      type: string
+    }>
   }
   biens: Array<{
     titre: string

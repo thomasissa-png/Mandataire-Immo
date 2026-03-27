@@ -68,13 +68,19 @@ export interface AnnonceEnrichieInput {
   dvf: DvfData
   dpe: DpeData
   coordonnees: CoordonneesGeo
-  // Donnees locales enrichies (depuis onboarding ou enrichissement auto)
+  // Donnees locales enrichies (depuis API DVF)
   donnees_locales?: {
     prix_m2_moyen?: number
-    commerces?: string[]
-    ecoles?: string[]
-    transports?: string[]
-    ambiance_quartier?: string
+    lat?: number | null
+    lon?: number | null
+    postcode?: string
+    dernieres_transactions?: Array<{
+      date: string
+      prix: number
+      surface: number
+      prix_m2: number
+      type: string
+    }>
   }
 }
 

@@ -27,13 +27,19 @@ export interface EditorialCalendarInput {
   annees_experience: number
   cible_clients: string
   gamme_prix?: string
-  // Donnees locales enrichies (depuis onboarding)
+  // Donnees locales enrichies (depuis API DVF)
   donnees_locales?: {
     prix_m2_moyen?: number
-    commerces?: string[]
-    ecoles?: string[]
-    transports?: string[]
-    ambiance_quartier?: string
+    lat?: number | null
+    lon?: number | null
+    postcode?: string
+    dernieres_transactions?: Array<{
+      date: string
+      prix: number
+      surface: number
+      prix_m2: number
+      type: string
+    }>
   }
   // Contexte de generation
   date_debut?: string // ISO date, defaut: aujourd'hui

@@ -25,13 +25,19 @@ export interface AnnonceStorytellingInput {
   }>
   cible_clients: string
   gamme_prix: string
-  // Donnees locales enrichies (depuis onboarding)
+  // Donnees locales enrichies (depuis API DVF)
   donnees_locales?: {
-    prix_m2_moyen: number
-    commerces: string[]
-    ecoles: string[]
-    transports: string[]
-    ambiance_quartier: string
+    prix_m2_moyen?: number
+    lat?: number | null
+    lon?: number | null
+    postcode?: string
+    dernieres_transactions?: Array<{
+      date: string
+      prix: number
+      surface: number
+      prix_m2: number
+      type: string
+    }>
   }
   // Pour le Boost Mandat (un seul bien)
   bien_unique?: {

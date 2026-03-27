@@ -43,13 +43,19 @@ export interface LandingBienInput {
   // Contact du mandataire (vraies coordonnees, pas de placeholders)
   email_contact: string
   telephone_contact?: string
-  // Donnees locales enrichies (depuis onboarding)
+  // Donnees locales enrichies (depuis API DVF)
   donnees_locales?: {
     prix_m2_moyen?: number
-    commerces?: string[]
-    ecoles?: string[]
-    transports?: string[]
-    ambiance_quartier?: string
+    lat?: number | null
+    lon?: number | null
+    postcode?: string
+    dernieres_transactions?: Array<{
+      date: string
+      prix: number
+      surface: number
+      prix_m2: number
+      type: string
+    }>
   }
   // Donnees d'enrichissement Versiroom (optionnelles — upgrade par rapport a la version B3 de base)
   dvf?: LandingBienDvfData
