@@ -30,7 +30,10 @@ CREATE TABLE IF NOT EXISTS clients (
   updated_at TIMESTAMPTZ DEFAULT NOW()   -- enrich-property/route.ts:53, monthly-update/route.ts:148
 );
 
--- Colonnes ajoutees progressivement — IF NOT EXISTS pour idempotence
+-- TOUTES les colonnes en ALTER — couvre le cas ou la table existe avec un schema partiel
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS email TEXT;
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS first_name TEXT;
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS last_name TEXT;
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS password_hash TEXT;
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS email_verified BOOLEAN DEFAULT FALSE;
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS clerk_user_id TEXT;
@@ -40,6 +43,7 @@ ALTER TABLE clients ADD COLUMN IF NOT EXISTS pack TEXT;
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'pending';
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS client_context JSONB;
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ;
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
 
 -- Index clients
@@ -73,11 +77,16 @@ CREATE TABLE IF NOT EXISTS deliverables (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Colonnes ajoutees progressivement
+-- Colonnes ajoutees progressivement — TOUTES les colonnes, pas juste les incrementales
 ALTER TABLE deliverables ADD COLUMN IF NOT EXISTS client_id TEXT;
 ALTER TABLE deliverables ADD COLUMN IF NOT EXISTS client_email TEXT;
-ALTER TABLE deliverables ADD COLUMN IF NOT EXISTS metadata JSONB DEFAULT '{}';
+ALTER TABLE deliverables ADD COLUMN IF NOT EXISTS type TEXT;
+ALTER TABLE deliverables ADD COLUMN IF NOT EXISTS title TEXT;
+ALTER TABLE deliverables ADD COLUMN IF NOT EXISTS content TEXT;
+ALTER TABLE deliverables ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'pending';
 ALTER TABLE deliverables ADD COLUMN IF NOT EXISTS month TEXT;
+ALTER TABLE deliverables ADD COLUMN IF NOT EXISTS metadata JSONB DEFAULT '{}';
+ALTER TABLE deliverables ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
 
 -- Index deliverables
 CREATE INDEX IF NOT EXISTS idx_deliverables_client_id ON deliverables (client_id);
@@ -105,12 +114,17 @@ CREATE TABLE IF NOT EXISTS payments (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Colonnes ajoutees progressivement
+-- TOUTES les colonnes en ALTER — couvre le cas ou la table existe avec un schema partiel
 ALTER TABLE payments ADD COLUMN IF NOT EXISTS email TEXT;
 ALTER TABLE payments ADD COLUMN IF NOT EXISTS stripe_session_id TEXT;
 ALTER TABLE payments ADD COLUMN IF NOT EXISTS stripe_customer_id TEXT;
 ALTER TABLE payments ADD COLUMN IF NOT EXISTS stripe_payment_intent_id TEXT;
 ALTER TABLE payments ADD COLUMN IF NOT EXISTS stripe_invoice_id TEXT;
+ALTER TABLE payments ADD COLUMN IF NOT EXISTS amount INTEGER DEFAULT 0;
+ALTER TABLE payments ADD COLUMN IF NOT EXISTS currency TEXT DEFAULT 'eur';
+ALTER TABLE payments ADD COLUMN IF NOT EXISTS pack TEXT;
+ALTER TABLE payments ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'succeeded';
+ALTER TABLE payments ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
 
 -- Index payments
 CREATE INDEX IF NOT EXISTS idx_payments_email ON payments (email);
@@ -288,8 +302,20 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'deliverables' AND column_name = 'client_id') THEN
     RAISE EXCEPTION 'COLONNE MANQUANTE : deliverables.client_id';
   END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'deliverables' AND column_name = 'title') THEN
+    RAISE EXCEPTION 'COLONNE MANQUANTE : deliverables.title';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'deliverables' AND column_name = 'content') THEN
+    RAISE EXCEPTION 'COLONNE MANQUANTE : deliverables.content';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'deliverables' AND column_name = 'type') THEN
+    RAISE EXCEPTION 'COLONNE MANQUANTE : deliverables.type';
+  END IF;
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'deliverables' AND column_name = 'metadata') THEN
     RAISE EXCEPTION 'COLONNE MANQUANTE : deliverables.metadata';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'deliverables' AND column_name = 'status') THEN
+    RAISE EXCEPTION 'COLONNE MANQUANTE : deliverables.status';
   END IF;
 
   RAISE NOTICE '========================================';
