@@ -70,49 +70,82 @@ export async function POST(request: NextRequest) {
     pack_type: "lancement",
   })
 
+  // Vérifier que la clé API est configurée avant de lancer 7 appels Claude
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json(
+      {
+        error: "ANTHROPIC_API_KEY non configurée",
+        details: "La clé API Anthropic est absente des variables d'environnement. Ajoute-la dans les Secrets Replit.",
+      },
+      { status: 500 }
+    )
+  }
+
   const deliverableIds: string[] = []
+  let currentStep = ""
 
   try {
     // L1 : Positionnement + mise en avant expertise
+    currentStep = "L1-positionnement"
     const posPrompt = buildPositioningStatementPrompt(ctx)
-    const posResult = await generateJSON<{ positionnement: string; accroche_principale: string; proposition_valeur: string; piliers_differenciation: string[]; accroche_identitaire: string }>(
+    const posResult = await generateJSON<{
+      positionnement: {
+        accroche_identitaire: string
+        proposition_valeur: string
+        piliers_differenciation: Array<{ titre: string; explication: string }>
+        histoire_personnelle: string
+        clients_ideaux: string
+        tonalite: { adjectifs: string[]; phrases_a_utiliser: string[]; phrases_a_eviter: string[] }
+        mots_cles_identitaires: string[]
+        document_complet_markdown: string
+      }
+    }>(
       { ...posPrompt, maxTokens: 4096 }
     )
-    const posData = posResult.data
+    const posData = posResult.data.positionnement
     const posId = await insertDeliverable({
       clientEmail,
       clientId: client_id,
       type: "positionnement",
       title: `Positionnement — ${ctx.prenom} ${ctx.nom}`,
-      content: posData.positionnement,
-      metadata: { sub_type: "positioning_statement", accroche_principale: posData.accroche_principale, proposition_valeur: posData.proposition_valeur, piliers: posData.piliers_differenciation },
+      content: posData.document_complet_markdown || posData.proposition_valeur,
+      metadata: { sub_type: "positioning_statement", accroche_identitaire: posData.accroche_identitaire, proposition_valeur: posData.proposition_valeur, piliers: posData.piliers_differenciation.map(p => p.titre) },
       month,
     })
     deliverableIds.push(posId)
 
     // L2 : Bio optimisee multiformat
+    currentStep = "L2-bio"
     const bioPrompt = buildBioMultiformatPrompt({
       ...ctx,
       accroche_identitaire: posData.accroche_identitaire,
-      piliers_differenciation: posData.piliers_differenciation,
+      piliers_differenciation: posData.piliers_differenciation.map(p => p.titre),
     })
-    const bioResult = await generateJSON<{ instagram: string; linkedin: string; google: string; general: string }>(
+    const bioResult = await generateJSON<{
+      bios: {
+        instagram: { texte: string; nombre_caracteres: number }
+        linkedin: { texte: string; nombre_caracteres: number }
+        google_business: { texte: string; nombre_caracteres: number }
+        general: { texte: string; nombre_mots: number }
+      }
+    }>(
       { ...bioPrompt, maxTokens: 2048 }
     )
-    const bioData = bioResult.data
-    const bioContent = `## Instagram (150 car.)\n${bioData.instagram}\n\n## LinkedIn (300 car.)\n${bioData.linkedin}\n\n## Google Business (750 car.)\n${bioData.google}\n\n## Presentation generale\n${bioData.general}`
+    const bioData = bioResult.data.bios
+    const bioContent = `## Instagram (150 car.)\n${bioData.instagram.texte}\n\n## LinkedIn (300 car.)\n${bioData.linkedin.texte}\n\n## Google Business (750 car.)\n${bioData.google_business.texte}\n\n## Presentation generale\n${bioData.general.texte}`
     const bioId = await insertDeliverable({
       clientEmail,
       clientId: client_id,
       type: "bio",
       title: `Bio optimisee — ${ctx.prenom} ${ctx.nom}`,
       content: bioContent,
-      metadata: { sub_type: "bio_multiformat", instagram: bioData.instagram, linkedin: bioData.linkedin, google: bioData.google },
+      metadata: { sub_type: "bio_multiformat", instagram: bioData.instagram.texte, linkedin: bioData.linkedin.texte, google: bioData.google_business.texte },
       month,
     })
     deliverableIds.push(bioId)
 
     // L3 : 5 annonces storytelling
+    currentStep = "L3-annonces"
     const annoncesPrompt = buildAnnonceStorytellingPrompt({
       ...ctx,
       nombre_annonces: 5,
@@ -134,6 +167,7 @@ export async function POST(request: NextRequest) {
     }
 
     // L4 : 5 articles SEO local
+    currentStep = "L4-articles"
     const articlesPrompt = buildArticleSeoPrompt({
       ...ctx,
       nombre_articles: 5,
@@ -155,6 +189,7 @@ export async function POST(request: NextRequest) {
     }
 
     // L6 : 20 posts prets a publier
+    currentStep = "L6-posts"
     const postsPrompt = buildPostSocialPrompt({
       ...ctx,
       plateforme: "mix",
@@ -177,6 +212,7 @@ export async function POST(request: NextRequest) {
     }
 
     // L7 : 10 scripts Reels
+    currentStep = "L7-scripts"
     const scriptsPrompt = buildScriptVideoPrompt({
       ...ctx,
       nombre_scripts: 10,
@@ -204,6 +240,7 @@ export async function POST(request: NextRequest) {
     }
 
     // L5 : Calendrier editorial 30 jours
+    currentStep = "L5-calendrier"
     const calendarPrompt = buildEditorialCalendarPrompt({
       ...ctx,
       frequence_hebdo: 5,
@@ -226,24 +263,26 @@ export async function POST(request: NextRequest) {
     deliverableIds.push(calendarId)
 
     // Design brief (L8 preparation — non automatisable)
+    currentStep = "L8-design-brief"
     const designBriefId = await insertDeliverable({
       clientEmail,
       clientId: client_id,
       type: "brief_graphique",
       title: `Brief graphique — ${ctx.prenom} ${ctx.nom}`,
-      content: `Brief pour kit graphique personalise.\nPositionnement: ${posData.accroche_principale}\nProposition de valeur: ${posData.proposition_valeur}\nReseau: ${ctx.reseau}\nZone: ${ctx.zone_geo.ville}\nTon: ${ctx.ton}\nValeurs: ${ctx.valeurs}`,
+      content: `Brief pour kit graphique personalise.\nPositionnement: ${posData.accroche_identitaire}\nProposition de valeur: ${posData.proposition_valeur}\nReseau: ${ctx.reseau}\nZone: ${ctx.zone_geo.ville}\nTon: ${ctx.ton}\nValeurs: ${ctx.valeurs}`,
       metadata: { sub_type: "design_brief" },
       month,
     })
     deliverableIds.push(designBriefId)
 
   } catch (err) {
-    console.error("Error generating pack lancement:", err)
+    console.error(`Error generating pack lancement at step ${currentStep}:`, err)
     return NextResponse.json(
       {
-        error: "Erreur lors de la generation",
+        error: `Erreur lors de la generation (etape: ${currentStep})`,
         details: err instanceof Error ? err.message : String(err),
         deliverable_ids: deliverableIds,
+        step: currentStep,
       },
       { status: 500 }
     )
