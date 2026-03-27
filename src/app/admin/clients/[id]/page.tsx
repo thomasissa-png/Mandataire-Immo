@@ -38,13 +38,14 @@ interface Payment {
 export default async function AdminClientDetailPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   // Auth gérée par le layout admin (cookie ADMIN_PASSWORD)
 
   const { rows: clientRows } = await query<ClientDetail>(
     "SELECT * FROM clients WHERE id = $1 LIMIT 1",
-    [params.id]
+    [id]
   )
 
   const clientData = clientRows[0]
@@ -61,7 +62,7 @@ export default async function AdminClientDetailPage({
   // Fetch recent deliverables
   const { rows: deliverableList } = await query<ClientDeliverable>(
     "SELECT id, type, title, status, month, created_at FROM deliverables WHERE client_id = $1 ORDER BY created_at DESC LIMIT 20",
-    [params.id]
+    [id]
   )
 
   return (
@@ -152,7 +153,7 @@ export default async function AdminClientDetailPage({
           <h2 className="font-display text-h2 text-primary mb-4">
             Production IA
           </h2>
-          <TriggerProductionButton clientId={params.id} clientPack={clientData.pack} />
+          <TriggerProductionButton clientId={id} clientPack={clientData.pack} />
         </div>
 
         {/* Deliverables */}

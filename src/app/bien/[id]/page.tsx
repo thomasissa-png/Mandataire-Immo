@@ -9,7 +9,7 @@ import { PropertyDPE } from "@/components/property/PropertyDPE"
 import { PropertyContact } from "@/components/property/PropertyContact"
 
 interface PageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 async function getProperty(id: string): Promise<PropertyPage | null> {
@@ -21,7 +21,8 @@ async function getProperty(id: string): Promise<PropertyPage | null> {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const property = await getProperty(params.id)
+  const { id } = await params
+  const property = await getProperty(id)
   if (!property) {
     return { title: "Bien non trouve" }
   }
@@ -50,7 +51,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function PropertyPageRoute({ params }: PageProps) {
-  const property = await getProperty(params.id)
+  const { id } = await params
+  const property = await getProperty(id)
   if (!property) notFound()
 
   const hasStaging = property.photos_staging.length > 0
