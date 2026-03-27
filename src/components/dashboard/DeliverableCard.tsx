@@ -246,7 +246,7 @@ export function DeliverableCard({
               <button
                 type="button"
                 className="underline font-semibold hover:text-error-900 transition-colors"
-                onClick={(e) => { e.stopPropagation(); setLoadError(false); loadContent() }}
+                onClick={(e) => { e.stopPropagation(); setLoadError(false); void loadContent() }}
               >
                 Réessayer
               </button>
