@@ -1,4 +1,4 @@
-import type React from "react"
+import type { ReactNode } from "react"
 
 interface ClientContextCardProps {
   context: Record<string, unknown>
@@ -82,25 +82,25 @@ export function ClientContextCard({ context }: ClientContextCardProps) {
   return (
     <div className="space-y-4 mb-6">
       {/* Sections principales */}
-      {SECTION_ORDER.map((section): React.ReactNode => {
+      {SECTION_ORDER.reduce<ReactNode[]>((acc, section) => {
         const hasValues = section.keys.some((k) => {
           const v = context[k]
           return v !== null && v !== undefined && v !== ""
         })
-        if (!hasValues) return null
+        if (!hasValues) return acc
 
-        return (
+        acc.push(
           <div key={section.title} className="rounded-xl bg-card border border-border p-5">
             <h3 className="font-display text-body font-semibold text-primary mb-3">
               {section.title}
             </h3>
             <div className="grid grid-cols-1 tablet:grid-cols-2 gap-x-6 gap-y-2">
-              {section.keys.map((key) => {
+              {section.keys.reduce<ReactNode[]>((keyAcc, key) => {
                 const raw = context[key]
                 const display = formatValue(key, raw)
-                if (display === "—") return null
+                if (display === "—") return keyAcc
 
-                return (
+                keyAcc.push(
                   <div key={key} className="py-1">
                     <p className="text-caption text-neutral-500">{LABELS[key] || key}</p>
                     {isLink(display) ? (
@@ -117,11 +117,13 @@ export function ClientContextCard({ context }: ClientContextCardProps) {
                     )}
                   </div>
                 )
-              })}
+                return keyAcc
+              }, [])}
             </div>
           </div>
         )
-      })}
+        return acc
+      }, [])}
 
       {/* Données locales enrichies */}
       {donneesLocales && (donneesLocales.lat || donneesLocales.postcode) && (
