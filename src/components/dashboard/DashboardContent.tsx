@@ -344,75 +344,100 @@ export function DashboardContent({
       {/* ============================================================ */}
       {/*  1. Carte profil                                              */}
       {/* ============================================================ */}
-      <div className="rounded-lg bg-card border border-border overflow-hidden shadow-sm">
-        {/* Banniere degradee */}
-        <div className="h-28 bg-gradient-to-r from-primary via-primary-600 to-primary-800 relative">
+      <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg">
+        {/* Banniere premium avec cercles decoratifs */}
+        <div className="h-36 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1a2744 100%)" }}>
+          {/* Cercles decoratifs semi-transparents */}
+          <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/5" />
+          <div className="absolute top-12 right-24 w-20 h-20 rounded-full bg-white/[0.07]" />
+          <div className="absolute -bottom-6 left-16 w-28 h-28 rounded-full bg-white/[0.04]" />
+          <div className="absolute top-6 left-1/2 w-12 h-12 rounded-full bg-white/[0.06]" />
+
+          {/* Texte bienvenue */}
+          <p className="absolute top-4 left-5 text-white/70 text-body-sm font-medium tracking-wide">
+            Bienvenue dans ton espace
+          </p>
+
+          {/* Badge pack */}
           {packLabel && (
-            <span className="absolute top-3 right-4 px-3 py-1 rounded-full bg-card text-primary text-caption font-bold shadow-sm">
+            <span className="absolute top-3 right-4 px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white text-caption font-bold border border-white/10 shadow-sm">
               {packLabel}
             </span>
           )}
         </div>
 
         <div className="px-6 pb-6">
-          {/* Avatar */}
-          <div className="-mt-10 mb-4 flex items-end gap-4">
-            {photoUrl ? (
-              <img
-                src={photoUrl}
-                alt={`Photo de ${profile?.prenom || userName}`}
-                className="w-20 h-20 rounded-xl border-4 border-card shadow-md object-cover"
-              />
-            ) : (
-              <div className="w-20 h-20 rounded-xl border-4 border-card shadow-md bg-secondary flex items-center justify-center">
-                <span className="font-display text-h2 font-bold text-white">{initials}</span>
-              </div>
-            )}
-            <div className="pb-1">
-              <h1 className="font-display text-h2 text-primary leading-tight">
-                {profile ? `${profile.prenom} ${profile.nom}` : userName}
-              </h1>
-              {profile?.reseau && (
-                <p className="text-body-sm text-neutral-500">{profile.reseau}</p>
+          {/* Avatar debordant sur la banniere */}
+          <div className="-mt-12 mb-4">
+            <div className="flex items-end gap-4">
+              {photoUrl ? (
+                <img
+                  src={photoUrl}
+                  alt={`Photo de ${profile?.prenom || userName}`}
+                  className="w-24 h-24 rounded-2xl border-4 border-white shadow-lg object-cover flex-shrink-0"
+                />
+              ) : (
+                <div
+                  className="w-24 h-24 rounded-2xl border-4 border-white shadow-lg flex items-center justify-center flex-shrink-0"
+                  style={{ background: "linear-gradient(135deg, #f97316 0%, #fb923c 100%)" }}
+                >
+                  <span className="font-display text-h1 font-bold text-white">{initials}</span>
+                </div>
               )}
+              <div className="pb-2">
+                <h1 className="font-display text-h1 text-primary leading-tight font-bold">
+                  {profile ? `${profile.prenom} ${profile.nom}` : userName}
+                </h1>
+                {profile?.reseau && (
+                  <p className="text-body text-neutral-500 mt-0.5">
+                    Mandataire {profile.reseau}{profile.ville ? ` \u00b7 ${profile.ville}` : ""}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Infos cles en ligne */}
+          {/* Infos metier en grille de mini-cards */}
           {profile && (
-            <div className="flex flex-wrap gap-x-6 gap-y-2">
-              {profile.ville && (
-                <div className="flex items-center gap-1.5 text-body-sm text-neutral-600">
-                  <svg className="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                  </svg>
-                  {profile.ville}{profile.departement ? ` (${profile.departement})` : ""}
-                </div>
-              )}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
               {profile.experience_annees && (
-                <div className="flex items-center gap-1.5 text-body-sm text-neutral-600">
-                  <svg className="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {profile.experience_annees} an{Number(profile.experience_annees) > 1 ? "s" : ""} d{"'"}exp{"\u00e9"}rience
+                <div className="flex items-center gap-3 rounded-xl bg-blue-50 px-4 py-3">
+                  <div className="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-caption text-blue-600/70 font-medium">Exp{"\u00e9"}rience</p>
+                    <p className="text-body-sm font-semibold text-blue-900">{profile.experience_annees} an{Number(profile.experience_annees) > 1 ? "s" : ""}</p>
+                  </div>
                 </div>
               )}
               {profile.nb_transactions_an && (
-                <div className="flex items-center gap-1.5 text-body-sm text-neutral-600">
-                  <svg className="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                  </svg>
-                  {profile.nb_transactions_an} transaction{Number(profile.nb_transactions_an) > 1 ? "s" : ""}/an
+                <div className="flex items-center gap-3 rounded-xl bg-emerald-50 px-4 py-3">
+                  <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-caption text-emerald-600/70 font-medium">Transactions</p>
+                    <p className="text-body-sm font-semibold text-emerald-900">{profile.nb_transactions_an}/an</p>
+                  </div>
                 </div>
               )}
               {profile.type_biens && (
-                <div className="flex items-center gap-1.5 text-body-sm text-neutral-600">
-                  <svg className="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6z" />
-                  </svg>
-                  {profile.type_biens}
+                <div className="flex items-center gap-3 rounded-xl bg-orange-50 px-4 py-3">
+                  <div className="w-9 h-9 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-caption text-orange-600/70 font-medium">Sp{"\u00e9"}cialit{"\u00e9"}</p>
+                    <p className="text-body-sm font-semibold text-orange-900">{profile.type_biens}</p>
+                  </div>
                 </div>
               )}
               {profile.linkedin_url && (
@@ -421,12 +446,17 @@ export function DashboardContent({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Voir le profil LinkedIn (s'ouvre dans un nouvel onglet)"
-                  className="inline-flex items-center gap-1.5 min-h-[44px] py-2 text-body-sm text-secondary-700 hover:text-secondary hover:underline transition-colors duration-normal"
+                  className="flex items-center gap-3 rounded-xl bg-[#EBF4FB] px-4 py-3 hover:bg-[#D6E9F6] transition-colors duration-normal group"
                 >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                  </svg>
-                  LinkedIn
+                  <div className="w-9 h-9 rounded-lg bg-[#D6E9F6] group-hover:bg-[#C0DCF0] flex items-center justify-center flex-shrink-0 transition-colors duration-normal">
+                    <svg className="w-5 h-5 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-caption text-[#0A66C2]/70 font-medium">Profil</p>
+                    <p className="text-body-sm font-semibold text-[#0A66C2]">LinkedIn</p>
+                  </div>
                 </a>
               )}
             </div>
