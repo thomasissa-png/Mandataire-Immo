@@ -57,83 +57,14 @@ interface DashboardContentProps {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Category definitions                                               */
+/*  Type labels & colors                                               */
 /* ------------------------------------------------------------------ */
-
-type CategoryKey = "posts" | "annonces" | "articles" | "scripts" | "emails" | "strategie"
-
-interface CategoryDef {
-  key: CategoryKey
-  label: string
-  pillLabel: string
-  icon: string
-  types: DeliverableType[]
-  bgClass: string
-  iconBgClass: string
-}
-
-const CATEGORIES: CategoryDef[] = [
-  {
-    key: "posts",
-    label: "Posts réseaux sociaux",
-    pillLabel: "Posts",
-    icon: "📱",
-    types: ["post"],
-    bgClass: "bg-secondary-50",
-    iconBgClass: "bg-secondary-50",
-  },
-  {
-    key: "articles",
-    label: "Articles SEO",
-    pillLabel: "Articles",
-    icon: "📝",
-    types: ["article_seo"],
-    bgClass: "bg-info-50",
-    iconBgClass: "bg-info-50",
-  },
-  {
-    key: "annonces",
-    label: "Annonces immobilières",
-    pillLabel: "Annonces",
-    icon: "🏠",
-    types: ["annonce"],
-    bgClass: "bg-success-50",
-    iconBgClass: "bg-success-50",
-  },
-  {
-    key: "scripts",
-    label: "Scripts vidéo",
-    pillLabel: "Scripts",
-    icon: "🎬",
-    types: ["script_video"],
-    bgClass: "bg-warning-50",
-    iconBgClass: "bg-warning-50",
-  },
-  {
-    key: "emails",
-    label: "Emails",
-    pillLabel: "Emails",
-    icon: "📧",
-    types: ["newsletter", "email_prospection"],
-    bgClass: "bg-primary-50",
-    iconBgClass: "bg-primary-50",
-  },
-  {
-    key: "strategie",
-    label: "Stratégie",
-    pillLabel: "Stratégie",
-    icon: "📋",
-    types: ["positionnement", "bio", "calendrier", "brief_graphique", "landing_page"],
-    bgClass: "bg-neutral-100",
-    iconBgClass: "bg-neutral-100",
-  },
-]
 
 const TYPE_LABELS: Record<string, string> = {
   post: "Post",
   article_seo: "Article SEO",
   annonce: "Annonce",
-  script_video: "Script vidéo",
+  script_video: "Script video",
   newsletter: "Newsletter",
   email_prospection: "Email prospection",
   bio: "Bio",
@@ -161,38 +92,6 @@ const TYPE_COLORS: Record<string, string> = {
 /*  SVG icons                                                          */
 /* ------------------------------------------------------------------ */
 
-function IconCheck() {
-  return (
-    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  )
-}
-
-function IconClock() {
-  return (
-    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  )
-}
-
-function IconGrid() {
-  return (
-    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-    </svg>
-  )
-}
-
-function IconArchive() {
-  return (
-    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-    </svg>
-  )
-}
-
 function ChevronIcon({ open }: { open: boolean }) {
   return (
     <svg
@@ -208,6 +107,122 @@ function ChevronIcon({ open }: { open: boolean }) {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Platform detection for posts                                       */
+/* ------------------------------------------------------------------ */
+
+function detectPlatform(title: string): { icon: string; name: string } {
+  const lower = title.toLowerCase()
+  if (lower.includes("instagram") || lower.includes("insta") || lower.includes("reel"))
+    return { icon: "📸", name: "Instagram" }
+  if (lower.includes("linkedin"))
+    return { icon: "💼", name: "LinkedIn" }
+  if (lower.includes("facebook") || lower.includes("fb"))
+    return { icon: "📘", name: "Facebook" }
+  if (lower.includes("tiktok") || lower.includes("tik tok"))
+    return { icon: "🎵", name: "TikTok" }
+  if (lower.includes("twitter") || lower.includes("x "))
+    return { icon: "🐦", name: "X / Twitter" }
+  return { icon: "📱", name: "Reseaux sociaux" }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Matching annonces to biens by index                                */
+/* ------------------------------------------------------------------ */
+
+function matchAnnoncesToBiens(
+  annonces: Deliverable[],
+  biensCount: number
+): { matched: Map<number, Deliverable[]>; unmatched: Deliverable[] } {
+  const matched = new Map<number, Deliverable[]>()
+  const unmatched: Deliverable[] = []
+
+  for (const annonce of annonces) {
+    const lower = annonce.title.toLowerCase()
+    let found = false
+
+    // Try to match "Bien X" pattern in the title
+    const bienMatch = lower.match(/bien\s+(\d+)/)
+    if (bienMatch) {
+      const bienIndex = parseInt(bienMatch[1], 10) - 1 // 0-based
+      if (bienIndex >= 0 && bienIndex < biensCount) {
+        const existing = matched.get(bienIndex) || []
+        existing.push(annonce)
+        matched.set(bienIndex, existing)
+        found = true
+      }
+    }
+
+    if (!found) {
+      unmatched.push(annonce)
+    }
+  }
+
+  return { matched, unmatched }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Format date                                                        */
+/* ------------------------------------------------------------------ */
+
+function formatDate(dateStr: string): string {
+  try {
+    const date = new Date(dateStr)
+    return date.toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
+  } catch {
+    return dateStr
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Section header component                                           */
+/* ------------------------------------------------------------------ */
+
+function SectionHeader({
+  icon,
+  title,
+  count,
+  isOpen,
+  onToggle,
+  defaultClosed,
+}: {
+  icon: React.ReactNode
+  title: string
+  count: number
+  isOpen: boolean
+  onToggle: () => void
+  defaultClosed?: boolean
+}) {
+  return (
+    <button
+      type="button"
+      className="w-full flex items-center justify-between gap-3 group"
+      onClick={onToggle}
+      aria-expanded={isOpen}
+    >
+      <div className="flex items-center gap-3">
+        <span
+          className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-primary-50 text-lg"
+          aria-hidden="true"
+        >
+          {icon}
+        </span>
+        <h2 className="font-display text-h3 text-primary">{title}</h2>
+        <span className="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-2 rounded-full bg-neutral-100 text-caption text-neutral-600 font-semibold">
+          {count}
+        </span>
+      </div>
+      <span className="text-neutral-400 group-hover:text-primary transition-colors duration-normal">
+        <ChevronIcon open={isOpen} />
+      </span>
+    </button>
+  )
+}
+
+/* ------------------------------------------------------------------ */
 /*  Main component                                                     */
 /* ------------------------------------------------------------------ */
 
@@ -219,28 +234,10 @@ export function DashboardContent({
   deliverables,
   profile,
 }: DashboardContentProps) {
-  const [activeFilter, setActiveFilter] = useState<CategoryKey | "all">("all")
-  const [collapsedSections, setCollapsedSections] = useState<Set<CategoryKey>>(new Set())
+  // Sections that start collapsed: only "strategie"
+  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set(["strategie"]))
 
-  /* Group deliverables by category */
-  const categorized = useMemo(() => {
-    return CATEGORIES.map((cat) => ({
-      ...cat,
-      items: deliverables.filter((d) => cat.types.includes(d.type)),
-    })).filter((cat) => cat.items.length > 0)
-  }, [deliverables])
-
-  /* Visible categories based on active filter */
-  const visibleCategories = activeFilter === "all"
-    ? categorized
-    : categorized.filter((cat) => cat.key === activeFilter)
-
-  /* Stats */
-  const totalDelivered = deliverables.filter((d) => d.status === "delivered").length
-  const totalDraft = deliverables.filter((d) => d.status === "draft").length
-  const activeCategories = categorized.length
-
-  const toggleSection = (key: CategoryKey) => {
+  const toggleSection = (key: string) => {
     setCollapsedSections((prev) => {
       const next = new Set(prev)
       if (next.has(key)) {
@@ -251,6 +248,56 @@ export function DashboardContent({
       return next
     })
   }
+
+  /* Categorize deliverables by context */
+  const { posts, articles, annonces, scripts, emails, strategie } = useMemo(() => {
+    const posts: Deliverable[] = []
+    const articles: Deliverable[] = []
+    const annonces: Deliverable[] = []
+    const scripts: Deliverable[] = []
+    const emails: Deliverable[] = []
+    const strategie: Deliverable[] = []
+
+    for (const d of deliverables) {
+      switch (d.type) {
+        case "post":
+          posts.push(d)
+          break
+        case "article_seo":
+          articles.push(d)
+          break
+        case "annonce":
+          annonces.push(d)
+          break
+        case "script_video":
+          scripts.push(d)
+          break
+        case "newsletter":
+        case "email_prospection":
+          emails.push(d)
+          break
+        case "positionnement":
+        case "bio":
+        case "calendrier":
+        case "brief_graphique":
+        case "landing_page":
+          strategie.push(d)
+          break
+      }
+    }
+
+    // Sort posts by created_at descending (newest first)
+    posts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+    return { posts, articles, annonces, scripts, emails, strategie }
+  }, [deliverables])
+
+  /* Match annonces to biens */
+  const biensCount = profile?.biens.length ?? 0
+  const { matched: matchedAnnonces, unmatched: unmatchedAnnonces } = useMemo(
+    () => matchAnnoncesToBiens(annonces, biensCount),
+    [annonces, biensCount]
+  )
 
   // Initiales pour l'avatar
   const initials = profile
@@ -265,9 +312,11 @@ export function DashboardContent({
 
   return (
     <div className="space-y-8">
-      {/* Carte profil */}
+      {/* ============================================================ */}
+      {/*  1. Carte profil                                              */}
+      {/* ============================================================ */}
       <div className="rounded-lg bg-card border border-border overflow-hidden shadow-sm">
-        {/* Bannière dégradée */}
+        {/* Banniere degradee */}
         <div className="h-28 bg-gradient-to-r from-primary via-primary-600 to-primary-800 relative">
           {packLabel && (
             <span className="absolute top-3 right-4 px-3 py-1 rounded-full bg-card text-primary text-caption font-bold shadow-sm">
@@ -300,7 +349,7 @@ export function DashboardContent({
             </div>
           </div>
 
-          {/* Infos clés en ligne */}
+          {/* Infos cles en ligne */}
           {profile && (
             <div className="flex flex-wrap gap-x-6 gap-y-2">
               {profile.ville && (
@@ -317,7 +366,7 @@ export function DashboardContent({
                   <svg className="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  {profile.experience_annees} an{Number(profile.experience_annees) > 1 ? "s" : ""} d'expérience
+                  {profile.experience_annees} an{Number(profile.experience_annees) > 1 ? "s" : ""} d{"'"}exp{"\u00e9"}rience
                 </div>
               )}
               {profile.nb_transactions_an && (
@@ -355,53 +404,6 @@ export function DashboardContent({
         </div>
       </div>
 
-      {/* Section Mes biens */}
-      {profile && profile.biens.length > 0 && (
-        <div className="rounded-lg bg-card border border-border overflow-hidden shadow-sm">
-          <div className="px-6 py-4 border-b border-border bg-neutral-50/50">
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-              </svg>
-              <h2 className="font-display text-h3 text-primary">Mes biens ({profile.biens.length})</h2>
-            </div>
-          </div>
-          <div className="divide-y divide-border">
-            {profile.biens.map((bien, i) => (
-              <div key={i} className="p-5 hover:bg-neutral-50/50 transition-colors duration-normal">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-600 flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-lg" aria-hidden="true">🏠</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-display text-body font-semibold text-primary leading-snug">
-                      {bien.titre || `Bien ${i + 1}`}
-                    </h3>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {bien.type ? <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-primary-50 text-caption font-medium text-primary-700">{bien.type}</span> : null}
-                      {bien.adresse ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600">
-                          📍 {bien.adresse}
-                        </span>
-                      ) : null}
-                      {bien.prix ? <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-success-50 text-caption font-bold text-success-700">{Number(bien.prix).toLocaleString("fr-FR")} €</span> : null}
-                      {bien.surface ? <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600">{bien.surface} m²</span> : null}
-                      {bien.pieces ? <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600">{bien.pieces} pièce{Number(bien.pieces) > 1 ? "s" : ""}</span> : null}
-                    </div>
-                    {bien.points_forts ? <p className="text-body-sm text-neutral-500 mt-2 italic">{bien.points_forts}</p> : null}
-                    {bien.lien_annonce ? (
-                      <a href={bien.lien_annonce} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 mt-2 text-body-sm text-secondary-700 font-semibold hover:text-secondary hover:underline transition-colors duration-normal">
-                        🔗 Voir l'annonce
-                      </a>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Monthly update banner */}
       {showMonthlyBanner && (
         <a
@@ -416,15 +418,15 @@ export function DashboardContent({
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-display text-h4 text-primary">
-                Mise à jour mensuelle
+                Mise {"\u00e0"} jour mensuelle
               </p>
               <p className="text-body-sm text-neutral-500 mt-0.5">
-                10 min pour des contenus encore plus personnalisés ce mois-ci
+                10 min pour des contenus encore plus personnalis{"\u00e9"}s ce mois-ci
               </p>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               <span className="text-body-sm font-semibold text-secondary-700 group-hover:text-secondary-800 transition-colors duration-normal">
-                Mettre à jour
+                Mettre {"\u00e0"} jour
               </span>
               <svg className="w-4 h-4 text-secondary-700 group-hover:translate-x-0.5 transition-transform duration-normal" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -434,24 +436,17 @@ export function DashboardContent({
         </a>
       )}
 
-      {/* Sous-titre contenus */}
-      <div>
-        <p className="text-body text-neutral-500">
-          {deliverables.length} contenu{deliverables.length !== 1 ? "s" : ""} prêt{deliverables.length !== 1 ? "s" : ""}
-        </p>
-      </div>
-
       {deliverables.length === 0 ? (
         /* ----- Empty state ----- */
         <div className="rounded-lg bg-card border border-border p-10 text-center max-w-lg mx-auto shadow-sm">
           <div className="w-16 h-16 rounded-2xl bg-secondary-50 flex items-center justify-center mx-auto mb-6">
-            <span className="text-3xl" aria-hidden="true">✍️</span>
+            <span className="text-3xl" aria-hidden="true">{"\u270d\ufe0f"}</span>
           </div>
           <h2 className="font-display text-h2 text-primary mb-3">
             Bienvenue dans ton espace !
           </h2>
           <p className="text-body text-neutral-600 mb-6">
-            Ton équipe est au travail. Tes premiers contenus arrivent sous 24h.
+            Ton {"\u00e9"}quipe est au travail. Tes premiers contenus arrivent sous 24h.
           </p>
           <div className="rounded-lg bg-background p-5 text-left">
             <p className="text-body-sm text-neutral-500 font-semibold mb-3">
@@ -460,133 +455,328 @@ export function DashboardContent({
             <ul className="text-body-sm text-neutral-600 space-y-2">
               {pack === "lancement" ? (
                 <>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 20 posts prêts à publier</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 5 articles SEO local</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 5 annonces storytelling</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 10 scripts vidéo</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> Kit graphique personnalisé</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 20 posts pr{"\u00ea"}ts {"\u00e0"} publier</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 5 articles SEO local</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 5 annonces storytelling</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 10 scripts vid{"\u00e9"}o</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> Kit graphique personnalis{"\u00e9"}</li>
                 </>
               ) : (
                 <>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 12 posts prêts à publier</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 2 articles SEO local</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 4 annonces personnalisées</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 4 scripts vidéo</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 1 newsletter + 1 email prospection</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 12 posts pr{"\u00ea"}ts {"\u00e0"} publier</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 2 articles SEO local</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 4 annonces personnalis{"\u00e9"}es</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 4 scripts vid{"\u00e9"}o</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 1 newsletter + 1 email prospection</li>
                 </>
               )}
             </ul>
           </div>
           <p className="text-caption text-neutral-500 mt-4">
-            On t'envoie un email dès que c'est prêt.
+            On t{"'"}envoie un email d{"\u00e8"}s que c{"'"}est pr{"\u00ea"}t.
           </p>
         </div>
       ) : (
-        <>
-          {/* ----- Stat cards ----- */}
-          <div className="grid grid-cols-2 tablet:grid-cols-4 gap-4">
-            <StatCard
-              icon={<IconArchive />}
-              label="Total"
-              value={deliverables.length}
-              colorClass="text-primary bg-primary-50"
-            />
-            <StatCard
-              icon={<IconCheck />}
-              label="Livrés"
-              value={totalDelivered}
-              colorClass="text-success-700 bg-success-50"
-            />
-            <StatCard
-              icon={<IconClock />}
-              label="En cours"
-              value={totalDraft}
-              colorClass="text-warning-700 bg-warning-50"
-            />
-            <StatCard
-              icon={<IconGrid />}
-              label="Catégories"
-              value={activeCategories}
-              colorClass="text-info-700 bg-info-50"
-            />
-          </div>
+        <div className="space-y-10">
 
-          {/* ----- Filter pills ----- */}
-          {/* overflow-x-auto + no-wrap : scroll horizontal sur mobile, pas de retour à la ligne */}
-          <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 tablet:mx-0 tablet:px-0 tablet:flex-wrap scrollbar-hide">
-            <FilterPill
-              label="Tout"
-              count={deliverables.length}
-              active={activeFilter === "all"}
-              onClick={() => setActiveFilter("all")}
-            />
-            {categorized.map((cat) => (
-              <FilterPill
-                key={cat.key}
-                label={`${cat.icon} ${cat.pillLabel}`}
-                count={cat.items.length}
-                active={activeFilter === cat.key}
-                onClick={() => setActiveFilter(activeFilter === cat.key ? "all" : cat.key)}
+          {/* ============================================================ */}
+          {/*  2. Section "Mes biens" + annonces rattachees                 */}
+          {/* ============================================================ */}
+          {profile && profile.biens.length > 0 && (
+            <section aria-labelledby="section-biens-heading">
+              <div className="rounded-lg bg-card border border-border overflow-hidden shadow-sm">
+                <div className="px-6 py-4 border-b border-border bg-neutral-50/50">
+                  <SectionHeader
+                    icon={<span>{"\ud83c\udfe0"}</span>}
+                    title={`Mes biens (${profile.biens.length})`}
+                    count={annonces.length}
+                    isOpen={!collapsedSections.has("biens")}
+                    onToggle={() => toggleSection("biens")}
+                  />
+                </div>
+
+                {!collapsedSections.has("biens") && (
+                  <div className="divide-y divide-border">
+                    {profile.biens.map((bien, i) => {
+                      const bienAnnonces = matchedAnnonces.get(i) || []
+                      return (
+                        <div key={i} className="p-5">
+                          {/* Bien card */}
+                          <div className="flex items-start gap-4">
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-600 flex items-center justify-center flex-shrink-0">
+                              <span className="text-white text-lg" aria-hidden="true">{"\ud83c\udfe0"}</span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-display text-body font-semibold text-primary leading-snug">
+                                {bien.titre || `Bien ${i + 1}`}
+                              </h3>
+                              <div className="flex flex-wrap gap-2 mt-2">
+                                {bien.type ? <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-primary-50 text-caption font-medium text-primary-700">{bien.type}</span> : null}
+                                {bien.adresse ? (
+                                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600">
+                                    {"\ud83d\udccd"} {bien.adresse}
+                                  </span>
+                                ) : null}
+                                {bien.prix ? <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-success-50 text-caption font-bold text-success-700">{Number(bien.prix).toLocaleString("fr-FR")} {"\u20ac"}</span> : null}
+                                {bien.surface ? <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600">{bien.surface} m{"\u00b2"}</span> : null}
+                                {bien.pieces ? <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600">{bien.pieces} pi{"\u00e8"}ce{Number(bien.pieces) > 1 ? "s" : ""}</span> : null}
+                              </div>
+                              {bien.points_forts ? <p className="text-body-sm text-neutral-500 mt-2 italic">{bien.points_forts}</p> : null}
+                              {bien.lien_annonce ? (
+                                <a href={bien.lien_annonce} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 mt-2 text-body-sm text-secondary-700 font-semibold hover:text-secondary hover:underline transition-colors duration-normal">
+                                  {"\ud83d\udd17"} Voir l{"'"}annonce originale
+                                </a>
+                              ) : null}
+                            </div>
+                          </div>
+
+                          {/* Annonces rattachees a ce bien */}
+                          {bienAnnonces.length > 0 && (
+                            <div className="mt-4 ml-16 space-y-3">
+                              <p className="text-body-sm font-semibold text-neutral-600 flex items-center gap-1.5">
+                                {"\ud83d\udcdd"} Annonces pour ce bien
+                              </p>
+                              {bienAnnonces.map((annonce) => (
+                                <DeliverableCard
+                                  key={annonce.id}
+                                  id={annonce.id}
+                                  type={annonce.type}
+                                  typeLabel={TYPE_LABELS[annonce.type] || annonce.type}
+                                  typeColor={TYPE_COLORS[annonce.type] || "bg-neutral-100 text-neutral-600"}
+                                  title={annonce.title}
+                                  status={annonce.status}
+                                />
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })}
+
+                    {/* Annonces non rattachees */}
+                    {unmatchedAnnonces.length > 0 && (
+                      <div className="p-5">
+                        <p className="text-body-sm font-semibold text-neutral-600 flex items-center gap-1.5 mb-3">
+                          {"\ud83d\udcdd"} Autres annonces
+                        </p>
+                        <div className="space-y-3">
+                          {unmatchedAnnonces.map((annonce) => (
+                            <DeliverableCard
+                              key={annonce.id}
+                              id={annonce.id}
+                              type={annonce.type}
+                              typeLabel={TYPE_LABELS[annonce.type] || annonce.type}
+                              typeColor={TYPE_COLORS[annonce.type] || "bg-neutral-100 text-neutral-600"}
+                              title={annonce.title}
+                              status={annonce.status}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* Annonces sans biens (si pas de biens dans le profil) */}
+          {(!profile || profile.biens.length === 0) && annonces.length > 0 && (
+            <section aria-labelledby="section-annonces-heading">
+              <SectionHeader
+                icon={<span>{"\ud83c\udfe0"}</span>}
+                title="Mes annonces"
+                count={annonces.length}
+                isOpen={!collapsedSections.has("annonces")}
+                onToggle={() => toggleSection("annonces")}
               />
-            ))}
-          </div>
+              {!collapsedSections.has("annonces") && (
+                <div className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4">
+                  {annonces.map((d) => (
+                    <DeliverableCard
+                      key={d.id}
+                      id={d.id}
+                      type={d.type}
+                      typeLabel={TYPE_LABELS[d.type] || d.type}
+                      typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"}
+                      title={d.title}
+                      status={d.status}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
 
-          {/* ----- Category sections ----- */}
-          <div className="space-y-8">
-            {visibleCategories.map((cat) => {
-              const isCollapsed = collapsedSections.has(cat.key)
+          {/* ============================================================ */}
+          {/*  3. Section "Ma timeline" — posts en flux social              */}
+          {/* ============================================================ */}
+          {posts.length > 0 && (
+            <section aria-labelledby="section-posts-heading">
+              <SectionHeader
+                icon={<span>{"\ud83d\udcf1"}</span>}
+                title="Ma timeline"
+                count={posts.length}
+                isOpen={!collapsedSections.has("posts")}
+                onToggle={() => toggleSection("posts")}
+              />
 
-              return (
-                <section key={cat.key} aria-labelledby={`section-${cat.key}-heading`}>
-                  {/* Section header */}
-                  <button
-                    type="button"
-                    id={`section-${cat.key}-heading`}
-                    className="w-full flex items-center justify-between gap-3 group mb-4"
-                    onClick={() => toggleSection(cat.key)}
-                    aria-expanded={!isCollapsed}
-                    aria-controls={`section-${cat.key}-grid`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span
-                        className={`inline-flex items-center justify-center w-9 h-9 rounded-lg ${cat.iconBgClass} text-lg`}
-                        aria-hidden="true"
-                      >
-                        {cat.icon}
-                      </span>
-                      <h2 className="font-display text-h3 text-primary">
-                        {cat.label}
-                      </h2>
-                      <span className="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-2 rounded-full bg-neutral-100 text-caption text-neutral-600 font-semibold">
-                        {cat.items.length}
-                      </span>
-                    </div>
-                    <span className="text-neutral-400 group-hover:text-primary transition-colors duration-normal">
-                      <ChevronIcon open={!isCollapsed} />
-                    </span>
-                  </button>
+              {!collapsedSections.has("posts") && (
+                <div className="mt-6 relative">
+                  {/* Ligne verticale de timeline */}
+                  <div className="absolute left-5 top-0 bottom-0 w-0.5 bg-gradient-to-b from-secondary/40 via-secondary/20 to-transparent" aria-hidden="true" />
 
-                  {/* Cards grid */}
-                  {!isCollapsed && (
-                    <div id={`section-${cat.key}-grid`} className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
-                      {cat.items.map((d) => (
-                        <DeliverableCard
-                          key={d.id}
-                          id={d.id}
-                          type={d.type}
-                          typeLabel={TYPE_LABELS[d.type] || d.type}
-                          typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"}
-                          title={d.title}
-                          status={d.status}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </section>
-              )
-            })}
-          </div>
-        </>
+                  <div className="space-y-1">
+                    {posts.map((post, index) => {
+                      const platform = detectPlatform(post.title)
+                      return (
+                        <div key={post.id} className="relative pl-12">
+                          {/* Pastille plateforme sur la ligne */}
+                          <div className="absolute left-2 top-5 w-7 h-7 rounded-full bg-card border-2 border-secondary/30 flex items-center justify-center text-sm shadow-xs" aria-hidden="true">
+                            {platform.icon}
+                          </div>
+
+                          <DeliverableCard
+                            id={post.id}
+                            type={post.type}
+                            typeLabel={platform.name}
+                            typeColor={TYPE_COLORS[post.type] || "bg-secondary-50 text-secondary-700"}
+                            title={post.title}
+                            status={post.status}
+                          />
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* ============================================================ */}
+          {/*  4. Section "Mes articles" — preview magazine                 */}
+          {/* ============================================================ */}
+          {articles.length > 0 && (
+            <section aria-labelledby="section-articles-heading">
+              <SectionHeader
+                icon={<span>{"\ud83d\udcdd"}</span>}
+                title="Mes articles"
+                count={articles.length}
+                isOpen={!collapsedSections.has("articles")}
+                onToggle={() => toggleSection("articles")}
+              />
+
+              {!collapsedSections.has("articles") && (
+                <div className="mt-4 space-y-4">
+                  {articles.map((article) => (
+                    <DeliverableCard
+                      key={article.id}
+                      id={article.id}
+                      type={article.type}
+                      typeLabel={TYPE_LABELS[article.type] || article.type}
+                      typeColor={TYPE_COLORS[article.type] || "bg-info-50 text-info-700"}
+                      title={article.title}
+                      status={article.status}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* ============================================================ */}
+          {/*  5. Section "Mes scripts video"                               */}
+          {/* ============================================================ */}
+          {scripts.length > 0 && (
+            <section aria-labelledby="section-scripts-heading">
+              <SectionHeader
+                icon={<span>{"\ud83c\udfac"}</span>}
+                title="Mes scripts vid\u00e9o"
+                count={scripts.length}
+                isOpen={!collapsedSections.has("scripts")}
+                onToggle={() => toggleSection("scripts")}
+              />
+
+              {!collapsedSections.has("scripts") && (
+                <div className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4">
+                  {scripts.map((script) => (
+                    <DeliverableCard
+                      key={script.id}
+                      id={script.id}
+                      type={script.type}
+                      typeLabel={TYPE_LABELS[script.type] || script.type}
+                      typeColor={TYPE_COLORS[script.type] || "bg-warning-50 text-warning-800"}
+                      title={script.title}
+                      status={script.status}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* ============================================================ */}
+          {/*  6. Section "Mes emails"                                      */}
+          {/* ============================================================ */}
+          {emails.length > 0 && (
+            <section aria-labelledby="section-emails-heading">
+              <SectionHeader
+                icon={<span>{"\ud83d\udce7"}</span>}
+                title="Mes emails"
+                count={emails.length}
+                isOpen={!collapsedSections.has("emails")}
+                onToggle={() => toggleSection("emails")}
+              />
+
+              {!collapsedSections.has("emails") && (
+                <div className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4">
+                  {emails.map((email) => (
+                    <DeliverableCard
+                      key={email.id}
+                      id={email.id}
+                      type={email.type}
+                      typeLabel={TYPE_LABELS[email.type] || email.type}
+                      typeColor={TYPE_COLORS[email.type] || "bg-primary-50 text-primary-700"}
+                      title={email.title}
+                      status={email.status}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* ============================================================ */}
+          {/*  7. Section "Ma strategie" (repliee par defaut)               */}
+          {/* ============================================================ */}
+          {strategie.length > 0 && (
+            <section aria-labelledby="section-strategie-heading">
+              <SectionHeader
+                icon={<span>{"\ud83d\udccb"}</span>}
+                title="Ma strat\u00e9gie"
+                count={strategie.length}
+                isOpen={!collapsedSections.has("strategie")}
+                onToggle={() => toggleSection("strategie")}
+              />
+
+              {!collapsedSections.has("strategie") && (
+                <div className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4">
+                  {strategie.map((d) => (
+                    <DeliverableCard
+                      key={d.id}
+                      id={d.id}
+                      type={d.type}
+                      typeLabel={TYPE_LABELS[d.type] || d.type}
+                      typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"}
+                      title={d.title}
+                      status={d.status}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+        </div>
       )}
 
       {/* Manage subscription */}
@@ -596,72 +786,10 @@ export function DashboardContent({
             href="/api/portal"
             className="text-body-sm text-neutral-600 hover:text-secondary-700 underline transition-colors duration-normal"
           >
-            Gérer mon abonnement
+            G{"\u00e9"}rer mon abonnement
           </a>
         </div>
       )}
     </div>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  Sub-components                                                     */
-/* ------------------------------------------------------------------ */
-
-function StatCard({
-  icon,
-  label,
-  value,
-  colorClass,
-}: {
-  icon: React.ReactNode
-  label: string
-  value: number
-  colorClass: string
-}) {
-  return (
-    <div className="rounded-lg bg-card border border-border p-4 flex items-center gap-3 shadow-xs hover:shadow-sm transition-shadow duration-normal">
-      <div className={`inline-flex items-center justify-center w-10 h-10 rounded-lg ${colorClass}`}>
-        {icon}
-      </div>
-      <div>
-        <p className="font-display text-h3 font-bold text-primary leading-none">{value}</p>
-        <p className="text-caption text-neutral-500 mt-1">{label}</p>
-      </div>
-    </div>
-  )
-}
-
-function FilterPill({
-  label,
-  count,
-  active,
-  onClick,
-}: {
-  label: string
-  count: number
-  active: boolean
-  onClick: () => void
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={active}
-      className={`flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-body-sm font-semibold transition-all duration-normal ${
-        active
-          ? "bg-primary text-white shadow-sm"
-          : "bg-card border border-border text-neutral-600 hover:border-secondary/40 hover:text-primary"
-      }`}
-      onClick={onClick}
-    >
-      {label}
-      <span
-        className={`inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1 rounded-full text-caption font-bold ${
-          active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500"
-        }`}
-      >
-        {count}
-      </span>
-    </button>
   )
 }
