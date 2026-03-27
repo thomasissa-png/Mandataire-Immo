@@ -244,12 +244,7 @@ export default function OnboardingPage() {
   const [submitError, setSubmitError] = useState("")
 
   // Photo upload state
-  const [photoPreview, setPhotoPreview] = useState<string | null>(() => {
-    if (typeof window !== "undefined") {
-      return sessionStorage.getItem("immocrew_onboarding_photo") || null
-    }
-    return null
-  })
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [photoUploading, setPhotoUploading] = useState(false)
   const photoInputRef = useRef<HTMLInputElement>(null)
 
@@ -286,14 +281,7 @@ export default function OnboardingPage() {
     sessionStorage.setItem("immocrew_onboarding_biens", JSON.stringify(biens))
   }, [currentStep, data, biens])
 
-  // Persist photo to sessionStorage
-  useEffect(() => {
-    if (photoPreview) {
-      sessionStorage.setItem("immocrew_onboarding_photo", photoPreview)
-    } else {
-      sessionStorage.removeItem("immocrew_onboarding_photo")
-    }
-  }, [photoPreview])
+  // Photo reste en mémoire uniquement (trop lourd pour sessionStorage — limite 5 Mo)
 
   // Close address dropdown on click outside or Escape
   useEffect(() => {
@@ -381,7 +369,7 @@ export default function OnboardingPage() {
     reader.onload = (event) => {
       const base64 = event.target?.result as string
       setPhotoPreview(base64)
-      setData((prev) => ({ ...prev, photo_profil: base64 }))
+      // Ne PAS stocker le base64 dans data (persisté en sessionStorage, trop lourd)
     }
     reader.readAsDataURL(file)
   }
