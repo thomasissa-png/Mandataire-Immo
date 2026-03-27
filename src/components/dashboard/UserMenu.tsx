@@ -5,7 +5,7 @@ import { signOut, useSession } from "next-auth/react"
 
 /**
  * Composant de menu utilisateur.
- * Avatar avec initiales + dropdown de d&eacute;connexion.
+ * Avatar avec initiales + dropdown de deconnexion.
  */
 export function UserMenu() {
   const { data: session } = useSession()
@@ -73,7 +73,7 @@ export function UserMenu() {
             onClick={() => signOut({ callbackUrl: "/" })}
             className="w-full text-left px-4 py-3 text-body-sm text-foreground hover:bg-neutral-50 transition-colors duration-fast focus-visible:outline-none focus-visible:bg-neutral-100"
           >
-            Se d&eacute;connecter
+            Se d{"\u00e9"}connecter
           </button>
         </div>
       )}
