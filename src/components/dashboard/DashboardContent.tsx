@@ -252,8 +252,6 @@ export function DashboardContent({
     })
   }
 
-  const firstName = userName.split(" ")[0] || "toi"
-
   // Initiales pour l'avatar
   const initials = profile
     ? `${(profile.prenom[0] || "").toUpperCase()}${(profile.nom[0] || "").toUpperCase()}`
@@ -393,7 +391,7 @@ export function DashboardContent({
                     {bien.points_forts ? <p className="text-body-sm text-neutral-500 mt-2 italic">{bien.points_forts}</p> : null}
                     {bien.lien_annonce ? (
                       <a href={bien.lien_annonce} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 mt-2 text-body-sm text-secondary font-semibold hover:underline">
-                        🔗 Voir l&apos;annonce
+                        🔗 Voir l&#39;annonce
                       </a>
                     ) : null}
                   </div>
@@ -436,13 +434,10 @@ export function DashboardContent({
         </a>
       )}
 
-      {/* Header */}
+      {/* Sous-titre livrables */}
       <div>
-        <h1 className="font-display text-h1 text-primary">
-          Salut {firstName}
-        </h1>
-        <p className="text-body text-neutral-500 mt-1">
-          {pack ? `Pack ${pack}` : "Ton espace de contenus"} — {deliverables.length} livrable{deliverables.length !== 1 ? "s" : ""} disponible{deliverables.length !== 1 ? "s" : ""}
+        <p className="text-body text-neutral-500">
+          {deliverables.length} livrable{deliverables.length !== 1 ? "s" : ""} disponible{deliverables.length !== 1 ? "s" : ""}
         </p>
       </div>
 
