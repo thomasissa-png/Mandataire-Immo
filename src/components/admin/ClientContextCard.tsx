@@ -31,7 +31,12 @@ const LABELS: Record<string, string> = {
   photo_profil_key: "Photo de profil",
 }
 
-const SECTION_ORDER = [
+interface Section {
+  title: string
+  keys: string[]
+}
+
+const SECTION_ORDER: Section[] = [
   { title: "Identité", keys: ["prenom", "nom", "telephone"] },
   { title: "Réseau & expérience", keys: ["reseau", "experience_annees", "nb_transactions_an"] },
   { title: "Zone", keys: ["ville", "quartiers", "departement"] },
