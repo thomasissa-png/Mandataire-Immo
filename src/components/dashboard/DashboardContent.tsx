@@ -56,10 +56,6 @@ interface DashboardContentProps {
   } | null
 }
 
-/* ------------------------------------------------------------------ */
-/*  Type labels & colors                                               */
-/* ------------------------------------------------------------------ */
-
 const TYPE_LABELS: Record<string, string> = {
   post: "Post",
   article_seo: "Article local",
@@ -76,7 +72,7 @@ const TYPE_LABELS: Record<string, string> = {
 
 const TYPE_COLORS: Record<string, string> = {
   post: "bg-secondary-50 text-secondary-700",
-  article_seo: "bg-info-50 text-info-700",
+  article_seo: "bg-blue-50 text-blue-700",
   annonce: "bg-success-50 text-success-700",
   script_video: "bg-warning-50 text-warning-800",
   newsletter: "bg-primary-50 text-primary-700",
@@ -88,146 +84,94 @@ const TYPE_COLORS: Record<string, string> = {
   landing_page: "bg-success-50 text-success-700",
 }
 
+/* Match annonces to biens by "Bien N" pattern in title */
+function matchAnnoncesToBiens(annonces: Deliverable[], biensCount: number) {
+  const matched: Record<number, Deliverable[]> = {}
+  const unmatched: Deliverable[] = []
+  for (const a of annonces) {
+    const m = a.title.match(/Bien\s+(\d+)/i)
+    if (m) {
+      const idx = parseInt(m[1], 10) - 1
+      if (idx >= 0 && idx < biensCount) {
+        if (!matched[idx]) matched[idx] = []
+        matched[idx].push(a)
+        continue
+      }
+    }
+    unmatched.push(a)
+  }
+  return { matched, unmatched }
+}
+
+function detectPlatform(title: string) {
+  const t = title.toLowerCase()
+  if (t.includes("instagram") || t.includes("reel") || t.includes("story")) return { icon: "📸", name: "Instagram" }
+  if (t.includes("linkedin")) return { icon: "💼", name: "LinkedIn" }
+  if (t.includes("facebook")) return { icon: "📘", name: "Facebook" }
+  if (t.includes("tiktok")) return { icon: "🎵", name: "TikTok" }
+  return { icon: "📱", name: "Post" }
+}
+
 /* ------------------------------------------------------------------ */
-/*  SVG icons                                                          */
+/* NAV SECTION                                                         */
 /* ------------------------------------------------------------------ */
 
-function ChevronIcon({ open }: { open: boolean }) {
+interface NavItem { id: string; label: string; icon: string; count: number }
+
+function DashboardNav({ items, active, onSelect }: { items: NavItem[]; active: string; onSelect: (id: string) => void }) {
   return (
-    <svg
-      className={`w-5 h-5 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2}
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-    </svg>
+    <nav className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" aria-label="Sections">
+      {items.map((item) => (
+        <button
+          key={item.id}
+          type="button"
+          onClick={() => onSelect(item.id === active ? "" : item.id)}
+          className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-body-sm font-medium transition-colors duration-150 ${
+            active === item.id
+              ? "bg-primary text-white"
+              : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+          }`}
+        >
+          <span aria-hidden="true">{item.icon}</span>
+          {item.label}
+          {item.count > 0 ? <span className="text-caption opacity-70">({item.count})</span> : null}
+        </button>
+      ))}
+    </nav>
   )
 }
 
 /* ------------------------------------------------------------------ */
-/*  Platform detection for posts                                       */
+/* SECTION HEADER                                                      */
 /* ------------------------------------------------------------------ */
 
-function detectPlatform(title: string): { icon: string; name: string } {
-  const lower = title.toLowerCase()
-  if (lower.includes("instagram") || lower.includes("insta") || lower.includes("reel"))
-    return { icon: "📸", name: "Instagram" }
-  if (lower.includes("linkedin"))
-    return { icon: "💼", name: "LinkedIn" }
-  if (lower.includes("facebook") || lower.includes("fb"))
-    return { icon: "📘", name: "Facebook" }
-  if (lower.includes("tiktok") || lower.includes("tik tok"))
-    return { icon: "🎵", name: "TikTok" }
-  if (lower.includes("twitter") || lower.includes("x "))
-    return { icon: "🐦", name: "X / Twitter" }
-  return { icon: "📱", name: "Réseaux sociaux" }
-}
-
-/* ------------------------------------------------------------------ */
-/*  Matching annonces to biens by index                                */
-/* ------------------------------------------------------------------ */
-
-function matchAnnoncesToBiens(
-  annonces: Deliverable[],
-  biensCount: number
-): { matched: Map<number, Deliverable[]>; unmatched: Deliverable[] } {
-  const matched = new Map<number, Deliverable[]>()
-  const unmatched: Deliverable[] = []
-
-  for (const annonce of annonces) {
-    const lower = annonce.title.toLowerCase()
-    let found = false
-
-    // Try to match "Bien X" pattern in the title
-    const bienMatch = lower.match(/bien\s+(\d+)/)
-    if (bienMatch) {
-      const bienIndex = parseInt(bienMatch[1], 10) - 1 // 0-based
-      if (bienIndex >= 0 && bienIndex < biensCount) {
-        const existing = matched.get(bienIndex) || []
-        existing.push(annonce)
-        matched.set(bienIndex, existing)
-        found = true
-      }
-    }
-
-    if (!found) {
-      unmatched.push(annonce)
-    }
-  }
-
-  return { matched, unmatched }
-}
-
-/* ------------------------------------------------------------------ */
-/*  Format date                                                        */
-/* ------------------------------------------------------------------ */
-
-function formatDate(dateStr: string): string {
-  try {
-    const date = new Date(dateStr)
-    return date.toLocaleDateString("fr-FR", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    })
-  } catch {
-    return dateStr
-  }
-}
-
-/* ------------------------------------------------------------------ */
-/*  Section header component                                           */
-/* ------------------------------------------------------------------ */
-
-function SectionHeader({
-  icon,
-  title,
-  count,
-  isOpen,
-  onToggle,
-  sectionId,
-  defaultClosed,
-}: {
-  icon: React.ReactNode
-  title: string
-  count: number
-  isOpen: boolean
-  onToggle: () => void
-  sectionId: string
-  defaultClosed?: boolean
+function SectionHeader({ icon, title, count, isOpen, onToggle }: {
+  icon: string; title: string; count: number; isOpen: boolean; onToggle: () => void
 }) {
   return (
     <button
       type="button"
-      id={`${sectionId}-heading`}
-      className="w-full flex items-center justify-between gap-3 group"
       onClick={onToggle}
+      className="w-full flex items-center justify-between py-3 group"
       aria-expanded={isOpen}
-      aria-controls={`${sectionId}-panel`}
     >
-      <div className="flex items-center gap-3">
-        <span
-          className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-primary-50 text-lg"
-          aria-hidden="true"
-        >
-          {icon}
-        </span>
+      <div className="flex items-center gap-2">
+        <span className="text-lg" aria-hidden="true">{icon}</span>
         <h2 className="font-display text-h3 text-primary">{title}</h2>
-        <span className="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-2 rounded-full bg-neutral-100 text-caption text-neutral-600 font-semibold">
-          {count}
-        </span>
+        <span className="text-caption text-neutral-400 ml-1">({count})</span>
       </div>
-      <span className="text-neutral-500 group-hover:text-primary transition-colors duration-normal">
-        <ChevronIcon open={isOpen} />
-      </span>
+      <svg
+        className={`w-5 h-5 text-neutral-400 transition-transform duration-150 ${isOpen ? "rotate-180" : ""}`}
+        fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+      </svg>
     </button>
   )
 }
 
 /* ------------------------------------------------------------------ */
-/*  Main component                                                     */
+/* MAIN COMPONENT                                                      */
 /* ------------------------------------------------------------------ */
 
 export function DashboardContent({
@@ -238,762 +182,391 @@ export function DashboardContent({
   deliverables,
   profile,
 }: DashboardContentProps) {
-  // Sections that start collapsed: only "strategie"
-  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set(["strategie"]))
+  const [activeNav, setActiveNav] = useState("")
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
+  const [showWelcome, setShowWelcome] = useState(() =>
+    typeof window !== "undefined" && !localStorage.getItem("immocrew_welcome_dismissed")
+  )
 
-  const toggleSection = (key: string) => {
-    setCollapsedSections((prev) => {
-      const next = new Set(prev)
-      if (next.has(key)) {
-        next.delete(key)
-      } else {
-        next.add(key)
-      }
-      return next
-    })
-  }
+  const toggle = (id: string) => setCollapsed((prev) => {
+    const next = new Set(prev)
+    next.has(id) ? next.delete(id) : next.add(id)
+    return next
+  })
 
-  /* Categorize deliverables by context */
+  const firstName = profile?.prenom || userName.split(" ")[0] || userName
+  const photoUrl = profile?.photo_profil_key ? `/api/images/${encodeURIComponent(profile.photo_profil_key)}` : null
+  const initials = profile
+    ? `${(profile.prenom[0] || "").toUpperCase()}${(profile.nom[0] || "").toUpperCase()}`
+    : "?"
+  const packLabel = pack === "mensuel" ? "Pack Mensuel" : pack === "lancement" ? "Pack Lancement" : null
+  const currentMonth = new Date().toISOString().slice(0, 7)
+
+  // Group deliverables
   const { posts, articles, annonces, scripts, emails, strategie } = useMemo(() => {
-    const posts: Deliverable[] = []
-    const articles: Deliverable[] = []
-    const annonces: Deliverable[] = []
-    const scripts: Deliverable[] = []
-    const emails: Deliverable[] = []
-    const strategie: Deliverable[] = []
-
+    const r = { posts: [] as Deliverable[], articles: [] as Deliverable[], annonces: [] as Deliverable[], scripts: [] as Deliverable[], emails: [] as Deliverable[], strategie: [] as Deliverable[] }
     for (const d of deliverables) {
-      switch (d.type) {
-        case "post":
-          posts.push(d)
-          break
-        case "article_seo":
-          articles.push(d)
-          break
-        case "annonce":
-          annonces.push(d)
-          break
-        case "script_video":
-          scripts.push(d)
-          break
-        case "newsletter":
-        case "email_prospection":
-          emails.push(d)
-          break
-        case "positionnement":
-        case "bio":
-        case "calendrier":
-        case "brief_graphique":
-        case "landing_page":
-          strategie.push(d)
-          break
-      }
+      if (d.type === "post") r.posts.push(d)
+      else if (d.type === "article_seo") r.articles.push(d)
+      else if (d.type === "annonce") r.annonces.push(d)
+      else if (d.type === "script_video") r.scripts.push(d)
+      else if (d.type === "newsletter" || d.type === "email_prospection") r.emails.push(d)
+      else r.strategie.push(d)
     }
-
-    // Sort posts by created_at descending (newest first)
-    posts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-
-    return { posts, articles, annonces, scripts, emails, strategie }
+    r.posts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    return r
   }, [deliverables])
 
-  /* Match annonces to biens */
   const biensCount = profile?.biens.length ?? 0
   const { matched: matchedAnnonces, unmatched: unmatchedAnnonces } = useMemo(
     () => matchAnnoncesToBiens(annonces, biensCount),
     [annonces, biensCount]
   )
 
-  // Initiales pour l'avatar
-  const initials = profile
-    ? `${(profile.prenom[0] || "").toUpperCase()}${(profile.nom[0] || "").toUpperCase()}`
-    : userName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2) || "?"
+  const postsThisMonth = posts.filter(p => p.month === currentMonth || p.created_at.startsWith(currentMonth)).length
 
-  const photoUrl = profile?.photo_profil_key
-    ? `/api/images/${encodeURIComponent(profile.photo_profil_key)}`
-    : null
+  // Nav items
+  const navItems: NavItem[] = [
+    strategie.length > 0 ? { id: "identite", label: "Mon profil", icon: "👤", count: strategie.length } : null,
+    (biensCount > 0 || annonces.length > 0) ? { id: "biens", label: "Biens & annonces", icon: "🏠", count: biensCount + annonces.length } : null,
+    posts.length > 0 ? { id: "posts", label: "Calendrier & posts", icon: "📅", count: posts.length } : null,
+    articles.length > 0 ? { id: "articles", label: "Articles", icon: "📝", count: articles.length } : null,
+    scripts.length > 0 ? { id: "scripts", label: "Scripts vidéo", icon: "🎬", count: scripts.length } : null,
+    emails.length > 0 ? { id: "emails", label: "Emails", icon: "📧", count: emails.length } : null,
+  ].filter((x): x is NavItem => x !== null)
 
-  const packLabel = pack === "mensuel" ? "Pack Mensuel" : pack === "lancement" ? "Pack Lancement" : pack ? `Pack ${pack}` : null
+  const isVisible = (id: string) => !activeNav || activeNav === id
 
-  const [showWelcome, setShowWelcome] = useState(() =>
-    typeof window !== "undefined" && !localStorage.getItem("immocrew_welcome_dismissed")
-  )
+  // ============================================================
+  // EMPTY STATE
+  // ============================================================
+  if (deliverables.length === 0) {
+    return (
+      <div className="rounded-lg bg-card border border-border p-10 text-center max-w-lg mx-auto">
+        <div className="w-16 h-16 rounded-full bg-secondary-50 flex items-center justify-center mx-auto mb-6">
+          <span className="text-secondary text-3xl" aria-hidden="true">✍️</span>
+        </div>
+        <h2 className="font-display text-h2 text-primary mb-3">Bienvenue dans ton espace !</h2>
+        <p className="text-body text-neutral-600 mb-4">
+          Ton équipe est au travail. Tes premiers contenus arrivent sous 24h.
+        </p>
+        <p className="text-caption text-neutral-400">
+          On t{"'"}envoie un email dès que c{"'"}est prêt.
+        </p>
+      </div>
+    )
+  }
 
+  // ============================================================
+  // MAIN LAYOUT
+  // ============================================================
   return (
-    <div className="space-y-8">
-      {/* Message d'accueil premier acces */}
-      {showWelcome && deliverables.length > 0 && (
+    <div className="space-y-6">
+
+      {/* WELCOME BANNER (first access only) */}
+      {showWelcome && (
         <div className="rounded-lg bg-secondary-50 border border-secondary/20 p-4 flex items-start justify-between gap-3">
           <div>
-            <p className="text-body-sm text-secondary-800 font-semibold mb-1">
-              Comment utiliser ton espace
-            </p>
+            <p className="text-body-sm text-secondary-800 font-semibold mb-1">Comment utiliser ton espace</p>
             <p className="text-body-sm text-secondary-700">
-              Clique sur une carte pour voir le contenu complet, puis <strong>Copier</strong> pour le coller directement dans ton appli. C{"'"}est tout.
+              Clique sur une carte pour voir le contenu, puis <strong>Copier</strong> pour le coller dans ton appli. C{"'"}est tout.
             </p>
           </div>
           <button
             type="button"
             onClick={() => { localStorage.setItem("immocrew_welcome_dismissed", "1"); setShowWelcome(false) }}
-            className="text-secondary-400 hover:text-secondary-600 flex-shrink-0 text-xl leading-none mt-0.5"
-            aria-label="Fermer le message de bienvenue"
+            className="text-secondary-400 hover:text-secondary-600 flex-shrink-0 text-xl"
+            aria-label="Fermer"
           >
-            \u00d7
+            {"×"}
           </button>
         </div>
       )}
+
       {/* ============================================================ */}
-      {/*  1. Carte profil                                              */}
+      {/* PROFILE CARD — compact, inline                                */}
       {/* ============================================================ */}
-      <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-lg">
-        {/* Banniere premium avec cercles decoratifs */}
-        <div className="h-36 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1a2744 100%)" }}>
-          {/* Cercles decoratifs semi-transparents */}
-          <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/5" />
-          <div className="absolute top-12 right-24 w-20 h-20 rounded-full bg-white/[0.07]" />
-          <div className="absolute -bottom-6 left-16 w-28 h-28 rounded-full bg-white/[0.04]" />
-          <div className="absolute top-6 left-1/2 w-12 h-12 rounded-full bg-white/[0.06]" />
-
-          {/* Texte bienvenue */}
-          <p className="absolute top-4 left-5 text-white/70 text-body-sm font-medium tracking-wide">
-            Bienvenue dans ton espace
-          </p>
-
-          {/* Badge pack */}
-          {packLabel && (
-            <span className="absolute top-3 right-4 px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white text-caption font-bold border border-white/10 shadow-sm">
-              {packLabel}
-            </span>
-          )}
-        </div>
-
-        <div className="px-6 pb-6">
-          {/* Avatar debordant sur la banniere */}
-          <div className="-mt-12 mb-4">
-            <div className="flex items-end gap-4">
-              {photoUrl ? (
-                <img
-                  src={photoUrl}
-                  alt={`Photo de ${profile?.prenom || userName}`}
-                  className="w-24 h-24 rounded-2xl border-4 border-white shadow-lg object-cover flex-shrink-0"
-                />
-              ) : (
-                <div
-                  className="w-24 h-24 rounded-2xl border-4 border-white shadow-lg flex items-center justify-center flex-shrink-0"
-                  style={{ background: "linear-gradient(135deg, #f97316 0%, #fb923c 100%)" }}
-                >
-                  <span className="font-display text-h1 font-bold text-white">{initials}</span>
-                </div>
-              )}
-              <div className="pb-2">
-                <h1 className="font-display text-h1 text-primary leading-tight font-bold">
-                  {profile ? `${profile.prenom} ${profile.nom}` : userName}
-                </h1>
-                {profile?.reseau && (
-                  <p className="text-body text-neutral-500 mt-0.5">
-                    Mandataire {profile.reseau}{profile.ville ? ` \u00b7 ${profile.ville}` : ""}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Infos metier en grille de mini-cards */}
-          {profile && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
-              {profile.experience_annees && (
-                <div className="flex items-center gap-3 rounded-xl bg-blue-50 px-4 py-3">
-                  <div className="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-caption text-blue-600/70 font-medium">Exp{"\u00e9"}rience</p>
-                    <p className="text-body-sm font-semibold text-blue-900">{profile.experience_annees} an{Number(profile.experience_annees) > 1 ? "s" : ""}</p>
-                  </div>
-                </div>
-              )}
-              {profile.nb_transactions_an && (
-                <div className="flex items-center gap-3 rounded-xl bg-emerald-50 px-4 py-3">
-                  <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-caption text-emerald-600/70 font-medium">Transactions</p>
-                    <p className="text-body-sm font-semibold text-emerald-900">{profile.nb_transactions_an}/an</p>
-                  </div>
-                </div>
-              )}
-              {profile.type_biens && (
-                <div className="flex items-center gap-3 rounded-xl bg-orange-50 px-4 py-3">
-                  <div className="w-9 h-9 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 6h.008v.008H6V6z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-caption text-orange-600/70 font-medium">Sp{"\u00e9"}cialit{"\u00e9"}</p>
-                    <p className="text-body-sm font-semibold text-orange-900">{profile.type_biens}</p>
-                  </div>
-                </div>
-              )}
-              {profile.linkedin_url && (
-                <a
-                  href={profile.linkedin_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Voir le profil LinkedIn (s'ouvre dans un nouvel onglet)"
-                  className="flex items-center gap-3 rounded-xl bg-[#EBF4FB] px-4 py-3 hover:bg-[#D6E9F6] transition-colors duration-normal group"
-                >
-                  <div className="w-9 h-9 rounded-lg bg-[#D6E9F6] group-hover:bg-[#C0DCF0] flex items-center justify-center flex-shrink-0 transition-colors duration-normal">
-                    <svg className="w-5 h-5 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-caption text-[#0A66C2]/70 font-medium">Profil</p>
-                    <p className="text-body-sm font-semibold text-[#0A66C2]">LinkedIn</p>
-                  </div>
-                </a>
-              )}
+      <div className="rounded-lg bg-card border border-border p-5">
+        <div className="flex items-center gap-4">
+          {photoUrl ? (
+            <img src={photoUrl} alt={`Photo de ${firstName}`} className="w-14 h-14 rounded-xl object-cover flex-shrink-0" />
+          ) : (
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-secondary to-secondary-600 flex items-center justify-center flex-shrink-0">
+              <span className="font-display text-h3 font-bold text-white">{initials}</span>
             </div>
           )}
-
-          {/* Modifier mes infos */}
-          <div className="mt-4 pt-4 border-t border-border flex flex-wrap items-center gap-4">
-            <a
-              href="mailto:support@immocrew.fr?subject=Modification%20de%20mes%20infos&body=Bonjour%2C%20je%20souhaite%20modifier%20mes%20infos%20(zone%2C%20biens%2C%20sp%C3%A9cialit%C3%A9)%20%3A"
-              className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors duration-normal"
-            >
-              Modifier mes infos (zone, biens, sp\u00e9cialit\u00e9)
-            </a>
-            {!photoUrl ? (
-              <a
-                href="mailto:support@immocrew.fr?subject=Ajout%20de%20ma%20photo%20de%20profil"
-                className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors duration-normal"
-              >
-                Ajouter ma photo
-              </a>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="font-display text-h3 text-primary font-bold">{profile ? `${profile.prenom} ${profile.nom}` : userName}</h1>
+              {packLabel ? <span className="px-2.5 py-0.5 rounded-full bg-primary-50 text-primary text-caption font-semibold">{packLabel}</span> : null}
+            </div>
+            {profile?.reseau ? (
+              <p className="text-body-sm text-neutral-500">Mandataire {profile.reseau}{profile.ville ? ` · ${profile.ville}` : ""}</p>
             ) : null}
           </div>
         </div>
+
+        {/* Info pills */}
+        {profile ? (
+          <div className="flex flex-wrap gap-2 mt-3">
+            {profile.experience_annees ? <span className="px-2.5 py-1 rounded-lg bg-primary-50 text-caption font-medium text-primary-700">{profile.experience_annees} ans d{"'"}expérience</span> : null}
+            {profile.nb_transactions_an ? <span className="px-2.5 py-1 rounded-lg bg-success-50 text-caption font-medium text-success-700">{profile.nb_transactions_an} transactions/an</span> : null}
+            {profile.type_biens ? <span className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700">{profile.type_biens}</span> : null}
+            {profile.linkedin_url ? <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-blue-50 text-caption font-medium text-blue-700 hover:bg-blue-100 transition-colors">LinkedIn</a> : null}
+            <a href="mailto:support@immocrew.fr?subject=Modifier%20mes%20infos" className="px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-500 hover:bg-neutral-200 transition-colors">Modifier mes infos</a>
+          </div>
+        ) : null}
       </div>
 
-      {/* CTA Passer au mensuel — visible uniquement pour Pack Lancement */}
-      {pack === "lancement" && (
-        <div className="rounded-lg bg-gradient-to-r from-primary to-primary-700 p-5 tablet:p-6 flex flex-col tablet:flex-row items-start tablet:items-center justify-between gap-4 text-white">
+      {/* CTA Passer au mensuel */}
+      {pack === "lancement" ? (
+        <div className="rounded-lg bg-gradient-to-r from-primary to-primary-700 p-5 flex flex-col tablet:flex-row items-start tablet:items-center justify-between gap-4 text-white">
           <div>
-            <p className="font-display text-h4 text-white">
-              Continue sur ta lanc\u00e9e \u2014 passe au mensuel
-            </p>
-            <p className="text-body-sm text-primary-200 mt-1">
-              Re\u00e7ois de nouveaux contenus chaque mois. 150\u20ac/mois, sans engagement.
-            </p>
+            <p className="font-display text-h4 text-white">Continue sur ta lancée — passe au mensuel</p>
+            <p className="text-body-sm text-primary-200 mt-1">Reçois de nouveaux contenus chaque mois. 150€/mois, sans engagement.</p>
           </div>
-          <a
-            href="/api/checkout?pack=mensuel"
-            className="flex-shrink-0 px-6 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all duration-normal shadow-sm"
-          >
-            S{"'"}abonner \u2192
+          <a href="/api/checkout?pack=mensuel" className="flex-shrink-0 px-6 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm">
+            S{"'"}abonner →
           </a>
         </div>
-      )}
+      ) : null}
 
-      {/* Monthly update banner */}
-      {showMonthlyBanner && (
-        <a
-          href="/dashboard/monthly-update"
-          className="group block rounded-lg border border-secondary/30 bg-gradient-to-r from-secondary-50 to-card p-5 hover:shadow-md transition-all duration-normal"
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-11 h-11 rounded-lg bg-secondary-100 flex items-center justify-center flex-shrink-0 group-hover:bg-secondary-200 transition-colors duration-normal">
-              <svg className="w-5 h-5 text-secondary-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-display text-h4 text-primary">
-                Dis-nous ce qui a chang{"\u00e9"} ce mois-ci
-              </p>
-              <p className="text-body-sm text-neutral-500 mt-0.5">
-                10 min, et tes prochains contenus seront encore plus dans le mille.
-              </p>
-            </div>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <span className="text-body-sm font-semibold text-secondary-700 group-hover:text-secondary-800 transition-colors duration-normal">
-                C{"'"}est parti
-              </span>
-              <svg className="w-4 h-4 text-secondary-700 group-hover:translate-x-0.5 transition-transform duration-normal" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-          </div>
-        </a>
-      )}
-
-      {deliverables.length === 0 ? (
-        /* ----- Empty state ----- */
-        <div className="rounded-lg bg-card border border-border p-10 text-center max-w-lg mx-auto shadow-sm">
-          <div className="w-16 h-16 rounded-2xl bg-secondary-50 flex items-center justify-center mx-auto mb-6">
-            <span className="text-3xl" aria-hidden="true">{"\u270d\ufe0f"}</span>
-          </div>
-          <h2 className="font-display text-h2 text-primary mb-3">
-            Bienvenue dans ton espace !
-          </h2>
-          <p className="text-body text-neutral-600 mb-6">
-            Ton {"\u00e9"}quipe est au travail. Tes premiers contenus arrivent sous 24h.
+      {/* PLAN STRATEGIQUE — résumé + recommandations */}
+      {profile ? (
+        <div className="rounded-lg bg-card border border-border p-5">
+          <h2 className="font-display text-h3 text-primary mb-3">👋 Salut {firstName} — ton plan du mois</h2>
+          <p className="text-body-sm text-neutral-600 mb-4">
+            On te connaît : mandataire {profile.reseau || ""} à {profile.ville || "ta zone"}, spécialisée {profile.type_biens || "immobilier"}.
+            Voici ce qu{"'"}on te recommande ce mois.
           </p>
-          <div className="rounded-lg bg-background p-5 text-left">
-            <p className="text-body-sm text-neutral-500 font-semibold mb-3">
-              Ce que tu vas recevoir :
-            </p>
-            <ul className="text-body-sm text-neutral-600 space-y-2">
-              {pack === "lancement" ? (
-                <>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 20 posts pr{"\u00ea"}ts {"\u00e0"} publier</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 5 articles SEO local</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 5 annonces storytelling</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 10 scripts vid{"\u00e9"}o</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> Kit graphique personnalis{"\u00e9"}</li>
-                </>
-              ) : (
-                <>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 12 posts pr{"\u00ea"}ts {"\u00e0"} publier</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 2 articles SEO local</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 4 annonces personnalis{"\u00e9"}es</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 4 scripts vid{"\u00e9"}o</li>
-                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">{"\u2713"}</span> 1 newsletter + 1 email prospection</li>
-                </>
-              )}
-            </ul>
-          </div>
-          <p className="text-caption text-neutral-500 mt-4">
-            On t{"'"}envoie un email d{"\u00e8"}s que c{"'"}est pr{"\u00ea"}t.
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-10">
-
-          {/* ============================================================ */}
-          {/*  Accroche personnalisee                                        */}
-          {/* ============================================================ */}
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="font-display text-h2 text-primary">
-                Salut {profile?.prenom || userName.split(" ")[0] || userName} !
-              </h2>
-              <p className="text-body text-neutral-500 mt-1">
-                Tes contenus sont pr{"\u00ea"}ts. Tu copies, tu publies, c{"'"}est fait.
-              </p>
-            </div>
-            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-success-50 text-success-700 text-caption font-semibold">
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-              {deliverables.filter((d) => d.status === "delivered").length} contenus pr{"\u00ea"}ts
-            </span>
-          </div>
-
-          {/* ============================================================ */}
-          {/*  Navigation rapide (ancres de section)                        */}
-          {/* ============================================================ */}
-          <nav aria-label="Aller directement à une section" className="flex flex-wrap gap-2">
-            {(profile?.biens?.length ?? 0) > 0 && annonces.length > 0 && (
-              <a href="#section-biens" className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full bg-neutral-100 hover:bg-secondary-100 text-caption font-semibold text-neutral-600 hover:text-secondary-700 transition-colors duration-normal">
-                Biens
-              </a>
-            )}
-            {(!profile || profile.biens.length === 0) && annonces.length > 0 && (
-              <a href="#section-annonces" className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full bg-neutral-100 hover:bg-secondary-100 text-caption font-semibold text-neutral-600 hover:text-secondary-700 transition-colors duration-normal">
-                Annonces
-              </a>
-            )}
-            {posts.length > 0 && (
-              <a href="#section-posts" className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full bg-neutral-100 hover:bg-secondary-100 text-caption font-semibold text-neutral-600 hover:text-secondary-700 transition-colors duration-normal">
-                Posts ({posts.length})
-              </a>
-            )}
-            {articles.length > 0 && (
-              <a href="#section-articles" className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full bg-neutral-100 hover:bg-secondary-100 text-caption font-semibold text-neutral-600 hover:text-secondary-700 transition-colors duration-normal">
-                Articles
-              </a>
-            )}
-            {scripts.length > 0 && (
-              <a href="#section-scripts" className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full bg-neutral-100 hover:bg-secondary-100 text-caption font-semibold text-neutral-600 hover:text-secondary-700 transition-colors duration-normal">
-                Scripts
-              </a>
-            )}
-            {emails.length > 0 && (
-              <a href="#section-emails" className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full bg-neutral-100 hover:bg-secondary-100 text-caption font-semibold text-neutral-600 hover:text-secondary-700 transition-colors duration-normal">
-                Emails
-              </a>
-            )}
-          </nav>
-
-          {/* ============================================================ */}
-          {/*  2. Section "Mes biens" + annonces rattachees                 */}
-          {/* ============================================================ */}
-          {profile && profile.biens.length > 0 && (
-            <section id="section-biens" aria-labelledby="section-biens-heading">
-              <div className="rounded-lg bg-card border border-border overflow-hidden shadow-sm">
-                <div className="px-6 py-4 border-b border-border bg-neutral-50/50">
-                  <SectionHeader
-                    icon={<span>{"\ud83c\udfe0"}</span>}
-                    title={`Mes biens (${profile.biens.length})`}
-                    count={annonces.length}
-                    isOpen={!collapsedSections.has("biens")}
-                    onToggle={() => toggleSection("biens")}
-                    sectionId="section-biens"
-                  />
-                </div>
-
-                {!collapsedSections.has("biens") && (
-                  <div id="section-biens-panel" className="divide-y divide-border accordion-enter">
-                    {profile.biens.map((bien, i) => {
-                      const bienAnnonces = matchedAnnonces.get(i) || []
-                      return (
-                        <div key={i} className="p-5">
-                          {/* Bien card */}
-                          <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-600 flex items-center justify-center flex-shrink-0">
-                              <span className="text-white text-lg" aria-hidden="true">{"\ud83c\udfe0"}</span>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-display text-body font-semibold text-primary leading-snug">
-                                {bien.titre || `Bien ${i + 1}`}
-                              </h3>
-                              <div className="flex flex-wrap gap-2 mt-2">
-                                {bien.type ? <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-primary-50 text-caption font-medium text-primary-700">{bien.type}</span> : null}
-                                {bien.adresse ? (
-                                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600">
-                                    {"\ud83d\udccd"} {bien.adresse}
-                                  </span>
-                                ) : null}
-                                {bien.prix ? <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-success-50 text-caption font-bold text-success-700">{Number(bien.prix).toLocaleString("fr-FR")} {"\u20ac"}</span> : null}
-                                {bien.surface ? <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600">{bien.surface} m{"\u00b2"}</span> : null}
-                                {bien.pieces ? <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600">{bien.pieces} pi{"\u00e8"}ce{Number(bien.pieces) > 1 ? "s" : ""}</span> : null}
-                              </div>
-                              {bien.points_forts ? <p className="text-body-sm text-neutral-500 mt-2 italic">{bien.points_forts}</p> : null}
-                              {bien.lien_annonce ? (
-                                <a href={bien.lien_annonce} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 mt-2 text-body-sm text-secondary-700 font-semibold hover:text-secondary hover:underline transition-colors duration-normal">
-                                  {"\ud83d\udd17"} Voir l{"'"}annonce originale
-                                </a>
-                              ) : null}
-                            </div>
-                          </div>
-
-                          {/* Annonces rattachees a ce bien */}
-                          {bienAnnonces.length > 0 && (
-                            <div className="mt-4 ml-16 space-y-3">
-                              <p className="text-body-sm font-semibold text-neutral-600 flex items-center gap-1.5">
-                                {"\ud83d\udcdd"} Annonces pour ce bien
-                              </p>
-                              {bienAnnonces.map((annonce) => (
-                                <DeliverableCard
-                                  key={annonce.id}
-                                  id={annonce.id}
-                                  type={annonce.type}
-                                  typeLabel={TYPE_LABELS[annonce.type] || annonce.type}
-                                  typeColor={TYPE_COLORS[annonce.type] || "bg-neutral-100 text-neutral-600"}
-                                  title={annonce.title}
-                                  status={annonce.status}
-                                />
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      )
-                    })}
-
-                    {/* Annonces non rattachees */}
-                    {unmatchedAnnonces.length > 0 && (
-                      <div className="p-5">
-                        <p className="text-body-sm font-semibold text-neutral-600 flex items-center gap-1.5 mb-2">
-                          📝 Annonces générales
-                        </p>
-                        <p className="text-caption text-neutral-400 mb-3">
-                          Ces annonces ne sont pas liées à un bien spécifique — elles servent pour ta communication générale.
-                        </p>
-                        <div className="space-y-3">
-                          {unmatchedAnnonces.map((annonce) => (
-                            <DeliverableCard
-                              key={annonce.id}
-                              id={annonce.id}
-                              type={annonce.type}
-                              typeLabel={TYPE_LABELS[annonce.type] || annonce.type}
-                              typeColor={TYPE_COLORS[annonce.type] || "bg-neutral-100 text-neutral-600"}
-                              title={annonce.title}
-                              status={annonce.status}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Ajouter un bien / Boost Mandat */}
-                <div className="px-6 pb-5 pt-4 border-t border-border">
-                  <a
-                    href="mailto:support@immocrew.fr?subject=Nouveau%20bien%20%C3%A0%20ajouter%20%2F%20Boost%20Mandat&body=Bonjour%2C%20je%20viens%20de%20signer%20un%20mandat%20pour%20%3A%0A%0AAdresse%20%3A%0AType%20(maison%2Fappart)%20%3A%0APrix%20%3A%0A%0AJe%20souhaite%20commander%20le%20Boost%20Mandat%20(100%E2%82%AC)."
-                    className="inline-flex items-center gap-2 text-body-sm font-semibold text-secondary-700 hover:text-secondary transition-colors duration-normal"
-                  >
-                    + Ajouter un bien / Commander un Boost Mandat (100\u20ac)
-                  </a>
+          <div className="space-y-3">
+            {strategie.length > 0 ? (
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-primary-50/50">
+                <span className="text-lg mt-0.5" aria-hidden="true">1️⃣</span>
+                <div>
+                  <p className="text-body-sm font-semibold text-primary">Mets à jour tes bios et ton positionnement</p>
+                  <p className="text-caption text-neutral-500">Copie-les sur Instagram, Facebook et LinkedIn.</p>
                 </div>
               </div>
-            </section>
-          )}
-
-          {/* Annonces sans biens (si pas de biens dans le profil) */}
-          {(!profile || profile.biens.length === 0) && annonces.length > 0 && (
-            <section id="section-annonces" aria-labelledby="section-annonces-heading">
-              <SectionHeader
-                icon={<span>{"\ud83c\udfe0"}</span>}
-                title="Mes annonces"
-                count={annonces.length}
-                isOpen={!collapsedSections.has("annonces")}
-                onToggle={() => toggleSection("annonces")}
-                sectionId="section-annonces"
-              />
-              {!collapsedSections.has("annonces") && (
-                <div id="section-annonces-panel" className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4 accordion-enter">
-                  {annonces.map((d) => (
-                    <DeliverableCard
-                      key={d.id}
-                      id={d.id}
-                      type={d.type}
-                      typeLabel={TYPE_LABELS[d.type] || d.type}
-                      typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"}
-                      title={d.title}
-                      status={d.status}
-                    />
-                  ))}
+            ) : null}
+            {posts.length > 0 ? (
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-secondary-50/50">
+                <span className="text-lg mt-0.5" aria-hidden="true">2️⃣</span>
+                <div>
+                  <p className="text-body-sm font-semibold text-primary">Publie tes posts — {postsThisMonth > 0 ? `${postsThisMonth} ce mois` : `${posts.length} prêts`}</p>
+                  <p className="text-caption text-neutral-500">On te conseille 3 posts/semaine : lundi, mercredi, vendredi à 18h.</p>
                 </div>
-              )}
-            </section>
-          )}
-
-          {/* ============================================================ */}
-          {/*  3. Section "Ma timeline" — posts en flux social              */}
-          {/* ============================================================ */}
-          {posts.length > 0 && (() => {
-            const currentMonth = new Date().toISOString().slice(0, 7)
-            const postsThisMonth = posts.filter(p => p.month === currentMonth || p.created_at.startsWith(currentMonth)).length
-            return (
-            <section id="section-posts" aria-labelledby="section-posts-heading">
-              <SectionHeader
-                icon={<span>{"\ud83d\udcf1"}</span>}
-                title={`Mes posts \u00e0 publier${postsThisMonth > 0 ? ` \u2014 ${postsThisMonth} ce mois` : ""}`}
-                count={posts.length}
-                isOpen={!collapsedSections.has("posts")}
-                onToggle={() => toggleSection("posts")}
-                sectionId="section-posts"
-              />
-
-              {!collapsedSections.has("posts") && (
-                <div id="section-posts-panel" className="mt-6 relative accordion-enter">
-                  {/* Guidage action — rappel de la promesse ImmoCrew */}
-                  <p className="text-caption text-neutral-400 mb-4 pl-12">
-                    Copie, colle, publie. Ton {"\u00e9"}quipe a fait le reste.
-                  </p>
-                  {/* Ligne verticale de timeline */}
-                  <div className="absolute left-5 top-0 bottom-0 w-0.5 bg-gradient-to-b from-secondary/40 via-secondary/20 to-transparent" aria-hidden="true" />
-
-                  <div className="space-y-1">
-                    {posts.map((post, index) => {
-                      const platform = detectPlatform(post.title)
-                      return (
-                        <div key={post.id} className="relative pl-12">
-                          {/* Pastille plateforme sur la ligne */}
-                          <div className="absolute left-2 top-5 w-7 h-7 rounded-full bg-card border-2 border-secondary/30 flex items-center justify-center text-sm shadow-xs" aria-hidden="true">
-                            {platform.icon}
-                          </div>
-
-                          {/* Date du post */}
-                          <p className="text-caption text-neutral-400 mb-1">
-                            {post.month || new Date(post.created_at).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}
-                          </p>
-                          <DeliverableCard
-                            id={post.id}
-                            type={post.type}
-                            typeLabel={platform.name}
-                            typeColor={TYPE_COLORS[post.type] || "bg-secondary-50 text-secondary-700"}
-                            title={post.title}
-                            status={post.status}
-                          />
-                        </div>
-                      )
-                    })}
-                  </div>
+              </div>
+            ) : null}
+            {scripts.length > 0 ? (
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-warning-50/50">
+                <span className="text-lg mt-0.5" aria-hidden="true">3️⃣</span>
+                <div>
+                  <p className="text-body-sm font-semibold text-primary">Tourne tes vidéos — {scripts.length} scripts prêts</p>
+                  <p className="text-caption text-neutral-500">Filme-toi avec ton iPhone face caméra. 30 à 60 secondes, c{"'"}est suffisant.</p>
                 </div>
-              )}
-            </section>
-          )})()}
-
-          {/* ============================================================ */}
-          {/*  4. Section "Mes articles" — preview magazine                 */}
-          {/* ============================================================ */}
-          {articles.length > 0 && (
-            <section id="section-articles" aria-labelledby="section-articles-heading">
-              <SectionHeader
-                icon={<span>{"\ud83d\udcdd"}</span>}
-                title="Mes articles"
-                count={articles.length}
-                isOpen={!collapsedSections.has("articles")}
-                onToggle={() => toggleSection("articles")}
-                sectionId="section-articles"
-              />
-
-              {!collapsedSections.has("articles") && (
-                <div id="section-articles-panel" className="mt-4 space-y-4 accordion-enter">
-                  {articles.map((article) => (
-                    <DeliverableCard
-                      key={article.id}
-                      id={article.id}
-                      type={article.type}
-                      typeLabel={TYPE_LABELS[article.type] || article.type}
-                      typeColor={TYPE_COLORS[article.type] || "bg-info-50 text-info-700"}
-                      title={article.title}
-                      status={article.status}
-                    />
-                  ))}
+              </div>
+            ) : null}
+            {annonces.length > 0 ? (
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-success-50/50">
+                <span className="text-lg mt-0.5" aria-hidden="true">4️⃣</span>
+                <div>
+                  <p className="text-body-sm font-semibold text-primary">Publie tes annonces sur SeLoger et LeBonCoin</p>
+                  <p className="text-caption text-neutral-500">{annonces.length} annonce{annonces.length > 1 ? "s" : ""} personnalisée{annonces.length > 1 ? "s" : ""} pour tes biens.</p>
                 </div>
-              )}
-            </section>
-          )}
-
-          {/* ============================================================ */}
-          {/*  5. Section "Mes scripts video"                               */}
-          {/* ============================================================ */}
-          {scripts.length > 0 && (
-            <section id="section-scripts" aria-labelledby="section-scripts-heading">
-              <SectionHeader
-                icon={<span>{"\ud83c\udfac"}</span>}
-                title="Mes scripts vid\u00e9o"
-                count={scripts.length}
-                isOpen={!collapsedSections.has("scripts")}
-                onToggle={() => toggleSection("scripts")}
-                sectionId="section-scripts"
-              />
-
-              {!collapsedSections.has("scripts") && (
-                <div id="section-scripts-panel" className="mt-4 accordion-enter">
-                  <p className="text-caption text-neutral-400 mb-4">
-                    Chaque script est pr\u00eat \u00e0 lire face cam\u00e9ra. Filme-toi avec ton iPhone, c{"'"}est suffisant.
-                  </p>
-                  <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
-                  {scripts.map((script) => {
-                    const titleLower = script.title.toLowerCase()
-                    const format = titleLower.includes("reel") || titleLower.includes("story") || titleLower.includes("court")
-                      ? "Reel / Story \u00b7 30-60 sec"
-                      : titleLower.includes("pr\u00e9sentation") || titleLower.includes("bien")
-                        ? "Vid\u00e9o bien \u00b7 1-2 min"
-                        : "Vid\u00e9o \u00b7 30-90 sec"
-                    return (
-                    <div key={script.id}>
-                      <p className="text-caption text-neutral-400 mb-1">{format}</p>
-                      <DeliverableCard
-                        id={script.id}
-                        type={script.type}
-                        typeLabel={TYPE_LABELS[script.type] || script.type}
-                        typeColor={TYPE_COLORS[script.type] || "bg-warning-50 text-warning-800"}
-                        title={script.title}
-                        status={script.status}
-                      />
-                    </div>
-                    )})}
-                  </div>
-                </div>
-              )}
-            </section>
-          )}
-
-          {/* ============================================================ */}
-          {/*  6. Section "Mes emails"                                      */}
-          {/* ============================================================ */}
-          {emails.length > 0 && (
-            <section id="section-emails" aria-labelledby="section-emails-heading">
-              <SectionHeader
-                icon={<span>{"\ud83d\udce7"}</span>}
-                title="Mes emails"
-                count={emails.length}
-                isOpen={!collapsedSections.has("emails")}
-                onToggle={() => toggleSection("emails")}
-                sectionId="section-emails"
-              />
-
-              {!collapsedSections.has("emails") && (
-                <div id="section-emails-panel" className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4 accordion-enter">
-                  {emails.map((email) => (
-                    <DeliverableCard
-                      key={email.id}
-                      id={email.id}
-                      type={email.type}
-                      typeLabel={TYPE_LABELS[email.type] || email.type}
-                      typeColor={TYPE_COLORS[email.type] || "bg-primary-50 text-primary-700"}
-                      title={email.title}
-                      status={email.status}
-                    />
-                  ))}
-                </div>
-              )}
-            </section>
-          )}
-
-          {/* ============================================================ */}
-          {/*  7. Section "Ma strategie" (repliee par defaut)               */}
-          {/* ============================================================ */}
-          {strategie.length > 0 && (
-            <section id="section-strategie" aria-labelledby="section-strategie-heading">
-              <SectionHeader
-                icon={<span>{"\ud83d\udccb"}</span>}
-                title="Mon identité pro"
-                count={strategie.length}
-                isOpen={!collapsedSections.has("strategie")}
-                onToggle={() => toggleSection("strategie")}
-                sectionId="section-strategie"
-              />
-
-              {!collapsedSections.has("strategie") && (
-                <div id="section-strategie-panel" className="mt-4 grid grid-cols-1 tablet:grid-cols-2 gap-4 accordion-enter">
-                  {strategie.map((d) => (
-                    <DeliverableCard
-                      key={d.id}
-                      id={d.id}
-                      type={d.type}
-                      typeLabel={TYPE_LABELS[d.type] || d.type}
-                      typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"}
-                      title={d.title}
-                      status={d.status}
-                    />
-                  ))}
-                </div>
-              )}
-            </section>
-          )}
+              </div>
+            ) : null}
+          </div>
+          {/* Question / feedback */}
+          <div className="mt-4 pt-4 border-t border-border">
+            <p className="text-body-sm text-neutral-500">
+              Un truc à changer ? Un bien à ajouter ?{" "}
+              <a href="mailto:support@immocrew.fr?subject=Retour%20sur%20mes%20contenus" className="text-secondary-700 font-semibold hover:underline">
+                Écris-nous, on répond sous 4h
+              </a>
+            </p>
+          </div>
         </div>
-      )}
+      ) : null}
 
-      {/* Footer — abonnement + support */}
-      <div className="mt-2 pt-6 border-t border-border flex flex-wrap items-center gap-4">
-        {stripeCustomerId ? (
-          <a
-            href="/api/portal"
-            className="text-body-sm text-neutral-600 hover:text-secondary-700 underline transition-colors duration-normal"
-          >
-            G\u00e9rer mon abonnement (modifier, r\u00e9silier)
-          </a>
-        ) : null}
-        <a
-          href="mailto:support@immocrew.fr"
-          className="text-body-sm text-neutral-600 hover:text-secondary-700 underline transition-colors duration-normal"
-        >
-          Une question sur tes contenus ?
+      {/* Monthly update banner */}
+      {showMonthlyBanner ? (
+        <a href="/dashboard/monthly-update" className="group block rounded-lg border border-secondary/30 bg-gradient-to-r from-secondary-50 to-card p-4 hover:shadow-md transition-all">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-secondary-100 flex items-center justify-center flex-shrink-0">
+              <span className="text-secondary-700" aria-hidden="true">📝</span>
+            </div>
+            <div className="flex-1">
+              <p className="text-body-sm font-semibold text-primary">Dis-nous ce qui a changé ce mois-ci</p>
+              <p className="text-caption text-neutral-500">10 min, et tes prochains contenus seront encore plus dans le mille.</p>
+            </div>
+          </div>
         </a>
+      ) : null}
+
+      {/* NAVIGATION */}
+      {navItems.length > 1 ? <DashboardNav items={navItems} active={activeNav} onSelect={setActiveNav} /> : null}
+
+      {/* ============================================================ */}
+      {/* 1. MON IDENTITÉ PRO (stratégie — EN PREMIER)                  */}
+      {/* ============================================================ */}
+      {isVisible("identite") && strategie.length > 0 ? (
+        <section>
+          <SectionHeader icon="👤" title="Mon profil et identité" count={strategie.length} isOpen={!collapsed.has("identite")} onToggle={() => toggle("identite")} />
+          {!collapsed.has("identite") ? (
+            <div className="mt-3 grid grid-cols-1 tablet:grid-cols-2 gap-3">
+              {strategie.map((d) => (
+                <DeliverableCard key={d.id} id={d.id} type={d.type} typeLabel={TYPE_LABELS[d.type] || d.type} typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"} title={d.title} status={d.status} />
+              ))}
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {/* ============================================================ */}
+      {/* 2. MES BIENS & ANNONCES                                       */}
+      {/* ============================================================ */}
+      {isVisible("biens") && (biensCount > 0 || annonces.length > 0) ? (
+        <section>
+          <SectionHeader icon="🏠" title="Mes biens et annonces" count={biensCount + annonces.length} isOpen={!collapsed.has("biens")} onToggle={() => toggle("biens")} />
+          {!collapsed.has("biens") ? (
+            <div className="mt-3 space-y-4">
+              {profile?.biens.map((bien, i) => (
+                <div key={i} className="rounded-lg bg-card border border-border overflow-hidden">
+                  <div className="p-4 flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center flex-shrink-0">
+                      <span aria-hidden="true">🏠</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-display text-body font-semibold text-primary">{bien.titre || `Bien ${i + 1}`}</p>
+                      <div className="flex flex-wrap gap-1.5 mt-1">
+                        {bien.type ? <span className="px-2 py-0.5 rounded bg-primary-50 text-caption text-primary-700">{bien.type}</span> : null}
+                        {bien.adresse ? <span className="px-2 py-0.5 rounded bg-neutral-100 text-caption text-neutral-600">📍 {bien.adresse}</span> : null}
+                        {bien.prix ? <span className="px-2 py-0.5 rounded bg-success-50 text-caption font-bold text-success-700">{Number(bien.prix).toLocaleString("fr-FR")} €</span> : null}
+                        {bien.surface ? <span className="px-2 py-0.5 rounded bg-neutral-100 text-caption text-neutral-600">{bien.surface} m²</span> : null}
+                      </div>
+                      {bien.lien_annonce ? (
+                        <a href={bien.lien_annonce} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-2 text-caption text-secondary-700 hover:underline">🔗 Voir l{"'"}annonce originale</a>
+                      ) : null}
+                    </div>
+                  </div>
+                  {/* Annonces rattachées */}
+                  {matchedAnnonces[i] && matchedAnnonces[i].length > 0 ? (
+                    <div className="border-t border-border p-4 bg-neutral-50/50 space-y-2">
+                      <p className="text-caption font-semibold text-neutral-500 mb-2">📝 Annonces pour ce bien</p>
+                      {matchedAnnonces[i].map((a) => (
+                        <DeliverableCard key={a.id} id={a.id} type={a.type} typeLabel="Annonce" typeColor="bg-success-50 text-success-700" title={a.title} status={a.status} />
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+              {/* Annonces non rattachées */}
+              {unmatchedAnnonces.length > 0 ? (
+                <div className="space-y-2">
+                  <p className="text-caption font-semibold text-neutral-500">📝 Annonces générales</p>
+                  {unmatchedAnnonces.map((a) => (
+                    <DeliverableCard key={a.id} id={a.id} type={a.type} typeLabel="Annonce" typeColor="bg-success-50 text-success-700" title={a.title} status={a.status} />
+                  ))}
+                </div>
+              ) : null}
+              {/* Ajouter un bien */}
+              <a href="mailto:support@immocrew.fr?subject=Nouveau%20bien%20%2F%20Boost%20Mandat" className="inline-flex items-center gap-2 text-body-sm font-semibold text-secondary-700 hover:text-secondary transition-colors">
+                + Ajouter un bien / Commander un Boost Mandat (100€)
+              </a>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {/* ============================================================ */}
+      {/* 3. MON CALENDRIER & POSTS                                     */}
+      {/* ============================================================ */}
+      {isVisible("posts") && posts.length > 0 ? (
+        <section>
+          <SectionHeader icon="📅" title={`Mon calendrier — ${postsThisMonth > 0 ? `${postsThisMonth} posts ce mois` : `${posts.length} posts`}`} count={posts.length} isOpen={!collapsed.has("posts")} onToggle={() => toggle("posts")} />
+          {!collapsed.has("posts") ? (
+            <div className="mt-3">
+              <p className="text-caption text-neutral-400 mb-3">Copie, colle, publie. Ton équipe a fait le reste.</p>
+              <div className="relative">
+                <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-secondary/20" aria-hidden="true" />
+                <div className="space-y-2">
+                  {posts.map((post) => {
+                    const platform = detectPlatform(post.title)
+                    return (
+                      <div key={post.id} className="relative pl-10">
+                        <div className="absolute left-2 top-4 w-5 h-5 rounded-full bg-card border-2 border-secondary/30 flex items-center justify-center text-xs" aria-hidden="true">
+                          {platform.icon}
+                        </div>
+                        <p className="text-caption text-neutral-400 mb-0.5">{post.month || ""}</p>
+                        <DeliverableCard id={post.id} type={post.type} typeLabel={platform.name} typeColor="bg-secondary-50 text-secondary-700" title={post.title} status={post.status} />
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {/* ============================================================ */}
+      {/* 4. MES ARTICLES                                               */}
+      {/* ============================================================ */}
+      {isVisible("articles") && articles.length > 0 ? (
+        <section>
+          <SectionHeader icon="📝" title="Mes articles" count={articles.length} isOpen={!collapsed.has("articles")} onToggle={() => toggle("articles")} />
+          {!collapsed.has("articles") ? (
+            <div className="mt-3 space-y-3">
+              {articles.map((d) => (
+                <DeliverableCard key={d.id} id={d.id} type={d.type} typeLabel="Article local" typeColor="bg-blue-50 text-blue-700" title={d.title} status={d.status} />
+              ))}
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {/* ============================================================ */}
+      {/* 5. MES SCRIPTS VIDÉO                                          */}
+      {/* ============================================================ */}
+      {isVisible("scripts") && scripts.length > 0 ? (
+        <section>
+          <SectionHeader icon="🎬" title="Mes scripts vidéo" count={scripts.length} isOpen={!collapsed.has("scripts")} onToggle={() => toggle("scripts")} />
+          {!collapsed.has("scripts") ? (
+            <div className="mt-3">
+              <p className="text-caption text-neutral-400 mb-3">Filme-toi avec ton iPhone, c{"'"}est suffisant. Chaque script est prêt à lire face caméra.</p>
+              <div className="grid grid-cols-1 tablet:grid-cols-2 gap-3">
+                {scripts.map((d) => (
+                  <DeliverableCard key={d.id} id={d.id} type={d.type} typeLabel="Script vidéo" typeColor="bg-warning-50 text-warning-800" title={d.title} status={d.status} />
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {/* ============================================================ */}
+      {/* 6. MES EMAILS                                                 */}
+      {/* ============================================================ */}
+      {isVisible("emails") && emails.length > 0 ? (
+        <section>
+          <SectionHeader icon="📧" title="Mes emails" count={emails.length} isOpen={!collapsed.has("emails")} onToggle={() => toggle("emails")} />
+          {!collapsed.has("emails") ? (
+            <div className="mt-3 grid grid-cols-1 tablet:grid-cols-2 gap-3">
+              {emails.map((d) => (
+                <DeliverableCard key={d.id} id={d.id} type={d.type} typeLabel={TYPE_LABELS[d.type] || d.type} typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"} title={d.title} status={d.status} />
+              ))}
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {/* FOOTER */}
+      <div className="pt-6 border-t border-border flex flex-wrap items-center gap-4">
+        {stripeCustomerId ? (
+          <a href="/api/portal" className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors">Gérer mon abonnement (modifier, résilier)</a>
+        ) : null}
+        <a href="mailto:support@immocrew.fr" className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors">Une question sur tes contenus ?</a>
       </div>
     </div>
   )
