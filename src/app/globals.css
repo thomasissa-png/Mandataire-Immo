@@ -84,4 +84,75 @@
   .prose-immocrew blockquote {
     @apply border-l-4 border-secondary pl-4 italic text-neutral-500 my-6;
   }
+
+  /* Prose styles for deliverable card content (markdown rendered inline) */
+  .prose-deliverable {
+    @apply text-body-sm text-neutral-700 leading-relaxed;
+  }
+
+  .prose-deliverable h1,
+  .prose-deliverable h2,
+  .prose-deliverable h3 {
+    @apply font-display font-semibold text-primary mt-4 mb-2;
+  }
+
+  .prose-deliverable h1 {
+    @apply text-h4;
+  }
+
+  .prose-deliverable h2 {
+    @apply text-body font-semibold;
+  }
+
+  .prose-deliverable h3 {
+    @apply text-body-sm font-semibold;
+  }
+
+  .prose-deliverable p {
+    @apply mb-3;
+  }
+
+  .prose-deliverable ul,
+  .prose-deliverable ol {
+    @apply mb-3 pl-5;
+  }
+
+  .prose-deliverable ul {
+    @apply list-disc;
+  }
+
+  .prose-deliverable ol {
+    @apply list-decimal;
+  }
+
+  .prose-deliverable li {
+    @apply mb-1;
+  }
+
+  .prose-deliverable strong {
+    @apply font-semibold text-neutral-800;
+  }
+
+  .prose-deliverable em {
+    @apply italic;
+  }
+
+  .prose-deliverable blockquote {
+    @apply border-l-4 border-secondary-200 pl-3 italic text-neutral-500 my-3;
+  }
+
+  .prose-deliverable hr {
+    @apply border-border my-4;
+  }
+}
+
+@layer utilities {
+  /* Cache la scrollbar tout en gardant le scroll fonctionnel (pour pills horizontales sur mobile) */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }

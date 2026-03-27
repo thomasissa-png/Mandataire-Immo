@@ -266,11 +266,11 @@ export function DashboardContent({
   return (
     <div className="space-y-8">
       {/* Carte profil */}
-      <div className="rounded-xl bg-card border border-border overflow-hidden">
+      <div className="rounded-lg bg-card border border-border overflow-hidden shadow-sm">
         {/* Bannière dégradée */}
-        <div className="h-20 bg-gradient-to-r from-primary via-primary-600 to-primary-800 relative">
+        <div className="h-28 bg-gradient-to-r from-primary via-primary-600 to-primary-800 relative">
           {packLabel && (
-            <span className="absolute top-3 right-4 px-3 py-1 rounded-full bg-secondary text-white text-caption font-bold shadow-sm">
+            <span className="absolute top-3 right-4 px-3 py-1 rounded-full bg-card text-primary text-caption font-bold shadow-sm">
               {packLabel}
             </span>
           )}
@@ -283,10 +283,10 @@ export function DashboardContent({
               <img
                 src={photoUrl}
                 alt={`Photo de ${profile?.prenom || userName}`}
-                className="w-20 h-20 rounded-xl border-4 border-white shadow-md object-cover"
+                className="w-20 h-20 rounded-xl border-4 border-card shadow-md object-cover"
               />
             ) : (
-              <div className="w-20 h-20 rounded-xl border-4 border-white shadow-md bg-secondary flex items-center justify-center">
+              <div className="w-20 h-20 rounded-xl border-4 border-card shadow-md bg-secondary flex items-center justify-center">
                 <span className="font-display text-h2 font-bold text-white">{initials}</span>
               </div>
             )}
@@ -317,7 +317,7 @@ export function DashboardContent({
                   <svg className="w-4 h-4 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  {profile.experience_annees} an{Number(profile.experience_annees) > 1 ? "s" : ""} d&#39;expérience
+                  {profile.experience_annees} an{Number(profile.experience_annees) > 1 ? "s" : ""} d'expérience
                 </div>
               )}
               {profile.nb_transactions_an && (
@@ -342,7 +342,7 @@ export function DashboardContent({
                   href={profile.linkedin_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-body-sm text-secondary hover:underline"
+                  className="flex items-center gap-1.5 text-body-sm text-secondary-700 hover:text-secondary hover:underline transition-colors duration-normal"
                 >
                   <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -357,7 +357,7 @@ export function DashboardContent({
 
       {/* Section Mes biens */}
       {profile && profile.biens.length > 0 && (
-        <div className="rounded-xl bg-card border border-border overflow-hidden">
+        <div className="rounded-lg bg-card border border-border overflow-hidden shadow-sm">
           <div className="px-6 py-4 border-b border-border bg-neutral-50/50">
             <div className="flex items-center gap-2">
               <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -368,7 +368,7 @@ export function DashboardContent({
           </div>
           <div className="divide-y divide-border">
             {profile.biens.map((bien, i) => (
-              <div key={i} className="p-5 hover:bg-neutral-50/50 transition-colors">
+              <div key={i} className="p-5 hover:bg-neutral-50/50 transition-colors duration-normal">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-600 flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-lg" aria-hidden="true">🏠</span>
@@ -390,8 +390,8 @@ export function DashboardContent({
                     </div>
                     {bien.points_forts ? <p className="text-body-sm text-neutral-500 mt-2 italic">{bien.points_forts}</p> : null}
                     {bien.lien_annonce ? (
-                      <a href={bien.lien_annonce} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 mt-2 text-body-sm text-secondary font-semibold hover:underline">
-                        🔗 Voir l&#39;annonce
+                      <a href={bien.lien_annonce} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 mt-2 text-body-sm text-secondary-700 font-semibold hover:text-secondary hover:underline transition-colors duration-normal">
+                        🔗 Voir l'annonce
                       </a>
                     ) : null}
                   </div>
@@ -406,11 +406,11 @@ export function DashboardContent({
       {showMonthlyBanner && (
         <a
           href="/dashboard/monthly-update"
-          className="group block rounded-xl border border-secondary/30 bg-gradient-to-r from-secondary-50 to-white p-5 hover:shadow-md transition-all duration-200"
+          className="group block rounded-lg border border-secondary/30 bg-gradient-to-r from-secondary-50 to-card p-5 hover:shadow-md transition-all duration-normal"
         >
           <div className="flex items-center gap-4">
-            <div className="w-11 h-11 rounded-xl bg-secondary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-secondary/20 transition-colors">
-              <svg className="w-5 h-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <div className="w-11 h-11 rounded-lg bg-secondary-100 flex items-center justify-center flex-shrink-0 group-hover:bg-secondary-200 transition-colors duration-normal">
+              <svg className="w-5 h-5 text-secondary-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
             </div>
@@ -422,11 +422,11 @@ export function DashboardContent({
                 10 min pour des contenus encore plus personnalisés ce mois-ci
               </p>
             </div>
-            <div className="hidden tablet:flex items-center gap-2 flex-shrink-0">
-              <span className="text-body-sm font-semibold text-secondary group-hover:text-secondary-600 transition-colors">
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <span className="text-body-sm font-semibold text-secondary-700 group-hover:text-secondary-800 transition-colors duration-normal">
                 Mettre à jour
               </span>
-              <svg className="w-4 h-4 text-secondary group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-4 h-4 text-secondary-700 group-hover:translate-x-0.5 transition-transform duration-normal" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
             </div>
@@ -434,51 +434,51 @@ export function DashboardContent({
         </a>
       )}
 
-      {/* Sous-titre livrables */}
+      {/* Sous-titre contenus */}
       <div>
         <p className="text-body text-neutral-500">
-          {deliverables.length} livrable{deliverables.length !== 1 ? "s" : ""} disponible{deliverables.length !== 1 ? "s" : ""}
+          {deliverables.length} contenu{deliverables.length !== 1 ? "s" : ""} prêt{deliverables.length !== 1 ? "s" : ""}
         </p>
       </div>
 
       {deliverables.length === 0 ? (
         /* ----- Empty state ----- */
-        <div className="rounded-xl bg-card border border-border p-10 text-center max-w-lg mx-auto">
+        <div className="rounded-lg bg-card border border-border p-10 text-center max-w-lg mx-auto shadow-sm">
           <div className="w-16 h-16 rounded-2xl bg-secondary-50 flex items-center justify-center mx-auto mb-6">
-            <span className="text-3xl" aria-hidden="true">&#x270D;&#xFE0F;</span>
+            <span className="text-3xl" aria-hidden="true">✍️</span>
           </div>
           <h2 className="font-display text-h2 text-primary mb-3">
             Bienvenue dans ton espace !
           </h2>
           <p className="text-body text-neutral-600 mb-6">
-            Ton équipe est au travail. Tu recevras tes premiers livrables sous 24h.
+            Ton équipe est au travail. Tes premiers contenus arrivent sous 24h.
           </p>
-          <div className="rounded-xl bg-background p-5 text-left">
+          <div className="rounded-lg bg-background p-5 text-left">
             <p className="text-body-sm text-neutral-500 font-semibold mb-3">
               Ce que tu vas recevoir :
             </p>
             <ul className="text-body-sm text-neutral-600 space-y-2">
               {pack === "lancement" ? (
                 <>
-                  <li className="flex items-center gap-2"><span className="text-success">&#10003;</span> 20 posts prêts à publier</li>
-                  <li className="flex items-center gap-2"><span className="text-success">&#10003;</span> 5 articles SEO local</li>
-                  <li className="flex items-center gap-2"><span className="text-success">&#10003;</span> 5 annonces storytelling</li>
-                  <li className="flex items-center gap-2"><span className="text-success">&#10003;</span> 10 scripts vidéo</li>
-                  <li className="flex items-center gap-2"><span className="text-success">&#10003;</span> Kit graphique personnalisé</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 20 posts prêts à publier</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 5 articles SEO local</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 5 annonces storytelling</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 10 scripts vidéo</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> Kit graphique personnalisé</li>
                 </>
               ) : (
                 <>
-                  <li className="flex items-center gap-2"><span className="text-success">&#10003;</span> 12 posts prêts à publier</li>
-                  <li className="flex items-center gap-2"><span className="text-success">&#10003;</span> 2 articles SEO local</li>
-                  <li className="flex items-center gap-2"><span className="text-success">&#10003;</span> 4 annonces personnalisées</li>
-                  <li className="flex items-center gap-2"><span className="text-success">&#10003;</span> 4 scripts vidéo</li>
-                  <li className="flex items-center gap-2"><span className="text-success">&#10003;</span> 1 newsletter + 1 email prospection</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 12 posts prêts à publier</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 2 articles SEO local</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 4 annonces personnalisées</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 4 scripts vidéo</li>
+                  <li className="flex items-center gap-2"><span className="text-success-700" aria-hidden="true">✓</span> 1 newsletter + 1 email prospection</li>
                 </>
               )}
             </ul>
           </div>
-          <p className="text-caption text-neutral-400 mt-4">
-            On t&#39;envoie un email dès que c&#39;est prêt.
+          <p className="text-caption text-neutral-500 mt-4">
+            On t'envoie un email dès que c'est prêt.
           </p>
         </div>
       ) : (
@@ -495,11 +495,11 @@ export function DashboardContent({
               icon={<IconCheck />}
               label="Livrés"
               value={totalDelivered}
-              colorClass="text-success bg-success-50"
+              colorClass="text-success-700 bg-success-50"
             />
             <StatCard
               icon={<IconClock />}
-              label="En préparation"
+              label="En cours"
               value={totalDraft}
               colorClass="text-warning-700 bg-warning-50"
             />
@@ -507,12 +507,13 @@ export function DashboardContent({
               icon={<IconGrid />}
               label="Catégories"
               value={activeCategories}
-              colorClass="text-info bg-info-50"
+              colorClass="text-info-700 bg-info-50"
             />
           </div>
 
           {/* ----- Filter pills ----- */}
-          <div className="flex flex-wrap gap-2">
+          {/* overflow-x-auto + no-wrap : scroll horizontal sur mobile, pas de retour à la ligne */}
+          <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 tablet:mx-0 tablet:px-0 tablet:flex-wrap scrollbar-hide">
             <FilterPill
               label="Tout"
               count={deliverables.length}
@@ -536,13 +537,15 @@ export function DashboardContent({
               const isCollapsed = collapsedSections.has(cat.key)
 
               return (
-                <section key={cat.key}>
+                <section key={cat.key} aria-labelledby={`section-${cat.key}-heading`}>
                   {/* Section header */}
                   <button
                     type="button"
+                    id={`section-${cat.key}-heading`}
                     className="w-full flex items-center justify-between gap-3 group mb-4"
                     onClick={() => toggleSection(cat.key)}
                     aria-expanded={!isCollapsed}
+                    aria-controls={`section-${cat.key}-grid`}
                   >
                     <div className="flex items-center gap-3">
                       <span
@@ -558,14 +561,14 @@ export function DashboardContent({
                         {cat.items.length}
                       </span>
                     </div>
-                    <span className="text-neutral-400 group-hover:text-primary transition-colors duration-200">
+                    <span className="text-neutral-400 group-hover:text-primary transition-colors duration-normal">
                       <ChevronIcon open={!isCollapsed} />
                     </span>
                   </button>
 
                   {/* Cards grid */}
                   {!isCollapsed && (
-                    <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
+                    <div id={`section-${cat.key}-grid`} className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                       {cat.items.map((d) => (
                         <DeliverableCard
                           key={d.id}
@@ -591,7 +594,7 @@ export function DashboardContent({
         <div className="mt-2 pt-6 border-t border-border">
           <a
             href="/api/portal"
-            className="text-body-sm text-neutral-500 hover:text-secondary underline transition-colors duration-200"
+            className="text-body-sm text-neutral-600 hover:text-secondary-700 underline transition-colors duration-normal"
           >
             Gérer mon abonnement
           </a>
@@ -617,13 +620,13 @@ function StatCard({
   colorClass: string
 }) {
   return (
-    <div className="rounded-xl bg-card border border-border p-4 flex items-center gap-3 shadow-xs hover:shadow-sm transition-shadow duration-200">
+    <div className="rounded-lg bg-card border border-border p-4 flex items-center gap-3 shadow-xs hover:shadow-sm transition-shadow duration-normal">
       <div className={`inline-flex items-center justify-center w-10 h-10 rounded-lg ${colorClass}`}>
         {icon}
       </div>
       <div>
-        <p className="font-display text-h2 text-primary leading-none">{value}</p>
-        <p className="text-caption text-neutral-500 mt-0.5">{label}</p>
+        <p className="font-display text-h3 font-bold text-primary leading-none">{value}</p>
+        <p className="text-caption text-neutral-500 mt-1">{label}</p>
       </div>
     </div>
   )
@@ -643,7 +646,8 @@ function FilterPill({
   return (
     <button
       type="button"
-      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-body-sm font-semibold transition-all duration-200 ${
+      aria-pressed={active}
+      className={`flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-body-sm font-semibold transition-all duration-normal ${
         active
           ? "bg-primary text-white shadow-sm"
           : "bg-card border border-border text-neutral-600 hover:border-secondary/40 hover:text-primary"

@@ -68,6 +68,7 @@ export function DeliverableCard({
   const [expanded, setExpanded] = useState(false)
   const [content, setContent] = useState<string | null>(initialContent ?? null)
   const [loadingContent, setLoadingContent] = useState(false)
+  const [loadError, setLoadError] = useState(false)
 
   const deliverableType = type as DeliverableType
   const accentColor = TYPE_ACCENT_COLORS[deliverableType] || "border-l-neutral-300"
@@ -75,15 +76,18 @@ export function DeliverableCard({
 
   const loadContent = useCallback(async () => {
     if (content !== null || loadingContent) return
+    setLoadError(false)
     setLoadingContent(true)
     try {
       const res = await fetch(`/api/deliverables/${id}`)
       if (res.ok) {
         const data = await res.json()
         setContent(data.content ?? "")
+      } else {
+        setLoadError(true)
       }
     } catch {
-      // Silencieux : le contenu reste null, l'utilisateur peut réessayer
+      setLoadError(true)
     } finally {
       setLoadingContent(false)
     }
@@ -103,9 +107,11 @@ export function DeliverableCard({
   const handleCopy = async (e: React.MouseEvent) => {
     e.stopPropagation()
     await loadContent()
+    // content peut être null si le fetch a échoué — l'état d'erreur est déjà affiché
     if (content === null) return
     const plainText = stripMarkdown(content)
-    navigator.clipboard.writeText(plainText).then(() => {
+    try {
+      await navigator.clipboard.writeText(plainText)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
       track("deliverable_download", {
@@ -113,7 +119,10 @@ export function DeliverableCard({
         type,
         method: "copy",
       })
-    })
+    } catch {
+      // Clipboard API non autorisée (contexte non-sécurisé ou refus utilisateur)
+      setLoadError(true)
+    }
   }
 
   /** Preview: first 2 non-empty, non-heading lines */
@@ -130,10 +139,12 @@ export function DeliverableCard({
     : null
 
   return (
-    <div
-      role="article"
-      className={`w-full text-left rounded-xl bg-card border border-border border-l-4 ${accentColor} overflow-hidden hover:shadow-md hover:border-secondary/30 transition-all duration-normal cursor-pointer`}
+    <article
+      tabIndex={0}
+      aria-label={`Livrable : ${title}`}
+      className={`rounded-lg bg-card border border-border border-l-4 ${accentColor} overflow-hidden shadow-xs hover:shadow-md hover:border-secondary/30 transition-all duration-normal cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary`}
       onClick={handleExpand}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); void handleExpand() } }}
     >
       <div className="p-5">
         {/* Header */}
@@ -219,10 +230,26 @@ export function DeliverableCard({
 
         {/* Loading state */}
         {loadingContent && (
-          <div className="flex items-center gap-2 mt-3">
-            <div className="w-4 h-4 border-2 border-secondary/30 border-t-secondary rounded-full animate-spin" />
-            <p className="text-body-sm text-neutral-400">
+          <div className="flex items-center gap-2 mt-3" aria-live="polite" aria-label="Chargement en cours">
+            <div className="w-4 h-4 border-2 border-secondary/30 border-t-secondary rounded-full animate-spin" aria-hidden="true" />
+            <p className="text-body-sm text-neutral-500">
               Chargement du contenu...
+            </p>
+          </div>
+        )}
+
+        {/* Error state */}
+        {loadError && !loadingContent && (
+          <div className="flex items-center gap-2 mt-3" role="alert">
+            <p className="text-body-sm text-error-700">
+              Impossible de charger le contenu.{" "}
+              <button
+                type="button"
+                className="underline font-semibold hover:text-error-900 transition-colors"
+                onClick={(e) => { e.stopPropagation(); setLoadError(false); loadContent() }}
+              >
+                Réessayer
+              </button>
             </p>
           </div>
         )}
@@ -230,7 +257,8 @@ export function DeliverableCard({
         {/* Expanded content with markdown rendering */}
         {expanded && content !== null && (
           <div
-            className="mt-4 pt-4 border-t border-border prose-deliverable text-body-sm text-neutral-700 leading-relaxed"
+            id={`deliverable-content-${id}`}
+            className="mt-4 pt-4 border-t border-border prose-deliverable"
             dangerouslySetInnerHTML={{ __html: markdownToHtml(content) }}
           />
         )}
@@ -240,11 +268,10 @@ export function DeliverableCard({
           {status === "delivered" ? (
             <button
               type="button"
-              className="text-caption text-neutral-400 hover:text-secondary transition-colors flex items-center gap-1"
-              onClick={(e) => {
-                e.stopPropagation()
-                handleExpand()
-              }}
+              aria-expanded={expanded}
+              aria-controls={`deliverable-content-${id}`}
+              className="text-caption text-neutral-500 hover:text-secondary-700 transition-colors duration-normal flex items-center gap-1 min-h-[44px] py-2"
+              onClick={(e) => { e.stopPropagation(); void handleExpand() }}
             >
               {expanded ? (
                 <>
@@ -254,6 +281,7 @@ export function DeliverableCard({
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth={2}
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -271,6 +299,7 @@ export function DeliverableCard({
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth={2}
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -284,11 +313,11 @@ export function DeliverableCard({
             </button>
           ) : (
             <span className="text-body-sm text-neutral-400">
-              Bientôt disponible
+              En cours de rédaction — disponible sous 24h
             </span>
           )}
         </div>
       </div>
-    </div>
+    </article>
   )
 }

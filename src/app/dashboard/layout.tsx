@@ -8,7 +8,7 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-background">
       {/* Top bar */}
-      <header className="sticky top-0 z-50 bg-white border-b border-border shadow-xs">
+      <header className="sticky top-0 z-50 bg-card border-b border-border shadow-xs">
         <div className="container-immocrew flex items-center justify-between h-14 tablet:h-16">
           <a href="/" className="font-display text-h3 font-bold text-primary">
             ImmoCrew
@@ -18,7 +18,7 @@ export default function DashboardLayout({
               href="/dashboard"
               className="text-body-sm font-medium text-foreground hover:text-secondary transition-colors duration-normal py-2"
             >
-              Mes livrables
+              Mes contenus
             </a>
             <UserMenu />
           </div>
