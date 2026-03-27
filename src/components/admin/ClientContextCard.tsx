@@ -1,3 +1,5 @@
+import type React from "react"
+
 interface ClientContextCardProps {
   context: Record<string, unknown>
 }
@@ -80,7 +82,7 @@ export function ClientContextCard({ context }: ClientContextCardProps) {
   return (
     <div className="space-y-4 mb-6">
       {/* Sections principales */}
-      {SECTION_ORDER.map((section) => {
+      {SECTION_ORDER.map((section): React.ReactNode => {
         const hasValues = section.keys.some((k) => {
           const v = context[k]
           return v !== null && v !== undefined && v !== ""
