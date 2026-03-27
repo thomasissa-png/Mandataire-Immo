@@ -111,7 +111,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
       "reels instagram immobilier idees",
       "idees posts reseaux sociaux immobilier",
     ],
-    categorie: "Reseaux sociaux",
+    categorie: "Réseaux sociaux",
     angle:
       "Strategie Instagram concrete pour un mandataire solo qui veut transformer ses followers en clients",
     priorite: 6,
@@ -127,7 +127,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
       "personal branding agent immobilier",
       "contenu linkedin mandataire",
     ],
-    categorie: "Reseaux sociaux",
+    categorie: "Réseaux sociaux",
     angle:
       "Comment utiliser LinkedIn pour generer des contacts entrants de vendeurs et investisseurs",
     priorite: 7,
@@ -260,7 +260,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
       "prospection facebook immobilier",
       "facebook agent immobilier strategie",
     ],
-    categorie: "Reseaux sociaux",
+    categorie: "Réseaux sociaux",
     angle:
       "Strategie pour apporter de la valeur dans les groupes Facebook et convertir les membres en clients",
     priorite: 15,
@@ -312,7 +312,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
       "filmer un bien immobilier",
       "video marketing immobilier",
     ],
-    categorie: "Video",
+    categorie: "Vidéo",
     angle:
       "Pourquoi la video est devenue incontournable et comment s'y mettre sans stress ni materiel couteux",
     priorite: 18,
@@ -328,7 +328,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
       "tiktok immobilier",
       "videos courtes agent immobilier",
     ],
-    categorie: "Video",
+    categorie: "Vidéo",
     angle:
       "Formats de Reels testes et approuves dans l'immobilier avec des scripts prets a tourner",
     priorite: 19,
@@ -344,7 +344,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
       "script reel immobilier",
       "video youtube agent immobilier",
     ],
-    categorie: "Video",
+    categorie: "Vidéo",
     angle:
       "Templates de scripts mot-a-mot que le mandataire peut lire et tourner en 10 minutes",
     priorite: 20,

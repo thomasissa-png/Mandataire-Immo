@@ -11,6 +11,7 @@ import {
   getRelatedArticles,
 } from "@/lib/blog"
 import { ArticleCover } from "@/components/blog/ArticleCover"
+import { PACK_MENSUEL, formatPrice } from "@/lib/pricing"
 
 interface BlogArticlePageProps {
   params: Promise<{ slug: string }>
@@ -228,12 +229,12 @@ export default async function BlogArticlePage({
                 Tu veux que ton marketing soit fait pour toi ?
               </p>
               <p className="text-body text-neutral-500 mb-6">
-                Posts, articles SEO, annonces storytelling — 100% personnalis&eacute;s
-                pour ta zone. &Agrave; partir de 150&nbsp;&euro;/mois.
+                Posts, articles SEO, annonces storytelling — 100% personnalisés
+                pour ta zone. À partir de {formatPrice(PACK_MENSUEL)}.
               </p>
               <CTAButton
                 href="/#pricing"
-                label="D&eacute;couvre ImmoCrew &rarr;"
+                label="Découvre ImmoCrew →"
                 location="blog_article_cta"
                 variant="primary"
                 className="w-full tablet:w-auto"
