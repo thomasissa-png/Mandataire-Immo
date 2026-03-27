@@ -551,7 +551,7 @@ export function DashboardContent({
                 Tes contenus sont pr{"\u00ea"}ts. Tu copies, tu publies, c{"'"}est fait.
               </p>
             </div>
-            <span className="hidden tablet:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-success-50 text-success-700 text-caption font-semibold">
+            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-success-50 text-success-700 text-caption font-semibold">
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
@@ -930,17 +930,23 @@ export function DashboardContent({
         </div>
       )}
 
-      {/* Manage subscription */}
-      {stripeCustomerId && (
-        <div className="mt-2 pt-6 border-t border-border">
+      {/* Footer — abonnement + support */}
+      <div className="mt-2 pt-6 border-t border-border flex flex-wrap items-center gap-4">
+        {stripeCustomerId ? (
           <a
             href="/api/portal"
             className="text-body-sm text-neutral-600 hover:text-secondary-700 underline transition-colors duration-normal"
           >
-            G{"\u00e9"}rer mon abonnement
+            G\u00e9rer mon abonnement
           </a>
-        </div>
-      )}
+        ) : null}
+        <a
+          href="mailto:support@immocrew.fr"
+          className="text-body-sm text-neutral-600 hover:text-secondary-700 underline transition-colors duration-normal"
+        >
+          Une question sur tes contenus ?
+        </a>
+      </div>
     </div>
   )
 }
