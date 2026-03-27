@@ -53,17 +53,29 @@ export default async function AdminClientDetailPage({
     notFound()
   }
 
-  // Fetch payments
-  const { rows: paymentList } = await query<Payment>(
-    "SELECT * FROM payments WHERE email = $1 ORDER BY created_at DESC",
-    [clientData.email]
-  )
+  // Fetch payments (non-bloquant — la page s'affiche même si payments plante)
+  let paymentList: Payment[] = []
+  try {
+    const result = await query<Payment>(
+      "SELECT * FROM payments WHERE email = $1 ORDER BY created_at DESC",
+      [clientData.email]
+    )
+    paymentList = result.rows
+  } catch (err) {
+    console.error("[admin/client] Error fetching payments:", err)
+  }
 
-  // Fetch recent deliverables
-  const { rows: deliverableList } = await query<ClientDeliverable>(
-    "SELECT id, type, title, status, month, created_at FROM deliverables WHERE client_id = $1 ORDER BY created_at DESC LIMIT 20",
-    [id]
-  )
+  // Fetch recent deliverables (non-bloquant)
+  let deliverableList: ClientDeliverable[] = []
+  try {
+    const result = await query<ClientDeliverable>(
+      "SELECT id, type, title, status, month, created_at FROM deliverables WHERE client_id = $1 ORDER BY created_at DESC LIMIT 20",
+      [id]
+    )
+    deliverableList = result.rows
+  } catch (err) {
+    console.error("[admin/client] Error fetching deliverables:", err)
+  }
 
   return (
     <div className="min-h-screen bg-background">
