@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
       nombre_annonces: 5,
     })
     const annoncesResult = await generateJSON<{ annonces: Array<{ bien_titre: string; annonce_complete: string; accroche_courte: string; titre_annonce: string; mots_cles_seo: string[] }> }>(
-      { ...annoncesPrompt, maxTokens: 8192 }
+      { ...annoncesPrompt, maxTokens: 16384 }
     )
     for (const annonce of annoncesResult.data.annonces) {
       const id = await insertDeliverable({
@@ -173,7 +173,7 @@ export async function POST(request: NextRequest) {
       nombre_articles: 5,
     })
     const articlesResult = await generateJSON<{ articles: Array<{ frontmatter: { title: string; meta_description: string; slug: string }; contenu_markdown: string; liens_internes_suggeres: string[] }> }>(
-      { ...articlesPrompt, maxTokens: 8192 }
+      { ...articlesPrompt, maxTokens: 16384 }
     )
     for (const article of articlesResult.data.articles) {
       const id = await insertDeliverable({
@@ -196,7 +196,7 @@ export async function POST(request: NextRequest) {
       nombre_posts: 20,
     })
     const postsResult = await generateJSON<{ posts: Array<{ plateforme: string; type: string; texte: string; hashtags: string[]; brief_visuel: string; hook: string }> }>(
-      { ...postsPrompt, maxTokens: 8192 }
+      { ...postsPrompt, maxTokens: 16384 }
     )
     for (const post of postsResult.data.posts) {
       const id = await insertDeliverable({
@@ -221,7 +221,7 @@ export async function POST(request: NextRequest) {
       type_video: "face_camera",
     })
     const scriptsResult = await generateJSON<{ scripts: Array<{ titre: string; format: string; duree_cible: string; scenes: Array<{ numero: number; duree: string; voix_off: string; indication_visuelle: string }>; musique_suggeree: string; hook: string }> }>(
-      { ...scriptsPrompt, maxTokens: 8192 }
+      { ...scriptsPrompt, maxTokens: 16384 }
     )
     for (const script of scriptsResult.data.scripts) {
       const scenesText = script.scenes

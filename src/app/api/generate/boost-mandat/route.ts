@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
       telephone_contact: ctx.telephone || undefined,
     })
     const landingResult = await generateJSON<{ titre_page: string; meta_description: string; html: string }>(
-      { ...landingPrompt, maxTokens: 8192 }
+      { ...landingPrompt, maxTokens: 16384 }
     )
     const landingId = await insertDeliverable({
       clientEmail,

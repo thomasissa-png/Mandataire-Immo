@@ -113,10 +113,21 @@ export async function generateJSON<T>(options: GenerateOptions): Promise<{
   inputTokens: number
   outputTokens: number
 }> {
-  const result = await generate(options)
+  // Forcer Claude à retourner du JSON pur (pas de backticks markdown)
+  const jsonOptions = {
+    ...options,
+    system: options.system + "\n\nIMPORTANT: Retourne UNIQUEMENT du JSON brut. Pas de backticks markdown (```), pas de texte avant ou après. La réponse doit commencer par { et finir par }.",
+  }
+  const result = await generate(jsonOptions)
 
   // Tenter d'extraire le JSON de la reponse
   let jsonStr = result.content.trim()
+
+  // Stripper les backticks markdown (```json ... ``` ou ``` ... ```)
+  const codeBlockMatch = jsonStr.match(/```(?:json)?\s*\n?([\s\S]*?)```/)
+  if (codeBlockMatch) {
+    jsonStr = codeBlockMatch[1].trim()
+  }
 
   // Si la reponse contient du texte autour du JSON, extraire le bloc JSON
   const jsonMatch = jsonStr.match(/\{[\s\S]*\}/)
