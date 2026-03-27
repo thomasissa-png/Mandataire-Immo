@@ -186,16 +186,13 @@ Reponds UNIQUEMENT avec un objet JSON valide :
   ].filter(Boolean).join("\n")
 
   const donneesLocalesDisponibles = input.donnees_locales &&
-    (input.donnees_locales.commerces?.length || input.donnees_locales.ecoles?.length || input.donnees_locales.transports?.length || input.donnees_locales.prix_m2_moyen)
+    (input.donnees_locales.prix_m2_moyen || input.donnees_locales.dernieres_transactions?.length)
 
   const donneesLocalesSection = donneesLocalesDisponibles
     ? `
 DONNEES LOCALES VERIFIEES pour la section quartier (utilise UNIQUEMENT ces references) :
-${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}EUR` : ''}
-${input.donnees_locales!.commerces?.length ? `- Commerces : ${input.donnees_locales!.commerces.join(', ')}` : ''}
-${input.donnees_locales!.ecoles?.length ? `- Ecoles : ${input.donnees_locales!.ecoles.join(', ')}` : ''}
-${input.donnees_locales!.transports?.length ? `- Transports : ${input.donnees_locales!.transports.join(', ')}` : ''}
-${input.donnees_locales!.ambiance_quartier ? `- Ambiance : ${input.donnees_locales!.ambiance_quartier}` : ''}`
+${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
+${input.donnees_locales!.dernieres_transactions?.length ? `- Dernières transactions DVF : ${input.donnees_locales!.dernieres_transactions.slice(0, 3).map(t => `${t.type} ${t.surface}m² à ${t.prix_m2}€/m²`).join(', ')}` : ''}`
     : `
 DONNEES LOCALES : non disponibles. Pour la section quartier, rester general (nom de ville et quartier uniquement). NE PAS inventer de commodites, ecoles ou transports.`
 

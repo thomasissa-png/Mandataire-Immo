@@ -45,13 +45,19 @@ export interface ScriptVideoInput {
     points_forts: string
     description_detaillee?: string
   }
+  // Donnees locales enrichies (depuis API DVF)
   donnees_locales?: {
     prix_m2_moyen?: number
-    ecoles?: string[]
-    transports?: string[]
-    commerces?: string[]
-    parcs?: string[]
-    tendance_marche?: string
+    lat?: number | null
+    lon?: number | null
+    postcode?: string
+    dernieres_transactions?: Array<{
+      date: string
+      prix: number
+      surface: number
+      prix_m2: number
+      type: string
+    }>
   }
 }
 
@@ -173,17 +179,13 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
     : ''
 
   const donneesLocalesDisponibles = input.donnees_locales &&
-    (input.donnees_locales.commerces?.length || input.donnees_locales.ecoles?.length || input.donnees_locales.transports?.length || input.donnees_locales.prix_m2_moyen)
+    (input.donnees_locales.prix_m2_moyen || input.donnees_locales.dernieres_transactions?.length)
 
   const donneesLocales = donneesLocalesDisponibles
     ? `
 DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references, ne rien inventer) :
 ${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
-${input.donnees_locales!.ecoles?.length ? `- Ecoles : ${input.donnees_locales!.ecoles.join(', ')}` : ''}
-${input.donnees_locales!.transports?.length ? `- Transports : ${input.donnees_locales!.transports.join(', ')}` : ''}
-${input.donnees_locales!.commerces?.length ? `- Commerces : ${input.donnees_locales!.commerces.join(', ')}` : ''}
-${input.donnees_locales!.parcs?.length ? `- Parcs : ${input.donnees_locales!.parcs.join(', ')}` : ''}
-${input.donnees_locales!.tendance_marche ? `- Tendance marche : ${input.donnees_locales!.tendance_marche}` : ''}`
+${input.donnees_locales!.dernieres_transactions?.length ? `- Dernières transactions DVF : ${input.donnees_locales!.dernieres_transactions.slice(0, 3).map(t => `${t.type} ${t.surface}m² à ${t.prix_m2}€/m²`).join(', ')}` : ''}`
     : `
 DONNEES LOCALES : non disponibles. Rester general sur les references locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, ecoles, arrets de transport ou marches.`
 

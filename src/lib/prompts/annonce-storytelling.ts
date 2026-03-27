@@ -62,7 +62,7 @@ export function buildAnnonceStorytellingPrompt(input: AnnonceStorytellingInput):
   user: string
 } {
   const donneesLocalesDisponibles = input.donnees_locales &&
-    (input.donnees_locales.commerces.length > 0 || input.donnees_locales.ecoles.length > 0 || input.donnees_locales.transports.length > 0)
+    (input.donnees_locales.prix_m2_moyen || input.donnees_locales.dernieres_transactions?.length)
 
   const system = `Tu es un redacteur immobilier specialise dans les annonces storytelling haut de gamme pour le marche francais. Tu transformes des descriptions techniques de biens en recits immersifs qui projettent l'acheteur dans sa future vie.
 
@@ -135,10 +135,7 @@ DPE : ${'dpe' in b && b.dpe ? b.dpe : '[DPE : information en cours — sera comm
     ? `
 DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references, ne rien inventer) :
 ${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
-${input.donnees_locales!.ecoles?.length ? `- Ecoles du quartier : ${input.donnees_locales!.ecoles.join(', ')}` : ''}
-${input.donnees_locales!.transports?.length ? `- Transports : ${input.donnees_locales!.transports.join(', ')}` : ''}
-${input.donnees_locales!.commerces?.length ? `- Commerces : ${input.donnees_locales!.commerces.join(', ')}` : ''}
-${input.donnees_locales!.ambiance_quartier ? `- Ambiance quartier : ${input.donnees_locales!.ambiance_quartier}` : ''}`
+${input.donnees_locales!.dernieres_transactions?.length ? `- Dernières transactions DVF : ${input.donnees_locales!.dernieres_transactions.slice(0, 3).map(t => `${t.type} ${t.surface}m² à ${t.prix_m2}€/m²`).join(', ')}` : ''}`
     : `
 DONNEES LOCALES : non disponibles. Rester general sur les references locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, ecoles, boulangeries, arrets de transport ou marches.`
 

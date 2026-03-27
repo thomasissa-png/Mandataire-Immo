@@ -95,15 +95,12 @@ Reponds UNIQUEMENT avec un objet JSON valide :
     : "\nAucun bien en vente actuellement — privilegier le contenu expertise, quartier et conseil."
 
   const donneesLocalesDisponibles = input.donnees_locales &&
-    (input.donnees_locales.commerces?.length || input.donnees_locales.ecoles?.length || input.donnees_locales.transports?.length || input.donnees_locales.prix_m2_moyen)
+    (input.donnees_locales.prix_m2_moyen || input.donnees_locales.dernieres_transactions?.length)
 
   const donneesLocalesSection = donneesLocalesDisponibles
     ? `\nDONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references dans les sujets de posts, ne rien inventer) :
-${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}EUR` : ''}
-${input.donnees_locales!.commerces?.length ? `- Commerces de reference : ${input.donnees_locales!.commerces.join(', ')}` : ''}
-${input.donnees_locales!.ecoles?.length ? `- Ecoles de reference : ${input.donnees_locales!.ecoles.join(', ')}` : ''}
-${input.donnees_locales!.transports?.length ? `- Transports : ${input.donnees_locales!.transports.join(', ')}` : ''}
-${input.donnees_locales!.ambiance_quartier ? `- Ambiance quartier : ${input.donnees_locales!.ambiance_quartier}` : ''}`
+${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
+${input.donnees_locales!.dernieres_transactions?.length ? `- Dernières transactions DVF : ${input.donnees_locales!.dernieres_transactions.slice(0, 3).map(t => `${t.type} ${t.surface}m² à ${t.prix_m2}€/m²`).join(', ')}` : ''}`
     : `\nDONNEES LOCALES : non disponibles. Dans les sujets de posts, utiliser UNIQUEMENT les noms de ville et quartiers fournis dans zone_geo. NE PAS inventer de noms de commerces, ecoles, marches ou arrets de transport.`
 
   const evenementsSection = input.evenements_locaux && input.evenements_locaux.length > 0

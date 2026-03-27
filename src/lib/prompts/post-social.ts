@@ -27,13 +27,19 @@ export interface PostSocialInput {
   nb_transactions_an: number
   gamme_prix: string
   cible_clients: string
-  // Donnees locales enrichies (depuis onboarding)
+  // Donnees locales enrichies (depuis API DVF)
   donnees_locales?: {
-    prix_m2_moyen: number
-    commerces: string[]
-    ecoles: string[]
-    transports: string[]
-    ambiance_quartier: string
+    prix_m2_moyen?: number
+    lat?: number | null
+    lon?: number | null
+    postcode?: string
+    dernieres_transactions?: Array<{
+      date: string
+      prix: number
+      surface: number
+      prix_m2: number
+      type: string
+    }>
   }
   // Contexte de generation
   plateforme: 'instagram' | 'facebook' | 'linkedin' | 'mix'
@@ -49,7 +55,7 @@ export function buildPostSocialPrompt(input: PostSocialInput): {
   user: string
 } {
   const donneesLocalesDisponibles = input.donnees_locales &&
-    (input.donnees_locales.commerces.length > 0 || input.donnees_locales.ecoles.length > 0 || input.donnees_locales.transports.length > 0)
+    (input.donnees_locales.prix_m2_moyen || input.donnees_locales.dernieres_transactions?.length)
 
   const system = `Tu es un redacteur marketing specialise dans l'immobilier en France. Tu rediges des posts pour les reseaux sociaux de mandataires immobiliers independants.
 
@@ -133,11 +139,8 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres. Format :
   const donneesLocalesStr = donneesLocalesDisponibles
     ? `
 DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references, ne rien inventer) :
-${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m2 : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}EUR` : ''}
-${input.donnees_locales!.commerces.length > 0 ? `- Commerces de reference : ${input.donnees_locales!.commerces.join(', ')}` : ''}
-${input.donnees_locales!.ecoles.length > 0 ? `- Ecoles de reference : ${input.donnees_locales!.ecoles.join(', ')}` : ''}
-${input.donnees_locales!.transports.length > 0 ? `- Transports : ${input.donnees_locales!.transports.join(', ')}` : ''}
-${input.donnees_locales!.ambiance_quartier ? `- Ambiance quartier : ${input.donnees_locales!.ambiance_quartier}` : ''}`
+${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
+${input.donnees_locales!.dernieres_transactions?.length ? `- Dernières transactions DVF : ${input.donnees_locales!.dernieres_transactions.slice(0, 3).map(t => `${t.type} ${t.surface}m² à ${t.prix_m2}€/m²`).join(', ')}` : ''}`
     : `
 DONNEES LOCALES : non disponibles. Rester general sur les references locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, ecoles, arrets de transport ou marches.`
 
