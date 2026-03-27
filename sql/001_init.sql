@@ -5,7 +5,7 @@
 -- 1. Table clients (coeur du systeme)
 CREATE TABLE IF NOT EXISTS clients (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::TEXT,
-  email TEXT UNIQUE,
+  email TEXT,
   first_name TEXT,
   last_name TEXT,
   password_hash TEXT,
