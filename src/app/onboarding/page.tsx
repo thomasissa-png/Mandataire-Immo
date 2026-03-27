@@ -579,8 +579,8 @@ export default function OnboardingPage() {
     )
   }
 
-  // Check if current step is the biens step (step index 7)
-  const isBiensStep = currentStep === 7
+  // Check if current step is the biens step (dynamically find it)
+  const isBiensStep = STEPS[currentStep]?.fields[0] === "__biens__"
 
   return (
     <div className="min-h-screen bg-background">
