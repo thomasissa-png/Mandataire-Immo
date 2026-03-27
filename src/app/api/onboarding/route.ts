@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
     await query(
       `INSERT INTO clients (email, first_name, last_name, client_context, created_at)
        VALUES ($1, $2, $3, $4, NOW())
-       ON CONFLICT (email) DO UPDATE SET
+       ON CONFLICT (email) WHERE email IS NOT NULL DO UPDATE SET
          first_name = EXCLUDED.first_name,
          last_name = EXCLUDED.last_name,
          client_context = EXCLUDED.client_context`,

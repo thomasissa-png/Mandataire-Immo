@@ -51,7 +51,7 @@ export async function POST(request: Request) {
         await query(
           `INSERT INTO clients (email, stripe_customer_id, pack, status, stripe_subscription_id, paid_at)
            VALUES ($1, $2, $3, $4, $5, $6)
-           ON CONFLICT (email) DO UPDATE SET
+           ON CONFLICT (email) WHERE email IS NOT NULL DO UPDATE SET
              stripe_customer_id = EXCLUDED.stripe_customer_id,
              pack = EXCLUDED.pack,
              status = EXCLUDED.status,
