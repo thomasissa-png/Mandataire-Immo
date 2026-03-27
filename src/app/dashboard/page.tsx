@@ -62,14 +62,14 @@ export default async function DashboardPage() {
           Ton abonnement est terminé
         </h2>
         <p className="text-body text-neutral-600 mb-6">
-          Tu n&apos;as plus accès à tes livrables. Pour retrouver ton espace
+          Tu n&#39;as plus accès à tes livrables. Pour retrouver ton espace
           et recevoir de nouveaux contenus chaque mois, réabonne-toi.
         </p>
         <a
           href="/#pricing"
           className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md transition-all duration-normal"
         >
-          Découvrir les packs &rarr;
+          Découvrir les packs &#8594;
         </a>
       </div>
     )
@@ -108,6 +108,34 @@ export default async function DashboardPage() {
     console.error("[dashboard] Error fetching deliverables:", err)
   }
 
+  // Extraire les infos profil depuis le client_context
+  const ctx = client?.client_context as Record<string, unknown> | null
+  const profile = ctx ? {
+    prenom: String(ctx.prenom || ""),
+    nom: String(ctx.nom || ""),
+    reseau: String(ctx.reseau || ""),
+    ville: String(ctx.ville || ""),
+    departement: String(ctx.departement || ""),
+    telephone: String(ctx.telephone || ""),
+    photo_profil_key: String(ctx.photo_profil_key || ""),
+    experience_annees: String(ctx.experience_annees || ""),
+    nb_transactions_an: String(ctx.nb_transactions_an || ""),
+    type_biens: String(ctx.type_biens || ""),
+    linkedin_url: String(ctx.linkedin_url || ""),
+    biens: Array.isArray(ctx.biens)
+      ? (ctx.biens as Array<Record<string, string>>).map((b) => ({
+          titre: String(b.titre || ""),
+          type: String(b.type || ""),
+          adresse: String(b.adresse || ""),
+          prix: String(b.prix || ""),
+          surface: String(b.surface || ""),
+          pieces: String(b.pieces || ""),
+          points_forts: String(b.points_forts || ""),
+          lien_annonce: String(b.lien_annonce || ""),
+        }))
+      : [],
+  } : null
+
   return (
     <DashboardContent
       userName={user.firstName || user.name || ""}
@@ -115,6 +143,7 @@ export default async function DashboardPage() {
       stripeCustomerId={client?.stripe_customer_id || null}
       showMonthlyBanner={showMonthlyBanner}
       deliverables={monthDeliverables}
+      profile={profile}
     />
   )
 }
