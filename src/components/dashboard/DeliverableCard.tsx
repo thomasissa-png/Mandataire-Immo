@@ -2,6 +2,48 @@
 
 import { useState, useCallback } from "react"
 import { track } from "@/lib/tracking"
+import { markdownToHtml, stripMarkdown } from "@/lib/markdownRenderer"
+
+type DeliverableType =
+  | "post"
+  | "article_seo"
+  | "annonce"
+  | "script_video"
+  | "newsletter"
+  | "email_prospection"
+  | "bio"
+  | "brief_graphique"
+  | "calendrier"
+  | "positionnement"
+  | "landing_page"
+
+const TYPE_ACCENT_COLORS: Record<DeliverableType, string> = {
+  post: "border-l-secondary",
+  article_seo: "border-l-info",
+  annonce: "border-l-success",
+  script_video: "border-l-warning",
+  newsletter: "border-l-primary-400",
+  email_prospection: "border-l-error",
+  bio: "border-l-secondary-300",
+  brief_graphique: "border-l-neutral-400",
+  calendrier: "border-l-warning-600",
+  positionnement: "border-l-primary-300",
+  landing_page: "border-l-success-400",
+}
+
+const TYPE_ICONS: Record<DeliverableType, string> = {
+  post: "📱",
+  article_seo: "📝",
+  annonce: "🏠",
+  script_video: "🎬",
+  newsletter: "📧",
+  email_prospection: "📧",
+  bio: "📋",
+  brief_graphique: "🎨",
+  calendrier: "📅",
+  positionnement: "🎯",
+  landing_page: "🌐",
+}
 
 interface DeliverableCardProps {
   id: string
@@ -27,7 +69,10 @@ export function DeliverableCard({
   const [content, setContent] = useState<string | null>(initialContent ?? null)
   const [loadingContent, setLoadingContent] = useState(false)
 
-  /** Charge le contenu complet depuis l'API si non disponible */
+  const deliverableType = type as DeliverableType
+  const accentColor = TYPE_ACCENT_COLORS[deliverableType] || "border-l-neutral-300"
+  const icon = TYPE_ICONS[deliverableType] || "📄"
+
   const loadContent = useCallback(async () => {
     if (content !== null || loadingContent) return
     setLoadingContent(true)
@@ -59,7 +104,8 @@ export function DeliverableCard({
     e.stopPropagation()
     await loadContent()
     if (content === null) return
-    navigator.clipboard.writeText(content).then(() => {
+    const plainText = stripMarkdown(content)
+    navigator.clipboard.writeText(plainText).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
       track("deliverable_download", {
@@ -70,61 +116,177 @@ export function DeliverableCard({
     })
   }
 
+  /** Preview: first 2 non-empty, non-heading lines */
+  const previewText = content
+    ? content
+        .split("\n")
+        .map((l) => l.trim())
+        .filter((l) => l && !l.startsWith("#") && !l.startsWith(">") && !l.startsWith("---"))
+        .slice(0, 2)
+        .join(" ")
+        .replace(/\*\*(.+?)\*\*/g, "$1")
+        .replace(/\*(.+?)\*/g, "$1")
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    : null
+
   return (
     <div
       role="article"
-      className="w-full text-left rounded-xl bg-card border border-border p-6 hover:shadow-md hover:border-secondary/30 transition-all duration-normal cursor-pointer"
+      className={`w-full text-left rounded-xl bg-card border border-border border-l-4 ${accentColor} overflow-hidden hover:shadow-md hover:border-secondary/30 transition-all duration-normal cursor-pointer`}
       onClick={handleExpand}
     >
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
-            <span
-              className={`inline-block px-2 py-0.5 rounded-full text-caption font-semibold ${typeColor}`}
-            >
-              {typeLabel}
-            </span>
-            {status === "draft" && (
-              <span className="inline-block px-2 py-0.5 rounded-full text-caption font-semibold bg-warning-50 text-warning-800">
-                En pr&eacute;paration
+      <div className="p-5">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="text-base" aria-hidden="true">
+                {icon}
               </span>
-            )}
-          </div>
-          <h3 className="font-display text-h4 text-primary mb-2">{title}</h3>
-          {loadingContent && (
-            <p className="text-body-sm text-neutral-400">Chargement du contenu...</p>
-          )}
-          {content !== null && (
-            <p className={`text-body-sm text-neutral-600 ${expanded ? "" : "line-clamp-3"}`}>
-              {content}
-            </p>
-          )}
-          <div className="flex items-center gap-4 mt-3">
-            {status === "delivered" ? (
-              <button
-                type="button"
-                aria-label={`Copier le texte : ${title}`}
-                className="text-body-sm text-secondary font-semibold hover:text-secondary-600 transition-colors"
-                onClick={handleCopy}
+              <span
+                className={`inline-block px-2 py-0.5 rounded-full text-caption font-semibold ${typeColor}`}
               >
-                {copied ? "✓ Copié !" : "Copier le texte"}
-              </button>
-            ) : (
-              <span className="text-body-sm text-neutral-400">
-                Bientôt disponible
+                {typeLabel}
               </span>
-            )}
+              {status === "draft" && (
+                <span className="inline-block px-2 py-0.5 rounded-full text-caption font-semibold bg-warning-50 text-warning-800">
+                  En préparation
+                </span>
+              )}
+            </div>
+            <h3 className="font-display text-h4 text-primary leading-snug">
+              {title}
+            </h3>
+          </div>
+
+          {/* Copy button — top right, always visible on delivered */}
+          {status === "delivered" && (
             <button
               type="button"
-              className="text-caption text-neutral-400 hover:text-secondary transition-colors"
+              aria-label={`Copier le texte : ${title}`}
+              className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-body-sm font-semibold transition-all duration-normal ${
+                copied
+                  ? "bg-success-50 text-success-700"
+                  : "bg-secondary-50 text-secondary-700 hover:bg-secondary-100"
+              }`}
+              onClick={handleCopy}
+            >
+              {copied ? (
+                <>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  Copié
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    />
+                  </svg>
+                  Copier
+                </>
+              )}
+            </button>
+          )}
+        </div>
+
+        {/* Preview (collapsed) */}
+        {!expanded && !loadingContent && previewText && (
+          <p className="text-body-sm text-neutral-500 mt-2 line-clamp-2">
+            {previewText}
+          </p>
+        )}
+
+        {/* Loading state */}
+        {loadingContent && (
+          <div className="flex items-center gap-2 mt-3">
+            <div className="w-4 h-4 border-2 border-secondary/30 border-t-secondary rounded-full animate-spin" />
+            <p className="text-body-sm text-neutral-400">
+              Chargement du contenu...
+            </p>
+          </div>
+        )}
+
+        {/* Expanded content with markdown rendering */}
+        {expanded && content !== null && (
+          <div
+            className="mt-4 pt-4 border-t border-border prose-deliverable text-body-sm text-neutral-700 leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: markdownToHtml(content) }}
+          />
+        )}
+
+        {/* Footer action */}
+        <div className="flex items-center mt-3">
+          {status === "delivered" ? (
+            <button
+              type="button"
+              className="text-caption text-neutral-400 hover:text-secondary transition-colors flex items-center gap-1"
               onClick={(e) => {
                 e.stopPropagation()
                 handleExpand()
               }}
             >
-              {expanded ? "Réduire" : "Lire en entier"}
+              {expanded ? (
+                <>
+                  <svg
+                    className="w-3.5 h-3.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 15l7-7 7 7"
+                    />
+                  </svg>
+                  Réduire
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="w-3.5 h-3.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                  Voir le contenu
+                </>
+              )}
             </button>
-          </div>
+          ) : (
+            <span className="text-body-sm text-neutral-400">
+              Bientôt disponible
+            </span>
+          )}
         </div>
       </div>
     </div>
