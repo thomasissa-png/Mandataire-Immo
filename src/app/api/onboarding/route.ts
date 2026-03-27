@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { trackServer } from "@/lib/tracking"
+import { enrichProperty } from "@/lib/enrich-property"
 
 interface OnboardingPayload {
   // Etape 1 — Identite
@@ -24,13 +25,7 @@ interface OnboardingPayload {
   ton_communication: string
   valeurs: string
   ce_qui_te_differencie: string
-  // Etape 6 — Quartier en detail
-  prix_m2_moyen: string
-  commerces_reference: string
-  ecoles_reference: string
-  transports: string
-  ambiance_quartier: string
-  // Etape 7 — Profil (facultatif)
+  // Etape 6 — Profil (facultatif)
   linkedin_url: string
   bio_personnelle: string
   // Photo (cle Object Storage)
@@ -83,6 +78,14 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // Enrichissement automatique du quartier via APIs publiques
+  const villeStr = body.ville.trim()
+  const quartiersStr = body.quartiers?.trim() || ""
+  const adresseRecherche = quartiersStr
+    ? `${quartiersStr}, ${villeStr}`
+    : villeStr
+  const enrichment = await enrichProperty(adresseRecherche)
+
   // Mapper les champs du wizard vers la structure client_context JSONB
   const clientContext = {
     // Identite
@@ -94,8 +97,8 @@ export async function POST(request: NextRequest) {
     experience_annees: body.experience_annees?.trim() || "",
     nb_transactions_an: body.nb_transactions_an?.trim() || "",
     // Zone
-    ville: body.ville.trim(),
-    quartiers: body.quartiers?.trim() || "",
+    ville: villeStr,
+    quartiers: quartiersStr,
     departement: body.departement?.trim() || "",
     // Specialite
     type_biens: body.type_biens?.trim() || "",
@@ -105,12 +108,14 @@ export async function POST(request: NextRequest) {
     ton_communication: body.ton_communication?.trim() || "",
     valeurs: body.valeurs?.trim() || "",
     ce_qui_te_differencie: body.ce_qui_te_differencie?.trim() || "",
-    // Quartier en detail
-    prix_m2_moyen: body.prix_m2_moyen?.trim() || "",
-    commerces_reference: body.commerces_reference?.trim() || "",
-    ecoles_reference: body.ecoles_reference?.trim() || "",
-    transports: body.transports?.trim() || "",
-    ambiance_quartier: body.ambiance_quartier?.trim() || "",
+    // Quartier (enrichi automatiquement)
+    prix_m2_moyen: enrichment?.prix_m2_moyen ? String(enrichment.prix_m2_moyen) : "",
+    donnees_locales: {
+      lat: enrichment?.lat ?? null,
+      lon: enrichment?.lon ?? null,
+      postcode: enrichment?.postcode ?? "",
+      dernieres_transactions: enrichment?.dernieres_transactions ?? [],
+    },
     // Profil
     linkedin_url: body.linkedin_url?.trim() || "",
     bio_personnelle: body.bio_personnelle?.trim() || "",

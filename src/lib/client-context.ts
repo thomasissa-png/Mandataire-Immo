@@ -30,10 +30,16 @@ export interface ClientContext {
   cible_clients: string
   donnees_locales: {
     prix_m2_moyen: number
-    commerces: string[]
-    ecoles: string[]
-    transports: string[]
-    ambiance_quartier: string
+    lat: number | null
+    lon: number | null
+    postcode: string
+    dernieres_transactions: Array<{
+      date: string
+      prix: number
+      surface: number
+      prix_m2: number
+      type: string
+    }>
   }
   histoire: {
     parcours_avant_immo: string
@@ -160,13 +166,19 @@ function parseClientContext(raw: Record<string, unknown>): ClientContext {
       ? (raw.reseaux_sociaux as Record<string, unknown>)
       : raw
 
-  // Parse donnees locales
+  // Parse donnees locales (enrichies automatiquement via API DVF)
+  const rawDonneesLocales =
+    typeof raw.donnees_locales === "object" && raw.donnees_locales !== null
+      ? (raw.donnees_locales as Record<string, unknown>)
+      : {}
   const donnees_locales: ClientContext["donnees_locales"] = {
     prix_m2_moyen: getNumber("prix_m2_moyen"),
-    commerces: parseStringList(raw.commerces_reference),
-    ecoles: parseStringList(raw.ecoles_reference),
-    transports: parseStringList(raw.transports),
-    ambiance_quartier: getString("ambiance_quartier"),
+    lat: typeof rawDonneesLocales.lat === "number" ? rawDonneesLocales.lat : null,
+    lon: typeof rawDonneesLocales.lon === "number" ? rawDonneesLocales.lon : null,
+    postcode: typeof rawDonneesLocales.postcode === "string" ? rawDonneesLocales.postcode : "",
+    dernieres_transactions: Array.isArray(rawDonneesLocales.dernieres_transactions)
+      ? (rawDonneesLocales.dernieres_transactions as ClientContext["donnees_locales"]["dernieres_transactions"])
+      : [],
   }
 
   // Parse histoire

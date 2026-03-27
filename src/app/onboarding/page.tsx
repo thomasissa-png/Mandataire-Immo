@@ -26,16 +26,6 @@ const STEPS = [
     fields: ["ton_communication", "valeurs", "ce_qui_te_differencie"],
   },
   {
-    title: "Ton quartier en détail",
-    fields: [
-      "prix_m2_moyen",
-      "commerces_reference",
-      "ecoles_reference",
-      "transports",
-      "ambiance_quartier",
-    ],
-  },
-  {
     title: "Ton profil",
     subtitle:
       "Facultatif — mais ça rend tes livrables beaucoup plus personnels",
@@ -166,34 +156,6 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
       "Ce que tes clients disent de toi que les autres mandataires n'ont pas",
     placeholder:
       "Ex: Je connais chaque rue de La Doutre, j'y vis depuis 10 ans. Mes clients disent que je réponds en moins d'1h.",
-    type: "textarea",
-  },
-  prix_m2_moyen: {
-    label: "Prix moyen au m2 dans ta zone (estimation)",
-    placeholder: "Ex: 2800",
-    type: "text",
-  },
-  commerces_reference: {
-    label: "Les commerces et lieux que tes clients connaissent",
-    placeholder:
-      "Ex: Marche de La Doutre le samedi, boulangerie Lepine, parc Balzac, mediatheque Toussaint",
-    type: "textarea",
-  },
-  ecoles_reference: {
-    label: "Les écoles et collèges du coin",
-    placeholder: "Ex: Ecole Dacier, college Chevreul, lycee Bergson",
-    type: "textarea",
-  },
-  transports: {
-    label: "Transports et acces",
-    placeholder:
-      "Ex: Tramway ligne A arret La Doutre, gare Saint-Laud a 10 min, rocade sud a 5 min",
-    type: "textarea",
-  },
-  ambiance_quartier: {
-    label: "Décris l'ambiance de ton quartier en 2-3 phrases",
-    placeholder:
-      "Ex: La Doutre c'est le quartier boheme d'Angers. Rues pavees, maisons a colombages, bistrots. Les gens qui s'y installent ne repartent plus.",
     type: "textarea",
   },
   linkedin_url: {
