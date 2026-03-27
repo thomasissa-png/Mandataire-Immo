@@ -12,7 +12,8 @@
 ## Branding & Communication
 
 - **JAMAIS de concurrent nommé** : pas de "Cocoon-Immo", pas de nom de service concurrent sur le site. Utiliser des catégories ("freelance marketing", "outil avec templates", "plateforme SaaS").
-- **Seuil qualité 9/10 minimum** : refus systématique de tout livrable < 9/10. Itération jusqu'à atteindre le seuil.
+- **Seuil qualité 10/10 exigé** : Thomas refuse la notion de MVP. Chaque écran, chaque composant doit être au niveau d'un SaaS premium (Notion, Linear). Les agents ne doivent JAMAIS valider un composant UI sans se demander "Sophie serait-elle FIÈRE de montrer ça ?". Un div coloré vide n'est pas une bannière. Une liste plate n'est pas un dashboard. Chaque critère doit être à 9+ individuellement, pas en moyenne.
+- **Pas de MVP, qualité production** : "On est sur un produit de qualité qu'on veut mettre à disposition." Les composants génériques (listes plates, texte brut, stats basiques, blocs vides) sont inacceptables. Chaque composant doit avoir des visuels (icônes, patterns), une structure logique, et du feedback sur chaque interaction.
 - **Accents français obligatoires** : tous les textes visibles doivent avoir les accents corrects. Utiliser des vrais caractères UTF-8 (é, è, à, ç), jamais des escapes unicode (\u00E9) dans les constantes JS.
 
 ## UX & Design
