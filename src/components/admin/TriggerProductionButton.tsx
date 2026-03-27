@@ -1,6 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
+
+const GENERATION_LOCK_PREFIX = "immocrew_generating_"
+const LOCK_EXPIRY_MS = 10 * 60 * 1000 // 10 minutes
 
 interface TriggerProductionButtonProps {
   clientId: string
@@ -11,6 +14,20 @@ export function TriggerProductionButton({
   clientId,
   clientPack,
 }: TriggerProductionButtonProps) {
+  const lockKey = `${GENERATION_LOCK_PREFIX}${clientId}`
+
+  /** Vérifie si une génération est encore en cours (localStorage + expiration) */
+  const isGenerationLocked = useCallback((): boolean => {
+    const stored = localStorage.getItem(lockKey)
+    if (!stored) return false
+    const elapsed = Date.now() - Number(stored)
+    if (elapsed > LOCK_EXPIRY_MS) {
+      localStorage.removeItem(lockKey)
+      return false
+    }
+    return true
+  }, [lockKey])
+
   const [isLoading, setIsLoading] = useState(false)
   const [result, setResult] = useState<{
     status: "success" | "error"
@@ -21,11 +38,32 @@ export function TriggerProductionButton({
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`
   })
 
+  // Au montage, restaurer le loading state si une génération est en cours
+  useEffect(() => {
+    if (isGenerationLocked()) {
+      setIsLoading(true)
+      setResult({
+        status: "success",
+        message: "Une génération est déjà en cours pour ce client. Patiente quelques minutes.",
+      })
+    }
+  }, [isGenerationLocked])
+
   const handleTrigger = async (
     packType: "mensuel" | "lancement" | "boost"
   ) => {
+    // Double-soumission : vérifier le lock avant de lancer
+    if (isGenerationLocked()) {
+      setResult({
+        status: "error",
+        message: "Une génération est déjà en cours pour ce client. Patiente quelques minutes.",
+      })
+      return
+    }
+
     setIsLoading(true)
     setResult(null)
+    localStorage.setItem(lockKey, String(Date.now()))
 
     try {
       const response = await fetch("/api/admin/trigger-production", {
@@ -43,7 +81,7 @@ export function TriggerProductionButton({
       if (response.ok) {
         setResult({
           status: "success",
-          message: `Production terminee : ${data.count || 0} livrables generes.`,
+          message: `Production terminée : ${data.count || 0} livrables générés.`,
         })
       } else {
         setResult({
@@ -54,9 +92,10 @@ export function TriggerProductionButton({
     } catch (err) {
       setResult({
         status: "error",
-        message: err instanceof Error ? err.message : "Erreur reseau",
+        message: err instanceof Error ? err.message : "Erreur réseau",
       })
     } finally {
+      localStorage.removeItem(lockKey)
       setIsLoading(false)
     }
   }

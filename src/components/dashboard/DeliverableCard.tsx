@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { track } from "@/lib/tracking"
 
 interface DeliverableCardProps {
@@ -9,7 +9,7 @@ interface DeliverableCardProps {
   typeLabel: string
   typeColor: string
   title: string
-  content: string
+  content?: string
   status?: "draft" | "delivered"
 }
 
@@ -19,14 +19,46 @@ export function DeliverableCard({
   typeLabel,
   typeColor,
   title,
-  content,
+  content: initialContent,
   status = "delivered",
 }: DeliverableCardProps) {
   const [copied, setCopied] = useState(false)
   const [expanded, setExpanded] = useState(false)
+  const [content, setContent] = useState<string | null>(initialContent ?? null)
+  const [loadingContent, setLoadingContent] = useState(false)
 
-  const handleCopy = (e: React.MouseEvent) => {
+  /** Charge le contenu complet depuis l'API si non disponible */
+  const loadContent = useCallback(async () => {
+    if (content !== null || loadingContent) return
+    setLoadingContent(true)
+    try {
+      const res = await fetch(`/api/deliverables/${id}`)
+      if (res.ok) {
+        const data = await res.json()
+        setContent(data.content ?? "")
+      }
+    } catch {
+      // Silencieux : le contenu reste null, l'utilisateur peut réessayer
+    } finally {
+      setLoadingContent(false)
+    }
+  }, [id, content, loadingContent])
+
+  const handleExpand = async () => {
+    if (!expanded) {
+      await loadContent()
+      track("deliverable_view", {
+        deliverable_id: id,
+        type,
+      })
+    }
+    setExpanded(!expanded)
+  }
+
+  const handleCopy = async (e: React.MouseEvent) => {
     e.stopPropagation()
+    await loadContent()
+    if (content === null) return
     navigator.clipboard.writeText(content).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
@@ -42,13 +74,7 @@ export function DeliverableCard({
     <div
       role="article"
       className="w-full text-left rounded-xl bg-card border border-border p-6 hover:shadow-md hover:border-secondary/30 transition-all duration-normal cursor-pointer"
-      onClick={() => {
-        track("deliverable_view", {
-          deliverable_id: id,
-          type,
-        })
-        setExpanded(!expanded)
-      }}
+      onClick={handleExpand}
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
@@ -65,9 +91,14 @@ export function DeliverableCard({
             )}
           </div>
           <h3 className="font-display text-h4 text-primary mb-2">{title}</h3>
-          <p className={`text-body-sm text-neutral-600 ${expanded ? "" : "line-clamp-3"}`}>
-            {content}
-          </p>
+          {loadingContent && (
+            <p className="text-body-sm text-neutral-400">Chargement du contenu...</p>
+          )}
+          {content !== null && (
+            <p className={`text-body-sm text-neutral-600 ${expanded ? "" : "line-clamp-3"}`}>
+              {content}
+            </p>
+          )}
           <div className="flex items-center gap-4 mt-3">
             {status === "delivered" ? (
               <button
@@ -88,7 +119,7 @@ export function DeliverableCard({
               className="text-caption text-neutral-400 hover:text-secondary transition-colors"
               onClick={(e) => {
                 e.stopPropagation()
-                setExpanded(!expanded)
+                handleExpand()
               }}
             >
               {expanded ? "Réduire" : "Lire en entier"}

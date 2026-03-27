@@ -91,6 +91,10 @@ export async function POST(request: NextRequest) {
 
   // Forward la requete vers la route de generation
   // On passe les cookies pour maintenir l'auth NextAuth
+  // Timeout 5 min : un pack lancement = 7 appels Claude = 3-7 minutes
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 5 * 60 * 1000)
+
   try {
     const cookieHeader = request.headers.get("cookie") || ""
     const response = await fetch(targetUrl, {
@@ -100,6 +104,7 @@ export async function POST(request: NextRequest) {
         Cookie: cookieHeader,
       },
       body: JSON.stringify(targetBody),
+      signal: controller.signal,
     })
 
     const data = await response.json()
@@ -114,13 +119,25 @@ export async function POST(request: NextRequest) {
       pack_type,
     })
   } catch (err) {
+    if (err instanceof DOMException && err.name === "AbortError") {
+      console.error("Production timeout after 5 minutes:", targetUrl)
+      return NextResponse.json(
+        {
+          error: "La génération a dépassé le délai maximum de 5 minutes. Réessaie ou vérifie les logs serveur.",
+        },
+        { status: 504 }
+      )
+    }
+
     console.error("Error triggering production:", err)
     return NextResponse.json(
       {
-        error: "Erreur lors du declenchement de la production",
+        error: "Erreur lors du déclenchement de la production",
         details: err instanceof Error ? err.message : String(err),
       },
       { status: 500 }
     )
+  } finally {
+    clearTimeout(timeoutId)
   }
 }

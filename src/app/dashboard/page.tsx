@@ -19,7 +19,6 @@ interface Deliverable {
   id: string
   type: DeliverableType
   title: string
-  content: string
   month: string
   status: "draft" | "delivered"
   created_at: string
@@ -122,7 +121,7 @@ export default async function DashboardPage() {
 
   // Fetch deliverables (draft + delivered, ordered by most recent)
   const { rows: deliverables } = await query<Deliverable>(
-    `SELECT * FROM deliverables
+    `SELECT id, type, title, status, month, created_at FROM deliverables
      WHERE client_email = $1 AND status IN ('draft', 'delivered')
      ORDER BY created_at DESC`,
     [primaryEmail]
@@ -275,7 +274,6 @@ export default async function DashboardPage() {
               typeLabel={TYPE_LABELS[deliverable.type]}
               typeColor={TYPE_COLORS[deliverable.type]}
               title={deliverable.title}
-              content={deliverable.content}
               status={deliverable.status}
             />
           ))}
