@@ -1,4 +1,4 @@
-import type { ReactNode } from "react"
+import type { JSX } from "react"
 
 interface ClientContextCardProps {
   context: Record<string, unknown>
@@ -75,55 +75,52 @@ interface BienData {
   lien_annonce?: string
 }
 
+function SectionFields({ keys, context }: { keys: string[]; context: Record<string, unknown> }) {
+  const fields: JSX.Element[] = []
+  for (const key of keys) {
+    const raw = context[key]
+    const display = formatValue(key, raw)
+    if (display === "—") continue
+    fields.push(
+      <div key={key} className="py-1">
+        <p className="text-caption text-neutral-500">{LABELS[key] || key}</p>
+        {isLink(display) ? (
+          <a href={display} target="_blank" rel="noopener noreferrer" className="text-body-sm text-secondary hover:underline break-all">
+            {display}
+          </a>
+        ) : (
+          <p className="text-body-sm text-foreground">{display}</p>
+        )}
+      </div>
+    )
+  }
+  return <>{fields}</>
+}
+
 export function ClientContextCard({ context }: ClientContextCardProps) {
   const biens = Array.isArray(context.biens) ? (context.biens as BienData[]) : []
   const donneesLocales = context.donnees_locales as Record<string, unknown> | undefined
 
+  const visibleSections = SECTION_ORDER.filter((section) =>
+    section.keys.some((k) => {
+      const v = context[k]
+      return v !== null && v !== undefined && v !== ""
+    })
+  )
+
   return (
     <div className="space-y-4 mb-6">
       {/* Sections principales */}
-      {SECTION_ORDER.reduce<ReactNode[]>((acc, section) => {
-        const hasValues = section.keys.some((k) => {
-          const v = context[k]
-          return v !== null && v !== undefined && v !== ""
-        })
-        if (!hasValues) return acc
-
-        acc.push(
-          <div key={section.title} className="rounded-xl bg-card border border-border p-5">
-            <h3 className="font-display text-body font-semibold text-primary mb-3">
-              {section.title}
-            </h3>
-            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-x-6 gap-y-2">
-              {section.keys.reduce<ReactNode[]>((keyAcc, key) => {
-                const raw = context[key]
-                const display = formatValue(key, raw)
-                if (display === "—") return keyAcc
-
-                keyAcc.push(
-                  <div key={key} className="py-1">
-                    <p className="text-caption text-neutral-500">{LABELS[key] || key}</p>
-                    {isLink(display) ? (
-                      <a
-                        href={display}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-body-sm text-secondary hover:underline break-all"
-                      >
-                        {display}
-                      </a>
-                    ) : (
-                      <p className="text-body-sm text-foreground">{display}</p>
-                    )}
-                  </div>
-                )
-                return keyAcc
-              }, [])}
-            </div>
+      {visibleSections.map((section) => (
+        <div key={section.title} className="rounded-xl bg-card border border-border p-5">
+          <h3 className="font-display text-body font-semibold text-primary mb-3">
+            {section.title}
+          </h3>
+          <div className="grid grid-cols-1 tablet:grid-cols-2 gap-x-6 gap-y-2">
+            <SectionFields keys={section.keys} context={context} />
           </div>
-        )
-        return acc
-      }, [])}
+        </div>
+      ))}
 
       {/* Données locales enrichies */}
       {donneesLocales && (donneesLocales.lat || donneesLocales.postcode) && (
