@@ -24,7 +24,7 @@ export function Footer() {
               <ul className="space-y-2">
                 <li>
                   <a
-                    href="/#piliers"
+                    href="/#comment-ca-marche"
                     className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
                   >
                     Comment &ccedil;a marche

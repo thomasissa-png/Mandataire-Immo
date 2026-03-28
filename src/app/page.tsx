@@ -7,6 +7,7 @@ import { BeforeAfter } from "@/components/landing/BeforeAfter"
 import { SocialProof } from "@/components/landing/SocialProof"
 import { Pricing } from "@/components/landing/Pricing"
 import { FAQ } from "@/components/landing/FAQ"
+import { HowItWorks } from "@/components/landing/HowItWorks"
 import { CTAFinal } from "@/components/landing/CTAFinal"
 import { Footer } from "@/components/landing/Footer"
 import { JsonLd } from "@/components/JsonLd"
@@ -136,6 +137,7 @@ export default function HomePage() {
         <Hero />
         <Problem />
         <Pillars />
+        <HowItWorks />
         <BeforeAfter />
         <SocialProof />
         <Pricing />

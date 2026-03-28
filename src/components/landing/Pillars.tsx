@@ -26,10 +26,10 @@ const PILLARS = [
   },
   {
     label: "C'est malin",
-    title: "Une vraie stratégie, pas des posts au hasard.",
-    text: "Poster 3 fois la même annonce, ça ne sert à rien. Ton calendrier éditorial est pensé pour varier : posts expertise, posts humains, posts quartier, posts mandats. Tes articles SEO ciblent les requêtes que les vendeurs tapent vraiment sur Google. Tout est pensé pour que tu sois visible là où ça compte.",
+    title: "Ton plan du mois — tu sais quoi faire, quand, et pourquoi.",
+    text: "Chaque mois, tu reçois ton plan de publication avec tes recommandations : combien poster, sur quels réseaux, quel type de contenu en priorité. Ton tableau de bord te dit ce qui fonctionne et ce qu'on te conseille pour le mois. Plus besoin de te demander « je poste quoi aujourd'hui ? » — c'est déjà décidé, et c'est justifié.",
     verbatim:
-      "Avant, je postais quand j'y pensais. Maintenant j'ai un vrai plan, et les gens me disent qu'ils me voient partout.",
+      "Avant, je postais quand j'y pensais. Maintenant j'ai un vrai plan chaque mois — et les gens me disent qu'ils me voient partout.",
     icon: (
       <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />

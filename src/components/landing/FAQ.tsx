@@ -45,6 +45,16 @@ const FAQ_ITEMS = [
       "Tu as un espace client en ligne. Chaque mois, tu te connectes, tes posts et articles sont là — prêts à copier en un clic. Pas de pièces jointes par email, pas de fichiers à télécharger, pas de format bizarre. Tout est prêt, tout est accessible depuis ton téléphone.",
   },
   {
+    question: "Qu'est-ce que je vois exactement dans mon espace client ?",
+    answer:
+      "Ton espace client, c'est deux choses. D'abord tes contenus du mois : tes 12 posts, tes articles, tes annonces, tes scripts — prêts à copier. Et ensuite ton plan du mois : ce qu'on te recommande de publier en priorité, sur quel réseau, à quelle fréquence. Tu n'as pas à réfléchir à ce que tu fais — c'est déjà décidé pour toi, avec les explications.",
+  },
+  {
+    question: "Comment vous savez ce qui va marcher pour MOI dans mon quartier ?",
+    answer:
+      "Tout commence par ton questionnaire d'onboarding : ta zone précise, tes biens, ton style de communication, tes réseaux actifs. À partir de là, chaque contenu et chaque recommandation est calé sur ton profil — pas sur un mandataire générique. On connaît les tendances de ta saison immobilière locale, les requêtes Google de tes futurs vendeurs, les types de posts qui fonctionnent dans ton secteur. C'est ça, la différence entre un template et une vraie stratégie personnalisée.",
+  },
+  {
     question: "Je peux arrêter quand je veux ?",
     answer:
       "Oui. Le Pack Mensuel est sans engagement. Tu peux résilier à tout moment, en un clic depuis ton espace client. Pas de frais cachés, pas de préavis de 3 mois, pas de coup de fil pour te retenir. Et pour le Pack Lancement, tu as une garantie satisfait ou remboursé de 14 jours.",
