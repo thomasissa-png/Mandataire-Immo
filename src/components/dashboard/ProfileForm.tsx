@@ -90,7 +90,6 @@ const SECTIONS: SectionConfig[] = [
           { value: "Capifrance", label: "Capifrance" },
           { value: "Optimhome", label: "Optimhome" },
           { value: "BSK Immobilier", label: "BSK Immobilier" },
-          { value: "iad", label: "iad" },
           { value: "Proprietes-privees", label: "Propriétés Privées" },
           { value: "Indépendant", label: "Indépendant" },
           { value: "Autre", label: "Autre" },
