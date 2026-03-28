@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 // ─── Types ────────────────────────────────────────────────────────
 
 interface BienFormData {
+  lien_annonce: string
   type_bien: string
   adresse: string
   prix: string
@@ -61,6 +62,7 @@ export function BienForm() {
   const router = useRouter()
 
   const [formData, setFormData] = useState<BienFormData>({
+    lien_annonce: "",
     type_bien: "",
     adresse: "",
     prix: "",
@@ -106,6 +108,7 @@ export function BienForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           titre: `${formData.type_bien} — ${formData.adresse}`,
+          lien_annonce: formData.lien_annonce || undefined,
           type_bien: formData.type_bien,
           adresse: formData.adresse,
           prix,
@@ -142,6 +145,25 @@ export function BienForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+      {/* Lien annonce existante — EN PREMIER */}
+      <div className="rounded-lg border-2 border-warning-300 bg-warning-50/50 p-4">
+        <label htmlFor="lien_annonce" className="block text-body-sm font-semibold text-primary mb-1.5">
+          Lien d{"'"}annonce existante <span className="text-caption text-neutral-500 font-normal">(optionnel)</span>
+        </label>
+        <input
+          id="lien_annonce"
+          name="lien_annonce"
+          type="url"
+          value={formData.lien_annonce}
+          onChange={handleChange}
+          placeholder="Colle le lien SeLoger, LeBonCoin ou Bien'ici"
+          className="w-full h-12 px-4 rounded-lg border border-border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50"
+        />
+        <p className="text-caption text-neutral-500 mt-1.5">
+          On récupère les infos automatiquement — tu n{"'"}auras presque rien à remplir.
+        </p>
+      </div>
+
       {/* Type de bien */}
       <div>
         <label htmlFor="type_bien" className="block text-body-sm font-semibold text-primary mb-1.5">

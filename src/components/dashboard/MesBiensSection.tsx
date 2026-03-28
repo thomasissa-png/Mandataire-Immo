@@ -2,11 +2,25 @@
 
 import { useState, useEffect } from "react"
 import { BienCard } from "@/components/biens/BienCard"
+import { DeliverableCard } from "./DeliverableCard"
 import type { PropertyPage } from "@/types/property"
+
+// ─── Types ────────────────────────────────────────────────────────
+
+interface AnnonceDeliverable {
+  id: string
+  type: string
+  title: string
+  status: "draft" | "delivered"
+}
+
+interface MesBiensSectionProps {
+  annonces?: AnnonceDeliverable[]
+}
 
 // ─── Composant ────────────────────────────────────────────────────
 
-export function MesBiensSection() {
+export function MesBiensSection({ annonces = [] }: MesBiensSectionProps) {
   const [biens, setBiens] = useState<PropertyPage[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -106,8 +120,16 @@ export function MesBiensSection() {
               />
             </svg>
           </div>
-          <p className="text-body-sm text-neutral-600 mb-4">
-            Tu n'as pas encore ajouté de bien
+          <p className="text-body-sm text-neutral-600 mb-2">
+            Ajoute tes biens ici pour créer des annonces personnalisées avec tes photos.
+          </p>
+          {annonces.length > 0 ? (
+            <p className="text-body-sm text-secondary-700 font-medium mb-4">
+              Tu as déjà {annonces.length} annonce{annonces.length > 1 ? "s" : ""} générée{annonces.length > 1 ? "s" : ""} par ton équipe. Ajoute tes biens pour recevoir des annonces avec TES photos.
+            </p>
+          ) : null}
+          <p className="text-caption text-neutral-400 mb-4">
+            Tu peux aussi coller le lien d{"'"}une annonce existante (SeLoger, LeBonCoin) pour qu{"'"}on récupère les infos.
           </p>
           <a
             href="/dashboard/biens/nouveau"
@@ -130,6 +152,18 @@ export function MesBiensSection() {
             Ajouter mon premier bien
           </a>
         </div>
+
+        {/* Annonces générées (deliverables) rattachées aux biens */}
+        {annonces.length > 0 ? (
+          <div className="mt-4">
+            <h3 className="text-body-sm font-semibold text-primary mb-2">Tes annonces générées</h3>
+            <div className="space-y-2">
+              {annonces.map((a) => (
+                <DeliverableCard key={a.id} id={a.id} type={a.type} typeLabel="Annonce" typeColor="bg-success-50 text-success-700" title={a.title} status={a.status} />
+              ))}
+            </div>
+          </div>
+        ) : null}
       </section>
     )
   }
@@ -173,6 +207,18 @@ export function MesBiensSection() {
           <BienCard key={bien.id} bien={bien} />
         ))}
       </div>
+
+      {/* Annonces générées (deliverables) rattachées aux biens */}
+      {annonces.length > 0 ? (
+        <div className="mt-4">
+          <h3 className="text-body-sm font-semibold text-primary mb-2">Tes annonces générées ({annonces.length})</h3>
+          <div className="space-y-2">
+            {annonces.map((a) => (
+              <DeliverableCard key={a.id} id={a.id} type={a.type} typeLabel="Annonce" typeColor="bg-success-50 text-success-700" title={a.title} status={a.status} />
+            ))}
+          </div>
+        </div>
+      ) : null}
     </section>
   )
 }
