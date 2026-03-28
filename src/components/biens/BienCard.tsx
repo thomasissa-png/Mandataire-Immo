@@ -24,7 +24,7 @@ const STATUS_CONFIG: Record<
   },
   archived: {
     label: "Archivé",
-    className: "bg-neutral-100 text-neutral-500",
+    className: "bg-neutral-100 text-neutral-700",
   },
 }
 

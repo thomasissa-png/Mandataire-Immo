@@ -144,7 +144,30 @@ export function markdownToHtml(md: string): string {
 
   if (inList) html.push(listType === "ul" ? "</ul>" : "</ol>")
   if (inTable) html.push("</tbody></table>")
-  return html.join("\n")
+  return sanitizeHtml(html.join("\n"))
+}
+
+/**
+ * Minimal HTML sanitizer — strips dangerous tags and attributes.
+ * No external dependency. Covers: <script>, <iframe>, <object>, <embed>,
+ * <form>, <input>, on* event handlers, javascript: URLs.
+ */
+function sanitizeHtml(html: string): string {
+  return html
+    // Remove <script>...</script> (including content)
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
+    // Remove self-closing <script/>
+    .replace(/<script\b[^>]*\/?>/gi, "")
+    // Remove <iframe>, <object>, <embed>, <form>, <input>, <style> tags (with content)
+    .replace(/<(iframe|object|embed|form|input|style)\b[^>]*>[\s\S]*?<\/\1>/gi, "")
+    // Remove self-closing variants
+    .replace(/<(iframe|object|embed|form|input|style)\b[^>]*\/?>/gi, "")
+    // Remove on* event attributes (onclick, onerror, onload, etc.)
+    .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "")
+    // Remove javascript: URLs in href/src/action attributes
+    .replace(/(href|src|action)\s*=\s*(?:"javascript:[^"]*"|'javascript:[^']*')/gi, '$1=""')
+    // Remove data: URLs in src (potential SVG/HTML injection)
+    .replace(/src\s*=\s*(?:"data:text\/html[^"]*"|'data:text\/html[^']*')/gi, 'src=""')
 }
 
 /**

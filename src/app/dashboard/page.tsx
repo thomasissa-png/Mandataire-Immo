@@ -62,8 +62,8 @@ export default async function DashboardPage() {
           Ton abonnement est termin{"\u00e9"}
         </h2>
         <p className="text-body text-neutral-600 mb-6">
-          Tu n{"'"}as plus acc{"\u00e8"}s {"\u00e0"} tes livrables. Pour retrouver ton espace
-          et recevoir de nouveaux contenus chaque mois, r{"\u00e9"}abonne-toi.
+          Tu n{"'"}as plus accès à tes contenus. Pour retrouver ton espace
+          et recevoir de nouveaux contenus chaque mois, réabonne-toi.
         </p>
         <a
           href="/#pricing"

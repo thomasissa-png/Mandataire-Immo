@@ -83,7 +83,7 @@ const STEPS = [
     number: "3",
     title: "Livraison",
     description:
-      "Tu re\u00e7ois tes livrables le 1er du mois dans ton espace client. Tu copies, tu publies. 3 minutes par post.",
+      "Tu reçois tes contenus le 1er du mois dans ton espace client. Tu copies, tu publies. 3 minutes par post.",
   },
 ] as const
 

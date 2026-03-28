@@ -12,7 +12,7 @@ const FAQ_ITEMS = [
   {
     question: "Le contenu est fait par une IA ?",
     answer:
-      "On utilise des outils IA pour personnaliser chaque texte à ta zone (quartier, écoles, prix au m², transports). Mais chaque livrable est relu, ajusté et validé par notre équipe avant de t'être envoyé. Le résultat ? Du texte qui sonne comme toi, pas comme un robot. On est transparents là-dessus : l'IA nous aide à être rapides et précis. L'humain garantit que c'est naturel et juste.",
+      "On utilise des outils IA pour personnaliser chaque texte à ta zone (quartier, écoles, prix au m², transports). Mais chaque contenu est relu, ajusté et validé par notre équipe avant de t'être envoyé. Le résultat ? Du texte qui sonne comme toi, pas comme un robot. On est transparents là-dessus : l'IA nous aide à être rapides et précis. L'humain garantit que c'est naturel et juste.",
   },
   {
     question: "Comment c'est personnalisé pour ma zone ?",

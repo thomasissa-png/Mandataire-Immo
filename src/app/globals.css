@@ -147,6 +147,11 @@
 }
 
 @layer utilities {
+  /* Focus ring accessible — utiliser focus-visible au lieu de focus */
+  .focus-ring {
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary;
+  }
+
   /* Cache la scrollbar tout en gardant le scroll fonctionnel (pour pills horizontales sur mobile) */
   .scrollbar-hide {
     -ms-overflow-style: none;

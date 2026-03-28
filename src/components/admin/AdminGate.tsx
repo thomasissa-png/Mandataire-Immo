@@ -75,7 +75,7 @@ export default function AdminGate({ children }: AdminGateProps) {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-body-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent mb-4"
+          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-body-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent mb-4"
           autoFocus
           required
         />

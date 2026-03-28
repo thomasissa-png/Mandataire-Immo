@@ -90,8 +90,8 @@ export default async function BienDetailPage({
       {/* En-tête bien */}
       <div className="rounded-lg bg-card border border-border p-5 mb-6">
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <h1 className="font-display text-h2 text-primary font-bold mb-1">
+          <div className="min-w-0">
+            <h1 className="font-display text-h2 text-primary font-bold mb-1 break-words">
               {bien.titre || `${bien.type_bien} — ${bien.adresse}`}
             </h1>
             <div className="flex flex-wrap items-center gap-2 mt-2">
@@ -103,7 +103,7 @@ export default async function BienDetailPage({
               </span>
             </div>
           </div>
-          <p className="text-h3 font-display font-bold text-secondary-700 flex-shrink-0">
+          <p className="text-h3 font-display font-bold text-secondary-700 flex-shrink-0 break-words">
             {formatPrix(bien.prix)}
           </p>
         </div>

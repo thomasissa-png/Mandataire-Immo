@@ -364,7 +364,7 @@ export function PhotoUploader({
               <button
                 type="button"
                 onClick={() => handleDelete(photo)}
-                className="absolute top-2 right-2 w-8 h-8 min-w-[44px] min-h-[44px] -mt-2 -mr-2 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-150 hover:bg-error/80"
+                className="absolute top-2 right-2 w-8 h-8 min-w-[44px] min-h-[44px] -mt-2 -mr-2 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-white transition-opacity duration-150 hover:bg-error/80"
                 aria-label={`Supprimer la photo ${photo.piece || photo.ordre}`}
               >
                 <svg

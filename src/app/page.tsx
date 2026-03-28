@@ -89,7 +89,7 @@ const faqJsonLd = {
       name: "Combien de temps dois-je consacrer à ImmoCrew chaque mois ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Environ 15-20 minutes par mois. Tu reçois tes livrables, tu copies-colles sur tes réseaux, et c'est tout. Pas de logiciel à apprendre, pas de template à adapter.",
+        text: "Environ 15-20 minutes par mois. Tu reçois tes contenus, tu copies-colles sur tes réseaux, et c'est tout. Pas de logiciel à apprendre, pas de template à adapter.",
       },
     },
     {

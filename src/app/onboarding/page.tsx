@@ -149,7 +149,7 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
   valeurs: {
     label: "Tes 3 valeurs les plus importantes dans ton métier",
     placeholder:
-      "Ex: Transparence sur les prix, disponibilité 7j/7, honnêteté même quand ca ne plait pas",
+      "Ex: Transparence sur les prix, disponibilité 7j/7, honnêteté même quand ça ne plaît pas",
     type: "text",
   },
   ce_qui_te_differencie: {

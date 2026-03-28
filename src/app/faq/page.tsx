@@ -29,7 +29,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Comment fonctionne ImmoCrew ?",
     answer:
-      "Le fonctionnement se r\u00e9sume en 3 \u00e9tapes. \u00c9tape 1 : tu remplis un questionnaire d\u2019onboarding de 7 minutes (ta zone, ton r\u00e9seau, ta sp\u00e9cialit\u00e9, ton ton de communication). \u00c9tape 2 : l\u2019\u00e9quipe ImmoCrew produit tes contenus personnalis\u00e9s avec les donn\u00e9es de ta zone. \u00c9tape 3 : tu re\u00e7ois tes livrables le 1er du mois dans ton espace client. Tu copies, tu publies. 3 minutes par post.",
+      "Le fonctionnement se résume en 3 étapes. Étape 1 : tu remplis un questionnaire d'onboarding de 7 minutes (ta zone, ton réseau, ta spécialité, ton ton de communication). Étape 2 : l'équipe ImmoCrew produit tes contenus personnalisés avec les données de ta zone. Étape 3 : tu reçois tes contenus le 1er du mois dans ton espace client. Tu copies, tu publies. 3 minutes par post.",
   },
   {
     question: "Combien co\u00fbte ImmoCrew ?",
@@ -44,7 +44,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Quelle est la diff\u00e9rence entre ImmoCrew et un community manager freelance ?",
     answer:
-      `Un community manager freelance facture généralement entre 500€ et 800€ par mois pour du contenu souvent générique, avec des délais variables et un résultat dépendant de la personne. ImmoCrew est un service productisé à prix fixe (${formatPrice(PACK_MENSUEL)}) avec un volume de livrables garanti chaque mois, personnalisés pour la zone géographique exacte du mandataire. Le mandataire sait exactement ce qu'il reçoit, quand il le reçoit, et combien ça coûte.`,
+      `Un community manager freelance facture généralement entre 500€ et 800€ par mois pour du contenu souvent générique, avec des délais variables et un résultat dépendant de la personne. ImmoCrew est un service productisé à prix fixe (${formatPrice(PACK_MENSUEL)}) avec un volume de contenus garanti chaque mois, personnalisés pour la zone géographique exacte du mandataire. Le mandataire sait exactement ce qu'il reçoit, quand il le reçoit, et combien ça coûte.`,
   },
   {
     question: "Quelle est la diff\u00e9rence entre ImmoCrew et une plateforme SaaS de marketing ?",
@@ -54,7 +54,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Les contenus sont-ils g\u00e9n\u00e9r\u00e9s par intelligence artificielle ?",
     answer:
-      "ImmoCrew utilise des outils d\u2019IA pour personnaliser chaque contenu \u00e0 la zone et aux biens du mandataire. Tous les contenus sont ensuite relus et valid\u00e9s par l\u2019\u00e9quipe avant livraison. Conform\u00e9ment au R\u00e8glement europ\u00e9en sur l\u2019Intelligence Artificielle (AI Act), la mention \u00ab contenu produit avec assistance IA \u2014 relu et valid\u00e9 par l\u2019\u00e9quipe ImmoCrew \u00bb figure sur les livrables concern\u00e9s.",
+      "ImmoCrew utilise des outils d'IA pour personnaliser chaque contenu à la zone et aux biens du mandataire. Tous les contenus sont ensuite relus et validés par l'équipe avant livraison. Conformément au Règlement européen sur l'Intelligence Artificielle (AI Act), la mention « contenu produit avec assistance IA — relu et validé par l'équipe ImmoCrew » figure sur les contenus concernés.",
   },
   {
     question: "Comment sont personnalis\u00e9s les contenus ?",
@@ -64,7 +64,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Peut-on r\u00e9silier \u00e0 tout moment ?",
     answer:
-      "Oui. Le Pack Mensuel est sans engagement. La r\u00e9siliation est libre, sans frais, depuis l\u2019espace client ou par email \u00e0 contact@immocrew.fr. Elle prend effet \u00e0 la fin de la p\u00e9riode mensuelle en cours. Les livrables d\u00e9j\u00e0 livr\u00e9s restent accessibles. Le Pack Lancement b\u00e9n\u00e9ficie d\u2019une garantie satisfait ou rembours\u00e9 de 14 jours.",
+      "Oui. Le Pack Mensuel est sans engagement. La résiliation est libre, sans frais, depuis l'espace client ou par email à contact@immocrew.fr. Elle prend effet à la fin de la période mensuelle en cours. Les contenus déjà livrés restent accessibles. Le Pack Lancement bénéficie d'une garantie satisfait ou remboursé de 14 jours.",
   },
   {
     question: "Combien de temps faut-il pour publier les contenus ?",

@@ -223,7 +223,7 @@ export default function MonthlyUpdatePage() {
           C&apos;est enregistre !
         </h1>
         <p className="text-body text-neutral-600 mb-2">
-          On s&apos;occupe du reste. Tes livrables arrivent sous 48h.
+          On s&apos;occupe du reste. Tes contenus arrivent sous 48h.
         </p>
         <p className="text-body-sm text-neutral-400 mb-8">
           Tes infos du mois vont rendre ta newsletter, tes posts et tes annonces
@@ -352,7 +352,7 @@ export default function MonthlyUpdatePage() {
                         updateNewBien(index, "titre", e.target.value)
                       }
                       placeholder="T3 vue Loire La Doutre"
-                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                     />
                   </div>
 
@@ -367,7 +367,7 @@ export default function MonthlyUpdatePage() {
                         onChange={(e) =>
                           updateNewBien(index, "type", e.target.value)
                         }
-                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                       >
                         {BIEN_TYPES.map((opt) => (
                           <option key={opt.value} value={opt.value}>
@@ -387,7 +387,7 @@ export default function MonthlyUpdatePage() {
                           updateNewBien(index, "adresse", e.target.value)
                         }
                         placeholder="12 rue Beaurepaire"
-                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                       />
                     </div>
                   </div>
@@ -405,7 +405,7 @@ export default function MonthlyUpdatePage() {
                           updateNewBien(index, "prix", e.target.value)
                         }
                         placeholder="185000"
-                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                       />
                     </div>
                     <div>
@@ -419,7 +419,7 @@ export default function MonthlyUpdatePage() {
                           updateNewBien(index, "surface", e.target.value)
                         }
                         placeholder="68"
-                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                       />
                     </div>
                     <div>
@@ -431,7 +431,7 @@ export default function MonthlyUpdatePage() {
                         onChange={(e) =>
                           updateNewBien(index, "dpe", e.target.value)
                         }
-                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                       >
                         <option value="">DPE...</option>
                         {["A", "B", "C", "D", "E", "F", "G"].map((l) => (
@@ -455,7 +455,7 @@ export default function MonthlyUpdatePage() {
                       }
                       placeholder="Vue Loire, parquet chene, cave voutee, 5 min tramway"
                       rows={2}
-                      className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast resize-y"
+                      className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast resize-y"
                     />
                   </div>
                 </div>
@@ -499,7 +499,7 @@ export default function MonthlyUpdatePage() {
               onChange={(e) => setAnecdoteMois(e.target.value)}
               placeholder="Ex: J'ai vendu le T3 Beaurepaire en 48h. Le couple m'a remerciee en pleurant le jour de la signature."
               rows={3}
-              className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast resize-y"
+              className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast resize-y"
             />
             <p className="text-caption text-neutral-400 mt-1">
               Facultatif — ca rend ta newsletter unique. 2 phrases suffisent.
@@ -520,7 +520,7 @@ export default function MonthlyUpdatePage() {
               onChange={(e) => setEvenementsLocaux(e.target.value)}
               placeholder="Ex: Foire d'Angers du 12 au 15, marche de Noel place du Ralliement, ouverture du nouveau tram"
               rows={2}
-              className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast resize-y"
+              className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast resize-y"
             />
             <p className="text-caption text-neutral-400 mt-1">
               Facultatif
@@ -539,7 +539,7 @@ export default function MonthlyUpdatePage() {
               id="tendance_marche"
               value={tendanceMarche}
               onChange={(e) => setTendanceMarche(e.target.value)}
-              className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+              className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
             >
               {TENDANCE_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -562,7 +562,7 @@ export default function MonthlyUpdatePage() {
               onChange={(e) => setTendanceDetail(e.target.value)}
               placeholder="Ex: Beaucoup de biens en vente dans le centre, les acheteurs negocient plus qu'avant"
               rows={2}
-              className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast resize-y"
+              className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast resize-y"
             />
             <p className="text-caption text-neutral-400 mt-1">
               Facultatif
@@ -584,7 +584,7 @@ export default function MonthlyUpdatePage() {
                     type="checkbox"
                     checked={sujetsPrioritaires.includes(sujet)}
                     onChange={() => toggleSujet(sujet)}
-                    className="w-5 h-5 rounded border-neutral-300 text-secondary focus:ring-secondary accent-secondary"
+                    className="w-5 h-5 rounded border-neutral-300 text-secondary focus-visible:ring-secondary accent-secondary"
                   />
                   <span className="text-body-sm text-foreground">{sujet}</span>
                 </label>
@@ -597,7 +597,7 @@ export default function MonthlyUpdatePage() {
                   value={sujetAutre}
                   onChange={(e) => setSujetAutre(e.target.value)}
                   placeholder="Un sujet specifique..."
-                  className="flex-1 h-12 px-4 rounded-md border border-neutral-300 bg-white text-body-sm text-foreground placeholder:text-neutral-400 focus:border-secondary focus:outline-none transition-all duration-fast"
+                  className="flex-1 h-12 px-4 rounded-md border border-neutral-300 bg-white text-body-sm text-foreground placeholder:text-neutral-400 focus-visible:border-secondary focus-visible:outline-none transition-all duration-fast"
                 />
               </div>
             </div>
@@ -672,7 +672,7 @@ export default function MonthlyUpdatePage() {
           </div>
 
           <p className="text-body-sm text-neutral-400 text-center mt-6">
-            On s&apos;occupe du reste. Tes livrables arrivent sous 48h.
+            On s&apos;occupe du reste. Tes contenus arrivent sous 48h.
           </p>
         </div>
       )}

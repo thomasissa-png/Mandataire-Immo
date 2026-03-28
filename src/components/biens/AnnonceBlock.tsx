@@ -325,7 +325,7 @@ export function AnnonceBlock({
         {/* Contenu annonce */}
         <div
           role="tabpanel"
-          className="rounded-lg bg-neutral-50 border border-border p-4 mb-4 max-h-[400px] overflow-y-auto"
+          className="rounded-lg bg-neutral-50 border border-border p-4 mb-4 max-h-[400px] overflow-y-auto overscroll-contain"
         >
           <p className="text-body-sm text-foreground whitespace-pre-wrap leading-relaxed">
             {currentText}
