@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react"
 import { DeliverableCard } from "./DeliverableCard"
+import { MesBiensSection } from "./MesBiensSection"
 
 type DeliverableType =
   | "post"
@@ -394,6 +395,11 @@ export function DashboardContent({
           </div>
         </div>
       ) : null}
+
+      {/* ============================================================ */}
+      {/* MES BIENS (self-service — property_pages)                       */}
+      {/* ============================================================ */}
+      <MesBiensSection />
 
       {/* CTA Passer au mensuel — APRÈS le plan, pas avant */}
       {pack === "lancement" ? (
