@@ -122,6 +122,10 @@ export default async function DashboardPage() {
     nb_transactions_an: String(ctx.nb_transactions_an || ""),
     type_biens: String(ctx.type_biens || ""),
     linkedin_url: String(ctx.linkedin_url || ""),
+    quartiers: String(ctx.quartiers || ""),
+    gamme_prix: String(ctx.gamme_prix || ""),
+    ton_communication: String(ctx.ton_communication || ""),
+    cible_clients: String(ctx.cible_clients || ""),
     biens: Array.isArray(ctx.biens)
       ? (ctx.biens as Array<Record<string, string>>).map((b) => ({
           titre: String(b.titre || ""),
