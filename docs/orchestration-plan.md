@@ -185,8 +185,12 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 - **2026-03-25 S3** : Clôture session. Phase 6 (pipeline IA) préparée mais non lancée.
 
 ## État pour reprise prochaine session
-- **Phases terminées** : 0, 1, 2, 3, 4, 5
-- **Phase en cours** : 6 (pipeline IA) — spécifiée, non codée
-- **Chantier critique** : implémenter le pipeline IA (docs/product/ai-services-roadmap.md)
-- **Blockers** : infos société VERSI pour placeholders CGV
-- **Pour reprendre** : voir mémo de reprise ci-dessous dans project-context.md
+- **Phases terminées** : 0, 1, 2, 3, 4, 5, 6 (pipeline IA livré — 9.2/10 revue V3)
+- **Phase en cours** : 7 (qualité production + nouvelles features)
+  - Dashboard réécrit en "coach marketing" — 18/18 gates QA PASS
+  - Landing page enrichie (coaching, HowItWorks, FAQ)
+  - Onboarding corrigé (mobile, navigation, bannière profil incomplet)
+  - Spec "Upload photos + annonces complètes" terminée (docs/product/photo-upload-spec.md)
+- **Prochaine phase** : 8 — Implémentation upload photos + annonces + page édition profil
+- **Blockers** : ANTHROPIC_API_KEY (clé payante), migration 008 à exécuter
+- **Pour reprendre** : voir mémo de reprise dans project-context.md

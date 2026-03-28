@@ -17,6 +17,8 @@
 - **Dashboard = coach marketing, pas bibliothèque** : le dashboard doit commencer par un résumé personnalisé ("voici ce qu'on a compris sur toi") puis un plan d'action structuré (mets à jour tes bios, publie 3 posts/semaine, tourne tes vidéos). Chaque section avec conseils + liens vers articles blog. La valeur ajoutée c'est le coaching, pas juste le contenu.
 - **Profil compact, pas de gros bloc bleu** : avatar inline 64px + nom à côté. Pas de bannière plein-largeur de 144px. Infos métier en pills horizontales. TOUS les réseaux sociaux (Instagram, Facebook, LinkedIn, site web), pas juste LinkedIn.
 - **Annonces liées aux biens** : si Sophie donne ses biens à l'onboarding, les annonces doivent être générées spécifiquement pour SES biens, pas des annonces génériques.
+- **Upload photos + annonces complètes** : Sophie doit pouvoir uploader 3-10 photos de ses biens depuis son dashboard et recevoir une annonce complète (texte storytelling + photos intégrées) prête à copier-coller sur SeLoger/LeBonCoin en 30 secondes. Avec un lien web partageable vers la page publique du bien. C'est la prochaine priorité absolue.
+- **Persona Sophie = utilisatrice réelle, pas évaluatrice** : l'agent @mandataire doit simuler 10 scénarios d'usage concrets (copier un post, ajouter un bien, passer au mensuel, signaler un problème) au lieu de noter des critères abstraits. Si un scénario est impossible (pas de bouton), c'est un FAIL à 0/10.
 - **Accents français obligatoires** : tous les textes visibles doivent avoir les accents corrects. Utiliser des vrais caractères UTF-8 (é, è, à, ç), jamais des escapes unicode (\u00E9) dans les constantes JS.
 
 ## UX & Design

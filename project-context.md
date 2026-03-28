@@ -289,31 +289,34 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 
 ## Memo de reprise — derniere session
 
-- **Date de cloture** : 2026-03-27, session 6
+- **Date de cloture** : 2026-03-28, session 6 (continuee sur 2 jours)
 - **Branche** : `claude/update-gradient-agents-59Rnz`
-- **Resume de la session** : Session de correction et simplification. 7 chantiers : (1) Mise a jour Gradient Agents depuis Agent-Team upstream, (2) Centralisation des prix dans src/lib/pricing.ts (P0 resolu), (3) Admin simplifie par mot de passe seul (plus de NextAuth), (4) Fix async params Next.js 14.2+ sur pages dynamiques, (5) Suppression etape 6 onboarding + enrichissement auto DVF, (6) Migration 001_init.sql creee (tables manquantes), (7) Adaptation 7 prompts IA au format DVF. ~10 commits, ~25 fichiers modifies.
+- **Resume de la session** : Session massive de correction, refonte et audit qualite. 4 grands chantiers : (1) Infrastructure — centralisation prix, admin simplifie, migration SQL definitive 008, fix ON CONFLICT/self-fetch/JSON parse Claude. (2) Onboarding — etape quartier supprimee (enrichissement DVF auto), LinkedIn dedup, lien annonce prioritaire, header sticky "Continuer plus tard", grilles mobile, banniere profil incomplet. (3) Dashboard — reecrit de zero en "coach marketing" : profil compact, plan strategique personnalise, biens+annonces rattachees, timeline posts avec dates francaises, scripts video avec format/duree, signaler un souci, support accessible partout, CTA passer au mensuel. 6 passes d'audit (Sophie, UX, design, copywriter, creative-strategy, QA) avec corrections iteratives. (4) Landing — section "Comment ca marche" (coaching), pilier 3 reforme, 2 FAQ coaching, 57 entites HTML nettoyees. ~40 commits, ~80 fichiers modifies.
 - **Travaux termines cette session** :
-  - Prix centralises dans src/lib/pricing.ts — 0 prix hardcode residuel
-  - /admin protege par ADMIN_PASSWORD (cookie HMAC, plus de NextAuth)
-  - Reset password deja existant (verifie)
-  - Option trimestrielle deja existante (toggle 135€/mois)
-  - Etape "Ton quartier en detail" supprimee — enrichissement auto (API DVF + API Adresse)
-  - LinkedIn dedup (supprime de l'etape Comptes)
-  - Lien annonce en champ principal du formulaire bien
-  - 7 prompts IA adaptes au format donnees_locales DVF
+  - Prix centralises dans src/lib/pricing.ts
+  - /admin protege par ADMIN_PASSWORD (cookie HMAC)
+  - Migration SQL definitive 008 (7 tables, toutes colonnes, verification auto)
+  - Fix ON CONFLICT partiel, self-fetch localhost, JSON parse backticks
+  - Onboarding simplifie 9 etapes + enrichissement DVF auto
+  - Dashboard reecrit (coach marketing) — 18/18 gates QA PASS
+  - Landing page : section HowItWorks + FAQ coaching + pilier 3 reforme
+  - Blog covers visuelles (8 categories)
+  - Spec feature "Upload photos + annonces completes" (docs/product/photo-upload-spec.md)
 - **Travaux en cours** :
-  - **Sequence email Lancement → Mensuel** : specifiee (J+2, J+7, J+14), non codee.
-  - **Deploiement** : fondateur doit executer sql/001_init.sql sur PostgreSQL Replit et configurer les Secrets.
+  - **Upload photos + annonces completes** : spec terminee (docs/product/photo-upload-spec.md), implementation non commencee. 5 endpoints API + 5 composants UI + 2 routes dashboard a creer.
+  - **Sequence email nurturing** : specifiee (J+2, J+7, J+14), non codee.
+  - **Page /dashboard/profile** : edition du profil en self-service (actuellement par email). Necessaire pour la retention.
+  - **Sauvegarde onboarding serveur** : sessionStorage seulement — perte de donnees si fermeture d'onglet. Necessite un endpoint PATCH /api/onboarding/draft.
 - **Prochaines actions recommandees** :
-  1. **Fondateur : Deployer et tester** — executer `psql $DATABASE_URL -f sql/001_init.sql`, configurer les Secrets Replit (NEXTAUTH_SECRET, NEXTAUTH_URL, ADMIN_PASSWORD, ANTHROPIC_API_KEY, DATABASE_URL), tester le flow complet sign-up → onboarding → admin → trigger production.
-  2. **@fullstack : Sequence email nurturing** — coder les 3 emails automatiques Lancement → Mensuel (J+2, J+7, J+14) avec triggers webhook Stripe.
-  3. **@qa : Tests de regression** — verifier que les modifications onboarding/admin/prompts n'ont rien casse. Mettre a jour les tests E2E.
+  1. **@fullstack : Implementer upload photos + annonces completes** — suivre la spec docs/product/photo-upload-spec.md. 5 endpoints, 5 composants. C'est le coeur de la valeur ajoutee pour Sophie (annonces personnalisees avec ses vraies photos). Priorite absolue.
+  2. **@fullstack : Page /dashboard/profile** — formulaire d'edition du profil (reprend les champs de l'onboarding en mode edition). Critique pour la retention au mois 2.
+  3. **@fullstack : Sauvegarde onboarding serveur** — endpoint PATCH /api/onboarding/draft pour eviter la perte de donnees entre sessions.
 - **Blockers** :
-  - Migration 001_init.sql doit etre executee avant tout test (tables inexistantes sinon)
-  - NEXTAUTH_SECRET et NEXTAUTH_URL obligatoires pour que l'auth fonctionne
-  - Marque INPI "ImmoCrew" a verifier (collision avec SIRET 894616713 Auterive)
+  - ANTHROPIC_API_KEY necessaire pour la generation (cle API payante Anthropic)
+  - Migration 008 doit etre executee : `psql $DATABASE_URL -f sql/008_definitive_fix.sql`
+  - Marque INPI "ImmoCrew" a verifier (collision SIRET 894616713 Auterive)
 - **Commande de reprise suggeree** :
 
 ```
-@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 6). Branche claude/update-gradient-agents-59Rnz. Prix centralises 400/150/100 EUR dans src/lib/pricing.ts. Admin par mot de passe (ADMIN_PASSWORD). Onboarding simplifie 9 etapes (etape quartier supprimee, enrichissement auto DVF). Prochaines priorites : (1) deployer et tester le flow complet, (2) sequence email nurturing, (3) tests de regression.
+@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 6). Branche claude/update-gradient-agents-59Rnz. Dashboard reecrit en "coach marketing" (profil compact, plan du mois, timeline posts avec dates, biens+annonces rattachees). Landing page avec section "Comment ca marche" (coaching). Prochaine priorite : implementer la feature "Upload photos + annonces completes" selon la spec docs/product/photo-upload-spec.md. Ensuite : page d'edition profil /dashboard/profile + sauvegarde onboarding serveur.
 ```
