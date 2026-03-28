@@ -85,7 +85,7 @@ export async function GET(
     ? "public, max-age=31536000, immutable"
     : "private, no-cache"
 
-  return new NextResponse(content, {
+  return new NextResponse(Buffer.from(content) as unknown as BodyInit, {
     status: 200,
     headers: {
       "Content-Type": contentType,
