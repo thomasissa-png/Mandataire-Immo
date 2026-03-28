@@ -44,6 +44,10 @@ interface DashboardContentProps {
     nb_transactions_an: string
     type_biens: string
     linkedin_url: string
+    quartiers: string
+    gamme_prix: string
+    ton_communication: string
+    cible_clients: string
     biens: Array<{
       titre: string
       type: string
@@ -70,6 +74,14 @@ const TYPE_LABELS: Record<string, string> = {
   calendrier: "Calendrier",
   positionnement: "Positionnement",
   landing_page: "Landing page",
+}
+
+const STRATEGY_HINTS: Record<string, string> = {
+  bio: "Copie-la sur Instagram, LinkedIn et Facebook",
+  positionnement: "Ton argumentaire unique — à utiliser dans tes échanges",
+  brief_graphique: "Pour tes visuels Canva ou ton graphiste",
+  calendrier: "Ton planning de publication pour le mois",
+  landing_page: "Ta page web personnalisée",
 }
 
 const TYPE_COLORS: Record<string, string> = {
@@ -617,7 +629,7 @@ export function DashboardContent({
         <a href="mailto:support@immocrew.fr" className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors">Une question sur tes contenus ?</a>
       </div>
 
-      </div>{/* end flex-1 main content */}
-    </div>{/* end lg:flex */}
+      </div>
+    </div>
   )
 }
