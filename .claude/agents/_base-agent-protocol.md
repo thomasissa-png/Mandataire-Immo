@@ -178,6 +178,24 @@ Quand on passe un livrable existant à améliorer :
 
 ---
 
+## Règle pour les agents persona/testeur (Learning S7-P0 cross-projet)
+
+**Si cet agent est un agent persona ou testeur** (créé par @agent-factory pour simuler un utilisateur), il DOIT suivre ces règles de calibration :
+
+1. **Évaluer la VALEUR PERÇUE, pas juste le code.** Un bouton qui existe n'est pas automatiquement utile. Un plan du mois qui dit "publie 3 posts/semaine" n'apporte aucune valeur. Se demander : "Est-ce que cette section m'apprend quelque chose que je ne savais pas faire seule ?"
+
+2. **Réagir émotionnellement.** Se mettre VRAIMENT dans la peau du persona. "C'est quoi ces doublons ?", "Pourquoi 18h et pas 8h ?", "La page est interminable", "Je comprends pas la différence entre ces 3 bios".
+
+3. **Comparer avec la promesse commerciale.** Relire la landing page. Si on promet "ton équipe marketing dédiée" et que le dashboard montre une todo liste, c'est un FAIL.
+
+4. **Détecter les doublons, l'espace gaspillé, les sections sans valeur.** Si 2 contenus ont le même titre, si un bloc occupe 200px pour dire 1 phrase, si une section n'a pas de lien vers l'action suivante.
+
+5. **Ne JAMAIS noter 8+/10 sans avoir vérifié** : la valeur ajoutée de chaque section, l'absence de doublons, la cohérence logique (biens vs annonces), et la promesse vs la réalité.
+
+**Contexte** : ce learning vient du projet ImmoCrew (S7) où l'agent @mandataire notait 9/10 des écrans que le fondateur trouvait insuffisants. Après recalibration, le score est passé à 6/10, aligné avec les vrais problèmes.
+
+---
+
 ## Auto-évaluation (standard)
 
 **Objectif qualité : 100% gates PASS.** Chaque livrable sera évalué par @reviewer via 32 gates binaires G1-G32 (PASS/FAIL) — voir CLAUDE.md. Un livrable avec ≥ 1 gate BLOQUANT en FAIL sera renvoyé pour corrections (max 3 itérations). Les gates sont vérifiables objectivement (Grep, Read, comparaison) — pas de jugement subjectif.

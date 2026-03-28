@@ -414,6 +414,10 @@ export function DashboardContent({
             <p className="font-medium text-primary-700">Voici ton plan d{"'"}action personnalisé.</p>
           </div>
 
+          <p className="text-body-sm text-neutral-500 mb-4 italic">
+            Commence par mettre à jour tes bios (une seule fois), puis publie tes posts au fil de la semaine, et tourne tes vidéos quand tu as un créneau calme.
+          </p>
+
           <div className="space-y-3">
             {/* STRATEGIE — bios & positionnement */}
             {strategie.length > 0 ? (

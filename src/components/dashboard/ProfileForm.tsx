@@ -134,9 +134,9 @@ const SECTIONS: SectionConfig[] = [
       },
       {
         key: "ce_qui_te_differencie",
-        label: "Ce que tes clients disent de toi",
+        label: "Ce qui te rend unique",
         type: "textarea",
-        placeholder: "Ex : Je connais chaque rue de La Doutre, j'y vis depuis 10 ans.",
+        placeholder: "Ex : Je connais chaque rue de La Doutre, j'y vis depuis 10 ans. Mes clients apprécient ma réactivité.",
       },
       {
         key: "confort_camera",
