@@ -400,7 +400,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
                     {field.label}
                   </label>
                   {field.helper && (
-                    <p className="text-caption text-neutral-400 mb-1">{field.helper}</p>
+                    <p className="text-caption text-neutral-500 mb-1">{field.helper}</p>
                   )}
 
                   {field.type === "select" && field.options ? (
