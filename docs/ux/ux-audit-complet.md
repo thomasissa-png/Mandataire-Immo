@@ -3,22 +3,24 @@
 
 ## Tableau récapitulatif par page
 
+> Voir détail complet dans la section "Tableau récapitulatif par page (mis à jour)" en fin de document.
+
 | Page | Clarté /10 | Navigation /10 | Mobile /10 | Feedback /10 | A11y /10 | Note globale |
 |---|---|---|---|---|---|---|
-| Landing Hero | — | — | — | — | — | — |
-| AuthModal sign-up | — | — | — | — | — | — |
-| Onboarding wizard | — | — | — | — | — | — |
-| Dashboard — état vide | — | — | — | — | — | — |
-| Dashboard — MesBiensSection | — | — | — | — | — | — |
-| Dashboard — DashboardContent | — | — | — | — | — | — |
-| /biens/nouveau — BienForm | — | — | — | — | — | — |
-| /biens/[id] — BienFicheClient | — | — | — | — | — | — |
-| PhotoUploader | — | — | — | — | — | — |
-| AnnonceBlock | — | — | — | — | — | — |
-| /admin — liste clients | — | — | — | — | — | — |
-| /admin — AdminGate login | — | — | — | — | — | — |
-| /admin/clients/[id] | — | — | — | — | — | — |
-| TriggerProductionButton | — | — | — | — | — | — |
+| Landing Hero | 9 | 7 | 8 | 7 | 8 | **7.8** |
+| AuthModal sign-up | 9 | 8 | 8 | 8 | 7 | **8.0** |
+| Onboarding wizard | 7 | 8 | 7 | 7 | 7 | **7.2** |
+| Dashboard — état vide | 8 | 5 | 8 | 6 | 7 | **6.8** |
+| Dashboard — MesBiensSection (vide) | 8 | 8 | 9 | 9 | 8 | **8.4** |
+| Dashboard — DashboardContent biens | 5 | 6 | 7 | 6 | 7 | **6.2** |
+| /biens/nouveau — BienForm | 8 | 8 | 8 | 8 | 8 | **8.0** |
+| /biens/[id] — BienFicheClient | 8 | 6 | 8 | 8 | 8 | **7.6** |
+| PhotoUploader | 8 | 7 | 7 | 7 | 7 | **7.2** |
+| AnnonceBlock | 9 | 8 | 8 | 8 | 8 | **8.2** |
+| /admin — liste clients | 7 | 7 | 6 | 7 | 7 | **6.8** |
+| /admin — AdminGate login | 9 | 8 | 8 | 7 | 7 | **7.8** |
+| /admin/clients/[id] | 8 | 8 | 6 | 7 | 7 | **7.2** |
+| TriggerProductionButton | 7 | 7 | 6 | 6 | 7 | **6.6** |
 
 ---
 
@@ -373,16 +375,127 @@ Q2 : Le TriggerProductionButton est-il visible ? OUI — section "Production IA"
 
 ## Audit heuristique Nielsen 10
 
-*(à remplir)*
+| # | Heuristique | Vérification | Statut | Évidence |
+|---|---|---|---|---|
+| H1 | Visibilité de l'état du système | Progress bar onboarding, états loading/erreur/succès dans tous les composants clés | ⚠️ PARTIAL | Progress bar onboarding trompeuse (étapes optionnelles non distinguées). TriggerProductionButton : loading visible mais pas de progression détaillée sur une génération de plusieurs minutes. PhotoUploader : progression simulée. |
+| H2 | Correspondance système/monde réel | Vocabulaire "biens", "annonce", "réseau", "livrable" adapté au persona Sophie | ✅ PASS | Le copy utilise le langage du mandataire (IAD, SeLoger, LeBonCoin, scripts Reels). Quelques labels sans accent (P1-06, P1-19). |
+| H3 | Contrôle et liberté | Bouton "Continuer plus tard" onboarding, bouton fermer modal auth (Escape, clic overlay, X), liens retour | ⚠️ PARTIAL | AuthModal : retour/fermeture complet. Onboarding : "Continuer plus tard" présent. BienFicheClient : retour depuis fiche bien à vérifier sur `/dashboard/biens/[id]/page.tsx`. DashboardContent : pas de navigation arrière dans le dashboard. |
+| H4 | Cohérence et standards | Patterns d'interaction identiques (boutons rounded-full, couleurs secondary, min-h-[44px]) | ⚠️ PARTIAL | TriggerProductionButton utilise `h-10` (40px) au lieu de `min-h-[44px]`. Quelques écarts de style admin vs dashboard (header bg-primary admin vs header minimaliste dashboard). |
+| H5 | Prévention des erreurs | Validation inline BienForm, confirmation avant régénération annonce, limite photos documentée | ⚠️ PARTIAL | BienForm : validation inline PASS. AuthModal : validation password uniquement à la soumission (P0-01). Onboarding : message d'erreur sans identification du champ manquant (P1-05). |
+| H6 | Reconnaissance plutôt que rappel | Pré-remplissage prénom/nom onboarding depuis session, champs avec placeholder, labels explicites | ⚠️ PARTIAL | Pré-remplissage prénom/nom PASS. BienForm ne pré-remplit pas les biens onboarding (P0-04). AnnonceBlock n'affiche pas le contexte bien en cours d'affichage (P1-12). |
+| H7 | Flexibilité et efficacité | Drag-and-drop photos, autocomplete adresse (onboarding), raccourcis keyboard modal | ⚠️ PARTIAL | Pas de réorganisation photos (P1-11). BienForm sans autocomplete adresse (P1-09). Onboarding : autocomplete adresse présent pour les biens. Admin : pas de recherche/filtre clients (P1-15). |
+| H8 | Design esthétique et minimaliste | Chaque section a une raison d'être | ⚠️ PARTIAL | Double section "biens" dans le dashboard (P0-03) : bruit visuel. Section GenerateArticleButton au milieu de la liste admin (P1-16). Onboarding étape 7 (formulaire bien complet dans une étape optionnelle) est trop lourde. |
+| H9 | Aide à reconnaissance et correction des erreurs | Messages d'erreur en langage humain avec solution | ✅ PASS | "Email ou mot de passe incorrect." (AuthModal), "La génération a pris trop longtemps — réessaie dans quelques instants." (AnnonceBlock), messages d'erreur réseau humains dans tous les composants. Exception : TriggerProductionButton affiche potentiellement du SQL brut si erreur PostgreSQL. |
+| H10 | Aide et documentation | Helper texts sur champs complexes, sous-titres d'étapes onboarding optionnelles | ⚠️ PARTIAL | Onboarding : helper text linkedin_url présent ("On utilise ton profil pour mieux comprendre ton parcours"). Welcome banner dashboard ("Comment utiliser ton espace"). Manque : helper text BienForm "Points forts" (P1-10), indication use-case post-copie annonce (P1-13). |
+
+**Bilan Nielsen :** 1 PASS total, 9 PARTIAL, 0 FAIL pur. Aucune heuristique complètement brisée, mais H1 (visibilité état système) et H6 (reconnaissance vs rappel) présentent les frictions les plus impactantes pour Sophie.
+
+---
+
+## Tableau récapitulatif par page (mis à jour)
+
+| Page | Clarté /10 | Navigation /10 | Mobile /10 | Feedback /10 | A11y /10 | Note globale |
+|---|---|---|---|---|---|---|
+| Landing Hero | 9 | 7 | 8 | 7 | 8 | **7.8** |
+| AuthModal sign-up | 9 | 8 | 8 | 8 | 7 | **8.0** |
+| Onboarding wizard | 7 | 8 | 7 | 7 | 7 | **7.2** |
+| Dashboard — état vide | 8 | 5 | 8 | 6 | 7 | **6.8** |
+| MesBiensSection (vide) | 8 | 8 | 9 | 9 | 8 | **8.4** |
+| DashboardContent — section biens | 5 | 6 | 7 | 6 | 7 | **6.2** |
+| /biens/nouveau — BienForm | 8 | 8 | 8 | 8 | 8 | **8.0** |
+| PhotoUploader | 8 | 7 | 7 | 7 | 7 | **7.2** |
+| AnnonceBlock | 9 | 8 | 8 | 8 | 8 | **8.2** |
+| BienFicheClient — page publique | 8 | 6 | 8 | 8 | 8 | **7.6** |
+| AdminGate login | 9 | 8 | 8 | 7 | 7 | **7.8** |
+| /admin — liste clients | 7 | 7 | 6 | 7 | 7 | **6.8** |
+| /admin/clients/[id] | 8 | 8 | 6 | 7 | 7 | **7.2** |
+| TriggerProductionButton | 7 | 7 | 6 | 6 | 7 | **6.6** |
+
+---
 
 ## HEART Framework — Métriques de succès
 
-*(à remplir)*
+| Dimension | Signal observable | Métrique | Cible | Méthode de mesure |
+|---|---|---|---|---|
+| **Happiness** | Satisfaction post-onboarding | NPS ou CSAT envoyé 24h après livraison des premiers livrables | >= 8/10 | Email automatique avec lien formulaire NPS |
+| **Engagement** | Utilisation du dashboard | Nb de livrables copiés par session, retour sur le dashboard dans les 7j | >= 3 livrables copiés/mois par client actif | PostHog — event `deliverable_copied` |
+| **Adoption** | Complétion de l'onboarding | % d'inscrits qui terminent les 5 étapes obligatoires | >= 80% | PostHog — event `onboarding_complete` vs `sign_up_complete` |
+| **Retention** | Retour clients | Rétention J7 (retour sur le dashboard), rétention J30 (abonnement actif) | J7 >= 60%, J30 >= 90% (objectif project-context) | PostHog — session tracking |
+| **Task success** | Complétion parcours bien → annonce copiée | % de clients qui créent un bien ET copient une annonce dans les 7j | >= 70% | PostHog — funnel `bien_created` → `annonce_generated` → `annonce_copied` |
+
+**Métrique HEART primaire pour cet audit :** Task success — le parcours "bien créé → annonce copiée" est le aha moment principal de Sophie. C'est la preuve que l'outil fonctionne.
+
+**Events PostHog à implémenter pour mesurer les parcours audités :**
+- `onboarding_step_complete` (déjà en place)
+- `onboarding_complete` (déjà en place)
+- `bien_created` → à ajouter après POST /api/biens success
+- `photo_uploaded` → à ajouter dans PhotoUploader après upload success
+- `annonce_generated` → à ajouter dans AnnonceBlock après génération success
+- `annonce_copied` → à ajouter dans AnnonceBlock handleCopy
+- `page_publique_link_copied` → à ajouter dans BienFicheClient handleCopyLink
+- `admin_production_triggered` → à ajouter dans TriggerProductionButton handleTrigger
+
+---
 
 ## Score global
 
-*(à remplir)*
+**Score UX global : 7.4 / 10**
+
+Calculé sur la moyenne des notes globales par page (14 pages auditées).
+
+**Distribution :**
+- Pages avec note >= 8 : AuthModal sign-up (8.0), MesBiensSection vide (8.4), BienForm (8.0), AnnonceBlock (8.2) — core loop solide
+- Pages avec note 7-7.9 : Landing Hero (7.8), Onboarding (7.2), PhotoUploader (7.2), BienFicheClient (7.6), AdminGate (7.8), /admin/clients/[id] (7.2)
+- Pages avec note < 7 : Dashboard état vide (6.8), DashboardContent section biens (6.2), /admin liste (6.8), TriggerProductionButton (6.6)
+
+**Verdict :** GO CONDITIONNEL — les 5 frictions P0 doivent être corrigées avant la mise en production. Les frictions P1 sont à prioriser dans les 2 premières semaines d'exploitation.
+
+**Chemin critique à corriger en priorité absolue (P0) :**
+1. P0-03 — Double section biens dashboard (confusion modèle mental Sophie)
+2. P0-01 — Validation password en temps réel (friction d'inscription)
+3. P0-02 — Progress bar onboarding trompeuse (abandon prématuré)
+4. P0-05 — Bouton Boost Mandat absent (loss de revenus)
+5. P0-04 — BienForm ne pré-remplit pas les biens onboarding (friction duplication)
+
+---
 
 ## Hypothèses à valider
 
-*(à remplir)*
+| ID | Hypothèse | Impact si faux | Comment valider |
+|---|---|---|---|
+| H-01 | Les 9 étapes d'onboarding n'entraînent pas de taux d'abandon > 20% à l'étape 7 (biens) | Refonte de l'étape 7 nécessaire | Suivi PostHog `onboarding_step_abandon` par étape, seuil d'alerte si étape 7 > 20% d'abandons |
+| H-02 | Sophie utilise l'autocomplete adresse dans l'onboarding (api-adresse.data.gouv.fr) | Moins utile, complexité technique non justifiée | Event tracking sur les sélections d'autocomplete vs saisies manuelles |
+| H-03 | La page /admin est accédée uniquement depuis desktop — les notes mobile admin (6/10) ne sont pas un problème | Si Thomas gère depuis mobile, refonte admin mobile requise | Vérifier les sessions admin dans PostHog par device |
+| H-04 | Les 30 secondes de génération d'annonce sont acceptables pour Sophie (elle ne rafraîchira pas la page) | Si elle rafraîchit, la génération est perdue et doit reprendre | Message proactif "Ne ferme pas cette page — l'IA rédige ton annonce" à afficher pendant le loading |
+
+---
+
+## Handoff
+
+---
+**Handoff → @fullstack**
+
+- Fichier produit : `/home/user/Mandataire-Immo/docs/ux/ux-audit-complet.md`
+
+**Corrections P0 à implémenter (bloquantes pour la mise en prod) :**
+
+1. **P0-01** — `src/components/AuthModal.tsx:296-307` : Ajouter validation `password.length >= 8` onBlur + indicateur visuel (texte ou barre) sous le champ password
+2. **P0-02** — `src/app/onboarding/page.tsx:632-660` : Afficher le nombre d'étapes obligatoires restantes (ex: "Étape 3 sur 5 étapes obligatoires") — distinguer les 5 étapes required des 4 optional dans la progress bar
+3. **P0-03** — `src/components/dashboard/DashboardContent.tsx:454-514` : Supprimer la section "Mes biens et annonces" de DashboardContent (qui affiche profile.biens de l'onboarding) — MesBiensSection est la source de vérité pour les biens self-service. Conserver uniquement la section MesBiensSection.
+4. **P0-04** — `src/components/biens/BienForm.tsx` : Fetch les biens existants depuis client_context au mount (GET /api/profile ou équivalent) et proposer un banner "Importer un bien depuis ton profil" si biens onboarding non vides
+5. **P0-05** — `src/components/admin/TriggerProductionButton.tsx:125-143` : Ajouter bouton "Lancer Boost Mandat" (handleTrigger("boost")) avec sélecteur de PropertyPage ID
+
+**Corrections P1 prioritaires (à faire dans les 2 semaines) :**
+
+- `AuthModal.tsx:104` : Ajouter `<p id="password-hint">8 caractères minimum</p>` + `aria-describedby="password-hint"` sur l'input password → @fullstack
+- `onboarding/page.tsx:449` : Message validation avec le nom du champ manquant → @fullstack
+- `onboarding/page.tsx:101` : Corriger "Ton reseau" → "Ton réseau" → @fullstack
+- `onboarding/page.tsx:593` : Corriger entité HTML `&eacute;` → `é` → @fullstack
+- `TriggerProductionButton.tsx:133,142,167` : Corriger "Generation" → "Génération", "sequentiels" → "séquentiels" → @fullstack
+- `BienForm.tsx` : Ajouter autocomplete adresse (réutiliser la logique onboarding/page.tsx) → @fullstack
+- `AnnonceBlock.tsx` : Passer prop `bienTitre` depuis BienFicheClient et afficher en contexte → @fullstack
+
+**Events PostHog à ajouter :**
+`bien_created`, `photo_uploaded`, `annonce_generated`, `annonce_copied`, `page_publique_link_copied`, `admin_production_triggered` — voir section HEART pour les emplacements exacts
+
+---
