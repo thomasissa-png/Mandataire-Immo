@@ -135,13 +135,17 @@ export async function POST(request: NextRequest) {
   try {
     // UPSERT : si le client existe (par email), update client_context.
     // Sinon, creer une nouvelle ligne.
+    // Nettoie aussi le brouillon d'onboarding (plus nécessaire une fois terminé).
     await query(
-      `INSERT INTO clients (email, first_name, last_name, client_context, created_at)
-       VALUES ($1, $2, $3, $4, NOW())
+      `INSERT INTO clients (email, first_name, last_name, client_context, onboarding_draft, onboarding_draft_step, onboarding_draft_updated_at, created_at)
+       VALUES ($1, $2, $3, $4, NULL, 0, NULL, NOW())
        ON CONFLICT (email) WHERE email IS NOT NULL DO UPDATE SET
          first_name = EXCLUDED.first_name,
          last_name = EXCLUDED.last_name,
-         client_context = EXCLUDED.client_context`,
+         client_context = EXCLUDED.client_context,
+         onboarding_draft = NULL,
+         onboarding_draft_step = 0,
+         onboarding_draft_updated_at = NULL`,
       [
         user.email,
         clientContext.prenom,

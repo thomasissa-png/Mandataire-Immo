@@ -262,8 +262,62 @@ export default function OnboardingPage() {
   const debounceTimerRef = useRef<Record<number, NodeJS.Timeout>>({})
   const addressDropdownRef = useRef<HTMLDivElement>(null)
 
+  const [draftLoaded, setDraftLoaded] = useState(false)
+
   const step = STEPS[currentStep]
   const progress = ((currentStep + 1) / STEPS.length) * 100
+
+  // Sauvegarde fire-and-forget du brouillon côté serveur
+  const saveDraftToServer = useCallback((stepIndex: number, draftData: OnboardingData, draftBiens: BienData[]) => {
+    const payload = {
+      step: stepIndex,
+      data: { ...draftData, __biens__: JSON.stringify(draftBiens) },
+    }
+    fetch("/api/onboarding/draft", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    }).catch(() => {
+      // Fire-and-forget : sessionStorage sert de fallback
+    })
+  }, [])
+
+  // Chargement du brouillon serveur au mount (priorité serveur > sessionStorage)
+  useEffect(() => {
+    let cancelled = false
+    async function loadDraft() {
+      try {
+        const res = await fetch("/api/onboarding/draft")
+        if (!res.ok || cancelled) return
+        const draft = await res.json()
+        if (cancelled) return
+        if (draft.data && Object.keys(draft.data).length > 0) {
+          // Extraire les biens du brouillon serveur
+          const { __biens__: biensJson, ...serverData } = draft.data as Record<string, string>
+          setData((prev) => ({ ...prev, ...serverData }))
+          if (biensJson) {
+            try {
+              const parsed = JSON.parse(biensJson)
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                setBiens(parsed)
+              }
+            } catch {
+              // JSON invalide, on garde les biens du sessionStorage
+            }
+          }
+          if (typeof draft.step === "number" && draft.step > 0) {
+            setCurrentStep(draft.step)
+          }
+        }
+      } catch {
+        // Fallback silencieux : les données sessionStorage sont déjà chargées
+      } finally {
+        if (!cancelled) setDraftLoaded(true)
+      }
+    }
+    loadDraft()
+    return () => { cancelled = true }
+  }, [])
 
   // Pre-fill prenom/nom from session (sign-up already collected these)
   useEffect(() => {
@@ -452,17 +506,23 @@ export default function OnboardingPage() {
     }
     setValidationError("")
     if (currentStep < STEPS.length - 1) {
+      const nextStep = currentStep + 1
       track("onboarding_step_complete", {
         step: currentStep + 1,
         step_name: step.title,
       })
-      setCurrentStep(currentStep + 1)
+      // Fire-and-forget : sauvegarde brouillon serveur
+      saveDraftToServer(nextStep, data, biens)
+      setCurrentStep(nextStep)
     }
   }
 
   const handlePrevious = () => {
     if (currentStep > 0) {
-      setCurrentStep(currentStep - 1)
+      const prevStep = currentStep - 1
+      // Fire-and-forget : sauvegarde brouillon serveur
+      saveDraftToServer(prevStep, data, biens)
+      setCurrentStep(prevStep)
     }
   }
 
@@ -549,7 +609,8 @@ export default function OnboardingPage() {
   }
 
   const handleContinueLater = () => {
-    // Les donnees sont deja persistees en sessionStorage via le useEffect
+    // Sauvegarde serveur en plus du sessionStorage
+    saveDraftToServer(currentStep, data, biens)
     track("onboarding_step_abandon", {
       step: currentStep + 1,
       step_name: STEPS[currentStep].title,
