@@ -56,7 +56,7 @@ export function BienFicheClient({
         <div className="flex items-center gap-2 mb-4">
           <span className="text-lg" aria-hidden="true">📸</span>
           <h2 className="font-display text-h3 text-primary">Photos</h2>
-          <span className="text-caption text-neutral-400">
+          <span className="text-caption text-neutral-500">
             ({photoCount})
           </span>
         </div>

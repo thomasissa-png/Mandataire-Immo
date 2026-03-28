@@ -317,7 +317,7 @@ export function BienForm() {
       {/* Description détaillée */}
       <div>
         <label htmlFor="description_detaillee" className="block text-body-sm font-semibold text-primary mb-1.5">
-          Description détaillée <span className="text-caption text-neutral-400 font-normal">(optionnel)</span>
+          Description détaillée <span className="text-caption text-neutral-500 font-normal">(optionnel)</span>
         </label>
         <textarea
           id="description_detaillee"

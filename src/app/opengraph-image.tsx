@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og"
 
 export const runtime = "edge"
-export const alt = "ImmoCrew \u2014 L'\u00E9quipe marketing des mandataires immobiliers"
+export const alt = "ImmoCrew — L'équipe marketing des mandataires immobiliers"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
@@ -68,7 +68,7 @@ export default async function Image() {
             lineHeight: 1.4,
           }}
         >
-          L&apos;\u00E9quipe marketing des mandataires immobiliers
+          L&apos;équipe marketing des mandataires immobiliers
         </div>
 
         {/* Ligne orange */}
@@ -91,7 +91,7 @@ export default async function Image() {
             fontWeight: 600,
           }}
         >
-          \u00C0 partir de 150\u20AC/mois \u00B7 Sans engagement
+          À partir de 150€/mois · Sans engagement
         </div>
       </div>
     ),

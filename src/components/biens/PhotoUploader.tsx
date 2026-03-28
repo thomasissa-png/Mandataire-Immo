@@ -339,7 +339,7 @@ export function PhotoUploader({
         <p className="text-body-sm font-semibold text-primary mb-1">
           Glisse tes photos ici ou clique pour sélectionner
         </p>
-        <p className="text-caption text-neutral-400">
+        <p className="text-caption text-neutral-500">
           JPG, PNG, WebP ou HEIC — max 5 Mo par photo — {photos.length}/{MAX_PHOTOS}{" "}
           photos
         </p>

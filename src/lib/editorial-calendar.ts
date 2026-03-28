@@ -380,7 +380,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
       "cout marketing agent immobilier",
       "externaliser marketing immobilier prix",
     ],
-    categorie: "Strat\u00E9gie",
+    categorie: "Stratégie",
     angle:
       "Comparatif honnete : freelance vs templates reseau vs service productise — sans nommer de concurrent, avec les vrais chiffres du marche",
     priorite: 7, // Haute priorite — bottom funnel, intention commerciale

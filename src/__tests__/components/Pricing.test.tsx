@@ -57,7 +57,7 @@ describe("Pricing", () => {
   it("shows the guarantee mention for Pack Lancement", () => {
     render(<Pricing />)
     expect(
-      screen.getByText(/Satisfait ou rembours\u00e9 14 jours/i)
+      screen.getByText(/Satisfait ou remboursé 14 jours/i)
     ).toBeInTheDocument()
   })
 
@@ -71,7 +71,7 @@ describe("Pricing", () => {
   it("renders CTA links pointing to /api/checkout", () => {
     render(<Pricing />)
 
-    const lancementLink = screen.getByText(/D\u00e9marrer mon lancement/i)
+    const lancementLink = screen.getByText(/Démarrer mon lancement/i)
       .closest("a")
     expect(lancementLink).toHaveAttribute(
       "href",
@@ -96,7 +96,7 @@ describe("Pricing", () => {
   it("renders the ROI argument", () => {
     render(<Pricing />)
     expect(
-      screen.getByText(/mandat suppl\u00e9mentaire.*rembourse.*abonnement/i)
+      screen.getByText(/mandat supplémentaire.*rembourse.*abonnement/i)
     ).toBeInTheDocument()
   })
 
@@ -110,10 +110,10 @@ describe("Pricing", () => {
   it("lists correct features for Pack Mensuel", () => {
     render(<Pricing />)
     expect(
-      screen.getByText("12 posts personnalis\u00e9s pour tes r\u00e9seaux")
+      screen.getByText("12 posts personnalisés pour tes réseaux")
     ).toBeInTheDocument()
     expect(
-      screen.getByText("4 scripts vid\u00e9o pour tes Reels")
+      screen.getByText("4 scripts vidéo pour tes Reels")
     ).toBeInTheDocument()
     expect(
       screen.getByText("2 articles SEO local")

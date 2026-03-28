@@ -272,6 +272,7 @@ ImmoCrew n'est PAS un outil. C'est une ÉQUIPE. Le mandataire rêve d'avoir un d
 | @fullstack | 2026-03-27 | Onboarding simplifie (etape 6 supprimee, enrichissement auto DVF) | 5 | 5 | 5 | 5 | 5 | **5/5** 3 fichiers, migration 001_init.sql, LinkedIn dedup |
 | @fullstack | 2026-03-27 | Adaptation 7 prompts IA au format DVF | 5 | 5 | 5 | 5 | 5 | **5/5** 7 prompts migres, 4 inchanges (interfaces locales) |
 | @ux | 2026-03-27 | Re-validation UX dashboard post-restructuration — 7 criteres notes /10, 5 corrections appliquees + `docs/ux/ux-review.md` | 5 | 5 | 5 | 5 | 5 | **5/5** Note globale 9.3/10. Corrections : nav rapide pills (ancres), aria-controls+id sections, min-h-[44px] LinkedIn, loadingCopy state bouton Copier, bug closure loadContent corrige |
+| @ux | 2026-03-28 | Re-audit post-corrections P0/P1 — `docs/ux/re-audit-post-corrections.md` | 5 | 5 | 5 | 5 | 5 | **5/5** 10/10 P0 effectifs. 6/6 P1 clés effectifs. Score global 6.5/10 → 8.9/10. 4 points résiduels mineurs (R1-R4), aucun bloquant. Pourquoi : vérification fichier par fichier des 10 corrections P0 annoncées — zéro prise de parole sur hypothèse, tout vérifié dans le code source. Double biens P0-01 : legacy supprimé, MesBiensSection seul point d'affichage confirmé. XSS sanitizeHtml confirmé en lecture directe markdownRenderer.ts. Point résiduel principal : EyeToggleButton absent de ResetPasswordForm — cohérence UX incomplète sur un parcours secondaire mais réel. |
 
 ---
 

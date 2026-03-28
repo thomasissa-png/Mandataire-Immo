@@ -36,13 +36,13 @@ const ARTICLE_MAP: ArticleMeta[] = [
     slug: "calendrier-editorial-agent-immobilier",
     file: "article-2-calendrier.md",
     date: "2026-03-21",
-    category: "Strat\u00E9gie",
+    category: "Stratégie",
   },
   {
     slug: "se-differencier-mandataire-immobilier",
     file: "article-3-differencier.md",
     date: "2026-03-22",
-    category: "Strat\u00E9gie",
+    category: "Stratégie",
   },
   {
     slug: "google-business-profile-mandataire",
@@ -302,7 +302,7 @@ function parseArticle(meta: ArticleMeta): Article {
       metaDescription = line.replace("> Meta description :", "").trim()
       continue
     }
-    if (line.startsWith("> Mots-cl\u00E9s secondaires :") || line.startsWith("> Mots-cles secondaires :")) {
+    if (line.startsWith("> Mots-clés secondaires :") || line.startsWith("> Mots-cles secondaires :")) {
       keywords = line.replace(/> Mots-cl[eé]s secondaires\s*:\s*/i, "").split(",").map((k: string) => k.trim())
       continue
     }

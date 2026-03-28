@@ -91,14 +91,14 @@ export default function CGVPage() {
                   price={`${PACK_LANCEMENT.price} &euro; TTC`}
                   type="Paiement unique"
                   items={[
-                    "Positionnement et strat\u00e9gie de personal branding",
-                    "Bio optimis\u00e9e pour les r\u00e9seaux sociaux",
-                    "5 templates d\u2019annonces immobili\u00e8res personnalis\u00e9es",
+                    "Positionnement et stratégie de personal branding",
+                    "Bio optimisée pour les réseaux sociaux",
+                    "5 templates d'annonces immobilières personnalisées",
                     "5 articles SEO local",
-                    "Calendrier \u00e9ditorial sur 30 jours",
-                    "20 posts r\u00e9seaux sociaux",
-                    "10 scripts Reels / vid\u00e9os courtes",
-                    "Brief d'identit\u00E9 visuelle personnalis\u00E9 (positionnement, palette couleurs, style recommand\u00E9)",
+                    "Calendrier éditorial sur 30 jours",
+                    "20 posts réseaux sociaux",
+                    "10 scripts Reels / vidéos courtes",
+                    "Brief d'identité visuelle personnalisé (positionnement, palette couleurs, style recommandé)",
                   ]}
                 />
 
@@ -107,11 +107,11 @@ export default function CGVPage() {
                   price={`${PACK_MENSUEL.price} &euro; TTC / mois`}
                   type="Abonnement mensuel sans engagement"
                   items={[
-                    "12 posts r\u00e9seaux sociaux par mois",
-                    "4 scripts vid\u00e9o",
+                    "12 posts réseaux sociaux par mois",
+                    "4 scripts vidéo",
                     "2 articles SEO local",
                     "1 newsletter",
-                    "4 annonces immobili\u00e8res personnalis\u00e9es",
+                    "4 annonces immobilières personnalisées",
                     "1 email de prospection",
                   ]}
                 />
@@ -121,8 +121,8 @@ export default function CGVPage() {
                   price={`${PACK_BOOST.price} &euro; TTC`}
                   type="Paiement unique, par mandat"
                   items={[
-                    "Annonce storytelling d\u00e9di\u00e9e au bien",
-                    "3 posts r\u00e9seaux sociaux + 1 script Reel",
+                    "Annonce storytelling dédiée au bien",
+                    "3 posts réseaux sociaux + 1 script Reel",
                     "Mini landing page pour le bien",
                     "Email blast acheteurs potentiels",
                   ]}
