@@ -129,7 +129,7 @@ export function TriggerProductionButton({
           disabled={isLoading}
           className="h-10 px-5 rounded-full bg-secondary text-white font-display font-semibold text-body-sm shadow-sm hover:bg-secondary-600 active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-wait"
         >
-          {isLoading ? "Generation..." : "Lancer Pack Mensuel"}
+          {isLoading ? "Génération..." : "Lancer Pack Mensuel"}
         </button>
 
         <button
@@ -138,7 +138,16 @@ export function TriggerProductionButton({
           disabled={isLoading}
           className="h-10 px-5 rounded-full bg-primary text-white font-display font-semibold text-body-sm shadow-sm hover:bg-primary-600 active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-wait"
         >
-          {isLoading ? "Generation..." : "Lancer Pack Lancement"}
+          {isLoading ? "Génération..." : "Lancer Pack Lancement"}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handleTrigger("boost")}
+          disabled={isLoading}
+          className="h-10 px-5 rounded-full bg-success-600 text-white font-display font-semibold text-body-sm shadow-sm hover:bg-success-700 active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-wait"
+        >
+          {isLoading ? "Génération..." : "Lancer Boost Mandat"}
         </button>
       </div>
 
@@ -164,7 +173,7 @@ export function TriggerProductionButton({
 
       {isLoading && (
         <div className="mt-4 p-3 rounded-lg bg-info-50 text-info-700 text-body-sm">
-          Generation en cours... Cela peut prendre plusieurs minutes (appels Claude API sequentiels).
+          Génération en cours... Cela peut prendre plusieurs minutes (appels Claude API séquentiels).
         </div>
       )}
     </div>

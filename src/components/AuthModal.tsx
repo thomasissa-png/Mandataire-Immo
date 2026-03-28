@@ -23,6 +23,60 @@ function getFocusableElements(container: HTMLElement): HTMLElement[] {
 }
 
 // ---------------------------------------------------------------------------
+// Eye toggle button for password fields
+// ---------------------------------------------------------------------------
+function EyeToggleButton({ show, onToggle }: { show: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 text-neutral-400 hover:text-neutral-600 transition-colors"
+      aria-label={show ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+    >
+      {show ? (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12c1.292 4.338 5.31 7.5 10.066 7.5.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+        </svg>
+      ) : (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      )}
+    </button>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Password strength indicator (sign-up only)
+// ---------------------------------------------------------------------------
+function PasswordStrength({ password }: { password: string }) {
+  if (!password) return null
+
+  const isLongEnough = password.length >= 8
+
+  return (
+    <p
+      className={`text-caption mt-1.5 flex items-center gap-1 ${
+        isLongEnough ? "text-success-600" : "text-error-600"
+      }`}
+      aria-live="polite"
+    >
+      {isLongEnough ? (
+        <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      ) : (
+        <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      )}
+      {isLongEnough ? "8 caractères minimum — OK" : `${password.length}/8 caractères minimum`}
+    </p>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Sign-In form
 // ---------------------------------------------------------------------------
 function SignInForm({
@@ -39,6 +93,7 @@ function SignInForm({
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(
     errorParam === "CredentialsSignin" ? "Email ou mot de passe incorrect." : ""
@@ -91,7 +146,7 @@ function SignInForm({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="sophie@exemple.fr"
-            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
           />
         </div>
         <div>
@@ -101,16 +156,19 @@ function SignInForm({
           >
             Mot de passe
           </label>
-          <input
-            id="modal-signin-password"
-            type="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="8 caractères minimum"
-            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
-          />
+          <div className="relative">
+            <input
+              id="modal-signin-password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="8 caractères minimum"
+              className="w-full h-12 px-4 pr-12 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
+            />
+            <EyeToggleButton show={showPassword} onToggle={() => setShowPassword(!showPassword)} />
+          </div>
           <div className="flex justify-end mt-1">
             <button
               type="button"
@@ -161,6 +219,7 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
 
@@ -241,7 +300,7 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               placeholder="Sophie"
-              className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+              className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
             />
           </div>
           <div>
@@ -259,7 +318,7 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Martin"
-              className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+              className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
             />
           </div>
         </div>
@@ -279,7 +338,7 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="sophie@exemple.fr"
-            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
           />
           <p className="text-caption text-neutral-500 mt-1">
             Tu utiliseras cette adresse pour te connecter
@@ -293,17 +352,21 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
           >
             Mot de passe
           </label>
-          <input
-            id="modal-signup-password"
-            type="password"
-            autoComplete="new-password"
-            required
-            minLength={8}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="8 caractères minimum"
-            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
-          />
+          <div className="relative">
+            <input
+              id="modal-signup-password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              required
+              minLength={8}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="8 caractères minimum"
+              className="w-full h-12 px-4 pr-12 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
+            />
+            <EyeToggleButton show={showPassword} onToggle={() => setShowPassword(!showPassword)} />
+          </div>
+          <PasswordStrength password={password} />
         </div>
 
         {error && (
@@ -387,7 +450,7 @@ function ForgotPasswordForm({
           </span>
           <div className="mt-4 p-4 rounded-lg bg-green-50 border border-green-200">
             <p className="text-body text-green-800 font-medium">
-              C&apos;est envoyé !
+              C{"'"}est envoyé !
             </p>
             <p className="text-body-sm text-green-700 mt-1">
               Si un compte existe avec cette adresse, tu recevras un lien pour
@@ -419,7 +482,7 @@ function ForgotPasswordForm({
           Pas de panique, ça arrive à tout le monde
         </p>
         <p className="text-body-sm text-neutral-400 mt-1">
-          Entre ton adresse email et on t&apos;envoie un lien pour choisir un nouveau mot de passe.
+          Entre ton adresse email et on t{"'"}envoie un lien pour choisir un nouveau mot de passe.
         </p>
       </div>
 
@@ -439,7 +502,7 @@ function ForgotPasswordForm({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="sophie@exemple.fr"
-            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
           />
         </div>
 
@@ -583,7 +646,7 @@ function ResetPasswordForm({
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             placeholder="8 caractères minimum"
-            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
           />
         </div>
 
@@ -603,7 +666,7 @@ function ResetPasswordForm({
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Retape ton mot de passe"
-            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
           />
         </div>
 

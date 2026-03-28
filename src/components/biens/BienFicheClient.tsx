@@ -77,14 +77,19 @@ export function BienFicheClient({
       </section>
 
       {/* Section Page publique */}
-      {slug && (
-        <section className="rounded-lg bg-card border border-border p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-lg" aria-hidden="true">🌐</span>
-            <h2 className="font-display text-h3 text-primary">
-              Page publique
-            </h2>
-          </div>
+      <section className="rounded-lg bg-card border border-border p-5">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-lg" aria-hidden="true">🌐</span>
+          <h2 className="font-display text-h3 text-primary">
+            Page publique
+          </h2>
+        </div>
+        {!slug ? (
+          <p className="text-body-sm text-neutral-500">
+            La page publique sera disponible après la génération de ton annonce.
+          </p>
+        ) : (
+          <>
           <p className="text-body-sm text-neutral-500 mb-4">
             Partage ce lien avec tes acheteurs potentiels par SMS, email ou
             dans tes annonces.
@@ -160,8 +165,9 @@ export function BienFicheClient({
               )}
             </button>
           </div>
-        </section>
-      )}
+          </>
+        )}
+      </section>
     </div>
   )
 }

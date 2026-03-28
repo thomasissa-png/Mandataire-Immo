@@ -86,24 +86,6 @@ const TYPE_COLORS: Record<string, string> = {
   landing_page: "bg-success-50 text-success-700",
 }
 
-/* Match annonces to biens by "Bien N" pattern in title */
-function matchAnnoncesToBiens(annonces: Deliverable[], biensCount: number) {
-  const matched: Record<number, Deliverable[]> = {}
-  const unmatched: Deliverable[] = []
-  for (const a of annonces) {
-    const m = a.title.match(/Bien\s+(\d+)/i)
-    if (m) {
-      const idx = parseInt(m[1], 10) - 1
-      if (idx >= 0 && idx < biensCount) {
-        if (!matched[idx]) matched[idx] = []
-        matched[idx].push(a)
-        continue
-      }
-    }
-    unmatched.push(a)
-  }
-  return { matched, unmatched }
-}
 
 function detectPlatform(title: string) {
   const t = title.toLowerCase()
@@ -221,10 +203,6 @@ export function DashboardContent({
   }, [deliverables])
 
   const biensCount = profile?.biens.length ?? 0
-  const { matched: matchedAnnonces, unmatched: unmatchedAnnonces } = useMemo(
-    () => matchAnnoncesToBiens(annonces, biensCount),
-    [annonces, biensCount]
-  )
 
   const postsThisMonth = posts.filter(p => p.month === currentMonth || p.created_at.startsWith(currentMonth)).length
 
@@ -285,6 +263,24 @@ export function DashboardContent({
           </button>
         </div>
       )}
+
+      {/* BANDEAU PAS DE PACK */}
+      {!pack ? (
+        <a href="/#pricing" className="block rounded-lg bg-gradient-to-r from-secondary-50 to-primary-50 border border-secondary/20 p-5 hover:shadow-md transition-all group">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center flex-shrink-0">
+              <span className="text-2xl" aria-hidden="true">🚀</span>
+            </div>
+            <div className="flex-1">
+              <p className="font-display text-h4 text-primary mb-1">Tu n{"'"}as pas encore de pack</p>
+              <p className="text-body-sm text-neutral-600">Découvre nos offres et lance ta visibilité locale dès aujourd{"'"}hui.</p>
+            </div>
+            <span className="flex-shrink-0 px-5 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm group-hover:bg-secondary-600 group-hover:text-white transition-all shadow-sm">
+              Voir les offres →
+            </span>
+          </div>
+        </a>
+      ) : null}
 
       {/* BANDEAU PROFIL INCOMPLET */}
       {profileIncomplete ? (
@@ -449,65 +445,17 @@ export function DashboardContent({
       ) : null}
 
       {/* ============================================================ */}
-      {/* 2. MES BIENS & ANNONCES                                       */}
+      {/* 2. ANNONCES (livrables uniquement — les biens sont dans        */}
+      {/*    MesBiensSection plus haut)                                  */}
       {/* ============================================================ */}
-      {isVisible("biens") ? (
+      {isVisible("biens") && annonces.length > 0 ? (
         <section>
-          <SectionHeader icon="🏠" title="Mes biens et annonces" count={biensCount + annonces.length} isOpen={!collapsed.has("biens")} onToggle={() => toggle("biens")} />
+          <SectionHeader icon="📝" title="Mes annonces" count={annonces.length} isOpen={!collapsed.has("biens")} onToggle={() => toggle("biens")} />
           {!collapsed.has("biens") ? (
-            <div className="mt-3 space-y-4">
-              {/* État vide si aucun bien */}
-              {biensCount === 0 && annonces.length === 0 ? (
-                <div className="rounded-lg bg-neutral-50 border border-border p-6 text-center">
-                  <p className="text-body-sm text-neutral-600 mb-3">Tu n{"'"}as pas encore de bien renseigné.</p>
-                  <a href="mailto:support@immocrew.fr?subject=Nouveau%20bien%20%2F%20Boost%20Mandat" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm">
-                    + Ajouter un bien pour recevoir tes annonces personnalisées
-                  </a>
-                </div>
-              ) : null}
-              {profile?.biens.map((bien, i) => (
-                <div key={i} className="rounded-lg bg-card border border-border overflow-hidden">
-                  <div className="p-4 flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center flex-shrink-0">
-                      <span aria-hidden="true">🏠</span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-display text-body font-semibold text-primary">{bien.titre || `Bien ${i + 1}`}</p>
-                      <div className="flex flex-wrap gap-1.5 mt-1">
-                        {bien.type ? <span className="px-2 py-0.5 rounded bg-primary-50 text-caption text-primary-700">{bien.type}</span> : null}
-                        {bien.adresse ? <span className="px-2 py-0.5 rounded bg-neutral-100 text-caption text-neutral-600">📍 {bien.adresse}</span> : null}
-                        {bien.prix ? <span className="px-2 py-0.5 rounded bg-success-50 text-caption font-bold text-success-700">{Number(bien.prix).toLocaleString("fr-FR")} €</span> : null}
-                        {bien.surface ? <span className="px-2 py-0.5 rounded bg-neutral-100 text-caption text-neutral-600">{bien.surface} m²</span> : null}
-                      </div>
-                      {bien.lien_annonce ? (
-                        <a href={bien.lien_annonce} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-2 text-caption text-secondary-700 hover:underline">🔗 Voir l{"'"}annonce originale</a>
-                      ) : null}
-                    </div>
-                  </div>
-                  {/* Annonces rattachées */}
-                  {matchedAnnonces[i] && matchedAnnonces[i].length > 0 ? (
-                    <div className="border-t border-border p-4 bg-neutral-50/50 space-y-2">
-                      <p className="text-caption font-semibold text-neutral-500 mb-2">📝 Annonces pour ce bien</p>
-                      {matchedAnnonces[i].map((a) => (
-                        <DeliverableCard key={a.id} id={a.id} type={a.type} typeLabel="Annonce" typeColor="bg-success-50 text-success-700" title={a.title} status={a.status} />
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
+            <div className="mt-3 space-y-2">
+              {annonces.map((a) => (
+                <DeliverableCard key={a.id} id={a.id} type={a.type} typeLabel="Annonce" typeColor="bg-success-50 text-success-700" title={a.title} status={a.status} />
               ))}
-              {/* Annonces non rattachées */}
-              {unmatchedAnnonces.length > 0 ? (
-                <div className="space-y-2">
-                  <p className="text-caption font-semibold text-neutral-500">📝 Annonces générales</p>
-                  {unmatchedAnnonces.map((a) => (
-                    <DeliverableCard key={a.id} id={a.id} type={a.type} typeLabel="Annonce" typeColor="bg-success-50 text-success-700" title={a.title} status={a.status} />
-                  ))}
-                </div>
-              ) : null}
-              {/* Ajouter un bien */}
-              <a href="mailto:support@immocrew.fr?subject=Nouveau%20bien%20%2F%20Boost%20Mandat" className="inline-flex items-center gap-2 text-body-sm font-semibold text-secondary-700 hover:text-secondary transition-colors">
-                + Ajouter un bien / Commander un Boost Mandat (100€)
-              </a>
             </div>
           ) : null}
         </section>

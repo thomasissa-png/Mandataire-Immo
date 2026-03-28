@@ -142,6 +142,13 @@ export function BienForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+      {/* Info onboarding */}
+      <div className="rounded-lg bg-primary-50 border border-primary-200 p-4">
+        <p className="text-body-sm text-primary-700">
+          Tu as déjà des biens dans ton profil ? Ils apparaîtront ici automatiquement.
+        </p>
+      </div>
+
       {/* Type de bien */}
       <div>
         <label htmlFor="type_bien" className="block text-body-sm font-semibold text-primary mb-1.5">
@@ -152,7 +159,7 @@ export function BienForm() {
           name="type_bien"
           value={formData.type_bien}
           onChange={handleChange}
-          className={`w-full h-12 px-4 rounded-lg border bg-card text-body-sm text-foreground transition-colors duration-normal focus:outline-none focus:ring-2 focus:ring-secondary/50 ${
+          className={`w-full h-12 px-4 rounded-lg border bg-card text-body-sm text-foreground transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50 ${
             errors.type_bien ? "border-error" : "border-border"
           }`}
           aria-invalid={!!errors.type_bien}
@@ -184,7 +191,7 @@ export function BienForm() {
           value={formData.adresse}
           onChange={handleChange}
           placeholder="12 rue des Lilas, 69003 Lyon"
-          className={`w-full h-12 px-4 rounded-lg border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus:outline-none focus:ring-2 focus:ring-secondary/50 ${
+          className={`w-full h-12 px-4 rounded-lg border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50 ${
             errors.adresse ? "border-error" : "border-border"
           }`}
           aria-invalid={!!errors.adresse}
@@ -215,7 +222,7 @@ export function BienForm() {
               value={formData.prix}
               onChange={handleChange}
               placeholder="285 000"
-              className={`w-full h-12 px-4 pr-10 rounded-lg border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus:outline-none focus:ring-2 focus:ring-secondary/50 ${
+              className={`w-full h-12 px-4 pr-10 rounded-lg border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50 ${
                 errors.prix ? "border-error" : "border-border"
               }`}
               aria-invalid={!!errors.prix}
@@ -226,7 +233,7 @@ export function BienForm() {
             </span>
           </div>
           {formData.prix && !errors.prix && (
-            <p id="hint-prix" className="text-caption text-neutral-400 mt-1">
+            <p id="hint-prix" className="text-caption text-neutral-500 mt-1">
               {formatPrix(formData.prix)} €
             </p>
           )}
@@ -252,7 +259,7 @@ export function BienForm() {
               value={formData.surface}
               onChange={handleChange}
               placeholder="65"
-              className={`w-full h-12 px-4 pr-10 rounded-lg border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus:outline-none focus:ring-2 focus:ring-secondary/50 ${
+              className={`w-full h-12 px-4 pr-10 rounded-lg border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50 ${
                 errors.surface ? "border-error" : "border-border"
               }`}
               aria-invalid={!!errors.surface}
@@ -283,7 +290,7 @@ export function BienForm() {
             value={formData.pieces}
             onChange={handleChange}
             placeholder="3"
-            className="w-full h-12 px-4 rounded-lg border border-border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus:outline-none focus:ring-2 focus:ring-secondary/50"
+            className="w-full h-12 px-4 rounded-lg border border-border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50"
           />
         </div>
       </div>
@@ -300,9 +307,9 @@ export function BienForm() {
           onChange={handleChange}
           placeholder="Parquet chêne, double exposition, cave, gardien, balcon 8m²..."
           rows={3}
-          className="w-full px-4 py-3 rounded-lg border border-border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus:outline-none focus:ring-2 focus:ring-secondary/50 resize-y"
+          className="w-full px-4 py-3 rounded-lg border border-border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50 resize-y"
         />
-        <p className="text-caption text-neutral-400 mt-1">
+        <p className="text-caption text-neutral-500 mt-1">
           Ces détails rendront ton annonce beaucoup plus percutante
         </p>
       </div>
@@ -319,7 +326,7 @@ export function BienForm() {
           onChange={handleChange}
           placeholder="Toute info supplémentaire qui pourrait enrichir l'annonce : contexte du quartier, travaux récents, vue, luminosité..."
           rows={4}
-          className="w-full px-4 py-3 rounded-lg border border-border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus:outline-none focus:ring-2 focus:ring-secondary/50 resize-y"
+          className="w-full px-4 py-3 rounded-lg border border-border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50 resize-y"
         />
       </div>
 

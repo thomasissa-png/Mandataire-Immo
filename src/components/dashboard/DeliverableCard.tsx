@@ -155,7 +155,7 @@ export function DeliverableCard({
   return (
     <article
       tabIndex={0}
-      aria-label={`Livrable : ${title}`}
+      aria-label={`Contenu : ${title}`}
       className={`rounded-lg bg-card border border-border border-l-4 ${accentColor} overflow-hidden shadow-xs hover:shadow-md hover:border-secondary/30 transition-all duration-normal cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary`}
       onClick={handleExpand}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); void handleExpand() } }}
@@ -216,7 +216,7 @@ export function DeliverableCard({
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  Copi{"\u00e9"} — colle-le !
+                  Copié — colle-le !
                 </>
               ) : loadingCopy ? (
                 <>
@@ -273,7 +273,7 @@ export function DeliverableCard({
                 className="underline font-semibold hover:text-error-900 transition-colors"
                 onClick={(e) => { e.stopPropagation(); setLoadError(false); void loadContent() }}
               >
-                R{"\u00e9"}essayer
+                Réessayer
               </button>
             </p>
           </div>
@@ -347,7 +347,7 @@ export function DeliverableCard({
         {expanded && status === "delivered" && (
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
             <p className="text-caption text-neutral-400">
-              Apr\u00e8s avoir copi\u00e9 \u2192 ouvre ton appli et colle le texte
+              Après avoir copié → ouvre ton appli et colle le texte
             </p>
             <a
               href={`mailto:support@immocrew.fr?subject=Contenu%20%C3%A0%20revoir&body=ID%20du%20contenu%20:%20${id}%0AProbl%C3%A8me%20:%20`}

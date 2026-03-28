@@ -29,7 +29,7 @@ const STEPS = [
   {
     title: "Ton profil",
     subtitle:
-      "Facultatif — mais ça rend tes livrables beaucoup plus personnels",
+      "Facultatif — mais ça rend tes contenus beaucoup plus personnels",
     fields: [
       "linkedin_url",
       "bio_personnelle",
@@ -99,7 +99,7 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
     type: "text",
   },
   reseau: {
-    label: "Ton reseau",
+    label: "Ton réseau",
     placeholder: "IAD, SAFTI, Capifrance, indépendant...",
     type: "text",
   },
@@ -136,7 +136,7 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
   },
   cible_clients: {
     label: "Tes clients types",
-    placeholder: "Primo-accedants, familles, investisseurs...",
+    placeholder: "Primo-accédants, familles, investisseurs...",
     type: "text",
   },
   ton_communication: {
@@ -175,7 +175,7 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
     label: "Ta photo de profil",
     placeholder: "",
     type: "photo",
-    helper: "Ta photo apparaîtra dans tes livrables et ton profil.",
+    helper: "Ta photo apparaîtra dans tes contenus et ton profil.",
   },
   confort_camera: {
     label: "Ton rapport à la vidéo",
@@ -587,11 +587,11 @@ export default function OnboardingPage() {
             </svg>
           </div>
           <h1 className="font-display text-h1 text-primary mb-4">
-            C&apos;est tout bon !
+            C{"'"}est tout bon !
           </h1>
           <p className="text-body text-neutral-600 mb-8">
-            On a tout ce qu&apos;il nous faut. Ton &eacute;quipe se met au travail.
-            Tu recevras tes premiers livrables sous 24h.
+            On a tout ce qu{"'"}il nous faut. Ton équipe se met au travail.
+            Tu recevras tes premiers contenus sous 24h.
           </p>
           <a
             href="/dashboard"
@@ -641,14 +641,31 @@ export default function OnboardingPage() {
               )}
             </div>
             <span className="text-caption text-neutral-500">
-              Étape {currentStep + 1} sur {STEPS.length} &middot; ~8 min
+              Étape {currentStep + 1} sur {STEPS.length}{"optional" in step && step.optional ? " (optionnel)" : ""} · ~8 min
             </span>
           </div>
-          <div className="h-1.5 bg-neutral-200 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-secondary rounded-full transition-all duration-slow"
-              style={{ width: `${progress}%` }}
-            />
+          {/* Step dots — obligatoire = plein, optionnel = outline dashed */}
+          <div className="flex items-center gap-1.5">
+            {STEPS.map((s, i) => {
+              const isOptional = "optional" in s && s.optional
+              const isDone = i < currentStep
+              const isCurrent = i === currentStep
+              return (
+                <div
+                  key={i}
+                  className={`h-1.5 flex-1 rounded-full transition-all duration-slow ${
+                    isDone
+                      ? "bg-secondary"
+                      : isCurrent
+                      ? "bg-secondary/70"
+                      : isOptional
+                      ? "bg-neutral-100 border border-dashed border-neutral-300"
+                      : "bg-neutral-200"
+                  }`}
+                  title={`${s.title}${isOptional ? " (optionnel)" : ""}`}
+                />
+              )
+            })}
           </div>
         </div>
 
@@ -689,7 +706,7 @@ export default function OnboardingPage() {
                         updateBien(index, "lien_annonce", e.target.value)
                       }
                       placeholder="https://www.seloger.com/annonces/..."
-                      className="w-full h-12 px-4 rounded-md border border-secondary-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                      className="w-full h-12 px-4 rounded-md border border-secondary-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                     />
                     <p className="text-caption text-secondary-600 mt-1">
                       Colle le lien SeLoger, LeBonCoin, ou ton site — on récupère tout automatiquement.
@@ -710,7 +727,7 @@ export default function OnboardingPage() {
                         updateBien(index, "titre", e.target.value)
                       }
                       placeholder="T3 vue Loire La Doutre"
-                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                     />
                   </div>
                   <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2">
@@ -726,7 +743,7 @@ export default function OnboardingPage() {
                           updateBien(index, "type", e.target.value)
                         }
                         placeholder="Appartement, Maison..."
-                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                       />
                     </div>
                     <div className="relative" ref={activeAddressIndex === index ? addressDropdownRef : undefined}>
@@ -743,7 +760,7 @@ export default function OnboardingPage() {
                         }}
                         placeholder="12 rue Beaurepaire, La Doutre"
                         autoComplete="off"
-                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                       />
                       {activeAddressIndex === index &&
                         addressSuggestions[index] &&
@@ -777,7 +794,7 @@ export default function OnboardingPage() {
                           updateBien(index, "prix", e.target.value)
                         }
                         placeholder="185000"
-                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                       />
                     </div>
                     <div>
@@ -792,7 +809,7 @@ export default function OnboardingPage() {
                           updateBien(index, "surface", e.target.value)
                         }
                         placeholder="68"
-                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                       />
                     </div>
                     <div>
@@ -807,7 +824,7 @@ export default function OnboardingPage() {
                           updateBien(index, "pieces", e.target.value)
                         }
                         placeholder="3"
-                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                       />
                     </div>
                   </div>
@@ -821,9 +838,9 @@ export default function OnboardingPage() {
                       onChange={(e) =>
                         updateBien(index, "points_forts", e.target.value)
                       }
-                      placeholder="Vue Loire, parquet chene, cave voutee, 5 min tramway"
+                      placeholder="Vue Loire, parquet chêne, cave voûtée, 5 min tramway"
                       rows={2}
-                      className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast resize-y"
+                      className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast resize-y"
                     />
                   </div>
                 </div>
@@ -930,14 +947,14 @@ export default function OnboardingPage() {
                       onChange={(e) => updateField(field, e.target.value)}
                       placeholder={config.placeholder}
                       rows={3}
-                      className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast resize-y"
+                      className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast resize-y"
                     />
                   ) : config.type === "select" && config.options ? (
                     <select
                       id={field}
                       value={data[field] || ""}
                       onChange={(e) => updateField(field, e.target.value)}
-                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                     >
                       {config.options.map((opt) => (
                         <option key={opt.value} value={opt.value}>
@@ -952,7 +969,7 @@ export default function OnboardingPage() {
                       value={data[field] || ""}
                       onChange={(e) => updateField(field, e.target.value)}
                       placeholder={config.placeholder}
-                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
+                      className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                     />
                   )}
                   {config.helper && (
