@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Plus_Jakarta_Sans, Inter } from "next/font/google"
+import Script from "next/script"
 import { SessionProvider } from "@/components/SessionProvider"
-import { PostHogProvider } from "@/components/PostHogProvider"
 import { JsonLd } from "@/components/JsonLd"
 import { CookieConsent } from "@/components/CookieConsent"
 import "./globals.css"
@@ -91,12 +91,15 @@ export default function RootLayout({
         <meta name="color-scheme" content="light only" />
       </head>
       <body>
+        <Script
+          src="https://cloud.umami.is/script.js"
+          data-website-id="533b1471-2f40-41dd-8754-02fa0f0615f8"
+          strategy="afterInteractive"
+        />
         <JsonLd data={organizationJsonLd} />
         <SessionProvider>
-          <PostHogProvider>
-            {children}
-            <CookieConsent />
-          </PostHogProvider>
+          {children}
+          <CookieConsent />
         </SessionProvider>
       </body>
     </html>

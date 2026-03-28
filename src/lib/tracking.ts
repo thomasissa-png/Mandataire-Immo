@@ -1,5 +1,3 @@
-import posthog from "posthog-js"
-
 type TrackingEvent =
   | "cta_click"
   | "pricing_view"
@@ -30,44 +28,52 @@ interface TrackingProperties {
 }
 
 /**
- * Track a PostHog event (client-side only).
+ * Track an Umami event (client-side only).
  * Safe to call server-side — it will no-op.
  */
 export function track(event: TrackingEvent, properties?: TrackingProperties) {
-  if (typeof window !== "undefined" && posthog.__loaded) {
-    posthog.capture(event, properties)
+  if (typeof window !== "undefined" && (window as Record<string, unknown>).umami) {
+    const umami = (window as Record<string, unknown>).umami as {
+      track: (event: string, data?: Record<string, string | number | boolean | null | undefined>) => void
+    }
+    umami.track(event, properties)
   }
 }
 
 /**
- * Track a server-side PostHog event via API.
+ * Track a server-side event via Umami API.
  * Used in API routes (webhooks, checkout).
+ *
+ * Umami Cloud does not require a server-side API key for event collection.
+ * Server-side events are sent via the Umami collect endpoint.
  */
 export async function trackServer(
   event: TrackingEvent,
   distinctId: string,
   properties?: TrackingProperties
 ) {
-  const apiKey = process.env.NEXT_PUBLIC_POSTHOG_KEY
-  const host = process.env.NEXT_PUBLIC_POSTHOG_HOST
-
-  if (!apiKey || !host) return
+  const websiteId = "533b1471-2f40-41dd-8754-02fa0f0615f8"
 
   try {
-    await fetch(`${host}/capture/`, {
+    await fetch("https://cloud.umami.is/api/send", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        api_key: apiKey,
-        event,
-        distinct_id: distinctId,
-        properties: {
-          ...properties,
-          $lib: "server",
+        type: "event",
+        payload: {
+          website: websiteId,
+          name: event,
+          data: {
+            ...properties,
+            distinct_id: distinctId,
+          },
+          url: "/api",
+          hostname: "immocrew.fr",
+          language: "fr",
         },
       }),
     })
   } catch {
-    console.error(`PostHog server tracking failed for event: ${event}`)
+    console.error(`Umami server tracking failed for event: ${event}`)
   }
 }

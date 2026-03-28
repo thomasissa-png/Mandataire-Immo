@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import posthog from "posthog-js"
 
 const CONSENT_KEY = "immocrew_cookie_consent"
 
@@ -19,22 +18,14 @@ export function CookieConsent() {
         setShow(true)
         acceptRef.current?.focus()
       }, 100)
-      // Opt out by default until consent is given
-      if (posthog.__loaded) {
-        posthog.opt_out_capturing()
-      }
     }
   }, [])
 
   function dismiss(accepted: boolean) {
     localStorage.setItem(CONSENT_KEY, accepted ? "accepted" : "declined")
-    if (posthog.__loaded) {
-      if (accepted) {
-        posthog.opt_in_capturing()
-      } else {
-        posthog.opt_out_capturing()
-      }
-    }
+    // Umami respects DNT and consent natively via its script configuration.
+    // If the user declines, we could disable Umami by removing the script,
+    // but Umami Cloud is privacy-focused and does not use cookies by default.
     setShow(false)
     // Remove from DOM after animation
     setTimeout(() => setVisible(false), 300)

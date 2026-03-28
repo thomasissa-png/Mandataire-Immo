@@ -72,9 +72,9 @@ export default function ConfidentialitePage() {
                       basis="Ex&eacute;cution du contrat (Art. 6.1.b)"
                     />
                     <DataRow
-                      treatment="Analytics (PostHog)"
+                      treatment="Analytics (Umami Cloud)"
                       data="Donn&eacute;es de navigation anonymis&eacute;es, &eacute;v&eacute;nements d&rsquo;usage"
-                      basis="Consentement (Art. 6.1.a)"
+                      basis="Int&eacute;r&ecirc;t l&eacute;gitime (Art. 6.1.f) — Umami est privacy-first, sans cookies, conforme RGPD"
                     />
                     <DataRow
                       treatment="Cookies essentiels"
@@ -122,10 +122,10 @@ export default function ConfidentialitePage() {
                       <td className="p-3 border border-primary-200">Clauses Contractuelles Types (SCC). Les donn&eacute;es transmises via l&rsquo;API ne sont pas utilis&eacute;es pour l&rsquo;entra&icirc;nement.</td>
                     </tr>
                     <tr>
-                      <td className="p-3 border border-primary-200 font-semibold">PostHog</td>
-                      <td className="p-3 border border-primary-200">Analytics</td>
-                      <td className="p-3 border border-primary-200">UE (Francfort, Allemagne)</td>
-                      <td className="p-3 border border-primary-200">Donn&eacute;es h&eacute;berg&eacute;es en UE — pas de transfert hors UE</td>
+                      <td className="p-3 border border-primary-200 font-semibold">Umami Cloud</td>
+                      <td className="p-3 border border-primary-200">Analytics (privacy-first, sans cookies)</td>
+                      <td className="p-3 border border-primary-200">UE</td>
+                      <td className="p-3 border border-primary-200">Donn&eacute;es h&eacute;berg&eacute;es en UE — pas de transfert hors UE. Aucun cookie d&eacute;pos&eacute;.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -191,7 +191,7 @@ export default function ConfidentialitePage() {
                       basis="Obligation LCEN (Art. 6 II)"
                     />
                     <DataRow
-                      treatment="Donn&eacute;es analytics (PostHog)"
+                      treatment="Donn&eacute;es analytics (Umami Cloud)"
                       data="25 mois maximum"
                       basis="Recommandation CNIL"
                     />
@@ -268,10 +268,10 @@ export default function ConfidentialitePage() {
 
               <p className="font-semibold mt-4">Cookies analytics</p>
               <p>
-                Nous utilisons <strong>PostHog</strong> (h&eacute;berg&eacute; en UE, Francfort) pour analyser
-                l&rsquo;utilisation du site et am&eacute;liorer le service. Ces cookies ne sont
-                d&eacute;pos&eacute;s qu&rsquo;apr&egrave;s votre <strong>consentement explicite</strong>, recueilli via
-                notre bandeau de cookies.
+                Nous utilisons <strong>Umami Cloud</strong> (h&eacute;berg&eacute; en UE), une solution
+                d&rsquo;analytics <strong>privacy-first qui ne d&eacute;pose aucun cookie</strong>. Les donn&eacute;es
+                collect&eacute;es sont anonymes et ne permettent pas d&rsquo;identifier individuellement
+                les visiteurs. Aucun consentement n&rsquo;est requis au titre de la directive ePrivacy.
               </p>
               <p className="mt-3">
                 Vous pouvez retirer votre consentement &agrave; tout moment en modifiant vos

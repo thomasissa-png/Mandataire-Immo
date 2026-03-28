@@ -196,7 +196,7 @@ export async function POST(request: Request) {
           ["churned", customerId]
         )
 
-        // Resolve customer email for proper PostHog identity linking
+        // Resolve customer email for analytics identity
         const cancelCustomer = await stripe.customers.retrieve(customerId)
         const cancelEmail = (!cancelCustomer.deleted && cancelCustomer.email) || customerId
 
