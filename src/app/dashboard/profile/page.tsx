@@ -7,6 +7,7 @@ import { redirect } from "next/navigation"
 import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { ProfileForm } from "@/components/dashboard/ProfileForm"
+import { ProfileSectionNav } from "@/components/dashboard/ProfileSectionNav"
 
 interface ClientRow {
   email: string
@@ -70,6 +71,7 @@ export default async function ProfilePage() {
       <p className="text-body text-neutral-500 mb-8">
         Modifie tes infos pour que tes contenus soient toujours dans le mille.
       </p>
+      <ProfileSectionNav />
       <ProfileForm initialData={profile} />
     </div>
   )

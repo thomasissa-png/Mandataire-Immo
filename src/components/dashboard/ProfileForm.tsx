@@ -174,22 +174,35 @@ type SectionStatus = "idle" | "loading" | "success" | "error"
 
 export function ProfileForm({ initialData }: ProfileFormProps) {
   const [data, setData] = useState<ProfileData>({ ...initialData })
+  const [savedData, setSavedData] = useState<ProfileData>({ ...initialData })
   const [sectionStatus, setSectionStatus] = useState<Record<string, SectionStatus>>({})
   const [sectionErrors, setSectionErrors] = useState<Record<string, string>>({})
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [photoUploading, setPhotoUploading] = useState(false)
   const timeoutRefs = useRef<Record<string, ReturnType<typeof setTimeout>>>({})
 
-  // Dirty tracking : compare current data with initial for a given section
+  // Dirty tracking : compare current data with last saved state
   const isSectionDirty = useCallback(
     (section: SectionConfig): boolean => {
-      return section.fields.some((f) => data[f.key] !== initialData[f.key])
+      return section.fields.some((f) => data[f.key] !== savedData[f.key])
     },
-    [data, initialData]
+    [data, savedData]
   )
 
   const updateField = (key: keyof ProfileData, value: string) => {
     setData((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const handleCancelSection = (section: SectionConfig) => {
+    setData((prev) => {
+      const reverted = { ...prev }
+      for (const field of section.fields) {
+        reverted[field.key] = savedData[field.key]
+      }
+      return reverted
+    })
+    setSectionErrors((prev) => ({ ...prev, [section.id]: "" }))
+    setSectionStatus((prev) => ({ ...prev, [section.id]: "idle" }))
   }
 
   // Photo upload (reuse onboarding logic)
@@ -243,6 +256,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ photo_profil_key: newKey }),
         })
+        setSavedData((prev) => ({ ...prev, photo_profil_key: newKey }))
         setSectionStatus((prev) => ({ ...prev, identite: "success" }))
         clearSuccessAfterDelay("identite")
       } else {
@@ -299,8 +313,15 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
       })
 
       if (res.ok) {
+        // Update savedData so dirty tracking resets for this section
+        setSavedData((prev) => {
+          const updated = { ...prev }
+          for (const field of section.fields) {
+            updated[field.key] = data[field.key]
+          }
+          return updated
+        })
         setSectionStatus((prev) => ({ ...prev, [section.id]: "success" }))
-        // Update initialData reference by reloading — here we just mark success
         clearSuccessAfterDelay(section.id)
       } else {
         const errData = await res.json().catch(() => ({ error: "Erreur inconnue" }))
@@ -381,6 +402,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
         return (
           <section
             key={section.id}
+            id={`section-${section.id}`}
             className="rounded-lg bg-card border border-border p-5"
             aria-label={section.title}
           >
@@ -438,8 +460,17 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
               ))}
             </div>
 
-            {/* Footer : save button + feedback */}
+            {/* Footer : cancel + save buttons + feedback */}
             <div className="mt-5 flex items-center gap-3">
+              {dirty && !isLoading && (
+                <button
+                  type="button"
+                  onClick={() => handleCancelSection(section)}
+                  className="px-4 py-2.5 rounded-lg text-neutral-600 text-body-sm font-medium hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 min-h-[44px] min-w-[44px]"
+                >
+                  Annuler
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => handleSaveSection(section)}
