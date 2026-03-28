@@ -228,7 +228,7 @@ export function DashboardContent({
   // Nav items
   const navItems: NavItem[] = [
     strategie.length > 0 ? { id: "identite", label: "Mon profil", icon: "👤", count: strategie.length } : null,
-    (biensCount > 0 || annonces.length > 0) ? { id: "biens", label: "Biens & annonces", icon: "🏠", count: biensCount + annonces.length } : null,
+    { id: "biens", label: "Biens & annonces", icon: "🏠", count: biensCount + annonces.length },
     posts.length > 0 ? { id: "posts", label: "Calendrier & posts", icon: "📅", count: posts.length } : null,
     articles.length > 0 ? { id: "articles", label: "Articles", icon: "📝", count: articles.length } : null,
     scripts.length > 0 ? { id: "scripts", label: "Scripts vidéo", icon: "🎬", count: scripts.length } : null,
@@ -313,23 +313,14 @@ export function DashboardContent({
             {profile.nb_transactions_an ? <span className="px-2.5 py-1 rounded-lg bg-success-50 text-caption font-medium text-success-700">{profile.nb_transactions_an} transactions/an</span> : null}
             {profile.type_biens ? <span className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700">{profile.type_biens}</span> : null}
             {profile.linkedin_url ? <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-blue-50 text-caption font-medium text-blue-700 hover:bg-blue-100 transition-colors">LinkedIn</a> : null}
-            <a href="mailto:support@immocrew.fr?subject=Modifier%20mes%20infos" className="px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-500 hover:bg-neutral-200 transition-colors">Modifier mes infos</a>
+            <a href="mailto:support@immocrew.fr?subject=Modifier%20mes%20infos" className="px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-500 hover:bg-neutral-200 transition-colors">Modifier mes infos (par email — sous 4h)</a>
           </div>
-        ) : null}
+        ) : (
+          <div className="flex flex-wrap gap-2 mt-3">
+            <a href="mailto:support@immocrew.fr?subject=Modifier%20mes%20infos" className="px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-500 hover:bg-neutral-200 transition-colors">Modifier mes infos (par email — sous 4h)</a>
+          </div>
+        )}
       </div>
-
-      {/* CTA Passer au mensuel */}
-      {pack === "lancement" ? (
-        <div className="rounded-lg bg-gradient-to-r from-primary to-primary-700 p-5 flex flex-col tablet:flex-row items-start tablet:items-center justify-between gap-4 text-white">
-          <div>
-            <p className="font-display text-h4 text-white">Continue sur ta lancée — passe au mensuel</p>
-            <p className="text-body-sm text-primary-200 mt-1">Reçois de nouveaux contenus chaque mois. 150€/mois, sans engagement.</p>
-          </div>
-          <a href="/api/checkout?pack=mensuel" className="flex-shrink-0 px-6 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm">
-            S{"'"}abonner →
-          </a>
-        </div>
-      ) : null}
 
       {/* PLAN STRATEGIQUE — résumé + recommandations */}
       {profile ? (
@@ -389,6 +380,19 @@ export function DashboardContent({
         </div>
       ) : null}
 
+      {/* CTA Passer au mensuel — APRÈS le plan, pas avant */}
+      {pack === "lancement" ? (
+        <div className="rounded-lg bg-gradient-to-r from-primary to-primary-700 p-5 flex flex-col tablet:flex-row items-start tablet:items-center justify-between gap-4 text-white">
+          <div>
+            <p className="font-display text-h4 text-white">Continue sur ta lancée — passe au mensuel</p>
+            <p className="text-body-sm text-primary-200 mt-1">12 posts, 2 articles, 4 scripts, 4 annonces — livrés chaque mois. 150€/mois, sans engagement.</p>
+          </div>
+          <a href="/api/checkout?pack=mensuel" className="flex-shrink-0 px-6 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm">
+            S{"'"}abonner →
+          </a>
+        </div>
+      ) : null}
+
       {/* Monthly update banner */}
       {showMonthlyBanner ? (
         <a href="/dashboard/monthly-update" className="group block rounded-lg border border-secondary/30 bg-gradient-to-r from-secondary-50 to-card p-4 hover:shadow-md transition-all">
@@ -426,11 +430,20 @@ export function DashboardContent({
       {/* ============================================================ */}
       {/* 2. MES BIENS & ANNONCES                                       */}
       {/* ============================================================ */}
-      {isVisible("biens") && (biensCount > 0 || annonces.length > 0) ? (
+      {isVisible("biens") ? (
         <section>
           <SectionHeader icon="🏠" title="Mes biens et annonces" count={biensCount + annonces.length} isOpen={!collapsed.has("biens")} onToggle={() => toggle("biens")} />
           {!collapsed.has("biens") ? (
             <div className="mt-3 space-y-4">
+              {/* État vide si aucun bien */}
+              {biensCount === 0 && annonces.length === 0 ? (
+                <div className="rounded-lg bg-neutral-50 border border-border p-6 text-center">
+                  <p className="text-body-sm text-neutral-600 mb-3">Tu n{"'"}as pas encore de bien renseigné.</p>
+                  <a href="mailto:support@immocrew.fr?subject=Nouveau%20bien%20%2F%20Boost%20Mandat" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm">
+                    + Ajouter un bien pour recevoir tes annonces personnalisées
+                  </a>
+                </div>
+              ) : null}
               {profile?.biens.map((bien, i) => (
                 <div key={i} className="rounded-lg bg-card border border-border overflow-hidden">
                   <div className="p-4 flex items-start gap-3">
@@ -491,18 +504,33 @@ export function DashboardContent({
               <div className="relative">
                 <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-secondary/20" aria-hidden="true" />
                 <div className="space-y-2">
-                  {posts.map((post) => {
-                    const platform = detectPlatform(post.title)
-                    return (
-                      <div key={post.id} className="relative pl-10">
-                        <div className="absolute left-2 top-4 w-5 h-5 rounded-full bg-card border-2 border-secondary/30 flex items-center justify-center text-xs" aria-hidden="true">
-                          {platform.icon}
+                  {(() => {
+                    let lastMonth = ""
+                    return posts.map((post) => {
+                      const platform = detectPlatform(post.title)
+                      const monthKey = post.month || post.created_at.slice(0, 7)
+                      const showMonthHeader = monthKey !== lastMonth
+                      if (showMonthHeader) lastMonth = monthKey
+                      const monthLabel = monthKey ? new Date(monthKey + "-01").toLocaleDateString("fr-FR", { month: "long", year: "numeric" }) : ""
+                      return (
+                        <div key={post.id}>
+                          {showMonthHeader && monthLabel ? (
+                            <div className="flex items-center gap-3 py-3 pl-10">
+                              <div className="h-px flex-1 bg-border" />
+                              <span className="text-caption font-semibold text-primary capitalize">{monthLabel}</span>
+                              <div className="h-px flex-1 bg-border" />
+                            </div>
+                          ) : null}
+                          <div className="relative pl-10">
+                            <div className="absolute left-2 top-4 w-5 h-5 rounded-full bg-card border-2 border-secondary/30 flex items-center justify-center text-xs" aria-hidden="true">
+                              {platform.icon}
+                            </div>
+                            <DeliverableCard id={post.id} type={post.type} typeLabel={platform.name} typeColor="bg-secondary-50 text-secondary-700" title={post.title} status={post.status} />
+                          </div>
                         </div>
-                        <p className="text-caption text-neutral-400 mb-0.5">{post.month || ""}</p>
-                        <DeliverableCard id={post.id} type={post.type} typeLabel={platform.name} typeColor="bg-secondary-50 text-secondary-700" title={post.title} status={post.status} />
-                      </div>
-                    )
-                  })}
+                      )
+                    })
+                  })()}
                 </div>
               </div>
             </div>
