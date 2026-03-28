@@ -11,7 +11,7 @@ export function Footer() {
               ImmoCrew
             </a>
             <p className="text-body-sm text-primary-200 mt-2 max-w-xs">
-              L&apos;&eacute;quipe marketing des mandataires immobiliers.
+              L&apos;équipe marketing des mandataires immobiliers.
             </p>
           </div>
 
@@ -27,7 +27,7 @@ export function Footer() {
                     href="/#comment-ca-marche"
                     className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
                   >
-                    Comment &ccedil;a marche
+                    Comment ça marche
                   </a>
                 </li>
                 <li>
@@ -51,7 +51,7 @@ export function Footer() {
                     href="/a-propos"
                     className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
                   >
-                    &Agrave; propos
+                    À propos
                   </a>
                 </li>
                 <li>
@@ -67,7 +67,7 @@ export function Footer() {
 
             <div>
               <h4 className="font-display text-h6 text-primary-200 uppercase tracking-widest mb-3">
-                L&eacute;gal
+                Légal
               </h4>
               <ul className="space-y-2">
                 <li>
@@ -83,7 +83,7 @@ export function Footer() {
                     href="/confidentialite"
                     className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
                   >
-                    Politique de confidentialit&eacute;
+                    Politique de confidentialité
                   </a>
                 </li>
                 <li>
@@ -91,7 +91,7 @@ export function Footer() {
                     href="/mentions-legales"
                     className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
                   >
-                    Mentions l&eacute;gales
+                    Mentions légales
                   </a>
                 </li>
               </ul>
@@ -118,7 +118,7 @@ export function Footer() {
         {/* Separator + Copyright */}
         <div className="mt-10 pt-6 border-t border-primary-600">
           <p className="text-caption text-primary-200 text-center">
-            &copy; {currentYear} ImmoCrew. Tous droits r&eacute;serv&eacute;s.
+            © {currentYear} ImmoCrew. Tous droits réservés.
           </p>
         </div>
       </div>

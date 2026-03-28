@@ -23,11 +23,11 @@ export function CTAFinal() {
             href="#pricing"
             className="text-body-sm text-primary-200 hover:text-secondary underline transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded"
           >
-            Voir tous les packs&nbsp;&rarr;
+            Voir tous les packs&nbsp;→
           </a>
 
           <p className="text-caption text-primary-300 mt-2">
-            Pas d&apos;engagement &middot; R&eacute;siliation libre &middot; Satisfait ou rembours&eacute; 14&nbsp;jours
+            Pas d&apos;engagement · Résiliation libre · Satisfait ou remboursé 14&nbsp;jours
           </p>
         </div>
       </div>

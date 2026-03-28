@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react"
 import { AuthModal } from "@/components/AuthModal"
 
 const NAV_LINKS = [
-  { label: "Comment ça marche", href: "#piliers" },
+  { label: "Comment ça marche", href: "#comment-ca-marche" },
   { label: "Avant / Après", href: "#avant-apres" },
   { label: "Tarifs", href: "#pricing" },
   { label: "Blog", href: "/blog" },
