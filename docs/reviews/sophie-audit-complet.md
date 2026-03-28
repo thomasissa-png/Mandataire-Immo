@@ -277,19 +277,29 @@ Si le bien vient d'être créé et que le slug n'est pas encore généré, la se
 > Fichiers : DashboardContent.tsx
 
 **Ce que je vois**
-[À remplir]
+
+**Si j'ai le pack Lancement** : un bandeau en dégradé sombre (primaire) après la section "Mes biens" : "Continue sur ta lancée — passe au mensuel" + "12 posts, 2 articles, 4 scripts, 4 annonces — livrés chaque mois. 150€/mois, sans engagement." + bouton "S'abonner →".
+
+**Si je n'ai pas de pack particulier** (`showMonthlyBanner`) : un bandeau de mise à jour mensuelle "Dis-nous ce qui a changé ce mois-ci — 10 min, et tes prochains contenus seront encore plus dans le mille."
+
+**Si je n'ai pas le pack Lancement** (pack null ou mensuel déjà) : pas de CTA visible pour le mensuel.
 
 **Ce que je comprends (ou pas)**
-[À remplir]
+
+"Sans engagement" — c'est ce que je voulais lire. 150€/mois, sans engagement. Le détail du contenu (12 posts, 2 articles, 4 scripts, 4 annonces) est précis — je sais exactement ce que j'achète. Pas de jargon.
 
 **Ce qui me bloque**
-[À remplir]
+
+Un problème de logique d'affichage : si je n'ai aucun pack actif (j'ai simplement créé un compte sans acheter), il n'y a pas de CTA pour acheter quoi que ce soit visible dans le dashboard. L'utilisateur qui arrive sans avoir acheté voit son espace mais ne sait pas comment commencer. Il faudrait au moins un bandeau "Tu n'as pas encore de pack — commence par le Pack Lancement à 400€" pour les comptes sans pack.
 
 **Ce qui me frustre**
-[À remplir]
 
-**Note** : [X]/10
-**Verdict** : [PASS / FAIL / FRICTION]
+- Le bouton "S'abonner →" pointe vers `/api/checkout?pack=mensuel` — c'est une route API, pas une page de confirmation. Je clique et je suis redirigée sans voir de récapitulatif avant. C'est rapide, mais si j'ai cliqué par erreur, il n'y a pas de "Confirmer".
+- "Continue sur ta lancée" suppose que j'ai eu une bonne expérience avec le Pack Lancement. Si mes premiers livrables sont encore en préparation ("En cours de rédaction — disponible sous 24h"), le message sonne creux.
+- Le bandeau est en dégradé sombre avec texte blanc — c'est bien visible, mais positionné assez bas dans la page (après les biens). Si j'ai beaucoup de biens et de livrables, je dois scroller pour le voir. Un CTA fixe en bas d'écran (sticky) serait plus visible.
+
+**Note** : 6/10
+**Verdict** : FRICTION
 
 ---
 
@@ -297,19 +307,31 @@ Si le bien vient d'être créé et que le slug n'est pas encore généré, la se
 > Fichiers : sign-in + dashboard
 
 **Ce que je vois**
-[À remplir]
+
+La page sign-in est exactement comme la page sign-up : même modale, même structure. "Connecte-toi à ton espace" en sous-titre. Deux champs : email + mot de passe. Un lien "Mot de passe oublié ?". Le bouton "Se connecter" avec feedback "Connexion..." pendant le traitement.
+
+En cas d'erreur : "Email ou mot de passe incorrect." Pas de précision sur quel champ est faux — c'est voulu (sécurité).
+
+Une fois connectée : je retrouve mon dashboard avec ma photo de profil, mes informations, et mes livrables. La bannière de bienvenue ("Comment utiliser ton espace") n'apparaît pas une seconde fois car elle est sauvée dans le `localStorage`.
 
 **Ce que je comprends (ou pas)**
-[À remplir]
+
+L'email est pré-rempli si j'ai un gestionnaire de mots de passe (autocomplete="email" bien configuré). Le parcours est minimal — 2 champs, un bouton.
+
+Le dashboard au retour : je retrouve mes livrables exactement là où je les avais laissés. Le plan du mois est toujours là avec les mêmes recommandations. Rassurant.
 
 **Ce qui me bloque**
-[À remplir]
+
+Un vrai problème : si j'ai oublié mon mot de passe (très probable après 2 semaines, j'ai des dizaines de comptes), je clique "Mot de passe oublié ?". Je tape mon email, je reçois le lien. Mais la page de reset via token est gérée par l'AuthModal avec le paramètre `?token=`. Si je suis sur téléphone et que je clique le lien depuis Gmail mobile, est-ce que la page s'ouvre correctement ? Ce flux mérite d'être testé sur mobile.
 
 **Ce qui me frustre**
-[À remplir]
 
-**Note** : [X]/10
-**Verdict** : [PASS / FAIL / FRICTION]
+- 2 semaines plus tard, de nouveaux livrables ont peut-être été ajoutés. Rien ne me le signale — pas de badge "Nouveau", pas de notification, pas d'email de rappel visible dans l'interface. Je dois scanner visuellement toutes mes cartes pour voir s'il y a du nouveau. Sur mobile, c'est long.
+- Si mes livrables sont marqués "En préparation" depuis 2 semaines, il n'y a pas de délai indicatif (juste "sous 24h" en statut de carte). Je peux me sentir abandonnée si la production est lente.
+- Pas de "Dernière connexion" ou de date sur les livrables directement visible. Je dois ouvrir chaque carte pour voir quand elle a été créée.
+
+**Note** : 7/10
+**Verdict** : FRICTION
 
 ---
 
@@ -317,30 +339,60 @@ Si le bien vient d'être créé et que le slug n'est pas encore généré, la se
 
 | Scénario | Note | Verdict |
 |----------|------|---------|
-| S1 — Inscription | [X]/10 | |
-| S2 — Onboarding | [X]/10 | |
-| S3 — Dashboard | [X]/10 | |
-| S4 — Copier un post | [X]/10 | |
-| S5 — Ajouter un bien | [X]/10 | |
-| S6 — Uploader photos | [X]/10 | |
-| S7 — Générer annonce | [X]/10 | |
-| S8 — Partager lien bien | [X]/10 | |
-| S9 — Passer au mensuel | [X]/10 | |
-| S10 — Retour après 2 semaines | [X]/10 | |
-| **MOYENNE** | **/10** | |
+| S1 — Inscription | 8/10 | PASS |
+| S2 — Onboarding | 7/10 | FRICTION |
+| S3 — Dashboard | 8/10 | PASS |
+| S4 — Copier un post | 9/10 | PASS |
+| S5 — Ajouter un bien | 7/10 | FRICTION |
+| S6 — Uploader photos | 7/10 | FRICTION |
+| S7 — Générer annonce | 8/10 | PASS |
+| S8 — Partager lien bien | 7/10 | FRICTION |
+| S9 — Passer au mensuel | 6/10 | FRICTION |
+| S10 — Retour après 2 semaines | 7/10 | FRICTION |
+| **MOYENNE** | **7.4/10** | **4 PASS / 6 FRICTION / 0 FAIL** |
 
 ---
 
 ## Top 5 corrections urgentes
 
-1. [À remplir]
-2. [À remplir]
-3. [À remplir]
-4. [À remplir]
-5. [À remplir]
+**1. Photos HEIC refusées (S6) — Bloquant pour utilisateurs iPhone**
+Toutes les photos iPhone récentes sont au format HEIC par défaut. Le PhotoUploader n'accepte que JPG, PNG, WebP. Résultat : une mandataire qui prend ses photos sur place avec son iPhone est bloquée à l'upload. Il faut soit accepter HEIC (conversion côté serveur), soit détecter le format et afficher un message d'aide précis avec un lien vers un convertisseur.
+
+**2. Pas de CTA visible pour les comptes sans pack (S9)**
+Un utilisateur qui s'inscrit et ne passe pas à caisse n'a aucun chemin visible pour acheter. Le dashboard est présent mais vide de livrables et vide d'instructions pour commander. Ajouter un bandeau "Commence par le Pack Lancement (400€) — la base pour démarrer" pour les comptes `pack = null`.
+
+**3. Pas de bouton "Afficher le mot de passe" (S1 et S10)**
+Sur mobile, en soirée, avec la fatigue, les erreurs de saisie de mot de passe sont fréquentes. L'icône oeil pour afficher/masquer est un standard attendu. Son absence va générer des erreurs de connexion et des demandes de reset inutiles.
+
+**4. Section "Page publique" invisible si le slug n'est pas encore généré (S8)**
+Après la création d'un bien, si le slug n'est pas encore disponible, toute la section "Page publique" disparaît silencieusement. Il faut au minimum un message "Ton lien de partage sera disponible d'ici quelques minutes" avec une icône de chargement.
+
+**5. Aucun indicateur de "nouveaux livrables" au retour (S10)**
+Après 2 semaines d'absence, je ne sais pas si de nouveaux contenus ont été ajoutés. Un badge "Nouveau" sur les livrables créés depuis ma dernière connexion, ou une ligne "X nouveaux contenus depuis ta dernière visite" en haut du dashboard, changerait complètement l'expérience de retour. Sans ça, je dois tout re-scanner à la main.
 
 ---
 
 ## Ma réaction honnête globale
 
-[À remplir]
+Honnêtement ? C'est mieux que ce que j'attendais. Le flux de base — inscription, onboarding, copier un post — est propre. Il n'y a pas de FAIL, pas de moment où j'ai cliqué et où rien ne s'est passé. Pour un outil à 150€/mois qui promet de me faire gagner du temps, le coeur du produit (copier et coller un post en 10 secondes) tient la promesse.
+
+Mais il y a 6 scénarios sur 10 en FRICTION. Ce sont des choses qui ne bloquent pas, mais qui font soupirer. En pratique : si je suis une vraie mandataire qui arrive épuisée à 21h30, chaque friction est un risque de fermer l'onglet. Le problème des photos HEIC, c'est le genre de truc qui me ferait envoyer un email à votre support ("ça marche pas") plutôt que de chercher une solution.
+
+Ce qui me plait vraiment :
+- Le plan du mois avec les étapes numérotées. C'est le seul outil marketing que j'ai qui me dit "voilà ce que tu fais ce mois-ci" sans que je doive réfléchir.
+- Le "Copié — colle-le !" comme confirmation. Petit détail, mais ça me fait sourire.
+- La génération d'annonce avec les deux versions (longue + courte portails) — quelqu'un a réfléchi à comment je travaille vraiment.
+- Le ton. C'est du tutoiement, c'est direct, y'a pas de jargon. Je me sens comprise.
+
+Ce que je corrigerais en priorité absolue : le problème HEIC et l'absence de CTA pour les comptes sans pack. Le reste, c'est des améliorations confort — importantes, mais pas des blocages.
+
+Si je devais recommander ça à une collègue demain : je le ferais, avec la mise en garde "prépare tes photos en JPG avant d'uploader". Ce qui veut dire que le produit est quasiment bon, mais il faut enlever ces aspérités.
+
+---
+
+**Handoff → @fullstack (corrections techniques) / @ux (frictions parcours)**
+- Fichier produit : `/docs/reviews/sophie-audit-complet.md`
+- Verdict global : À RETRAVAILLER (6 FRICTION sur 10 scénarios)
+- Corrections urgentes (dans l'ordre) : HEIC photos, CTA sans pack, bouton afficher mdp, section page publique sans slug, badge nouveaux livrables
+- Les 4 PASS (S1, S3, S4, S7) peuvent passer en production tels quels
+- Les 6 FRICTION nécessitent des corrections avant lancement public
