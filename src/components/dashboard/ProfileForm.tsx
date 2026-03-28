@@ -12,6 +12,7 @@ export interface ProfileData {
   quartiers: string
   departement: string
   reseau: string
+  specialites: string
   type_biens: string
   gamme_prix: string
   cible_clients: string
@@ -45,11 +46,22 @@ interface SectionConfig {
 interface FieldDef {
   key: keyof ProfileData
   label: string
-  type: "text" | "textarea" | "select" | "url"
+  type: "text" | "textarea" | "select" | "url" | "pills"
   placeholder: string
   options?: { value: string; label: string }[]
   helper?: string
 }
+
+const SPECIALITES_OPTIONS = [
+  "Résidentiel",
+  "Commercial",
+  "Terrain",
+  "Neuf",
+  "Ancien",
+  "Luxe",
+  "Investissement locatif",
+  "Viager",
+] as const
 
 const SECTIONS: SectionConfig[] = [
   {
@@ -100,6 +112,7 @@ const SECTIONS: SectionConfig[] = [
       { key: "type_biens", label: "Types de biens", type: "text", placeholder: "Appartements, maisons, neuf, ancien..." },
       { key: "gamme_prix", label: "Gamme de prix", type: "text", placeholder: "100K - 300K EUR" },
       { key: "cible_clients", label: "Tes clients types", type: "text", placeholder: "Primo-accédants, familles, investisseurs..." },
+      { key: "specialites", label: "Tes spécialités", type: "pills", placeholder: "", helper: "Sélectionne une ou plusieurs spécialités qui te correspondent." },
     ],
   },
   {
@@ -424,7 +437,36 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
                     <p className="text-caption text-neutral-500 mb-1">{field.helper}</p>
                   )}
 
-                  {field.type === "select" && field.options ? (
+                  {field.type === "pills" ? (
+                    <div className="flex flex-wrap gap-2" role="group" aria-label={field.label}>
+                      {SPECIALITES_OPTIONS.map((option) => {
+                        const current = data[field.key] || ""
+                        const selected = current.split(",").map((s) => s.trim()).filter(Boolean)
+                        const isSelected = selected.includes(option)
+                        return (
+                          <button
+                            key={option}
+                            type="button"
+                            role="checkbox"
+                            aria-checked={isSelected}
+                            onClick={() => {
+                              const newSelected = isSelected
+                                ? selected.filter((s) => s !== option)
+                                : [...selected, option]
+                              updateField(field.key, newSelected.join(", "))
+                            }}
+                            className={`px-4 py-2 rounded-full text-body-sm font-medium border transition-all min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 ${
+                              isSelected
+                                ? "bg-secondary text-primary border-secondary font-bold"
+                                : "bg-background text-foreground border-border hover:border-secondary hover:text-secondary"
+                            }`}
+                          >
+                            {option}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  ) : field.type === "select" && field.options ? (
                     <select
                       id={`field-${field.key}`}
                       value={data[field.key]}

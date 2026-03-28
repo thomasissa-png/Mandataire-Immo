@@ -142,13 +142,6 @@ export function BienForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-      {/* Info onboarding */}
-      <div className="rounded-lg bg-primary-50 border border-primary-200 p-4">
-        <p className="text-body-sm text-primary-700">
-          Tu as déjà des biens dans ton profil ? Ils apparaîtront ici automatiquement.
-        </p>
-      </div>
-
       {/* Type de bien */}
       <div>
         <label htmlFor="type_bien" className="block text-body-sm font-semibold text-primary mb-1.5">

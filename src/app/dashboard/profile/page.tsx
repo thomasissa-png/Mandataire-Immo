@@ -38,6 +38,7 @@ export default async function ProfilePage() {
     quartiers: (ctx.quartiers as string) ?? "",
     departement: (ctx.departement as string) ?? "",
     reseau: (ctx.reseau as string) ?? "",
+    specialites: (ctx.specialites as string) ?? "",
     type_biens: (ctx.type_biens as string) ?? "",
     gamme_prix: (ctx.gamme_prix as string) ?? "",
     cible_clients: (ctx.cible_clients as string) ?? "",

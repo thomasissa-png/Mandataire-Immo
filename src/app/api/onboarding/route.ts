@@ -4,6 +4,41 @@ import { query } from "@/lib/db"
 import { trackServer } from "@/lib/tracking"
 import { enrichProperty } from "@/lib/enrich-property"
 
+// ─── Slug helper (mirrored from /api/biens/route.ts) ─────────────
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 80)
+}
+
+async function generateUniqueSlug(adresse: string): Promise<string> {
+  const base = slugify(adresse)
+  if (!base) return `bien-${Date.now()}`
+
+  const { rows } = await query<{ slug: string }>(
+    "SELECT slug FROM property_pages WHERE slug LIKE $1",
+    [`${base}%`]
+  )
+
+  if (rows.length === 0) return base
+
+  const existingSlugs = new Set(rows.map((r) => r.slug))
+  if (!existingSlugs.has(base)) return base
+
+  let counter = 2
+  while (existingSlugs.has(`${base}-${counter}`)) {
+    counter++
+  }
+  return `${base}-${counter}`
+}
+
 interface OnboardingPayload {
   // Etape 1 — Identite
   prenom: string
@@ -159,6 +194,66 @@ export async function POST(request: NextRequest) {
       { error: "Erreur lors de la sauvegarde" },
       { status: 500 }
     )
+  }
+
+  // ─── Créer les property_pages pour chaque bien saisi ───────────
+
+  if (parsedBiens.length > 0) {
+    // Récupérer le client_id fraîchement inséré/mis à jour
+    const { rows: clientRows } = await query<{ id: string }>(
+      "SELECT id FROM clients WHERE email = $1",
+      [user.email]
+    )
+    const clientId = clientRows[0]?.id
+
+    if (clientId) {
+      for (const bien of parsedBiens) {
+        const adresse = typeof bien.adresse === "string" ? bien.adresse.trim() : ""
+        if (!adresse) continue
+
+        // Ne pas créer de doublon si un bien avec le même client_id + adresse existe déjà
+        const { rows: existing } = await query<{ id: string }>(
+          "SELECT id FROM property_pages WHERE client_id = $1 AND adresse = $2 LIMIT 1",
+          [clientId, adresse]
+        )
+        if (existing.length > 0) continue
+
+        const titre = typeof bien.titre === "string" && bien.titre.trim()
+          ? bien.titre.trim()
+          : adresse
+        const typeBien = typeof bien.type === "string" ? bien.type.trim() : ""
+        const prix = typeof bien.prix === "string" ? parseFloat(bien.prix) || 0 : (typeof bien.prix === "number" ? bien.prix : 0)
+        const surface = typeof bien.surface === "string" ? parseFloat(bien.surface) || 0 : (typeof bien.surface === "number" ? bien.surface : 0)
+        const pieces = typeof bien.pieces === "string" ? parseInt(bien.pieces, 10) || 0 : (typeof bien.pieces === "number" ? bien.pieces : 0)
+        const pointsForts = typeof bien.points_forts === "string" ? bien.points_forts.trim() : ""
+
+        const slug = await generateUniqueSlug(adresse)
+
+        try {
+          await query(
+            `INSERT INTO property_pages (
+              client_id, client_email, titre, type_bien, adresse, prix, surface, pieces,
+              points_forts, slug, status
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'draft')`,
+            [
+              clientId,
+              user.email,
+              titre,
+              typeBien,
+              adresse,
+              prix,
+              surface,
+              pieces,
+              pointsForts,
+              slug,
+            ]
+          )
+        } catch (bienErr) {
+          // Log mais ne pas bloquer l'onboarding pour un bien en erreur
+          console.error(`[Onboarding] Erreur création property_page pour "${adresse}":`, bienErr)
+        }
+      }
+    }
   }
 
   // Track onboarding_complete server-side
