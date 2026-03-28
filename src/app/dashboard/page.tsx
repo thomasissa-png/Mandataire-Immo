@@ -136,6 +136,8 @@ export default async function DashboardPage() {
       : [],
   } : null
 
+  const profileIncomplete = !ctx || !ctx.ville
+
   return (
     <DashboardContent
       userName={user.firstName || user.name || ""}
@@ -144,6 +146,7 @@ export default async function DashboardPage() {
       showMonthlyBanner={showMonthlyBanner}
       deliverables={monthDeliverables}
       profile={profile}
+      profileIncomplete={profileIncomplete}
     />
   )
 }

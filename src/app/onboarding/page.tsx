@@ -713,7 +713,7 @@ export default function OnboardingPage() {
                       className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2">
                     <div>
                       <label htmlFor={`bien-${index}-type`} className="block text-caption font-medium text-neutral-600 mb-1">
                         Type
@@ -764,7 +764,7 @@ export default function OnboardingPage() {
                         )}
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 tablet:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 tablet:grid-cols-3 gap-3">
                     <div>
                       <label htmlFor={`bien-${index}-prix`} className="block text-caption font-medium text-neutral-600 mb-1">
                         Prix

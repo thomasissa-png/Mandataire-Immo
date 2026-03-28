@@ -54,6 +54,7 @@ interface DashboardContentProps {
       lien_annonce: string
     }>
   } | null
+  profileIncomplete?: boolean
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -181,6 +182,7 @@ export function DashboardContent({
   showMonthlyBanner,
   deliverables,
   profile,
+  profileIncomplete,
 }: DashboardContentProps) {
   const [activeNav, setActiveNav] = useState("")
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
@@ -282,6 +284,19 @@ export function DashboardContent({
           </button>
         </div>
       )}
+
+      {/* BANDEAU PROFIL INCOMPLET */}
+      {profileIncomplete ? (
+        <a href="/onboarding" className="block rounded-lg bg-warning-50 border border-warning-200 p-4 hover:bg-warning-100 transition-colors">
+          <div className="flex items-center gap-3">
+            <span className="text-xl" aria-hidden="true">📝</span>
+            <div>
+              <p className="text-body-sm font-semibold text-warning-800">Ton profil est incomplet</p>
+              <p className="text-caption text-warning-700">Reprends l{"'"}onboarding pour recevoir tes contenus personnalisés — 5 min max.</p>
+            </div>
+          </div>
+        </a>
+      ) : null}
 
       {/* ============================================================ */}
       {/* PROFILE CARD — compact, inline                                */}

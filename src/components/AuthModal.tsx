@@ -225,7 +225,7 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2">
           <div>
             <label
               htmlFor="modal-signup-firstname"
@@ -282,7 +282,7 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
             className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus:border-secondary focus:shadow-inner focus:outline-none transition-all duration-fast"
           />
           <p className="text-caption text-neutral-500 mt-1">
-            Utilise la même adresse que pour ton paiement
+            Tu utiliseras cette adresse pour te connecter
           </p>
         </div>
 
