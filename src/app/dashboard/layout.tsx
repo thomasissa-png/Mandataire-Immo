@@ -13,21 +13,27 @@ export default function DashboardLayout({
           <a href="/" className="font-display text-h3 font-bold text-primary">
             ImmoCrew
           </a>
-          <div className="flex items-center gap-4">
+          <nav className="flex items-center gap-4" aria-label="Navigation principale">
             <a
               href="/dashboard"
-              className="text-body-sm font-medium text-foreground hover:text-secondary transition-colors duration-normal py-2"
+              className="text-body-sm font-medium text-foreground hover:text-secondary transition-colors duration-normal py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded"
             >
-              Mes contenus
+              Mon espace
+            </a>
+            <a
+              href="/dashboard/profile"
+              className="text-body-sm font-medium text-neutral-500 hover:text-secondary transition-colors duration-normal py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded"
+            >
+              Mon profil
             </a>
             <a
               href="mailto:support@immocrew.fr"
-              className="text-body-sm text-neutral-500 hover:text-secondary transition-colors duration-normal py-2"
+              className="text-body-sm text-neutral-500 hover:text-secondary transition-colors duration-normal py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded"
             >
               Une question ?
             </a>
             <UserMenu />
-          </div>
+          </nav>
         </div>
       </header>
 

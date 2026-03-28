@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Non authentifié" }, { status: 401 })
   }
 
-  let body: { photo: string; email: string }
+  let body: { photo: string }
 
   try {
     body = await request.json()
@@ -20,16 +20,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
 
-  if (!body.photo || !body.email) {
+  if (!body.photo) {
     return NextResponse.json(
-      { error: "photo et email sont requis" },
+      { error: "Le champ photo est requis" },
       { status: 400 }
     )
   }
 
-  // Valider que l'email correspond a l'utilisateur connecte
-  if (body.email !== user.email) {
-    return NextResponse.json({ error: "Email non autorisé" }, { status: 403 })
+  const email = user.email
+  if (!email) {
+    return NextResponse.json({ error: "Email utilisateur introuvable" }, { status: 400 })
   }
 
   // Extraire le contenu base64 (supporte avec ou sans data URI prefix)
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
   }
   const ext = extMap[mimeType] || "jpg"
 
-  const key = `clients/${body.email}/photo.${ext}`
+  const key = `clients/${email}/photo.${ext}`
 
   try {
     await uploadFile(key, buffer)
