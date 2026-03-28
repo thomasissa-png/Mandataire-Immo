@@ -297,34 +297,54 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 
 ## Memo de reprise — derniere session
 
-- **Date de cloture** : 2026-03-28, session 7
+- **Date de cloture** : 2026-03-28, session 7 (session longue, ~50 commits)
 - **Branche** : `claude/update-gradient-agents-ZwVm9`
-- **Resume de la session** : Session en 2 phases. Phase 1 : (1) Mise a jour Gradient Agents. (2) Feature upload photos + annonces (16 fichiers). (3) Audit 5 agents sur 18 pages. (4) 10 P0 + 12 P1 + 3 P2 corriges → score 9.1/10. Phase 2 : (5) Page /dashboard/profile (edition profil 6 sections, dirty tracking, annuler, nav ancres mobile). (6) Sauvegarde onboarding serveur (JSONB draft, fire-and-forget, spinner chargement). (7) Sequence email nurturing (3 templates J+2/J+7/J+14, cron idempotent, admin manuel, mode log only). (8) Audit UX 8-9/10 + QA 9.8/10. (9) 1 P0 + 5 P1 corriges → score final 9.5+/10.
+- **Resume de la session** : Session en 4 phases. Phase 1 : Mise a jour Gradient Agents + feature upload photos + annonces (16 fichiers). Phase 2 : 5 audits (UX, Design, Copy, Sophie, QA) + 25 corrections P0/P1/P2 → score 9.1/10. Phase 3 : 3 features (profil self-service, sauvegarde onboarding serveur, email nurturing J+2/J+7/J+14) + 5 P2 (HEIC Sharp, unsubscribe email, biens onboarding sync, specialites, tests). Phase 4 : Refonte dashboard (12 retours fondateur : sidebar, plan du mois enrichi, "on te connait", doublons, navigation). Migration Umami Cloud (remplace PostHog). Recalibration agent @mandataire (learning cross-projet). 3 audits Sophie recalibree sur le site complet (25 pages) → score 7.4/10 avec P0 identifies.
 - **Travaux termines cette session** :
-  - Feature upload photos + annonces completes (7 endpoints API + 8 composants UI)
-  - 5 audits complets (UX, Design, Copy, Sophie, QA) + 10 P0 + 12 P1 + 3 P2 corriges
-  - Page /dashboard/profile : 6 sections editables, dirty tracking, bouton annuler, nav ancres mobile, upload photo
-  - Sauvegarde onboarding serveur : PATCH /api/onboarding/draft, brouillon JSONB, fire-and-forget, spinner chargement
-  - Sequence email nurturing : 3 templates (J+2, J+7, J+14), cron /api/cron/nurturing, admin /api/admin/send-nurturing, mode log only
-  - Migrations SQL 009 (photos), 010 (onboarding draft), 011 (email_logs)
-  - Sanitizer XSS, focus-visible systemique, HEIC iPhone, badge "Nouveau", eye toggle password
-  - Unicode escapes -> UTF-8 natif (30+ fichiers), "livrables" -> "contenus" (13 occurrences)
-- **Travaux en cours** :
-  - Aucun — tout est pousse et committe
+  - Feature upload photos + annonces completes (7 endpoints API + 8 composants UI + migration 009)
+  - Page /dashboard/profile (6 sections, dirty tracking, annuler, nav ancres, specialites pills, upload photo)
+  - Sauvegarde onboarding serveur (PATCH /api/onboarding/draft, JSONB, fire-and-forget, spinner)
+  - Sequence email nurturing (3 templates J+2/J+7/J+14, cron, admin, idempotent, mode log only)
+  - Conversion HEIC → JPEG via Sharp (photos biens + profil)
+  - Lien desinscription email fonctionnel (/api/unsubscribe + SQL 012 + filtre cron)
+  - Biens onboarding → property_pages auto-sync (POST /api/onboarding cree les property_pages)
+  - Refonte dashboard : sidebar desktop, nav sticky mobile, plan du mois avec valeur (conseils plateforme, liens blog, ancres), "on te connait" enrichi (quartiers, gamme prix, cible), doublons dedupliques, sous-titres explicatifs, annonces fusionnees dans MesBiensSection, lien SeLoger en premier BienForm, CTA "Commencer le mensuel"
+  - Migration PostHog → Umami Cloud (script, trackEvent wrapper, 0 ref PostHog)
+  - 5 audits + 25 corrections P0/P1/P2 (sanitizer XSS, focus-visible x41, HEIC, "livrables" → "contenus", unicode, badge Nouveau, eye toggle, CTA sans pack, boost admin)
+  - Recalibration @mandataire propagee dans _base-agent-protocol.md + agent-factory.md (learning cross-projet)
+  - 127/127 tests vitest PASS, 0 erreur TypeScript
+  - Migrations SQL 009 (photos), 010 (onboarding draft), 011 (email_logs), 012 (unsubscribe)
+- **Travaux en cours — P0 BLOQUANTS (audit Sophie recalibree)** :
+  - **Lien annonce SeLoger = fausse promesse** : le texte dit "on recupere tout automatiquement" mais aucun scraping n'est implemente. Il faut soit implementer le scraping (via API SeLoger/LeBonCoin ou web scraping), soit reformuler le texte honnêtement. C'est le P0 n°1.
+  - **Bug encodage "meubles" → "meublés"** : src/app/bien/[id]/page.tsx — faute visible par les acheteurs de Sophie.
+  - **Temoignages sans photos/noms** : src/components/landing/SocialProof.tsx — initiales seulement, pas credible pour 150€/mois. Ajouter des photos + noms complets (ou des metriques verifiables au lieu de temoignages).
+  - **Page A propos trop vague** : src/app/a-propos/page.tsx — "un entrepreneur specialise" sans prenom ni parcours. Sophie a besoin de savoir qui est derriere.
+  - **Accents manquants sur l'interface** : "Etape", "genere", "enregistre" etc. — passe de grep/fix sur tout src/.
+- **Travaux en cours — P1 (audit Sophie recalibree)** :
+  - Pas de bouton "Modifier" un bien depuis sa fiche (/dashboard/biens/[id])
+  - Monthly update sans contexte (pourquoi Sophie remplit ca)
+  - Admin sans suivi livraison mensuelle (quels clients ont recu quoi)
+  - FAQ publique sans accordeon (mur de texte sur mobile)
+  - Onboarding etape "Tes comptes" confuse (5/10)
+- **Promesses a tenir pour Sophie** (si quelque chose manque, le creer) :
+  - Landing page personnalisee pour Sophie (mentionnee dans les deliverables mais pas de page /landing/[slug] codee)
+  - Scraping lien annonce (promis dans l'onboarding)
+  - Calendrier de publication visuel dans le dashboard (pas juste une liste de posts)
 - **Prochaines actions recommandees** :
-  1. **@fullstack : Pre-remplissage biens onboarding dans BienForm** — les biens saisis en onboarding devraient apparaitre dans "Mes biens" (bandeau info present, auto-sync a implementer).
-  2. **@fullstack : Conversion HEIC → JPEG serveur** — les photos HEIC sont acceptees mais pas converties. Sharp ou service externe pour la conversion.
-  3. **@fullstack : Integration Resend/Postmark** — les emails sont en mode "log only". Configurer EMAIL_PROVIDER + RESEND_API_KEY pour envoyer reellement.
-  4. **@fullstack : Lien desinscription email** — le #unsubscribe dans les templates est un placeholder. Implementer un vrai flow unsubscribe avant production.
-  5. **@seo : Audit SEO post-features** — les nouvelles pages /dashboard/biens/, /dashboard/profile ne sont pas indexables (normal, auth requise) mais /bien/[slug] doit avoir des meta OG correctes.
+  1. **@fullstack : Corriger les 5 P0 Sophie** — lien annonce (reformuler ou implementer scraping), bug "meubles", temoignages, a propos, accents. Priorite absolue avant tout test client.
+  2. **@fullstack : Corriger les 5 P1 Sophie** — bouton modifier bien, contexte monthly update, suivi admin, FAQ accordeon, etape comptes onboarding.
+  3. **@fullstack : Implementer les promesses manquantes** — scraping lien annonce (ou au minimum un enrichissement basique via API publiques), page landing personnalisee /landing/[slug] si promise dans le pack.
+  4. **@fullstack : Integration Resend** — activer les emails reels (EMAIL_PROVIDER + RESEND_API_KEY). Les templates et le cron sont prets.
+  5. **@seo : Audit SEO pages publiques** — meta OG sur /bien/[slug], sitemap a jour avec les biens publies.
 - **Blockers** :
-  - ANTHROPIC_API_KEY necessaire pour la generation (cle API payante Anthropic)
-  - Migrations 008 + 009 + 010 + 011 a executer : `for f in sql/008*.sql sql/009*.sql sql/010*.sql sql/011*.sql; do psql $DATABASE_URL -f $f; done`
+  - ANTHROPIC_API_KEY necessaire pour la generation IA
+  - Migrations 008-012 a executer : `for f in sql/008*.sql sql/009*.sql sql/010*.sql sql/011*.sql sql/012*.sql; do psql $DATABASE_URL -f $f; done`
   - Marque INPI "ImmoCrew" a verifier (collision SIRET 894616713 Auterive)
-  - EMAIL_PROVIDER + RESEND_API_KEY pour activer les emails reels
-  - CRON_SECRET pour securiser le cron nurturing
+  - EMAIL_PROVIDER + RESEND_API_KEY pour emails reels
+  - CRON_SECRET pour le cron nurturing
+  - STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET + produits Stripe a creer
 - **Commande de reprise suggeree** :
 
 ```
-@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 7). Branche claude/update-gradient-agents-ZwVm9. Toutes les features core implementees et auditees (score 9.5+/10) : upload photos, profil, onboarding draft, email nurturing. Prochaine priorite : pre-remplissage biens onboarding, conversion HEIC, integration Resend, lien desinscription.
+@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 7). Branche claude/update-gradient-agents-ZwVm9. Session 7 terminee : toutes les features core implementees, dashboard refondu, migration Umami, recalibration @mandataire. Il reste 5 P0 bloquants (audit Sophie recalibree) : lien annonce fausse promesse, bug "meubles", temoignages landing, page a propos, accents. Et 5 P1 + promesses manquantes (landing perso, scraping lien, calendrier visuel). Priorite : corriger les P0 avant tout test client reel.
 ```

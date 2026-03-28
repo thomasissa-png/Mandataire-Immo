@@ -1,7 +1,7 @@
 # Préférences Fondateur — Thomas
 
 > Source de vérité pour @moi. Mis à jour après chaque session.
-> Dernière mise à jour : 2026-03-26, session 5.
+> Dernière mise à jour : 2026-03-28, session 7.
 
 ## Pricing & Business
 
@@ -33,3 +33,12 @@
 - **NextAuth.js plutôt que Clerk** : auth locale, zero dépendance externe. Clerk causait des erreurs serveur et la dépendance externe ajoutait un point de défaillance.
 - **Tout doit être automatisé** : la production de contenu, la publication d'articles SEO (cron 2x/semaine), le recyclage du contenu en posts sociaux. Un fondateur solo ne peut pas produire manuellement.
 - **Object Storage pour la persistance** : les fichiers générés (articles cron) doivent être sauvegardés en Object Storage en plus du filesystem (ephémère sur Replit).
+- **Umami Cloud, pas PostHog** : tracking analytics = Umami Cloud uniquement. Ne jamais proposer PostHog, Plausible, GA4 ou autre sauf demande explicite. Website ID : 533b1471-2f40-41dd-8754-02fa0f0615f8.
+
+## Calibration qualité
+
+- **Zéro fausse promesse** : si le texte dit "on récupère tout automatiquement", la fonctionnalité DOIT exister. Pas de promesse sans implémentation, même en V1. Mieux vaut reformuler honnêtement que mentir.
+- **Agents persona = calibrés sur la VALEUR** : un agent testeur qui valide le code mais pas la valeur est inutile. La recalibration de @mandataire (S7) a fait passer le score de 9/10 à 6/10 — aligné avec les vrais problèmes. Thomas exige que TOUS les agents persona de TOUS les projets aient cette calibration. C'est le learning le plus important du framework.
+- **Le plan du mois doit être un COACH** : dire SUR QUELLE PLATEFORME publier, POURQUOI ces horaires, donner des LIENS vers des articles, un ORDRE de priorité. Pas juste "publie 3 posts/semaine". Thomas compare au niveau Notion/Linear.
+- **Dashboard = SaaS premium** : pas de liste plate, pas de blocs vides, pas de todo liste générique. Sidebar desktop, navigation sticky mobile, sections avec sous-titres explicatifs, doublons dédupliqués.
+- **Si on promet quelque chose à Sophie, on le crée** : landing personnalisée, scraping lien annonce, calendrier visuel — si c'est dans le produit ou la landing, ça doit exister dans le dashboard.
