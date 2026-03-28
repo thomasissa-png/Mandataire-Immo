@@ -293,34 +293,38 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 
 ## Memo de reprise — derniere session
 
-- **Date de cloture** : 2026-03-28, session 6 (continuee sur 2 jours)
+- **Date de cloture** : 2026-03-28, session 7
 - **Branche** : `claude/update-gradient-agents-ZwVm9`
-- **Resume de la session** : Session massive de correction, refonte et audit qualite. 4 grands chantiers : (1) Infrastructure — centralisation prix, admin simplifie, migration SQL definitive 008, fix ON CONFLICT/self-fetch/JSON parse Claude. (2) Onboarding — etape quartier supprimee (enrichissement DVF auto), LinkedIn dedup, lien annonce prioritaire, header sticky "Continuer plus tard", grilles mobile, banniere profil incomplet. (3) Dashboard — reecrit de zero en "coach marketing" : profil compact, plan strategique personnalise, biens+annonces rattachees, timeline posts avec dates francaises, scripts video avec format/duree, signaler un souci, support accessible partout, CTA passer au mensuel. 6 passes d'audit (Sophie, UX, design, copywriter, creative-strategy, QA) avec corrections iteratives. (4) Landing — section "Comment ca marche" (coaching), pilier 3 reforme, 2 FAQ coaching, 57 entites HTML nettoyees. ~40 commits, ~80 fichiers modifies.
+- **Resume de la session** : (1) Mise a jour Gradient Agents depuis Agent-Team. (2) Feature upload photos + annonces completes implementee (16 fichiers : migration SQL 009, 7 endpoints API, 8 composants UI, 2 routes dashboard). (3) Audit complet 5 agents (UX 7.4, Copy 8.1, Design 7.5, Sophie 7.4, QA technique) sur 18 pages. (4) 10 P0 corriges (double section biens, password UX, UTF-8, CTA sans pack, admin boost, page publique sans slug). (5) ~12 P1 corriges (XSS sanitizer, focus-visible systemique 41 remplacements, contrastes WCAG, HEIC iPhone, "livrables" -> "contenus", accents, badge "Nouveau"). (6) 3 P2 residuels corriges (eye toggle reset, focus-ring, HEIC onboarding). Score final post-corrections : 8.9-9.1/10.
 - **Travaux termines cette session** :
-  - Prix centralises dans src/lib/pricing.ts
-  - /admin protege par ADMIN_PASSWORD (cookie HMAC)
-  - Migration SQL definitive 008 (7 tables, toutes colonnes, verification auto)
-  - Fix ON CONFLICT partiel, self-fetch localhost, JSON parse backticks
-  - Onboarding simplifie 9 etapes + enrichissement DVF auto
-  - Dashboard reecrit (coach marketing) — 18/18 gates QA PASS
-  - Landing page : section HowItWorks + FAQ coaching + pilier 3 reforme
-  - Blog covers visuelles (8 categories)
-  - Spec feature "Upload photos + annonces completes" (docs/product/photo-upload-spec.md)
+  - Feature upload photos + annonces completes (spec -> code complet)
+  - Migration SQL 009 (annonce_generated_at + index client_status)
+  - 7 endpoints API biens (CRUD + photos + generate-annonce + proxy photos)
+  - 8 composants UI (BienForm, PhotoUploader, AnnonceBlock, BienCard, BienFicheClient, MesBiensSection + 2 pages dashboard)
+  - 5 audits complets (UX, Design, Copy, Sophie, QA) — livrables dans docs/
+  - 10 P0 + 12 P1 + 3 P2 corriges — score 6.5 -> 9.1/10
+  - Sanitizer XSS sur markdownToHtml
+  - focus-visible systemique (41 remplacements dans 6 fichiers)
+  - Support HEIC/HEIF iPhone (PhotoUploader + onboarding + API)
+  - "livrables" -> "contenus" partout client-facing (13 occurrences)
+  - Unicode escapes -> UTF-8 natif (30+ dans 9 fichiers)
+  - Badge "Nouveau" sur contenus < 48h (DeliverableCard)
+  - Eye toggle mot de passe sur tous les formulaires auth
+  - Banniere CTA pour comptes sans pack
+  - Bouton Boost Mandat dans admin
 - **Travaux en cours** :
-  - **Upload photos + annonces completes** : spec terminee (docs/product/photo-upload-spec.md), implementation non commencee. 5 endpoints API + 5 composants UI + 2 routes dashboard a creer.
-  - **Sequence email nurturing** : specifiee (J+2, J+7, J+14), non codee.
-  - **Page /dashboard/profile** : edition du profil en self-service (actuellement par email). Necessaire pour la retention.
-  - **Sauvegarde onboarding serveur** : sessionStorage seulement — perte de donnees si fermeture d'onglet. Necessite un endpoint PATCH /api/onboarding/draft.
+  - Aucun — tout est pousse et committe
 - **Prochaines actions recommandees** :
-  1. **@fullstack : Implementer upload photos + annonces completes** — suivre la spec docs/product/photo-upload-spec.md. 5 endpoints, 5 composants. C'est le coeur de la valeur ajoutee pour Sophie (annonces personnalisees avec ses vraies photos). Priorite absolue.
-  2. **@fullstack : Page /dashboard/profile** — formulaire d'edition du profil (reprend les champs de l'onboarding en mode edition). Critique pour la retention au mois 2.
-  3. **@fullstack : Sauvegarde onboarding serveur** — endpoint PATCH /api/onboarding/draft pour eviter la perte de donnees entre sessions.
+  1. **@fullstack : Page /dashboard/profile** — formulaire d'edition du profil (reprend les champs de l'onboarding en mode edition). Critique pour la retention au mois 2.
+  2. **@fullstack : Sauvegarde onboarding serveur** — endpoint PATCH /api/onboarding/draft pour eviter la perte de donnees entre sessions.
+  3. **@fullstack : Sequence email nurturing** — specifiee (J+2, J+7, J+14), non codee. Automatisation acquisition.
+  4. **@fullstack : Pre-remplissage biens onboarding dans BienForm** — les biens saisis en onboarding devraient apparaitre dans "Mes biens" (P0-10 simplifie pour l'instant avec un bandeau info).
 - **Blockers** :
   - ANTHROPIC_API_KEY necessaire pour la generation (cle API payante Anthropic)
-  - Migration 008 doit etre executee : `psql $DATABASE_URL -f sql/008_definitive_fix.sql`
+  - Migration 008 + 009 doivent etre executees : `psql $DATABASE_URL -f sql/008_definitive_fix.sql && psql $DATABASE_URL -f sql/009_photo_upload.sql`
   - Marque INPI "ImmoCrew" a verifier (collision SIRET 894616713 Auterive)
 - **Commande de reprise suggeree** :
 
 ```
-@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 6). Branche claude/update-gradient-agents-59Rnz. Dashboard reecrit en "coach marketing" (profil compact, plan du mois, timeline posts avec dates, biens+annonces rattachees). Landing page avec section "Comment ca marche" (coaching). Prochaine priorite : implementer la feature "Upload photos + annonces completes" selon la spec docs/product/photo-upload-spec.md. Ensuite : page d'edition profil /dashboard/profile + sauvegarde onboarding serveur.
+@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 7). Branche claude/update-gradient-agents-ZwVm9. Feature upload photos + annonces implementee et auditee (score 9.1/10). Prochaine priorite : page /dashboard/profile (edition profil self-service) + sauvegarde onboarding serveur (PATCH /api/onboarding/draft) + sequence email nurturing.
 ```
