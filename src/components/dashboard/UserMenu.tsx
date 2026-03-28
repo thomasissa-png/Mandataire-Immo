@@ -67,6 +67,13 @@ export function UserMenu() {
               {session?.user?.email || ""}
             </p>
           </div>
+          <a
+            href="/dashboard/profile"
+            role="menuitem"
+            className="block w-full text-left px-4 py-3 text-body-sm text-foreground hover:bg-neutral-50 transition-colors duration-fast focus-visible:outline-none focus-visible:bg-neutral-100"
+          >
+            Mon profil
+          </a>
           <button
             type="button"
             role="menuitem"

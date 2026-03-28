@@ -325,11 +325,11 @@ export function DashboardContent({
             {profile.nb_transactions_an ? <span className="px-2.5 py-1 rounded-lg bg-success-50 text-caption font-medium text-success-700">{profile.nb_transactions_an} transactions/an</span> : null}
             {profile.type_biens ? <span className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700">{profile.type_biens}</span> : null}
             {profile.linkedin_url ? <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-blue-50 text-caption font-medium text-blue-700 hover:bg-blue-100 transition-colors">LinkedIn</a> : null}
-            <a href="mailto:support@immocrew.fr?subject=Modifier%20mes%20infos" className="px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-500 hover:bg-neutral-200 transition-colors">Modifier mes infos (par email — sous 4h)</a>
+            <a href="/dashboard/profile" className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700 hover:bg-secondary-100 transition-colors">Modifier mon profil</a>
           </div>
         ) : (
           <div className="flex flex-wrap gap-2 mt-3">
-            <a href="mailto:support@immocrew.fr?subject=Modifier%20mes%20infos" className="px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-500 hover:bg-neutral-200 transition-colors">Modifier mes infos (par email — sous 4h)</a>
+            <a href="/dashboard/profile" className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700 hover:bg-secondary-100 transition-colors">Modifier mon profil</a>
           </div>
         )}
       </div>
