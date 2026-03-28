@@ -6,25 +6,25 @@ import { JsonLd } from "@/components/JsonLd"
 import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice, formatPriceTTC } from "@/lib/pricing"
 
 export const metadata: Metadata = {
-  title: "FAQ ImmoCrew \u2014 Toutes les r\u00e9ponses pour les mandataires immobiliers",
+  title: "FAQ ImmoCrew — Toutes les réponses pour les mandataires immobiliers",
   description:
-    "Questions fr\u00e9quentes sur ImmoCrew : prix, fonctionnement, personnalisation, r\u00e9siliation, RGPD. Tout ce qu\u2019un mandataire immobilier doit savoir avant de s\u2019abonner.",
+    "Questions fréquentes sur ImmoCrew : prix, fonctionnement, personnalisation, résiliation, RGPD. Tout ce qu'un mandataire immobilier doit savoir avant de s'abonner.",
   alternates: {
     canonical: "https://immocrew.fr/faq",
   },
   openGraph: {
-    title: "FAQ ImmoCrew \u2014 Toutes les r\u00e9ponses pour les mandataires immobiliers",
+    title: "FAQ ImmoCrew — Toutes les réponses pour les mandataires immobiliers",
     description:
-      "Questions fr\u00e9quentes sur ImmoCrew : prix, fonctionnement, personnalisation, r\u00e9siliation, RGPD.",
+      "Questions fréquentes sur ImmoCrew : prix, fonctionnement, personnalisation, résiliation, RGPD.",
     url: "https://immocrew.fr/faq",
   },
 }
 
 const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
-    question: "Qu\u2019est-ce qu\u2019ImmoCrew ?",
+    question: "Qu'est-ce qu'ImmoCrew ?",
     answer:
-      "ImmoCrew est un service de marketing cl\u00e9 en main destin\u00e9 aux mandataires immobiliers ind\u00e9pendants en France. Chaque mois, le mandataire re\u00e7oit ses contenus marketing complets (12 posts r\u00e9seaux sociaux, 2 articles SEO local, 4 annonces personnalis\u00e9es, 4 scripts vid\u00e9o, 1 newsletter, 1 email de prospection), personnalis\u00e9s pour sa zone g\u00e9ographique et pr\u00eats \u00e0 publier. Il n\u2019y a aucun outil \u00e0 configurer, aucun template \u00e0 adapter.",
+      "ImmoCrew est un service de marketing clé en main destiné aux mandataires immobiliers indépendants en France. Chaque mois, le mandataire reçoit ses contenus marketing complets (12 posts réseaux sociaux, 2 articles SEO local, 4 annonces personnalisées, 4 scripts vidéo, 1 newsletter, 1 email de prospection), personnalisés pour sa zone géographique et prêts à publier. Il n'y a aucun outil à configurer, aucun template à adapter.",
   },
   {
     question: "Comment fonctionne ImmoCrew ?",
@@ -32,74 +32,74 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
       "Le fonctionnement se résume en 3 étapes. Étape 1 : tu remplis un questionnaire d'onboarding de 7 minutes (ta zone, ton réseau, ta spécialité, ton ton de communication). Étape 2 : l'équipe ImmoCrew produit tes contenus personnalisés avec les données de ta zone. Étape 3 : tu reçois tes contenus le 1er du mois dans ton espace client. Tu copies, tu publies. 3 minutes par post.",
   },
   {
-    question: "Combien co\u00fbte ImmoCrew ?",
+    question: "Combien coûte ImmoCrew ?",
     answer:
       `ImmoCrew propose trois formules. Le ${PACK_MENSUEL.name} à ${formatPriceTTC(PACK_MENSUEL)} par mois (sans engagement) inclut le contenu mensuel complet : 12 posts, 4 scripts vidéo, 2 articles SEO, 4 annonces, 1 newsletter, 1 email de prospection. Le ${PACK_LANCEMENT.name} à ${formatPriceTTC(PACK_LANCEMENT)} (one-shot) fournit un kit de démarrage complet avec 20 posts, 5 articles SEO, 10 scripts Reels et un calendrier éditorial sur 30 jours. Le ${PACK_BOOST.name} à ${formatPriceTTC(PACK_BOOST)} par bien met un bien spécifique en avant avec une annonce storytelling, 3 posts dédiés, 1 Reel, 1 mini landing page et 1 email blast.`,
   },
   {
     question: "Qui utilise ImmoCrew ?",
     answer:
-      "ImmoCrew est con\u00e7u pour les mandataires immobiliers ind\u00e9pendants rattach\u00e9s \u00e0 des r\u00e9seaux comme IAD France, SAFTI, Capifrance, Optimhome, BSK Immobilier ou Expertimo. Ces professionnels exercent souvent seuls, sans \u00e9quipe marketing, et n\u2019ont pas le temps de g\u00e9rer eux-m\u00eames leur pr\u00e9sence digitale. Le march\u00e9 des mandataires ind\u00e9pendants repr\u00e9sente environ 40 000 \u00e0 50 000 professionnels actifs en France (source : Barom\u00e8tre LMDM 2023).",
+      "ImmoCrew est conçu pour les mandataires immobiliers indépendants rattachés à des réseaux comme IAD France, SAFTI, Capifrance, Optimhome, BSK Immobilier ou Expertimo. Ces professionnels exercent souvent seuls, sans équipe marketing, et n'ont pas le temps de gérer eux-mêmes leur présence digitale. Le marché des mandataires indépendants représente environ 40 000 à 50 000 professionnels actifs en France (source : Baromètre LMDM 2023).",
   },
   {
-    question: "Quelle est la diff\u00e9rence entre ImmoCrew et un community manager freelance ?",
+    question: "Quelle est la différence entre ImmoCrew et un community manager freelance ?",
     answer:
       `Un community manager freelance facture généralement entre 500€ et 800€ par mois pour du contenu souvent générique, avec des délais variables et un résultat dépendant de la personne. ImmoCrew est un service productisé à prix fixe (${formatPrice(PACK_MENSUEL)}) avec un volume de contenus garanti chaque mois, personnalisés pour la zone géographique exacte du mandataire. Le mandataire sait exactement ce qu'il reçoit, quand il le reçoit, et combien ça coûte.`,
   },
   {
-    question: "Quelle est la diff\u00e9rence entre ImmoCrew et une plateforme SaaS de marketing ?",
+    question: "Quelle est la différence entre ImmoCrew et une plateforme SaaS de marketing ?",
     answer:
-      "Une plateforme SaaS fournit un outil que le mandataire doit utiliser lui-m\u00eame : choisir des templates, les adapter, programmer les publications. ImmoCrew est un service, pas un outil. Le mandataire ne configure rien. Il re\u00e7oit ses contenus termin\u00e9s, personnalis\u00e9s avec les donn\u00e9es de sa zone (quartier, prix au m\u00b2, \u00e9coles, commerces), pr\u00eats \u00e0 publier sans modification. C\u2019est la diff\u00e9rence entre cuisiner soi-m\u00eame avec un robot et se faire livrer un plat pr\u00eat.",
+      "Une plateforme SaaS fournit un outil que le mandataire doit utiliser lui-même : choisir des templates, les adapter, programmer les publications. ImmoCrew est un service, pas un outil. Le mandataire ne configure rien. Il reçoit ses contenus terminés, personnalisés avec les données de sa zone (quartier, prix au m², écoles, commerces), prêts à publier sans modification. C'est la différence entre cuisiner soi-même avec un robot et se faire livrer un plat prêt.",
   },
   {
-    question: "Les contenus sont-ils g\u00e9n\u00e9r\u00e9s par intelligence artificielle ?",
+    question: "Les contenus sont-ils générés par intelligence artificielle ?",
     answer:
       "ImmoCrew utilise des outils d'IA pour personnaliser chaque contenu à la zone et aux biens du mandataire. Tous les contenus sont ensuite relus et validés par l'équipe avant livraison. Conformément au Règlement européen sur l'Intelligence Artificielle (AI Act), la mention « contenu produit avec assistance IA — relu et validé par l'équipe ImmoCrew » figure sur les contenus concernés.",
   },
   {
-    question: "Comment sont personnalis\u00e9s les contenus ?",
+    question: "Comment sont personnalisés les contenus ?",
     answer:
-      "Chaque contenu int\u00e8gre des donn\u00e9es sp\u00e9cifiques \u00e0 la zone du mandataire : nom du quartier exact (pas juste la ville), \u00e9tablissements scolaires dans un rayon de 1 km, prix au m\u00b2 moyen de la rue ou du quartier, commerces et transports de proximit\u00e9. Ces donn\u00e9es sont int\u00e9gr\u00e9es dans chaque post, article SEO et annonce. Les articles SEO ciblent des requ\u00eates locales pr\u00e9cises comme \u00ab vendre appartement [quartier] [ville] \u00bb.",
+      "Chaque contenu intègre des données spécifiques à la zone du mandataire : nom du quartier exact (pas juste la ville), établissements scolaires dans un rayon de 1 km, prix au m² moyen de la rue ou du quartier, commerces et transports de proximité. Ces données sont intégrées dans chaque post, article SEO et annonce. Les articles SEO ciblent des requêtes locales précises comme « vendre appartement [quartier] [ville] ».",
   },
   {
-    question: "Peut-on r\u00e9silier \u00e0 tout moment ?",
+    question: "Peut-on résilier à tout moment ?",
     answer:
       "Oui. Le Pack Mensuel est sans engagement. La résiliation est libre, sans frais, depuis l'espace client ou par email à contact@immocrew.fr. Elle prend effet à la fin de la période mensuelle en cours. Les contenus déjà livrés restent accessibles. Le Pack Lancement bénéficie d'une garantie satisfait ou remboursé de 14 jours.",
   },
   {
     question: "Combien de temps faut-il pour publier les contenus ?",
     answer:
-      "Environ 3 minutes par post. Le mandataire re\u00e7oit ses contenus pr\u00eats \u00e0 publier dans son espace client. Il lui suffit de copier le texte et de le coller sur son r\u00e9seau social (LinkedIn, Instagram, Facebook). L\u2019onboarding initial (questionnaire) prend environ 7 minutes. Apr\u00e8s \u00e7a, la routine mensuelle ne demande aucune cr\u00e9ation de contenu.",
+      "Environ 3 minutes par post. Le mandataire reçoit ses contenus prêts à publier dans son espace client. Il lui suffit de copier le texte et de le coller sur son réseau social (LinkedIn, Instagram, Facebook). L'onboarding initial (questionnaire) prend environ 7 minutes. Après ça, la routine mensuelle ne demande aucune création de contenu.",
   },
   {
-    question: "Qu\u2019est-ce qu\u2019un Boost Mandat ?",
+    question: "Qu'est-ce qu'un Boost Mandat ?",
     answer:
       `Le ${PACK_BOOST.name} est une prestation ponctuelle à ${PACK_BOOST.price}€ TTC par bien, en complément du ${PACK_MENSUEL.name}. Il met un bien spécifique en avant avec : 1 annonce storytelling qui sort du lot, 3 posts dédiés au bien et 1 Reel, 1 mini landing page du bien, et 1 email blast vers la base d'acheteurs du mandataire. C'est conçu pour accélérer la vente d'un mandat précis.`,
   },
   {
-    question: "ImmoCrew fonctionne-t-il pour tous les r\u00e9seaux de mandataires ?",
+    question: "ImmoCrew fonctionne-t-il pour tous les réseaux de mandataires ?",
     answer:
-      "Oui. ImmoCrew est compatible avec tous les r\u00e9seaux de mandataires fran\u00e7ais : IAD France, SAFTI, Capifrance, Optimhome, BSK Immobilier, Expertimo, MegAgence et tout r\u00e9seau de mandataires ind\u00e9pendants. Les contenus sont personnalis\u00e9s pour chaque mandataire individuellement, sans contrainte li\u00e9e au r\u00e9seau d\u2019appartenance.",
+      "Oui. ImmoCrew est compatible avec tous les réseaux de mandataires français : IAD France, SAFTI, Capifrance, Optimhome, BSK Immobilier, Expertimo, MegAgence et tout réseau de mandataires indépendants. Les contenus sont personnalisés pour chaque mandataire individuellement, sans contrainte liée au réseau d'appartenance.",
   },
   {
-    question: "Comment sont prot\u00e9g\u00e9es mes donn\u00e9es ?",
+    question: "Comment sont protégées mes données ?",
     answer:
-      "ImmoCrew respecte le R\u00e8glement G\u00e9n\u00e9ral sur la Protection des Donn\u00e9es (RGPD). Les donn\u00e9es collect\u00e9es lors de l\u2019onboarding sont des donn\u00e9es professionnelles (zone g\u00e9ographique, sp\u00e9cialit\u00e9, ton de communication) utilis\u00e9es uniquement pour produire les contenus. Elles ne sont pas revendues ni partag\u00e9es avec des tiers. Les donn\u00e9es transmises \u00e0 l\u2019IA de production ne sont pas utilis\u00e9es pour l\u2019entra\u00eenement des mod\u00e8les. La politique de confidentialit\u00e9 compl\u00e8te est disponible sur immocrew.fr/confidentialite.",
+      "ImmoCrew respecte le Règlement Général sur la Protection des Données (RGPD). Les données collectées lors de l'onboarding sont des données professionnelles (zone géographique, spécialité, ton de communication) utilisées uniquement pour produire les contenus. Elles ne sont pas revendues ni partagées avec des tiers. Les données transmises à l'IA de production ne sont pas utilisées pour l'entraînement des modèles. La politique de confidentialité complète est disponible sur immocrew.fr/confidentialite.",
   },
   {
-    question: "ImmoCrew cr\u00e9e-t-il mes visuels et mes photos ?",
+    question: "ImmoCrew crée-t-il mes visuels et mes photos ?",
     answer:
-      "Non. ImmoCrew produit les contenus r\u00e9dactionnels : textes de posts, articles, annonces, scripts vid\u00e9o, newsletters. Les visuels (photos de biens, portraits, cr\u00e9ations graphiques) ne sont pas inclus dans le service. Le brief d\u2019identit\u00e9 visuelle fourni dans le Pack Lancement donne des recommandations pour cr\u00e9er une identit\u00e9 coh\u00e9rente, mais la production graphique reste \u00e0 la charge du mandataire.",
+      "Non. ImmoCrew produit les contenus rédactionnels : textes de posts, articles, annonces, scripts vidéo, newsletters. Les visuels (photos de biens, portraits, créations graphiques) ne sont pas inclus dans le service. Le brief d'identité visuelle fourni dans le Pack Lancement donne des recommandations pour créer une identité cohérente, mais la production graphique reste à la charge du mandataire.",
   },
   {
-    question: "Puis-je voir un exemple de contenu avant de m\u2019abonner ?",
+    question: "Puis-je voir un exemple de contenu avant de m'abonner ?",
     answer:
-      "Oui. La page d\u2019accueil d\u2019immocrew.fr pr\u00e9sente des exemples avant/apr\u00e8s d\u2019annonces immobili\u00e8res produites par ImmoCrew. Ces exemples montrent la diff\u00e9rence entre une annonce standard et une annonce storytelling personnalis\u00e9e pour une zone pr\u00e9cise. Le Pack Lancement b\u00e9n\u00e9ficie \u00e9galement d\u2019une garantie satisfait ou rembours\u00e9 de 14 jours.",
+      "Oui. La page d'accueil d'immocrew.fr présente des exemples avant/après d'annonces immobilières produites par ImmoCrew. Ces exemples montrent la différence entre une annonce standard et une annonce storytelling personnalisée pour une zone précise. Le Pack Lancement bénéficie également d'une garantie satisfait ou remboursé de 14 jours.",
   },
   {
-    question: "ImmoCrew inclut-il des articles pour le r\u00e9f\u00e9rencement local (SEO) ?",
+    question: "ImmoCrew inclut-il des articles pour le référencement local (SEO) ?",
     answer:
-      "Oui. Chaque Pack Mensuel inclut 2 articles SEO local par mois. Ces articles ciblent des requ\u00eates comme \u00ab mandataire immobilier [ville] \u00bb, \u00ab vendre appartement [quartier] \u00bb ou \u00ab estimation bien immobilier [zone] \u00bb. Ils sont structur\u00e9s pour am\u00e9liorer la visibilit\u00e9 organique du mandataire dans les r\u00e9sultats Google locaux.",
+      "Oui. Chaque Pack Mensuel inclut 2 articles SEO local par mois. Ces articles ciblent des requêtes comme « mandataire immobilier [ville] », « vendre appartement [quartier] » ou « estimation bien immobilier [zone] ». Ils sont structurés pour améliorer la visibilité organique du mandataire dans les résultats Google locaux.",
   },
 ]
 

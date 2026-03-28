@@ -53,6 +53,7 @@ interface DeliverableCardProps {
   title: string
   content?: string
   status?: "draft" | "delivered"
+  createdAt?: string
 }
 
 export function DeliverableCard({
@@ -63,6 +64,7 @@ export function DeliverableCard({
   title,
   content: initialContent,
   status = "delivered",
+  createdAt,
 }: DeliverableCardProps) {
   const [copied, setCopied] = useState(false)
   const [loadingCopy, setLoadingCopy] = useState(false)
@@ -74,6 +76,11 @@ export function DeliverableCard({
   const deliverableType = type as DeliverableType
   const accentColor = TYPE_ACCENT_COLORS[deliverableType] || "border-l-neutral-300"
   const icon = TYPE_ICONS[deliverableType] || "📄"
+
+  // Badge "Nouveau" si créé il y a moins de 48h
+  const isNew = createdAt
+    ? Date.now() - new Date(createdAt).getTime() < 48 * 60 * 60 * 1000
+    : false
 
   /**
    * Charge le contenu si pas encore disponible.
@@ -173,6 +180,11 @@ export function DeliverableCard({
               >
                 {typeLabel}
               </span>
+              {isNew && status === "delivered" && (
+                <span className="inline-block px-2 py-0.5 rounded-full text-caption font-semibold bg-success-50 text-success-700">
+                  Nouveau
+                </span>
+              )}
               {status === "draft" && (
                 <span className="inline-block px-2 py-0.5 rounded-full text-caption font-semibold bg-warning-50 text-warning-800">
                   En préparation

@@ -21,7 +21,7 @@ interface UploadingPhoto {
 
 const MAX_PHOTOS = 10
 const MAX_SIZE_BYTES = 5 * 1024 * 1024 // 5 Mo
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"]
 
 // ─── Helpers ──────────────────────────────────────────────────────
 
@@ -161,7 +161,7 @@ export function PhotoUploader({
             file,
             preview: "",
             progress: 0,
-            error: "Format non supporté. Utilise JPG, PNG ou WebP.",
+            error: "Format non supporté. Utilise JPG, PNG, WebP ou HEIC.",
           })
           continue
         }
@@ -311,7 +311,7 @@ export function PhotoUploader({
         <input
           ref={inputRef}
           type="file"
-          accept="image/jpeg,image/png,image/webp"
+          accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
           multiple
           className="hidden"
           onChange={handleInputChange}
@@ -340,7 +340,7 @@ export function PhotoUploader({
           Glisse tes photos ici ou clique pour sélectionner
         </p>
         <p className="text-caption text-neutral-400">
-          JPG, PNG ou WebP — max 5 Mo par photo — {photos.length}/{MAX_PHOTOS}{" "}
+          JPG, PNG, WebP ou HEIC — max 5 Mo par photo — {photos.length}/{MAX_PHOTOS}{" "}
           photos
         </p>
       </div>

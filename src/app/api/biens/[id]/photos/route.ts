@@ -15,11 +15,13 @@ import type { PropertyPhoto } from "@/types/property"
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024 // 5 Mo
 const MAX_PHOTOS_PER_BIEN = 10
-const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"]
+const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"]
 const EXT_MAP: Record<string, string> = {
   "image/jpeg": "jpg",
   "image/png": "png",
   "image/webp": "webp",
+  "image/heic": "heic",
+  "image/heif": "heif",
 }
 
 export async function POST(

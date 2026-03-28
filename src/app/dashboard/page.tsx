@@ -59,7 +59,7 @@ export default async function DashboardPage() {
     return (
       <div className="rounded-xl bg-card border border-border p-10 text-center max-w-lg mx-auto mt-12">
         <h2 className="font-display text-h2 text-primary mb-3">
-          Ton abonnement est termin{"\u00e9"}
+          Ton abonnement est terminé
         </h2>
         <p className="text-body text-neutral-600 mb-6">
           Tu n{"'"}as plus accès à tes contenus. Pour retrouver ton espace
@@ -69,7 +69,7 @@ export default async function DashboardPage() {
           href="/#pricing"
           className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md transition-all duration-normal"
         >
-          D{"\u00e9"}couvrir les packs {"\u2192"}
+          Découvrir les packs →
         </a>
       </div>
     )

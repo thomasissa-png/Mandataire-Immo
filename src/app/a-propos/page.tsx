@@ -27,16 +27,16 @@ const organizationJsonLd = {
   url: "https://immocrew.fr",
   logo: "https://immocrew.fr/logo.png",
   description:
-    "Service de marketing cl\u00e9 en main pour mandataires immobiliers ind\u00e9pendants en France. Chaque mois : 12 posts, 2 articles SEO, 4 annonces, 4 scripts vid\u00e9o, livr\u00e9s pr\u00eats \u00e0 publier.",
+    "Service de marketing clé en main pour mandataires immobiliers indépendants en France. Chaque mois : 12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo, livrés prêts à publier.",
   foundingDate: "2026",
   areaServed: "FR",
   knowsAbout: [
     "marketing immobilier",
     "mandataire immobilier",
-    "r\u00e9seaux sociaux immobilier",
+    "réseaux sociaux immobilier",
     "SEO local immobilier",
   ],
-  slogan: "L'\u00e9quipe marketing des mandataires immobiliers",
+  slogan: "L'équipe marketing des mandataires immobiliers",
   serviceArea: {
     "@type": "Country",
     name: "France",
@@ -71,13 +71,13 @@ const STEPS = [
     number: "1",
     title: "Onboarding",
     description:
-      "Tu remplis un questionnaire de 7 minutes : ta zone, ton r\u00e9seau, ta sp\u00e9cialit\u00e9, ton ton de communication. C\u2019est la seule \u00e9tape o\u00f9 tu dois agir.",
+      "Tu remplis un questionnaire de 7 minutes : ta zone, ton réseau, ta spécialité, ton ton de communication. C'est la seule étape où tu dois agir.",
   },
   {
     number: "2",
     title: "Production",
     description:
-      "L\u2019\u00e9quipe ImmoCrew produit tes contenus personnalis\u00e9s avec les donn\u00e9es de ta zone : quartier, prix au m\u00b2, \u00e9coles, commerces, transports.",
+      "L'équipe ImmoCrew produit tes contenus personnalisés avec les données de ta zone : quartier, prix au m², écoles, commerces, transports.",
   },
   {
     number: "3",
@@ -260,10 +260,10 @@ export default function AProposPage() {
               <div className="rounded-xl bg-card border border-border p-6 desktop:p-8">
                 <ul className="space-y-3">
                   {[
-                    "12 posts r\u00e9seaux sociaux personnalis\u00e9s (LinkedIn, Instagram, Facebook)",
-                    "4 scripts vid\u00e9o pour Reels et Stories",
+                    "12 posts réseaux sociaux personnalisés (LinkedIn, Instagram, Facebook)",
+                    "4 scripts vidéo pour Reels et Stories",
                     "2 articles SEO local ciblant ta ville et ton quartier",
-                    "4 annonces immobili\u00e8res storytelling",
+                    "4 annonces immobilières storytelling",
                     "1 newsletter pour ta base de contacts",
                     "1 email de prospection vendeurs",
                     "1 calendrier de publication mensuel",

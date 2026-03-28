@@ -185,9 +185,9 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
       { value: "", label: "Choisis ton niveau..." },
       {
         value: "debutant",
-        label: "Je n'ai jamais fait de video — ca me stresse",
+        label: "Je n'ai jamais fait de vidéo — ça me stresse",
       },
-      { value: "a_laise", label: "J'ai deja fait quelques videos, ca va" },
+      { value: "a_laise", label: "J'ai déjà fait quelques vidéos, ça va" },
       { value: "expert", label: "Je suis à l'aise devant la caméra" },
     ],
   },
