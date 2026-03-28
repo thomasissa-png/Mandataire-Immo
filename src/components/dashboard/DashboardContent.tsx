@@ -399,56 +399,110 @@ export function DashboardContent({
 
       {/* PLAN STRATEGIQUE — résumé + recommandations */}
       {profile ? (
-        <div className="rounded-lg bg-card border border-border p-4">
+        <div className="rounded-lg bg-card border border-border p-5">
           <h2 className="font-display text-h3 text-primary mb-3">👋 Salut {firstName} — ton plan du mois</h2>
-          <p className="text-body-sm text-neutral-600 mb-4">
-            On te connaît : mandataire {profile.reseau || ""} à {profile.ville || "ta zone"}, spécialisée {profile.type_biens || "immobilier"}.
-            Voici ce qu{"'"}on te recommande ce mois.
-          </p>
+
+          {/* Section "On te connaît" — données profil */}
+          <div className="text-body-sm text-neutral-600 mb-4 space-y-1">
+            <p>
+              On connaît bien ton marché : tu es mandataire {profile.reseau || ""} à {profile.ville || "ta zone"}{profile.quartiers ? `, quartiers ${profile.quartiers}` : ""}.
+            </p>
+            <p>
+              Tu travailles surtout {profile.type_biens || "l'immobilier"}{profile.gamme_prix ? ` dans la gamme ${profile.gamme_prix}` : ""}{profile.cible_clients ? ` pour ${profile.cible_clients}` : ""}.
+              {profile.ton_communication ? ` Ton style : ${profile.ton_communication}.` : ""}
+            </p>
+            <p className="font-medium text-primary-700">Voici ton plan d{"'"}action personnalisé.</p>
+          </div>
+
           <div className="space-y-3">
+            {/* STRATEGIE — bios & positionnement */}
             {strategie.length > 0 ? (
               <div className="flex items-start gap-3 p-3 rounded-lg bg-primary-50/50">
-                <span className="text-lg mt-0.5" aria-hidden="true">1️⃣</span>
+                <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">👤</span>
                 <div>
                   <p className="text-body-sm font-semibold text-primary">Mets à jour tes bios et ton positionnement</p>
                   <p className="text-caption text-neutral-500">Copie-les sur Instagram, Facebook et LinkedIn.</p>
                 </div>
               </div>
             ) : null}
+
+            {/* POSTS */}
             {posts.length > 0 ? (
               <div className="flex items-start gap-3 p-3 rounded-lg bg-secondary-50/50">
-                <span className="text-lg mt-0.5" aria-hidden="true">2️⃣</span>
+                <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">📱</span>
                 <div>
-                  <p className="text-body-sm font-semibold text-primary">Publie tes posts — {postsThisMonth > 0 ? `${postsThisMonth} ce mois` : `${posts.length} prêts`}</p>
-                  <p className="text-caption text-neutral-500">On te conseille 3 posts/semaine : lundi, mercredi, vendredi à 18h.</p>
+                  <p className="text-body-sm font-semibold text-primary">Tes {postsThisMonth > 0 ? postsThisMonth : posts.length} posts sont prêts</p>
+                  <p className="text-caption text-neutral-500">
+                    Publie sur Instagram et LinkedIn — tes deux meilleurs canaux pour toucher des vendeurs locaux. Le matin (7h-9h) sur LinkedIn pour les pros, le soir (18h-20h) sur Instagram pour les particuliers.
+                  </p>
+                  <p className="text-caption mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <a href="#section-posts" className="text-secondary-700 font-semibold hover:underline">Voir mes posts ci-dessous</a>
+                    <span className="text-neutral-300 hidden tablet:inline" aria-hidden="true">|</span>
+                    <a href="/blog/calendrier-editorial-mandataire" className="text-neutral-500 hover:text-secondary-700 hover:underline">📖 Lire : Comment créer un calendrier éditorial efficace</a>
+                  </p>
                 </div>
               </div>
             ) : null}
+
+            {/* SCRIPTS VIDEO */}
             {scripts.length > 0 ? (
               <div className="flex items-start gap-3 p-3 rounded-lg bg-warning-50/50">
-                <span className="text-lg mt-0.5" aria-hidden="true">3️⃣</span>
+                <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">🎬</span>
                 <div>
-                  <p className="text-body-sm font-semibold text-primary">Tourne tes vidéos — {scripts.length} scripts prêts</p>
-                  <p className="text-caption text-neutral-500">Filme-toi avec ton iPhone face caméra. 30 à 60 secondes, c{"'"}est suffisant.</p>
+                  <p className="text-body-sm font-semibold text-primary">{scripts.length} script{scripts.length > 1 ? "s" : ""} vidéo prêt{scripts.length > 1 ? "s" : ""} à tourner</p>
+                  <p className="text-caption text-neutral-500">
+                    Format Reel (30-60 sec) vertical. Filme-toi face caméra en lumière naturelle. Pas besoin d{"'"}être parfaite — l{"'"}authenticité marche mieux que la production.
+                  </p>
+                  <p className="text-caption mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <a href="#section-scripts" className="text-secondary-700 font-semibold hover:underline">Voir mes scripts ci-dessous</a>
+                    <span className="text-neutral-300 hidden tablet:inline" aria-hidden="true">|</span>
+                    <a href="/blog/se-differencier-mandataire-immobilier" className="text-neutral-500 hover:text-secondary-700 hover:underline">📖 Lire : Se différencier comme mandataire</a>
+                  </p>
                 </div>
               </div>
             ) : null}
+
+            {/* ANNONCES */}
             {annonces.length > 0 ? (
               <div className="flex items-start gap-3 p-3 rounded-lg bg-success-50/50">
-                <span className="text-lg mt-0.5" aria-hidden="true">4️⃣</span>
+                <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">📝</span>
                 <div>
-                  <p className="text-body-sm font-semibold text-primary">Publie tes annonces sur SeLoger et LeBonCoin</p>
-                  <p className="text-caption text-neutral-500">{annonces.length} annonce{annonces.length > 1 ? "s" : ""} personnalisée{annonces.length > 1 ? "s" : ""} pour tes biens.</p>
+                  <p className="text-body-sm font-semibold text-primary">{annonces.length} annonce{annonces.length > 1 ? "s" : ""} prête{annonces.length > 1 ? "s" : ""} pour les portails</p>
+                  <p className="text-caption text-neutral-500">
+                    Copie-les sur SeLoger, LeBonCoin et Bien{"'"}ici. Chaque annonce inclut un lien vers ta page publique ImmoCrew — partage-le aussi par SMS à tes acheteurs potentiels.
+                  </p>
+                  <p className="text-caption mt-1.5">
+                    <a href="#section-biens" className="text-secondary-700 font-semibold hover:underline">Voir mes annonces ci-dessous</a>
+                  </p>
+                </div>
+              </div>
+            ) : null}
+
+            {/* ARTICLES SEO */}
+            {articles.length > 0 ? (
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-blue-50/50">
+                <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">📰</span>
+                <div>
+                  <p className="text-body-sm font-semibold text-primary">{articles.length} article{articles.length > 1 ? "s" : ""} SEO pour ta visibilité locale</p>
+                  <p className="text-caption text-neutral-500">
+                    Publie-les sur ton blog ou ta page Facebook. Le SEO local met 2-3 mois à porter ses fruits — la régularité est la clé.
+                  </p>
+                  <p className="text-caption mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <a href="#section-articles" className="text-secondary-700 font-semibold hover:underline">Voir mes articles ci-dessous</a>
+                    <span className="text-neutral-300 hidden tablet:inline" aria-hidden="true">|</span>
+                    <a href="/blog/google-business-profile-mandataire" className="text-neutral-500 hover:text-secondary-700 hover:underline">📖 Lire : Google Business Profile pour mandataire</a>
+                  </p>
                 </div>
               </div>
             ) : null}
           </div>
+
           {/* Question / feedback */}
           <div className="mt-4 pt-4 border-t border-border">
             <p className="text-body-sm text-neutral-500">
-              Un truc à changer ? Un bien à ajouter ?{" "}
+              Une question ? Un souci avec un contenu ?{" "}
               <a href="mailto:support@immocrew.fr?subject=Retour%20sur%20mes%20contenus" className="text-secondary-700 font-semibold hover:underline">
-                Écris-nous, on répond sous 4h
+                Écris-nous, on te répond au plus vite
               </a>
             </p>
           </div>
@@ -458,7 +512,7 @@ export function DashboardContent({
       {/* ============================================================ */}
       {/* MES BIENS (self-service — property_pages)                       */}
       {/* ============================================================ */}
-      <MesBiensSection />
+      <MesBiensSection annonces={annonces} />
 
       {/* CTA Passer au mensuel — APRÈS le plan, pas avant */}
       {pack === "lancement" ? (
@@ -494,41 +548,35 @@ export function DashboardContent({
       {/* ============================================================ */}
       {/* 1. MON IDENTITÉ PRO (stratégie — EN PREMIER)                  */}
       {/* ============================================================ */}
-      {isVisible("identite") && strategie.length > 0 ? (
+      {isVisible("identite") && strategie.length > 0 ? (() => {
+        // Dédupliquer par type (garde le plus récent)
+        const uniqueStrategie = strategie.reduce<Deliverable[]>((acc, d) => {
+          if (!acc.find(x => x.type === d.type)) acc.push(d)
+          return acc
+        }, [])
+        return (
         <section>
-          <SectionHeader icon="👤" title="Mon profil et identité" count={strategie.length} isOpen={!collapsed.has("identite")} onToggle={() => toggle("identite")} />
+          <SectionHeader icon="👤" title="Mon profil et identité" count={uniqueStrategie.length} isOpen={!collapsed.has("identite")} onToggle={() => toggle("identite")} />
           {!collapsed.has("identite") ? (
             <div className="mt-3 grid grid-cols-1 tablet:grid-cols-2 gap-3">
-              {strategie.map((d) => (
-                <DeliverableCard key={d.id} id={d.id} type={d.type} typeLabel={TYPE_LABELS[d.type] || d.type} typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"} title={d.title} status={d.status} />
+              {uniqueStrategie.map((d) => (
+                <div key={d.id}>
+                  <DeliverableCard id={d.id} type={d.type} typeLabel={TYPE_LABELS[d.type] || d.type} typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"} title={d.title} status={d.status} />
+                  {STRATEGY_HINTS[d.type] ? <p className="text-caption text-neutral-400 mt-1 ml-1">{STRATEGY_HINTS[d.type]}</p> : null}
+                </div>
               ))}
             </div>
           ) : null}
         </section>
-      ) : null}
+        )})() : null}
+
+      {/* Annonces fusionnées dans MesBiensSection — plus de section séparée */}
 
       {/* ============================================================ */}
-      {/* 2. ANNONCES (livrables uniquement — les biens sont dans        */}
-      {/*    MesBiensSection plus haut)                                  */}
-      {/* ============================================================ */}
-      {isVisible("biens") && annonces.length > 0 ? (
-        <section>
-          <SectionHeader icon="📝" title="Mes annonces" count={annonces.length} isOpen={!collapsed.has("biens")} onToggle={() => toggle("biens")} />
-          {!collapsed.has("biens") ? (
-            <div className="mt-3 space-y-2">
-              {annonces.map((a) => (
-                <DeliverableCard key={a.id} id={a.id} type={a.type} typeLabel="Annonce" typeColor="bg-success-50 text-success-700" title={a.title} status={a.status} />
-              ))}
-            </div>
-          ) : null}
-        </section>
-      ) : null}
-
-      {/* ============================================================ */}
-      {/* 3. MON CALENDRIER & POSTS                                     */}
+      {/* 2. MON CALENDRIER & POSTS                                     */}
       {/* ============================================================ */}
       {isVisible("posts") && posts.length > 0 ? (
-        <section>
+        <section id="section-posts">
           <SectionHeader icon="📅" title={`Mon calendrier — ${postsThisMonth > 0 ? `${postsThisMonth} posts ce mois` : `${posts.length} posts`}`} count={posts.length} isOpen={!collapsed.has("posts")} onToggle={() => toggle("posts")} />
           {!collapsed.has("posts") ? (
             <div className="mt-3">
@@ -574,7 +622,7 @@ export function DashboardContent({
       {/* 4. MES ARTICLES                                               */}
       {/* ============================================================ */}
       {isVisible("articles") && articles.length > 0 ? (
-        <section>
+        <section id="section-articles">
           <SectionHeader icon="📝" title="Mes articles" count={articles.length} isOpen={!collapsed.has("articles")} onToggle={() => toggle("articles")} />
           {!collapsed.has("articles") ? (
             <div className="mt-3 space-y-3">
@@ -590,7 +638,7 @@ export function DashboardContent({
       {/* 5. MES SCRIPTS VIDÉO                                          */}
       {/* ============================================================ */}
       {isVisible("scripts") && scripts.length > 0 ? (
-        <section>
+        <section id="section-scripts">
           <SectionHeader icon="🎬" title="Mes scripts vidéo" count={scripts.length} isOpen={!collapsed.has("scripts")} onToggle={() => toggle("scripts")} />
           {!collapsed.has("scripts") ? (
             <div className="mt-3">
