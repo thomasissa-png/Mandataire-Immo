@@ -8,6 +8,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server"
+import sharp from "sharp"
 import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { uploadFile } from "@/lib/storage"
@@ -82,7 +83,7 @@ export async function POST(
   let mimeType = "image/jpeg"
 
   const dataUriMatch = base64Data.match(
-    /^data:(image\/(jpeg|png|webp));base64,(.+)$/
+    /^data:(image\/(jpeg|png|webp|heic|heif));base64,(.+)$/
   )
   if (dataUriMatch) {
     mimeType = dataUriMatch[1]
@@ -113,6 +114,20 @@ export async function POST(
       { error: "Cette photo dépasse 5 Mo — réduis sa taille avant upload." },
       { status: 400 }
     )
+  }
+
+  // Convertir HEIC/HEIF en JPEG (les navigateurs non-Safari ne les affichent pas)
+  if (mimeType === "image/heic" || mimeType === "image/heif") {
+    try {
+      buffer = await sharp(buffer).jpeg({ quality: 85 }).toBuffer()
+      mimeType = "image/jpeg"
+    } catch (err) {
+      console.error(`[Photo upload] Erreur conversion HEIC pour bien ${propertyId}:`, err)
+      return NextResponse.json(
+        { error: "Impossible de convertir cette photo HEIC. Essaie un autre format (JPG, PNG)." },
+        { status: 400 }
+      )
+    }
   }
 
   // Déterminer l'extension et construire la clé

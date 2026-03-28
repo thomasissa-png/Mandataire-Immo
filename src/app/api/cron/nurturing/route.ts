@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { query } from "@/lib/db"
-import { sendEmail } from "@/lib/email"
+import { sendEmail, buildUnsubscribeUrl } from "@/lib/email"
 import { nurturingJ2, nurturingJ7, nurturingJ14 } from "@/lib/email-templates"
 
 /**
@@ -52,6 +52,7 @@ export async function GET(request: NextRequest) {
         c.created_at <= NOW() - INTERVAL '2 days'
         AND c.pack = 'lancement'
         AND c.status != 'pending'
+        AND (c.email_unsubscribed = FALSE OR c.email_unsubscribed IS NULL)
         AND c.id NOT IN (
           SELECT el.client_id FROM email_logs el WHERE el.email_type = 'nurturing_j2' AND el.status = 'sent'
         )
@@ -62,6 +63,7 @@ export async function GET(request: NextRequest) {
           email,
           dashboardUrl: `${baseUrl}/dashboard`,
           pricingUrl: `${baseUrl}/#pricing`,
+          unsubscribeUrl: buildUnsubscribeUrl(email),
         }),
       results,
     })
@@ -75,6 +77,7 @@ export async function GET(request: NextRequest) {
       sqlWhere: `
         c.created_at <= NOW() - INTERVAL '7 days'
         AND c.status != 'pending'
+        AND (c.email_unsubscribed = FALSE OR c.email_unsubscribed IS NULL)
         AND c.id NOT IN (
           SELECT el.client_id FROM email_logs el WHERE el.email_type = 'nurturing_j7' AND el.status = 'sent'
         )
@@ -85,6 +88,7 @@ export async function GET(request: NextRequest) {
           email,
           dashboardUrl: `${baseUrl}/dashboard`,
           pricingUrl: `${baseUrl}/#pricing`,
+          unsubscribeUrl: buildUnsubscribeUrl(email),
         }),
       results,
     })
@@ -100,6 +104,7 @@ export async function GET(request: NextRequest) {
         AND c.pack = 'lancement'
         AND c.stripe_subscription_id IS NULL
         AND c.status != 'pending'
+        AND (c.email_unsubscribed = FALSE OR c.email_unsubscribed IS NULL)
         AND c.id NOT IN (
           SELECT el.client_id FROM email_logs el WHERE el.email_type = 'nurturing_j14' AND el.status = 'sent'
         )
@@ -110,6 +115,7 @@ export async function GET(request: NextRequest) {
           email,
           dashboardUrl: `${baseUrl}/dashboard`,
           pricingUrl: `${baseUrl}/#pricing`,
+          unsubscribeUrl: buildUnsubscribeUrl(email),
         }),
       results,
     })

@@ -8,6 +8,20 @@
 import { query } from "@/lib/db"
 
 // ---------------------------------------------------------------------------
+// Utilitaire — URL de désinscription
+// ---------------------------------------------------------------------------
+
+/**
+ * Génère l'URL de désinscription pour un email donné.
+ * Le token est l'email encodé en base64 (V1).
+ */
+export function buildUnsubscribeUrl(email: string): string {
+  const baseUrl = process.env.NEXTAUTH_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "https://immocrew.fr"
+  const token = Buffer.from(email).toString("base64")
+  return `${baseUrl}/api/unsubscribe?token=${token}`
+}
+
+// ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 

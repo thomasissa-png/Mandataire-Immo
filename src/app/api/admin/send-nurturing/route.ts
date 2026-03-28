@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { isAdminAuthenticated } from "@/lib/admin-auth"
 import { query } from "@/lib/db"
-import { sendEmail, isEmailSent } from "@/lib/email"
+import { sendEmail, isEmailSent, buildUnsubscribeUrl } from "@/lib/email"
 import { nurturingJ2, nurturingJ7, nurturingJ14 } from "@/lib/email-templates"
 
 /**
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     } else {
       // --- Mode batch ---
       const { rows: clients } = await query<{ id: string }>(
-        "SELECT id FROM clients WHERE status != 'pending' AND email IS NOT NULL ORDER BY created_at ASC LIMIT 100"
+        "SELECT id FROM clients WHERE status != 'pending' AND email IS NOT NULL AND (email_unsubscribed = FALSE OR email_unsubscribed IS NULL) ORDER BY created_at ASC LIMIT 100"
       )
       for (const client of clients) {
         await sendNurturingForClient(client.id, baseUrl, results)
@@ -73,6 +73,7 @@ interface ClientRow {
   pack: string | null
   stripe_subscription_id: string | null
   created_at: string
+  email_unsubscribed: boolean | null
 }
 
 async function sendNurturingForClient(
@@ -84,7 +85,7 @@ async function sendNurturingForClient(
   }
 ): Promise<void> {
   const { rows } = await query<ClientRow>(
-    "SELECT id, email, first_name, pack, stripe_subscription_id, created_at::TEXT FROM clients WHERE id = $1 LIMIT 1",
+    "SELECT id, email, first_name, pack, stripe_subscription_id, created_at::TEXT, email_unsubscribed FROM clients WHERE id = $1 LIMIT 1",
     [clientId]
   )
 
@@ -99,6 +100,12 @@ async function sendNurturingForClient(
     return
   }
 
+  // Vérifier que le client n'est pas désinscrit
+  if (client.email_unsubscribed) {
+    results.sent.push({ clientId, email: client.email, type: "all", status: "skipped" })
+    return
+  }
+
   const prenom = client.first_name ?? "toi"
   const createdAt = new Date(client.created_at)
   const now = new Date()
@@ -109,6 +116,7 @@ async function sendNurturingForClient(
     email: client.email,
     dashboardUrl: `${baseUrl}/dashboard`,
     pricingUrl: `${baseUrl}/#pricing`,
+    unsubscribeUrl: buildUnsubscribeUrl(client.email),
   }
 
   // J+2 : Pack Lancement, >= 2 jours

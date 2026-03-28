@@ -17,6 +17,7 @@ export interface EmailTemplateParams {
   email: string
   dashboardUrl: string
   pricingUrl: string
+  unsubscribeUrl: string
 }
 
 export interface EmailTemplate {
@@ -43,7 +44,7 @@ const COLORS = {
 // Layout HTML partagé
 // ---------------------------------------------------------------------------
 
-function wrapInLayout(content: string): string {
+function wrapInLayout(content: string, unsubscribeUrl: string): string {
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -75,7 +76,7 @@ ${content}
 <td style="padding:24px 32px;background-color:${COLORS.fondGris};text-align:center;font-size:13px;color:${COLORS.texteSecondaire};line-height:1.5;">
 <p style="margin:0 0 8px;">ImmoCrew — Ton équipe marketing immobilier</p>
 <p style="margin:0 0 8px;">VERSI — 75 rue de la République, 69002 Lyon</p>
-<p style="margin:0;"><a href="#unsubscribe" style="color:${COLORS.texteSecondaire};text-decoration:underline;">Se désinscrire</a></p>
+<p style="margin:0;"><a href="${unsubscribeUrl}" style="color:${COLORS.texteSecondaire};text-decoration:underline;">Se désinscrire</a></p>
 </td>
 </tr>
 
@@ -103,7 +104,7 @@ ${text}
 // ---------------------------------------------------------------------------
 
 export function nurturingJ2(params: EmailTemplateParams): EmailTemplate {
-  const { prenom, dashboardUrl } = params
+  const { prenom, dashboardUrl, unsubscribeUrl } = params
   const prixMensuel = PACK_MENSUEL.price
 
   const subject = `Salut ${prenom} — ton kit marketing est prêt !`
@@ -129,7 +130,7 @@ ${ctaButton("Voir mes contenus", dashboardUrl)}
 
 <p style="margin:0 0 8px;">À très vite,</p>
 <p style="margin:0;font-weight:600;">L'équipe ImmoCrew</p>
-`)
+`, unsubscribeUrl)
 
   const text = `Salut ${prenom},
 
@@ -158,7 +159,7 @@ L'équipe ImmoCrew`
 // ---------------------------------------------------------------------------
 
 export function nurturingJ7(params: EmailTemplateParams): EmailTemplate {
-  const { prenom } = params
+  const { prenom, unsubscribeUrl } = params
 
   const subject = `${prenom}, tu as publié tes premiers posts ?`
 
@@ -181,7 +182,7 @@ ${ctaButton("Besoin d'aide ? Écris-nous", "mailto:support@immocrew.fr")}
 
 <p style="margin:0 0 8px;">À bientôt,</p>
 <p style="margin:0;font-weight:600;">L'équipe ImmoCrew</p>
-`)
+`, unsubscribeUrl)
 
   const text = `Salut ${prenom},
 
@@ -208,7 +209,7 @@ L'équipe ImmoCrew`
 // ---------------------------------------------------------------------------
 
 export function nurturingJ14(params: EmailTemplateParams): EmailTemplate {
-  const { prenom, pricingUrl } = params
+  const { prenom, pricingUrl, unsubscribeUrl } = params
   const prixMensuel = PACK_MENSUEL.price
 
   const subject = `2 semaines déjà — tu passes au mensuel, ${prenom} ?`
@@ -238,7 +239,7 @@ ${ctaButton("Voir le Pack Mensuel", pricingUrl)}
 
 <p style="margin:0 0 8px;">À bientôt,</p>
 <p style="margin:0;font-weight:600;">L'équipe ImmoCrew</p>
-`)
+`, unsubscribeUrl)
 
   const text = `Salut ${prenom},
 

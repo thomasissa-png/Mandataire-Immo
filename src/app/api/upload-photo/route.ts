@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import sharp from "sharp"
 import { getSessionUser } from "@/lib/getSessionUser"
 import { uploadFile } from "@/lib/storage"
 
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
   let mimeType = "image/jpeg"
 
   const dataUriMatch = base64Data.match(
-    /^data:(image\/(jpeg|png|webp));base64,(.+)$/
+    /^data:(image\/(jpeg|png|webp|heic|heif));base64,(.+)$/
   )
   if (dataUriMatch) {
     mimeType = dataUriMatch[1]
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Valider le type MIME
-  const allowedTypes = ["image/jpeg", "image/png", "image/webp"]
+  const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"]
   if (!allowedTypes.includes(mimeType)) {
     return NextResponse.json(
       { error: "Format non supporté. Utilise JPG, PNG ou WebP." },
@@ -52,8 +53,8 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  // Decoder et verifier la taille
-  const buffer = Buffer.from(base64Data, "base64")
+  // Décoder et vérifier la taille
+  let buffer: Buffer<ArrayBufferLike> = Buffer.from(base64Data, "base64")
   if (buffer.length > MAX_SIZE_BYTES) {
     return NextResponse.json(
       { error: "La photo dépasse 5 Mo. Réduis sa taille et réessaie." },
@@ -61,7 +62,21 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  // Determiner l'extension
+  // Convertir HEIC/HEIF en JPEG (les navigateurs non-Safari ne les affichent pas)
+  if (mimeType === "image/heic" || mimeType === "image/heif") {
+    try {
+      buffer = await sharp(buffer).jpeg({ quality: 85 }).toBuffer()
+      mimeType = "image/jpeg"
+    } catch (err) {
+      console.error("[Photo profil] Erreur conversion HEIC:", err)
+      return NextResponse.json(
+        { error: "Impossible de convertir cette photo HEIC. Essaie un autre format (JPG, PNG)." },
+        { status: 400 }
+      )
+    }
+  }
+
+  // Déterminer l'extension
   const extMap: Record<string, string> = {
     "image/jpeg": "jpg",
     "image/png": "png",
