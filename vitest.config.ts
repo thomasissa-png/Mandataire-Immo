@@ -35,8 +35,6 @@ export default defineConfig({
       NEXTAUTH_URL: "http://localhost:3000",
       DATABASE_URL: "postgresql://test:test@localhost:5432/testdb",
       NEXT_PUBLIC_APP_URL: "https://immocrew.fr",
-      NEXT_PUBLIC_POSTHOG_KEY: "phc_test_key",
-      NEXT_PUBLIC_POSTHOG_HOST: "https://eu.posthog.com",
     },
   },
   resolve: {

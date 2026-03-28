@@ -32,8 +32,8 @@ interface TrackingProperties {
  * Safe to call server-side — it will no-op.
  */
 export function track(event: TrackingEvent, properties?: TrackingProperties) {
-  if (typeof window !== "undefined" && (window as Record<string, unknown>).umami) {
-    const umami = (window as Record<string, unknown>).umami as {
+  if (typeof window !== "undefined" && (window as unknown as Record<string, unknown>).umami) {
+    const umami = (window as unknown as Record<string, unknown>).umami as {
       track: (event: string, data?: Record<string, string | number | boolean | null | undefined>) => void
     }
     umami.track(event, properties)

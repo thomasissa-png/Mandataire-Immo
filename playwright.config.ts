@@ -92,8 +92,7 @@ export default defineConfig({
       STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || "sk_test_placeholder",
       NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
         process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "pk_test_placeholder",
-      /* PostHog — disabled in test */
-      NEXT_PUBLIC_POSTHOG_KEY: "phc_test_disabled",
+      /* Analytics = Umami Cloud (script public, no env key needed) */
     },
   },
 })
