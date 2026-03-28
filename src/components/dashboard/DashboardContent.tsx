@@ -104,23 +104,25 @@ interface NavItem { id: string; label: string; icon: string; count: number }
 
 function DashboardNav({ items, active, onSelect }: { items: NavItem[]; active: string; onSelect: (id: string) => void }) {
   return (
-    <nav className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" aria-label="Sections">
-      {items.map((item) => (
-        <button
-          key={item.id}
-          type="button"
-          onClick={() => onSelect(item.id === active ? "" : item.id)}
-          className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-body-sm font-medium transition-colors duration-150 ${
-            active === item.id
-              ? "bg-primary text-white"
-              : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
-          }`}
-        >
-          <span aria-hidden="true">{item.icon}</span>
-          {item.label}
-          {item.count > 0 ? <span className="text-caption opacity-70">({item.count})</span> : null}
-        </button>
-      ))}
+    <nav className="lg:hidden sticky top-14 z-10 bg-card/95 backdrop-blur-sm py-2 -mx-4 px-4 border-b border-border" aria-label="Sections">
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        {items.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => onSelect(item.id === active ? "" : item.id)}
+            className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 rounded-full text-body font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 ${
+              active === item.id
+                ? "bg-primary text-white"
+                : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+            }`}
+          >
+            <span aria-hidden="true">{item.icon}</span>
+            {item.label}
+            {item.count > 0 ? <span className="text-caption opacity-70">({item.count})</span> : null}
+          </button>
+        ))}
+      </div>
     </nav>
   )
 }
@@ -242,7 +244,47 @@ export function DashboardContent({
   // MAIN LAYOUT
   // ============================================================
   return (
-    <div className="space-y-6">
+    <div className="lg:flex lg:gap-6">
+
+      {/* SIDEBAR DESKTOP (≥1024px) */}
+      <aside className="hidden lg:block lg:w-56 lg:flex-shrink-0">
+        <div className="sticky top-20 space-y-1">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setActiveNav(item.id === activeNav ? "" : item.id)}
+              className={`w-full text-left px-3 py-2.5 rounded-lg text-body-sm flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 ${
+                activeNav === item.id
+                  ? "bg-primary-50 text-primary font-semibold"
+                  : "text-neutral-600 hover:bg-neutral-100"
+              }`}
+            >
+              <span aria-hidden="true">{item.icon}</span>
+              <span className="flex-1">{item.label}</span>
+              <span className="text-caption text-neutral-400">{item.count}</span>
+            </button>
+          ))}
+          <hr className="my-3 border-border" />
+          <a
+            href="/dashboard/profile"
+            className="w-full text-left px-3 py-2.5 rounded-lg text-body-sm flex items-center gap-2 text-neutral-600 hover:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+          >
+            <span aria-hidden="true">✏️</span>
+            <span>Modifier mon profil</span>
+          </a>
+          <a
+            href="mailto:support@immocrew.fr"
+            className="w-full text-left px-3 py-2.5 rounded-lg text-body-sm flex items-center gap-2 text-neutral-600 hover:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+          >
+            <span aria-hidden="true">💬</span>
+            <span>Support</span>
+          </a>
+        </div>
+      </aside>
+
+      {/* MAIN CONTENT */}
+      <div className="flex-1 min-w-0 space-y-4">
 
       {/* WELCOME BANNER (first access only) */}
       {showWelcome && (
@@ -266,7 +308,7 @@ export function DashboardContent({
 
       {/* BANDEAU PAS DE PACK */}
       {!pack ? (
-        <a href="/#pricing" className="block rounded-lg bg-gradient-to-r from-secondary-50 to-primary-50 border border-secondary/20 p-5 hover:shadow-md transition-all group">
+        <a href="/#pricing" className="block rounded-lg bg-gradient-to-r from-secondary-50 to-primary-50 border border-secondary/20 p-4 hover:shadow-md transition-all group">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center flex-shrink-0">
               <span className="text-2xl" aria-hidden="true">🚀</span>
@@ -298,7 +340,7 @@ export function DashboardContent({
       {/* ============================================================ */}
       {/* PROFILE CARD — compact, inline                                */}
       {/* ============================================================ */}
-      <div className="rounded-lg bg-card border border-border p-5">
+      <div className="rounded-lg bg-card border border-border p-4">
         <div className="flex items-center gap-4">
           {photoUrl ? (
             <img src={photoUrl} alt={`Photo de ${firstName}`} className="w-14 h-14 rounded-xl object-cover flex-shrink-0" />
@@ -311,6 +353,15 @@ export function DashboardContent({
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="font-display text-h3 text-primary font-bold">{profile ? `${profile.prenom} ${profile.nom}` : userName}</h1>
               {packLabel ? <span className="px-2.5 py-0.5 rounded-full bg-primary-50 text-primary text-caption font-semibold">{packLabel}</span> : null}
+              <a
+                href="/dashboard/profile"
+                className="p-1.5 rounded-lg hover:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+                aria-label="Modifier mon profil"
+              >
+                <svg className="w-4 h-4 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                </svg>
+              </a>
             </div>
             {profile?.reseau ? (
               <p className="text-body-sm text-neutral-500">Mandataire {profile.reseau}{profile.ville ? ` · ${profile.ville}` : ""}</p>
@@ -336,7 +387,7 @@ export function DashboardContent({
 
       {/* PLAN STRATEGIQUE — résumé + recommandations */}
       {profile ? (
-        <div className="rounded-lg bg-card border border-border p-5">
+        <div className="rounded-lg bg-card border border-border p-4">
           <h2 className="font-display text-h3 text-primary mb-3">👋 Salut {firstName} — ton plan du mois</h2>
           <p className="text-body-sm text-neutral-600 mb-4">
             On te connaît : mandataire {profile.reseau || ""} à {profile.ville || "ta zone"}, spécialisée {profile.type_biens || "immobilier"}.
@@ -399,13 +450,13 @@ export function DashboardContent({
 
       {/* CTA Passer au mensuel — APRÈS le plan, pas avant */}
       {pack === "lancement" ? (
-        <div className="rounded-lg bg-gradient-to-r from-primary to-primary-700 p-5 flex flex-col tablet:flex-row items-start tablet:items-center justify-between gap-4 text-white">
+        <div className="rounded-lg bg-gradient-to-r from-primary to-primary-700 p-4 flex flex-col tablet:flex-row items-start tablet:items-center justify-between gap-4 text-white">
           <div>
             <p className="font-display text-h4 text-white">Continue sur ta lancée — passe au mensuel</p>
             <p className="text-body-sm text-primary-200 mt-1">12 posts, 2 articles, 4 scripts, 4 annonces — livrés chaque mois. 150€/mois, sans engagement.</p>
           </div>
           <a href="/api/checkout?pack=mensuel" className="flex-shrink-0 px-6 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm">
-            S{"'"}abonner →
+            Commencer le mensuel →
           </a>
         </div>
       ) : null}
@@ -565,6 +616,8 @@ export function DashboardContent({
         ) : null}
         <a href="mailto:support@immocrew.fr" className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors">Une question sur tes contenus ?</a>
       </div>
-    </div>
+
+      </div>{/* end flex-1 main content */}
+    </div>{/* end lg:flex */}
   )
 }
