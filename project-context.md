@@ -296,36 +296,32 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 
 - **Date de cloture** : 2026-03-28, session 7
 - **Branche** : `claude/update-gradient-agents-ZwVm9`
-- **Resume de la session** : (1) Mise a jour Gradient Agents depuis Agent-Team. (2) Feature upload photos + annonces completes implementee (16 fichiers : migration SQL 009, 7 endpoints API, 8 composants UI, 2 routes dashboard). (3) Audit complet 5 agents (UX 7.4, Copy 8.1, Design 7.5, Sophie 7.4, QA technique) sur 18 pages. (4) 10 P0 corriges (double section biens, password UX, UTF-8, CTA sans pack, admin boost, page publique sans slug). (5) ~12 P1 corriges (XSS sanitizer, focus-visible systemique 41 remplacements, contrastes WCAG, HEIC iPhone, "livrables" -> "contenus", accents, badge "Nouveau"). (6) 3 P2 residuels corriges (eye toggle reset, focus-ring, HEIC onboarding). Score final post-corrections : 8.9-9.1/10.
+- **Resume de la session** : Session en 2 phases. Phase 1 : (1) Mise a jour Gradient Agents. (2) Feature upload photos + annonces (16 fichiers). (3) Audit 5 agents sur 18 pages. (4) 10 P0 + 12 P1 + 3 P2 corriges → score 9.1/10. Phase 2 : (5) Page /dashboard/profile (edition profil 6 sections, dirty tracking, annuler, nav ancres mobile). (6) Sauvegarde onboarding serveur (JSONB draft, fire-and-forget, spinner chargement). (7) Sequence email nurturing (3 templates J+2/J+7/J+14, cron idempotent, admin manuel, mode log only). (8) Audit UX 8-9/10 + QA 9.8/10. (9) 1 P0 + 5 P1 corriges → score final 9.5+/10.
 - **Travaux termines cette session** :
-  - Feature upload photos + annonces completes (spec -> code complet)
-  - Migration SQL 009 (annonce_generated_at + index client_status)
-  - 7 endpoints API biens (CRUD + photos + generate-annonce + proxy photos)
-  - 8 composants UI (BienForm, PhotoUploader, AnnonceBlock, BienCard, BienFicheClient, MesBiensSection + 2 pages dashboard)
-  - 5 audits complets (UX, Design, Copy, Sophie, QA) — livrables dans docs/
-  - 10 P0 + 12 P1 + 3 P2 corriges — score 6.5 -> 9.1/10
-  - Sanitizer XSS sur markdownToHtml
-  - focus-visible systemique (41 remplacements dans 6 fichiers)
-  - Support HEIC/HEIF iPhone (PhotoUploader + onboarding + API)
-  - "livrables" -> "contenus" partout client-facing (13 occurrences)
-  - Unicode escapes -> UTF-8 natif (30+ dans 9 fichiers)
-  - Badge "Nouveau" sur contenus < 48h (DeliverableCard)
-  - Eye toggle mot de passe sur tous les formulaires auth
-  - Banniere CTA pour comptes sans pack
-  - Bouton Boost Mandat dans admin
+  - Feature upload photos + annonces completes (7 endpoints API + 8 composants UI)
+  - 5 audits complets (UX, Design, Copy, Sophie, QA) + 10 P0 + 12 P1 + 3 P2 corriges
+  - Page /dashboard/profile : 6 sections editables, dirty tracking, bouton annuler, nav ancres mobile, upload photo
+  - Sauvegarde onboarding serveur : PATCH /api/onboarding/draft, brouillon JSONB, fire-and-forget, spinner chargement
+  - Sequence email nurturing : 3 templates (J+2, J+7, J+14), cron /api/cron/nurturing, admin /api/admin/send-nurturing, mode log only
+  - Migrations SQL 009 (photos), 010 (onboarding draft), 011 (email_logs)
+  - Sanitizer XSS, focus-visible systemique, HEIC iPhone, badge "Nouveau", eye toggle password
+  - Unicode escapes -> UTF-8 natif (30+ fichiers), "livrables" -> "contenus" (13 occurrences)
 - **Travaux en cours** :
   - Aucun — tout est pousse et committe
 - **Prochaines actions recommandees** :
-  1. **@fullstack : Page /dashboard/profile** — formulaire d'edition du profil (reprend les champs de l'onboarding en mode edition). Critique pour la retention au mois 2.
-  2. **@fullstack : Sauvegarde onboarding serveur** — endpoint PATCH /api/onboarding/draft pour eviter la perte de donnees entre sessions.
-  3. **@fullstack : Sequence email nurturing** — specifiee (J+2, J+7, J+14), non codee. Automatisation acquisition.
-  4. **@fullstack : Pre-remplissage biens onboarding dans BienForm** — les biens saisis en onboarding devraient apparaitre dans "Mes biens" (P0-10 simplifie pour l'instant avec un bandeau info).
+  1. **@fullstack : Pre-remplissage biens onboarding dans BienForm** — les biens saisis en onboarding devraient apparaitre dans "Mes biens" (bandeau info present, auto-sync a implementer).
+  2. **@fullstack : Conversion HEIC → JPEG serveur** — les photos HEIC sont acceptees mais pas converties. Sharp ou service externe pour la conversion.
+  3. **@fullstack : Integration Resend/Postmark** — les emails sont en mode "log only". Configurer EMAIL_PROVIDER + RESEND_API_KEY pour envoyer reellement.
+  4. **@fullstack : Lien desinscription email** — le #unsubscribe dans les templates est un placeholder. Implementer un vrai flow unsubscribe avant production.
+  5. **@seo : Audit SEO post-features** — les nouvelles pages /dashboard/biens/, /dashboard/profile ne sont pas indexables (normal, auth requise) mais /bien/[slug] doit avoir des meta OG correctes.
 - **Blockers** :
   - ANTHROPIC_API_KEY necessaire pour la generation (cle API payante Anthropic)
-  - Migration 008 + 009 doivent etre executees : `psql $DATABASE_URL -f sql/008_definitive_fix.sql && psql $DATABASE_URL -f sql/009_photo_upload.sql`
+  - Migrations 008 + 009 + 010 + 011 a executer : `for f in sql/008*.sql sql/009*.sql sql/010*.sql sql/011*.sql; do psql $DATABASE_URL -f $f; done`
   - Marque INPI "ImmoCrew" a verifier (collision SIRET 894616713 Auterive)
+  - EMAIL_PROVIDER + RESEND_API_KEY pour activer les emails reels
+  - CRON_SECRET pour securiser le cron nurturing
 - **Commande de reprise suggeree** :
 
 ```
-@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 7). Branche claude/update-gradient-agents-ZwVm9. Feature upload photos + annonces implementee et auditee (score 9.1/10). Prochaine priorite : page /dashboard/profile (edition profil self-service) + sauvegarde onboarding serveur (PATCH /api/onboarding/draft) + sequence email nurturing.
+@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 7). Branche claude/update-gradient-agents-ZwVm9. Toutes les features core implementees et auditees (score 9.5+/10) : upload photos, profil, onboarding draft, email nurturing. Prochaine priorite : pre-remplissage biens onboarding, conversion HEIC, integration Resend, lien desinscription.
 ```
