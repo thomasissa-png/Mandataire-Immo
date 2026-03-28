@@ -290,7 +290,7 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 ## Memo de reprise — derniere session
 
 - **Date de cloture** : 2026-03-28, session 6 (continuee sur 2 jours)
-- **Branche** : `claude/update-gradient-agents-59Rnz`
+- **Branche** : `claude/update-gradient-agents-ZwVm9`
 - **Resume de la session** : Session massive de correction, refonte et audit qualite. 4 grands chantiers : (1) Infrastructure — centralisation prix, admin simplifie, migration SQL definitive 008, fix ON CONFLICT/self-fetch/JSON parse Claude. (2) Onboarding — etape quartier supprimee (enrichissement DVF auto), LinkedIn dedup, lien annonce prioritaire, header sticky "Continuer plus tard", grilles mobile, banniere profil incomplet. (3) Dashboard — reecrit de zero en "coach marketing" : profil compact, plan strategique personnalise, biens+annonces rattachees, timeline posts avec dates francaises, scripts video avec format/duree, signaler un souci, support accessible partout, CTA passer au mensuel. 6 passes d'audit (Sophie, UX, design, copywriter, creative-strategy, QA) avec corrections iteratives. (4) Landing — section "Comment ca marche" (coaching), pilier 3 reforme, 2 FAQ coaching, 57 entites HTML nettoyees. ~40 commits, ~80 fichiers modifies.
 - **Travaux termines cette session** :
   - Prix centralises dans src/lib/pricing.ts
