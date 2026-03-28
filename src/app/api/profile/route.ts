@@ -6,35 +6,53 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
-import { z } from "zod"
 
-// ---------- Schéma de validation PATCH ----------
+// ---------- Validation PATCH ----------
 
-const profilePatchSchema = z.object({
-  prenom: z.string().min(1, "Le prénom est requis").optional(),
-  nom: z.string().min(1, "Le nom est requis").optional(),
-  telephone: z.string().optional(),
-  ville: z.string().min(1, "La ville est requise").optional(),
-  quartiers: z.string().optional(),
-  reseau: z.string().optional(),
-  specialites: z.string().optional(),
-  type_biens: z.string().optional(),
-  gamme_prix: z.string().optional(),
-  cible_clients: z.string().optional(),
-  ton_communication: z.string().optional(),
-  ce_qui_te_differencie: z.string().optional(),
-  valeurs: z.string().optional(),
-  linkedin_url: z.string().optional(),
-  instagram: z.string().optional(),
-  facebook: z.string().optional(),
-  site_web: z.string().optional(),
-  bio_personnelle: z.string().optional(),
-  photo_profil_key: z.string().optional(),
-  confort_camera: z.string().optional(),
-  experience_annees: z.string().optional(),
-  nb_transactions_an: z.string().optional(),
-  departement: z.string().optional(),
-})
+/** Champs autorisés pour la mise à jour du profil */
+const ALLOWED_FIELDS = new Set([
+  "prenom", "nom", "telephone", "ville", "quartiers", "departement",
+  "reseau", "specialites", "type_biens", "gamme_prix", "cible_clients",
+  "ton_communication", "ce_qui_te_differencie", "valeurs",
+  "linkedin_url", "instagram", "facebook", "site_web",
+  "bio_personnelle", "photo_profil_key", "confort_camera",
+  "experience_annees", "nb_transactions_an",
+])
+
+/** Champs obligatoires — si envoyés, ne peuvent pas être vides */
+const REQUIRED_IF_PRESENT: Record<string, string> = {
+  prenom: "Le prénom est requis",
+  nom: "Le nom est requis",
+  ville: "La ville est requise",
+}
+
+function validatePatch(body: unknown): { data: Record<string, string>; error: string | null } {
+  if (typeof body !== "object" || body === null || Array.isArray(body)) {
+    return { data: {}, error: "Données invalides" }
+  }
+
+  const raw = body as Record<string, unknown>
+  const data: Record<string, string> = {}
+
+  for (const [key, value] of Object.entries(raw)) {
+    if (!ALLOWED_FIELDS.has(key)) continue
+    if (typeof value !== "string") continue
+    data[key] = value
+  }
+
+  // Vérifier les champs obligatoires si envoyés
+  for (const [field, message] of Object.entries(REQUIRED_IF_PRESENT)) {
+    if (field in data && !data[field].trim()) {
+      return { data: {}, error: message }
+    }
+  }
+
+  if (Object.keys(data).length === 0) {
+    return { data: {}, error: "Aucun champ à mettre à jour" }
+  }
+
+  return { data, error: null }
+}
 
 // ---------- Types ----------
 
@@ -117,16 +135,10 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "JSON invalide" }, { status: 400 })
   }
 
-  const parsed = profilePatchSchema.safeParse(body)
-  if (!parsed.success) {
-    const firstError = parsed.error.errors[0]
-    return NextResponse.json(
-      { error: firstError?.message ?? "Données invalides" },
-      { status: 400 }
-    )
+  const { data: updates, error: validationError } = validatePatch(body)
+  if (validationError) {
+    return NextResponse.json({ error: validationError }, { status: 400 })
   }
-
-  const updates = parsed.data
 
   try {
     // Récupérer le client_context actuel
@@ -147,9 +159,7 @@ export async function PATCH(request: NextRequest) {
     // Merger les champs envoyés dans le context existant
     const updatedCtx = { ...currentCtx }
     for (const [key, value] of Object.entries(updates)) {
-      if (value !== undefined) {
-        updatedCtx[key] = (value as string).trim()
-      }
+      updatedCtx[key] = value.trim()
     }
 
     // Mettre à jour aussi first_name / last_name si envoyés
