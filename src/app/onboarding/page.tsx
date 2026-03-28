@@ -365,9 +365,9 @@ export default function OnboardingPage() {
       return
     }
 
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp"]
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"]
     if (!allowedTypes.includes(file.type)) {
-      alert("Format non supporté. Utilise JPG, PNG ou WebP.")
+      alert("Format non supporté. Utilise JPG, PNG, WebP ou HEIC.")
       return
     }
 
@@ -918,7 +918,7 @@ export default function OnboardingPage() {
                       <input
                         ref={photoInputRef}
                         type="file"
-                        accept="image/jpeg,image/png,image/webp"
+                        accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
                         onChange={handlePhotoChange}
                         className="hidden"
                       />

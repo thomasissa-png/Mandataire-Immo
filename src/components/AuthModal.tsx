@@ -30,7 +30,7 @@ function EyeToggleButton({ show, onToggle }: { show: boolean; onToggle: () => vo
     <button
       type="button"
       onClick={onToggle}
-      className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 text-neutral-400 hover:text-neutral-600 transition-colors"
+      className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 text-neutral-400 hover:text-neutral-600 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none rounded transition-colors"
       aria-label={show ? "Masquer le mot de passe" : "Afficher le mot de passe"}
     >
       {show ? (
@@ -546,6 +546,8 @@ function ResetPasswordForm({
 }) {
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
@@ -637,17 +639,20 @@ function ResetPasswordForm({
           >
             Nouveau mot de passe
           </label>
-          <input
-            id="modal-reset-password"
-            type="password"
-            autoComplete="new-password"
-            required
-            minLength={8}
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="8 caractères minimum"
-            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
-          />
+          <div className="relative">
+            <input
+              id="modal-reset-password"
+              type={showNewPassword ? "text" : "password"}
+              autoComplete="new-password"
+              required
+              minLength={8}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="8 caractères minimum"
+              className="w-full h-12 px-4 pr-12 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
+            />
+            <EyeToggleButton show={showNewPassword} onToggle={() => setShowNewPassword(!showNewPassword)} />
+          </div>
         </div>
 
         <div>
@@ -657,17 +662,20 @@ function ResetPasswordForm({
           >
             Confirmer le mot de passe
           </label>
-          <input
-            id="modal-reset-confirm"
-            type="password"
-            autoComplete="new-password"
-            required
-            minLength={8}
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Retape ton mot de passe"
-            className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
-          />
+          <div className="relative">
+            <input
+              id="modal-reset-confirm"
+              type={showConfirmPassword ? "text" : "password"}
+              autoComplete="new-password"
+              required
+              minLength={8}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Retape ton mot de passe"
+              className="w-full h-12 px-4 pr-12 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
+            />
+            <EyeToggleButton show={showConfirmPassword} onToggle={() => setShowConfirmPassword(!showConfirmPassword)} />
+          </div>
         </div>
 
         {error && (
