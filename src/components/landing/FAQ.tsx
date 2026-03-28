@@ -50,7 +50,7 @@ const FAQ_ITEMS = [
       "Ton espace client, c'est deux choses. D'abord tes contenus du mois : tes 12 posts, tes articles, tes annonces, tes scripts — prêts à copier. Et ensuite ton plan du mois : ce qu'on te recommande de publier en priorité, sur quel réseau, à quelle fréquence. Tu n'as pas à réfléchir à ce que tu fais — c'est déjà décidé pour toi, avec les explications.",
   },
   {
-    question: "Comment vous savez ce qui va marcher pour MOI dans mon quartier ?",
+    question: "Comment tu sais ce qui va marcher pour MOI dans mon quartier ?",
     answer:
       "Tout commence par ton questionnaire d'onboarding : ta zone précise, tes biens, ton style de communication, tes réseaux actifs. À partir de là, chaque contenu et chaque recommandation est calé sur ton profil — pas sur un mandataire générique. On connaît les tendances de ta saison immobilière locale, les requêtes Google de tes futurs vendeurs, les types de posts qui fonctionnent dans ton secteur. C'est ça, la différence entre un template et une vraie stratégie personnalisée.",
   },

@@ -26,7 +26,7 @@ export function BeforeAfter() {
     <section className="section-padding bg-white" id="avant-apres">
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-10 desktop:mb-16">
-          La diff&eacute;rence ? Regarde par toi-m&ecirc;me.
+          La différence ? Regarde par toi-même.
         </h2>
 
         <div className="space-y-6 desktop:space-y-16">
@@ -51,7 +51,7 @@ export function BeforeAfter() {
                   {/* APRES */}
                   <div className="rounded-xl bg-white border-l-4 border-success p-6 shadow-sm">
                     <span className="text-overline text-success uppercase tracking-widest mb-3 block">
-                      Apr&egrave;s (version ImmoCrew)
+                      Après (version ImmoCrew)
                     </span>
                     <div className="space-y-3">
                       {example.after.map((paragraph, pIndex) => (
@@ -77,7 +77,7 @@ export function BeforeAfter() {
 
         {/* Mention legale */}
         <p className="mt-8 text-center text-caption text-neutral-400">
-          R&eacute;dig&eacute; par l&apos;&eacute;quipe ImmoCrew &agrave; partir de donn&eacute;es locales r&eacute;elles.
+          Rédigé par l&apos;équipe ImmoCrew à partir de données locales réelles.
         </p>
       </div>
     </section>

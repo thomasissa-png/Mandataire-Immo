@@ -27,7 +27,7 @@ export function Problem() {
     <section className="section-padding bg-white" id="probleme">
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-10 desktop:mb-16">
-          Voil&agrave; ce que vivent 9 mandataires sur 10.
+          Voilà ce que vivent 9 mandataires sur 10.
         </h2>
 
         <div className="grid gap-6 tablet:grid-cols-2">

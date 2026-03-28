@@ -49,10 +49,10 @@ export function SocialProof() {
     <section className="section-padding bg-background" id="temoignages">
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-4">
-          Ils l&apos;utilisent d&eacute;j&agrave;.
+          Ils l&apos;utilisent déjà.
         </h2>
         <p className="text-center text-body-lg text-neutral-500 mb-10 desktop:mb-16 max-w-xl mx-auto">
-          Des mandataires comme toi qui ont retrouv&eacute; du temps — et des mandats.
+          Des mandataires comme toi qui ont retrouvé du temps — et des mandats.
         </p>
 
         {/* Temoignages */}
@@ -63,7 +63,7 @@ export function SocialProof() {
               className="rounded-xl bg-card border border-border p-6 shadow-sm"
             >
               <p className="text-body text-neutral-600 leading-relaxed mb-4 italic">
-                &laquo;&nbsp;{t.quote}&nbsp;&raquo;
+                «&nbsp;{t.quote}&nbsp;»
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center flex-shrink-0">
@@ -109,7 +109,7 @@ export function SocialProof() {
         {/* Logos reseaux */}
         <div className="text-center">
           <p className="text-body-sm text-neutral-500 mb-4">
-            Utilis&eacute; par des mandataires de :
+            Utilisé par des mandataires de :
           </p>
           <div className="flex items-center justify-center flex-wrap gap-4 tablet:gap-8" aria-hidden="true">
             <span className="px-4 py-2 rounded-lg bg-card border border-border font-display font-bold text-h4 text-neutral-400">IAD</span>

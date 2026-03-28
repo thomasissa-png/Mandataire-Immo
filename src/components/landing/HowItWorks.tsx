@@ -26,11 +26,11 @@ export function HowItWorks() {
     <section className="section-padding bg-white" id="comment-ca-marche">
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-4">
-          Comment &ccedil;a marche ?
+          Comment ça marche ?
         </h2>
         <p className="text-center text-body-lg text-neutral-500 mb-10 desktop:mb-16 max-w-xl mx-auto">
           Tu t&apos;inscris, on personnalise tout, et chaque mois ton plan
-          marketing arrive&nbsp;&mdash;&nbsp;pr&ecirc;t &agrave; publier.
+          marketing arrive&nbsp;—&nbsp;prêt à publier.
         </p>
 
         {/* Steps */}
@@ -85,7 +85,7 @@ export function HowItWorks() {
                   Publie 3 posts cette semaine
                 </p>
                 <p className="text-caption text-primary-200 mt-0.5">
-                  2 posts quartier + 1 post expertise &mdash; tes contenus sont pr&ecirc;ts
+                  2 posts quartier + 1 post expertise — tes contenus sont prêts
                 </p>
               </div>
             </div>
@@ -96,10 +96,10 @@ export function HowItWorks() {
               </span>
               <div>
                 <p className="text-body-sm font-semibold text-white">
-                  Lance ton article SEO d&egrave;s lundi
+                  Lance ton article SEO dès lundi
                 </p>
                 <p className="text-caption text-primary-200 mt-0.5">
-                  &laquo;&nbsp;Acheter un appartement &agrave; La Doutre, Angers&nbsp;&raquo; &mdash; r&eacute;dig&eacute;, publie-le en 3 min
+                  «&nbsp;Acheter un appartement à La Doutre, Angers&nbsp;» — rédigé, publie-le en 3 min
                 </p>
               </div>
             </div>
@@ -110,17 +110,17 @@ export function HowItWorks() {
               </span>
               <div>
                 <p className="text-body-sm font-semibold text-white">
-                  Ce mois-ci, priorit&eacute; aux scripts Reels
+                  Ce mois-ci, priorité aux scripts Reels
                 </p>
                 <p className="text-caption text-primary-200 mt-0.5">
-                  La vid&eacute;o est le format qui engage le plus en ce moment &mdash; 4 scripts pr&ecirc;ts pour toi
+                  La vidéo est le format qui engage le plus en ce moment — 4 scripts prêts pour toi
                 </p>
               </div>
             </div>
           </div>
 
           <p className="mt-4 text-caption text-primary-300 text-center">
-            Exemple de tableau de bord ImmoCrew &mdash; ton plan du mois, personnalis&eacute; pour ta zone
+            Exemple de tableau de bord ImmoCrew — ton plan du mois, personnalisé pour ta zone
           </p>
         </div>
 

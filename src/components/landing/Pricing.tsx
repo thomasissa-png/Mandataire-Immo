@@ -26,17 +26,17 @@ export function Pricing() {
       <PricingTracker />
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-3">
-          Ton &eacute;quipe marketing, &agrave; partir de {formatPrice(PACK_MENSUEL)}.
+          Ton équipe marketing, à partir de {formatPrice(PACK_MENSUEL)}.
         </h2>
         <p className="text-center text-body-lg text-neutral-500 mb-4 max-w-xl mx-auto">
-          Un seul mandat suppl&eacute;mentaire dans l&apos;ann&eacute;e rembourse
-          ton abonnement entier. Et ta commission moyenne, c&apos;est 3 000 &agrave; 5 000&euro;.
+          Un seul mandat supplémentaire dans l&apos;année rembourse
+          ton abonnement entier. Et ta commission moyenne, c&apos;est 3 000 à 5 000€.
         </p>
 
         {/* Guidage decisionnel */}
         <p className="text-center text-body-sm text-neutral-400 mb-10 desktop:mb-16">
-          Nouvelle sur ImmoCrew ? &rarr; Pack Lancement.
-          D&eacute;j&agrave; pr&ecirc;te &agrave; t&apos;abonner ? &rarr; Pack Mensuel.
+          Nouvelle sur ImmoCrew ? → Pack Lancement.
+          Déjà prête à t&apos;abonner ? → Pack Mensuel.
         </p>
 
         {/* 2 packs principaux */}
@@ -115,7 +115,7 @@ export function Pricing() {
           <div className="tablet:flex tablet:items-center tablet:justify-between tablet:gap-8">
             <div className="mb-4 tablet:mb-0">
               <h3 className="font-display text-h3 text-primary mb-1">
-                {PACK_BOOST.name} &middot; {formatPrice(PACK_BOOST)}
+                {PACK_BOOST.name} · {formatPrice(PACK_BOOST)}
               </h3>
               <p className="text-body-sm text-neutral-500">
                 {PACK_BOOST.subtitle}
@@ -145,23 +145,23 @@ export function Pricing() {
         {/* Ancrage comparatif */}
         <div className="mt-10 max-w-2xl mx-auto rounded-xl bg-background border border-border p-6 desktop:p-8">
           <p className="font-display text-h3 text-primary text-center mb-4">
-            {formatPrice(PACK_MENSUEL)}. La d&eacute;cision la plus simple de ta semaine.
+            {formatPrice(PACK_MENSUEL)}. La décision la plus simple de ta semaine.
           </p>
           <div className="grid grid-cols-1 tablet:grid-cols-3 gap-4 text-center">
             <div className="p-4 rounded-lg bg-error-50">
-              <p className="font-display text-h2 text-error line-through">500-800&euro;</p>
+              <p className="font-display text-h2 text-error line-through">500-800€</p>
               <p className="text-body-sm text-neutral-600 mt-1">Freelance marketing</p>
-              <p className="text-caption text-neutral-400">R&eacute;sultat g&eacute;n&eacute;rique</p>
+              <p className="text-caption text-neutral-400">Résultat générique</p>
             </div>
             <div className="p-4 rounded-lg bg-warning-50">
-              <p className="font-display text-h2 text-warning-800">250-300&euro;</p>
+              <p className="font-display text-h2 text-warning-800">250-300€</p>
               <p className="text-body-sm text-neutral-600 mt-1">Outil avec templates</p>
-              <p className="text-caption text-neutral-400">&Agrave; adapter toi-m&ecirc;me</p>
+              <p className="text-caption text-neutral-400">À adapter toi-même</p>
             </div>
             <div className="p-4 rounded-lg bg-success-50 ring-2 ring-success">
               <p className="font-display text-h2 text-success-800">{PACK_MENSUEL.price}€</p>
               <p className="text-body-sm text-neutral-600 mt-1 font-semibold">ImmoCrew</p>
-              <p className="text-caption text-neutral-400">Tes posts, articles et annonces — personnalis&eacute;s</p>
+              <p className="text-caption text-neutral-400">Tes posts, articles et annonces — personnalisés</p>
             </div>
           </div>
         </div>

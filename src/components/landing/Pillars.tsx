@@ -43,7 +43,7 @@ export function Pillars() {
     <section className="section-padding bg-background" id="piliers">
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-10 desktop:mb-16">
-          Voil&agrave; ce qui change d&egrave;s le 1er mois.
+          Voilà ce qui change dès le 1er mois.
         </h2>
 
         <div className="grid gap-8 tablet:grid-cols-3">
@@ -75,7 +75,7 @@ export function Pillars() {
               {/* Verbatim */}
               <blockquote className="border-l-2 border-secondary-200 pl-4">
                 <p className="text-body-sm italic text-neutral-500">
-                  &laquo;&nbsp;{pillar.verbatim}&nbsp;&raquo;
+                  «&nbsp;{pillar.verbatim}&nbsp;»
                 </p>
               </blockquote>
             </div>
