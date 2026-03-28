@@ -1,5 +1,14 @@
 # Lessons Learned — ImmoCrew
 
+## Session 7 — 2026-03-28
+
+### Learnings
+
+| Session | Date | Catégorie | Sévérité | Description | Correction appliquée | Recommandation framework | Statut |
+|---------|------|-----------|----------|-------------|---------------------|-------------------------|--------|
+| S7 | 2026-03-28 | 8. Préférence fondateur | P0 | [PRÉFÉRENCE FONDATEUR] : Umami Cloud remplace PostHog pour le tracking analytics. Sauf indication contraire, TOUJOURS utiliser Umami et jamais d'autre solution de tracking. URL cloud : https://cloud.umami.is. Website ID : 533b1471-2f40-41dd-8754-02fa0f0615f8. Région : EU. | Migration PostHog → Umami en cours. | Règle projet : tracking = Umami Cloud uniquement. Ne jamais proposer PostHog, Plausible, GA4 ou autre sauf demande explicite du fondateur. | en-cours |
+| S7 | 2026-03-28 | 4. Biais détecté | P0 | L'agent @mandataire (Sophie) valide des écrans à 7-9/10 alors que le fondateur trouve 12+ problèmes majeurs. Cause : Sophie évalue le CODE (boutons existent, états gérés, aria OK) mais pas l'EXPÉRIENCE RÉELLE (valeur perçue, doublons visuels, espace gaspillé, contenu creux). Elle ne voit jamais le rendu visuel et ne challenge pas la valeur du contenu. | Recalibration de mandataire.md en cours. | L'agent @mandataire doit : (1) évaluer la VALEUR PERÇUE de chaque section, pas juste son existence, (2) simuler une vraie réaction émotionnelle, (3) comparer avec la promesse commerciale (landing vs dashboard), (4) détecter les doublons/répétitions, (5) challenger le contenu ("pourquoi 18h ?", "c'est quoi ces 3 bios identiques ?"). Un écran qui compile et a ses 5 états UI n'est PAS automatiquement un bon écran. | en-cours |
+
 ## Session 5 — 2026-03-26
 
 ### Learnings

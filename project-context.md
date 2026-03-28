@@ -52,7 +52,7 @@
 - **Budget IA mensuel (tokens)** : À définir (estimation : 50-100€/mois pour 30 clients)
 - **Volume d'usage IA prévu** : ~30 sessions d'agents/mois (1 par client), chaque session génère 12 posts + 2 articles + 4 annonces + 4 scripts vidéo
 - **Latence IA cible** : Pas de contrainte temps réel — production batch, livrables livrés sous 24-48h
-- **Outils d'analytics** : PostHog
+- **Outils d'analytics** : Umami Cloud (remplace PostHog — décision fondateur 2026-03-28). Website ID : 533b1471-2f40-41dd-8754-02fa0f0615f8. Région : EU. URL : https://cloud.umami.is
 
 ---
 
