@@ -171,7 +171,7 @@ async function processNurturing({
   for (const client of clients) {
     if (!client.email) continue
 
-    const prenom = client.first_name ?? "là"
+    const prenom = client.first_name ?? "toi"
     const template = buildTemplate(prenom, client.email)
 
     const result = await sendEmail({

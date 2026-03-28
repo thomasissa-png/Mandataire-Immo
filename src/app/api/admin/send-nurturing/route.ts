@@ -99,7 +99,7 @@ async function sendNurturingForClient(
     return
   }
 
-  const prenom = client.first_name ?? "là"
+  const prenom = client.first_name ?? "toi"
   const createdAt = new Date(client.created_at)
   const now = new Date()
   const daysSinceCreation = Math.floor((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24))

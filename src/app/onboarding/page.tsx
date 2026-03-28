@@ -669,6 +669,21 @@ export default function OnboardingPage() {
   // Check if current step is the biens step (dynamically find it)
   const isBiensStep = STEPS[currentStep]?.fields[0] === "__biens__"
 
+  // Spinner pendant le chargement du brouillon serveur
+  if (!draftLoaded) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white flex flex-col items-center justify-center gap-4">
+        <span className="font-display text-h2 text-primary font-bold tracking-tight">
+          ImmoCrew
+        </span>
+        <div className="flex items-center gap-2 text-neutral-500 text-body-sm">
+          <span className="w-5 h-5 border-2 border-secondary border-t-transparent rounded-full animate-spin" />
+          Chargement...
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white">
       {/* Header minimal sticky */}

@@ -211,7 +211,7 @@ export function nurturingJ14(params: EmailTemplateParams): EmailTemplate {
   const { prenom, pricingUrl } = params
   const prixMensuel = PACK_MENSUEL.price
 
-  const subject = `2 semaines déjà — et si on passait au mensuel ?`
+  const subject = `2 semaines déjà — tu passes au mensuel, ${prenom} ?`
 
   const html = wrapInLayout(`
 <p style="margin:0 0 16px;font-size:18px;font-weight:600;">Salut ${prenom},</p>
