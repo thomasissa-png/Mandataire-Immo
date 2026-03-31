@@ -144,26 +144,28 @@ export async function POST(request: NextRequest) {
     })
     deliverableIds.push(bioId)
 
-    // L3 : 5 annonces storytelling
+    // L3 : 5 annonces storytelling — uniquement si le client a des biens réels
     currentStep = "L3-annonces"
-    const annoncesPrompt = buildAnnonceStorytellingPrompt({
-      ...ctx,
-      nombre_annonces: 5,
-    })
-    const annoncesResult = await generateJSON<{ annonces: Array<{ bien_titre: string; annonce_complete: string; accroche_courte: string; titre_annonce: string; mots_cles_seo: string[] }> }>(
-      { ...annoncesPrompt, maxTokens: 16384 }
-    )
-    for (const annonce of annoncesResult.data.annonces) {
-      const id = await insertDeliverable({
-        clientEmail,
-        clientId: client_id,
-        type: "annonce",
-        title: annonce.titre_annonce,
-        content: annonce.annonce_complete,
-        metadata: { accroche_courte: annonce.accroche_courte, mots_cles_seo: annonce.mots_cles_seo },
-        month,
+    if (ctx.biens && ctx.biens.length > 0) {
+      const annoncesPrompt = buildAnnonceStorytellingPrompt({
+        ...ctx,
+        nombre_annonces: Math.min(ctx.biens.length, 5),
       })
-      deliverableIds.push(id)
+      const annoncesResult = await generateJSON<{ annonces: Array<{ bien_titre: string; annonce_complete: string; accroche_courte: string; titre_annonce: string; mots_cles_seo: string[] }> }>(
+        { ...annoncesPrompt, maxTokens: 16384 }
+      )
+      for (const annonce of annoncesResult.data.annonces) {
+        const id = await insertDeliverable({
+          clientEmail,
+          clientId: client_id,
+          type: "annonce",
+          title: annonce.titre_annonce,
+          content: annonce.annonce_complete,
+          metadata: { accroche_courte: annonce.accroche_courte, mots_cles_seo: annonce.mots_cles_seo },
+          month,
+        })
+        deliverableIds.push(id)
+      }
     }
 
     // L4 : 5 articles SEO local

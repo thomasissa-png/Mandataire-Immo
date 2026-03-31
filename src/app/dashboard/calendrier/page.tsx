@@ -53,7 +53,7 @@ export default async function CalendrierPage() {
         <h3 className="font-display text-h5 text-primary mb-3">
           Accès rapide
         </h3>
-        <div className="grid grid-cols-2 tablet:grid-cols-5 gap-2">
+        <div className="grid grid-cols-2 tablet:grid-cols-4 gap-2">
           {QUICK_LINKS.map((link) => (
             <Link
               key={link.href}

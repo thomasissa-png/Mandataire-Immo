@@ -26,7 +26,7 @@ export function ArticlesFiltered({ articles }: ArticlesFilteredProps) {
                 id={d.id}
                 type={d.type}
                 typeLabel="Article local"
-                typeColor="bg-blue-50 text-blue-700"
+                typeColor="bg-info-50 text-info-700"
                 title={d.title}
                 status={d.status}
                 createdAt={d.created_at}

@@ -227,7 +227,7 @@ export function DashboardContent({
             {profile.experience_annees ? <span className="px-2.5 py-1 rounded-lg bg-primary-50 text-caption font-medium text-primary-700">{profile.experience_annees} ans d{"'"}expérience</span> : null}
             {profile.nb_transactions_an ? <span className="px-2.5 py-1 rounded-lg bg-success-50 text-caption font-medium text-success-700">{profile.nb_transactions_an} transactions/an</span> : null}
             {profile.type_biens ? <span className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700">{profile.type_biens}</span> : null}
-            {profile.linkedin_url ? <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-blue-50 text-caption font-medium text-blue-700 hover:bg-blue-100 transition-colors">LinkedIn</a> : null}
+            {profile.linkedin_url ? <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-info-50 text-caption font-medium text-info-700 hover:bg-info-100 transition-colors">LinkedIn</a> : null}
           </div>
         ) : null}
       </div>
@@ -343,7 +343,7 @@ export function DashboardContent({
 
             {/* ARTICLES SEO */}
             {counts.articles > 0 ? (
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-blue-50/50">
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-info-50/50">
                 <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">📰</span>
                 <div>
                   <p className="text-body-sm font-semibold text-primary">{counts.articles} article{counts.articles > 1 ? "s" : ""} SEO pour ta visibilité locale</p>
