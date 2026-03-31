@@ -44,7 +44,7 @@ describe("Pricing", () => {
   it("shows the badge on Pack Mensuel", () => {
     render(<Pricing />)
     expect(
-      screen.getByText(/choix de la plupart des mandataires/i)
+      screen.getByText(/le pack qui fait la différence/i)
     ).toBeInTheDocument()
   })
 
