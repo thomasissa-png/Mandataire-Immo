@@ -1,119 +1,75 @@
+/**
+ * Page Calendrier éditorial — SSR avec Suspense.
+ * Affiche un calendrier visuel mensuel avec les contenus planifiés.
+ * Le composant EditorialCalendar gère la navigation entre mois côté client.
+ */
+
 import { redirect } from "next/navigation"
+import Link from "next/link"
 import { getSessionUser } from "@/lib/getSessionUser"
 import { getDeliverables } from "@/lib/getDeliverables"
 import { DashboardPageLayout } from "@/components/dashboard/DashboardPageLayout"
-import { DeliverableCard } from "@/components/dashboard/DeliverableCard"
+import { EditorialCalendar } from "@/components/dashboard/EditorialCalendar"
 
-const TYPE_LABELS: Record<string, string> = {
-  post: "Post",
-  article_seo: "Article SEO",
-  annonce: "Annonce",
-  script_video: "Script vidéo",
-  newsletter: "Newsletter",
-  email_prospection: "Email prospection",
-}
-
-const TYPE_COLORS: Record<string, string> = {
-  post: "bg-secondary-50 text-secondary-600",
-  article_seo: "bg-primary-50 text-primary-700",
-  annonce: "bg-warning-50 text-warning-700",
-  script_video: "bg-success-50 text-success-700",
-  newsletter: "bg-neutral-100 text-neutral-600",
-  email_prospection: "bg-neutral-100 text-neutral-600",
-}
+const QUICK_LINKS = [
+  { href: "/dashboard/posts", icon: "📱", label: "Posts" },
+  { href: "/dashboard/articles", icon: "📝", label: "Articles SEO" },
+  { href: "/dashboard/scripts", icon: "🎬", label: "Scripts vidéo" },
+  { href: "/dashboard/emails", icon: "📧", label: "Emails" },
+  { href: "/dashboard/annonces", icon: "🏠", label: "Annonces" },
+] as const
 
 export default async function CalendrierPage() {
   const user = await getSessionUser()
   if (!user) redirect("/login")
 
-  // Récupérer le calendrier + tous les contenus du mois en cours
-  const currentMonth = new Date().toISOString().slice(0, 7)
-  const monthLabel = new Date().toLocaleDateString("fr-FR", { month: "long", year: "numeric" })
+  const now = new Date()
+  const monthLabel = now.toLocaleDateString("fr-FR", { month: "long", year: "numeric" })
 
-  const [calendriers, allDeliverables] = await Promise.all([
-    getDeliverables(user.email, ["calendrier"]),
-    getDeliverables(user.email, [
-      "post", "article_seo", "annonce", "script_video", "newsletter", "email_prospection",
-    ]),
+  // Récupérer tous les contenus (toutes les dates, tous les types)
+  const allDeliverables = await getDeliverables(user.email, [
+    "post",
+    "article_seo",
+    "annonce",
+    "script_video",
+    "newsletter",
+    "email_prospection",
   ])
-
-  const thisMonthContent = allDeliverables.filter(
-    (d) => d.month === currentMonth || d.created_at.startsWith(currentMonth)
-  )
-
-  // Compter par type
-  const countByType = thisMonthContent.reduce<Record<string, number>>((acc, d) => {
-    acc[d.type] = (acc[d.type] || 0) + 1
-    return acc
-  }, {})
-
-  const latestCalendrier = calendriers[0]
 
   return (
     <DashboardPageLayout
       icon="📆"
       title="Calendrier éditorial"
-      description={`Ta vue d'ensemble pour ${monthLabel}.`}
-      count={thisMonthContent.length}
+      description={`Ton planning de contenus pour ${monthLabel}.`}
+      count={allDeliverables.length}
     >
-      {/* Calendrier deliverable */}
-      {latestCalendrier && (
-        <div className="mb-6">
-          <DeliverableCard
-            id={latestCalendrier.id}
-            type={latestCalendrier.type}
-            typeLabel="Calendrier du mois"
-            typeColor="bg-secondary-50 text-secondary-600"
-            title={latestCalendrier.title}
-            status={latestCalendrier.status}
-          />
-        </div>
-      )}
+      {/* Calendrier visuel */}
+      <EditorialCalendar
+        deliverables={allDeliverables}
+        initialYear={now.getFullYear()}
+        initialMonth={now.getMonth()}
+      />
 
-      {/* Résumé du mois */}
-      <div className="rounded-xl bg-card border border-border p-5 mb-6">
-        <h3 className="font-display text-h4 font-semibold text-primary mb-4">
-          Contenus prévus — {monthLabel}
+      {/* Liens rapides vers les sections */}
+      <div className="rounded-xl bg-card border border-border p-4 tablet:p-5">
+        <h3 className="font-display text-h5 text-primary mb-3">
+          Accès rapide
         </h3>
-        {Object.keys(countByType).length === 0 ? (
-          <p className="text-body-sm text-neutral-500">
-            Aucun contenu prévu ce mois-ci — ton prochain pack sera bientôt livré.
-          </p>
-        ) : (
-          <div className="grid grid-cols-2 tablet:grid-cols-3 gap-3">
-            {Object.entries(countByType).map(([type, count]) => (
-              <div key={type} className="rounded-lg bg-background p-3 text-center">
-                <p className="font-display text-h2 font-bold text-primary">{count}</p>
-                <p className="text-caption text-neutral-500">
-                  {TYPE_LABELS[type] || type}{count > 1 ? "s" : ""}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-2 tablet:grid-cols-5 gap-2">
+          {QUICK_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-background hover:bg-secondary-50 text-body-sm text-primary font-medium transition-colors min-h-[44px] group"
+            >
+              <span className="text-base" aria-hidden="true">{link.icon}</span>
+              <span className="group-hover:text-secondary-700 transition-colors">
+                {link.label}
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
-
-      {/* Liste des contenus du mois */}
-      {thisMonthContent.length > 0 && (
-        <>
-          <h3 className="font-display text-h4 font-semibold text-primary mb-3">
-            Détail des contenus
-          </h3>
-          <div className="space-y-3">
-            {thisMonthContent.map((d) => (
-              <DeliverableCard
-                key={d.id}
-                id={d.id}
-                type={d.type}
-                typeLabel={TYPE_LABELS[d.type] || d.type}
-                typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"}
-                title={d.title}
-                status={d.status}
-              />
-            ))}
-          </div>
-        </>
-      )}
     </DashboardPageLayout>
   )
 }

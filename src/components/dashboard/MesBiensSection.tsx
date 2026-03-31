@@ -10,7 +10,7 @@ interface AnnonceDeliverable {
   id: string
   type: string
   title: string
-  status: "draft" | "delivered"
+  status: "draft" | "delivered" | "archived"
 }
 
 interface MesBiensSectionProps {

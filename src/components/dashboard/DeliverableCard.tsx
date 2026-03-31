@@ -42,7 +42,7 @@ interface DeliverableCardProps {
   typeColor: string
   title: string
   content?: string
-  status?: "draft" | "delivered"
+  status?: "draft" | "delivered" | "archived"
   createdAt?: string
 }
 
@@ -193,7 +193,7 @@ export function DeliverableCard({
     <article
       tabIndex={0}
       aria-label={`Contenu : ${title}`}
-      className={`rounded-lg bg-card border border-border border-l-4 ${accentColor} overflow-hidden shadow-xs hover:shadow-md hover:border-secondary/30 transition-all duration-normal cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary`}
+      className={`rounded-lg bg-card border border-border border-l-4 ${accentColor} overflow-hidden shadow-xs hover:shadow-md hover:border-secondary/30 transition-all duration-normal cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary ${status === "archived" ? "opacity-60" : ""}`}
       onClick={handleExpand}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); void handleExpand() } }}
     >
@@ -220,14 +220,19 @@ export function DeliverableCard({
                   En préparation
                 </span>
               )}
+              {status === "archived" && (
+                <span className="inline-block px-2 py-0.5 rounded-full text-caption font-semibold bg-neutral-200 text-neutral-600">
+                  Archivé
+                </span>
+              )}
             </div>
             <h3 className="font-display text-h4 text-primary leading-snug">
               {title}
             </h3>
           </div>
 
-          {/* Copy button — top right, always visible on delivered */}
-          {status === "delivered" && (
+          {/* Copy button — top right, always visible on delivered/archived */}
+          {(status === "delivered" || status === "archived") && (
             <button
               type="button"
               aria-label={copied ? "Contenu copié" : loadingCopy ? "Chargement en cours" : `Copier le texte : ${title}`}

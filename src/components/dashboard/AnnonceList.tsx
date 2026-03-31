@@ -7,13 +7,15 @@ import { markdownToHtml, stripMarkdown } from "@/lib/markdownRenderer"
 interface Annonce {
   id: string
   title: string
-  status: "draft" | "delivered"
+  status: "draft" | "delivered" | "archived"
   createdAt?: string
   shareToken?: string | null
 }
 
 interface AnnonceListProps {
   annonces: Annonce[]
+  /** Callback pour archiver/désarchiver un livrable */
+  onArchiveToggle?: (id: string) => void
 }
 
 const PORTAILS = [
@@ -22,23 +24,26 @@ const PORTAILS = [
   { name: "SeLoger", icon: "🟢", maxChars: 1500 },
 ] as const
 
-export function AnnonceList({ annonces }: AnnonceListProps) {
+export function AnnonceList({ annonces, onArchiveToggle }: AnnonceListProps) {
   return (
     <div className="space-y-3">
       {annonces.map((a) => (
-        <AnnonceRow key={a.id} annonce={a} />
+        <AnnonceRow key={a.id} annonce={a} onArchiveToggle={onArchiveToggle} />
       ))}
     </div>
   )
 }
 
-function AnnonceRow({ annonce }: { annonce: Annonce }) {
+function AnnonceRow({ annonce, onArchiveToggle }: { annonce: Annonce; onArchiveToggle?: (id: string) => void }) {
   const [expanded, setExpanded] = useState(false)
   const [content, setContent] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState<string | null>(null)
   const [shareLoading, setShareLoading] = useState(false)
   const [shareUrl, setShareUrl] = useState<string | null>(null)
+  const [archiving, setArchiving] = useState(false)
+
+  const isArchived = annonce.status === "archived"
 
   const isNew = annonce.createdAt
     ? Date.now() - new Date(annonce.createdAt).getTime() < 48 * 60 * 60 * 1000
@@ -137,8 +142,15 @@ function AnnonceRow({ annonce }: { annonce: Annonce }) {
     }
   }
 
+  const handleArchive = async () => {
+    if (!onArchiveToggle || archiving) return
+    setArchiving(true)
+    onArchiveToggle(annonce.id)
+    setArchiving(false)
+  }
+
   return (
-    <article className="rounded-lg bg-card border border-border border-l-4 border-l-success overflow-hidden shadow-xs hover:shadow-sm transition-shadow">
+    <article className={`rounded-lg bg-card border border-border border-l-4 border-l-success overflow-hidden shadow-xs hover:shadow-sm transition-shadow ${isArchived ? "opacity-60" : ""}`}>
       {/* Header — compact row */}
       <div className="p-4 flex items-center gap-3">
         <span className="text-lg flex-shrink-0" aria-hidden="true">🏠</span>
@@ -155,6 +167,11 @@ function AnnonceRow({ annonce }: { annonce: Annonce }) {
                 En préparation
               </span>
             )}
+            {isArchived && (
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-neutral-200 text-neutral-600 uppercase">
+                Archivé
+              </span>
+            )}
           </div>
           <h3
             className="font-display text-body font-semibold text-primary truncate cursor-pointer hover:text-secondary transition-colors"
@@ -165,7 +182,7 @@ function AnnonceRow({ annonce }: { annonce: Annonce }) {
         </div>
 
         {/* Actions rapides — toujours visibles */}
-        {annonce.status === "delivered" && (
+        {(annonce.status === "delivered" || isArchived) && (
           <div className="flex items-center gap-2 flex-shrink-0">
             {/* Partager — lien public */}
             <button
@@ -271,6 +288,24 @@ function AnnonceRow({ annonce }: { annonce: Annonce }) {
             className="px-4 pb-4 prose-deliverable text-body-sm"
             dangerouslySetInnerHTML={{ __html: markdownToHtml(content) }}
           />
+
+          {/* Archive button */}
+          {onArchiveToggle && (
+            <div className="px-4 pb-3 flex justify-end">
+              <button
+                type="button"
+                onClick={handleArchive}
+                disabled={archiving}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-caption font-medium text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 transition-colors disabled:opacity-50"
+                aria-label={isArchived ? "Désarchiver cette annonce" : "Archiver cette annonce"}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                </svg>
+                {isArchived ? "Désarchiver" : "Archiver"}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </article>
