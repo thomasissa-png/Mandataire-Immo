@@ -86,7 +86,7 @@ export const PACK_MENSUEL: Pack = {
   ctaHref: "/api/checkout?pack=mensuel",
   paymentType: "recurring",
   featured: true,
-  badge: "Le choix de la plupart des mandataires",
+  badge: "Le pack qui fait la différence",
   features: [
     "12 posts personnalisés pour tes réseaux",
     "4 scripts vidéo pour tes Reels",
