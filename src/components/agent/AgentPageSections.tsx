@@ -21,7 +21,7 @@ function splitList(value: string): string[] {
 
 /** Formate un prix en EUR */
 function formatPrice(prix: number): string {
-  return prix.toLocaleString("fr-FR") + " \u20ac"
+  return prix.toLocaleString("fr-FR") + " €"
 }
 
 // ─── 1. HeroSection ────────────────────────────────────────────────
