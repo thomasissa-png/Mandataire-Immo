@@ -273,47 +273,7 @@ export function DashboardContent({
   // MAIN LAYOUT
   // ============================================================
   return (
-    <div className="lg:flex lg:gap-6">
-
-      {/* SIDEBAR DESKTOP (≥1024px) */}
-      <aside className="hidden lg:block lg:w-56 lg:flex-shrink-0">
-        <div className="sticky top-20 space-y-1">
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => setActiveNav(item.id === activeNav ? "" : item.id)}
-              className={`w-full text-left px-3 py-2.5 rounded-lg text-body-sm flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 ${
-                activeNav === item.id
-                  ? "bg-primary-50 text-primary font-semibold"
-                  : "text-neutral-600 hover:bg-neutral-100"
-              }`}
-            >
-              <span aria-hidden="true">{item.icon}</span>
-              <span className="flex-1">{item.label}</span>
-              <span className="text-caption text-neutral-400">{item.count}</span>
-            </button>
-          ))}
-          <hr className="my-3 border-border" />
-          <a
-            href="/dashboard/profile"
-            className="w-full text-left px-3 py-2.5 rounded-lg text-body-sm flex items-center gap-2 text-neutral-600 hover:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
-          >
-            <span aria-hidden="true">✏️</span>
-            <span>Modifier mon profil</span>
-          </a>
-          <a
-            href="mailto:support@immocrew.fr"
-            className="w-full text-left px-3 py-2.5 rounded-lg text-body-sm flex items-center gap-2 text-neutral-600 hover:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
-          >
-            <span aria-hidden="true">💬</span>
-            <span>Support</span>
-          </a>
-        </div>
-      </aside>
-
-      {/* MAIN CONTENT */}
-      <div className="flex-1 min-w-0 space-y-4">
+    <div className="space-y-4">
 
       {/* WELCOME BANNER (first access only) */}
       {showWelcome && (
@@ -375,13 +335,21 @@ export function DashboardContent({
       {/* ============================================================ */}
       <div className="rounded-lg bg-card border border-border p-4">
         <div className="flex items-center gap-4">
-          {photoUrl ? (
-            <img src={photoUrl} alt={`Photo de ${firstName}`} className="w-14 h-14 rounded-xl object-cover flex-shrink-0" />
-          ) : (
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-secondary to-secondary-600 flex items-center justify-center flex-shrink-0">
-              <span className="font-display text-h3 font-bold text-white">{initials}</span>
+          <a href="/dashboard/profile#section-identite" className="relative group flex-shrink-0" aria-label="Changer ma photo de profil">
+            {photoUrl ? (
+              <img src={photoUrl} alt={`Photo de ${firstName}`} className="w-14 h-14 rounded-xl object-cover" />
+            ) : (
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-secondary to-secondary-600 flex items-center justify-center">
+                <span className="font-display text-h3 font-bold text-white">{initials}</span>
+              </div>
+            )}
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center shadow-sm group-hover:bg-primary-700 transition-colors">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+              </svg>
             </div>
-          )}
+          </a>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="font-display text-h3 text-primary font-bold">{profile ? `${profile.prenom} ${profile.nom}` : userName}</h1>
@@ -409,13 +377,8 @@ export function DashboardContent({
             {profile.nb_transactions_an ? <span className="px-2.5 py-1 rounded-lg bg-success-50 text-caption font-medium text-success-700">{profile.nb_transactions_an} transactions/an</span> : null}
             {profile.type_biens ? <span className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700">{profile.type_biens}</span> : null}
             {profile.linkedin_url ? <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-blue-50 text-caption font-medium text-blue-700 hover:bg-blue-100 transition-colors">LinkedIn</a> : null}
-            <a href="/dashboard/profile" className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700 hover:bg-secondary-100 transition-colors">Modifier mon profil</a>
           </div>
-        ) : (
-          <div className="flex flex-wrap gap-2 mt-3">
-            <a href="/dashboard/profile" className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700 hover:bg-secondary-100 transition-colors">Modifier mon profil</a>
-          </div>
-        )}
+        ) : null}
       </div>
 
       {/* CARTE PAGE MANDATAIRE */}
@@ -548,8 +511,32 @@ export function DashboardContent({
             ) : null}
           </div>
 
-          {/* Question / feedback */}
+          {/* Recommandations de lecture du mois */}
           <div className="mt-4 pt-4 border-t border-border">
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50">
+              <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">📚</span>
+              <div>
+                <p className="text-body-sm font-semibold text-primary mb-1">Nos recommandations de lecture du mois</p>
+                <ul className="space-y-1.5">
+                  <li>
+                    <a href="/blog/se-differencier-mandataire-immobilier" className="text-caption text-secondary-700 font-medium hover:underline">
+                      Se différencier comme mandataire immobilier →
+                    </a>
+                    <p className="text-caption text-neutral-400">Les clés pour te démarquer dans ton secteur</p>
+                  </li>
+                  <li>
+                    <a href="/blog/google-business-profile-mandataire" className="text-caption text-secondary-700 font-medium hover:underline">
+                      Google Business Profile pour mandataire →
+                    </a>
+                    <p className="text-caption text-neutral-400">Optimise ta visibilité locale en 30 minutes</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Question / feedback */}
+          <div className="mt-3 pt-3 border-t border-border">
             <p className="text-body-sm text-neutral-500">
               Une question ? Un souci avec un contenu ?{" "}
               <a href="mailto:support@immocrew.fr?subject=Retour%20sur%20mes%20contenus" className="text-secondary-700 font-semibold hover:underline">
@@ -730,7 +717,6 @@ export function DashboardContent({
         <a href="mailto:support@immocrew.fr" className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors">Une question sur tes contenus ?</a>
       </div>
 
-      </div>
     </div>
   )
 }

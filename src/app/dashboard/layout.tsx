@@ -1,4 +1,5 @@
 import { UserMenu } from "@/components/dashboard/UserMenu"
+import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar"
 
 export default function DashboardLayout({
   children,
@@ -21,14 +22,8 @@ export default function DashboardLayout({
               Mon espace
             </a>
             <a
-              href="/dashboard/profile"
-              className="text-body-sm font-medium text-neutral-500 hover:text-secondary transition-colors duration-normal py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded"
-            >
-              Mon profil
-            </a>
-            <a
               href="mailto:support@immocrew.fr"
-              className="text-body-sm text-neutral-500 hover:text-secondary transition-colors duration-normal py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded"
+              className="hidden tablet:inline text-body-sm text-neutral-500 hover:text-secondary transition-colors duration-normal py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded"
             >
               Une question ?
             </a>
@@ -37,10 +32,15 @@ export default function DashboardLayout({
         </div>
       </header>
 
-      {/* Content */}
-      <main className="container-immocrew py-8 desktop:py-12">
-        {children}
-      </main>
+      {/* Content with persistent sidebar */}
+      <div className="container-immocrew py-8 desktop:py-12">
+        <div className="lg:flex lg:gap-6">
+          <DashboardSidebar />
+          <main className="flex-1 min-w-0 pb-16 lg:pb-0">
+            {children}
+          </main>
+        </div>
+      </div>
     </div>
   )
 }

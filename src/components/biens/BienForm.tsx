@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 
 // ─── Types ────────────────────────────────────────────────────────
@@ -22,6 +22,21 @@ interface FormErrors {
   prix?: string
   surface?: string
   pieces?: string
+}
+
+interface ParseResult {
+  platform: string
+  listing: {
+    type_bien: string
+    adresse: string
+    prix: string
+    surface: string
+    pieces: string
+    description: string
+    points_forts: string
+  }
+  photos: string[]
+  photo_urls: string[]
 }
 
 const TYPES_BIEN = [
@@ -56,6 +71,26 @@ function validate(data: BienFormData): FormErrors {
   return errors
 }
 
+// ─── Helpers ──────────────────────────────────────────────────────
+
+function isValidUrl(str: string): boolean {
+  try {
+    const url = new URL(str)
+    return ["http:", "https:"].includes(url.protocol)
+  } catch {
+    return false
+  }
+}
+
+function platformLabel(platform: string): string {
+  switch (platform) {
+    case "seloger": return "SeLoger"
+    case "leboncoin": return "LeBonCoin"
+    case "bienici": return "Bien'ici"
+    default: return "l'annonce"
+  }
+}
+
 // ─── Composant ────────────────────────────────────────────────────
 
 export function BienForm() {
@@ -75,16 +110,78 @@ export function BienForm() {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
+  // Import state
+  const [importing, setImporting] = useState(false)
+  const [importResult, setImportResult] = useState<{ platform: string; photoCount: number } | null>(null)
+  const [importError, setImportError] = useState<string | null>(null)
+  const [importedPhotos, setImportedPhotos] = useState<string[]>([])
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
-    // Effacer l'erreur du champ modifié
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }))
     }
   }
+
+  // ─── Import depuis URL ──────────────────────────────────────────
+
+  const handleImport = useCallback(async () => {
+    const url = formData.lien_annonce.trim()
+    if (!url || !isValidUrl(url)) {
+      setImportError("Colle un lien valide (commençant par https://)")
+      return
+    }
+
+    setImporting(true)
+    setImportError(null)
+    setImportResult(null)
+
+    try {
+      const res = await fetch("/api/biens/parse-listing", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      })
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: "Erreur inconnue" }))
+        throw new Error(data.error || `Erreur ${res.status}`)
+      }
+
+      const data: ParseResult = await res.json()
+
+      // Pré-remplir uniquement les champs vides
+      setFormData((prev) => ({
+        ...prev,
+        type_bien: prev.type_bien || data.listing.type_bien,
+        adresse: prev.adresse || data.listing.adresse,
+        prix: prev.prix || data.listing.prix,
+        surface: prev.surface || data.listing.surface,
+        pieces: prev.pieces || data.listing.pieces,
+        points_forts: prev.points_forts || data.listing.points_forts,
+        description_detaillee: prev.description_detaillee || data.listing.description,
+      }))
+
+      setImportedPhotos(data.photos)
+      setImportResult({
+        platform: data.platform,
+        photoCount: data.photos.length,
+      })
+    } catch (err) {
+      setImportError(
+        err instanceof Error
+          ? err.message
+          : "Impossible d'importer l'annonce. Réessaie ou remplis le formulaire manuellement."
+      )
+    } finally {
+      setImporting(false)
+    }
+  }, [formData.lien_annonce])
+
+  // ─── Submit ─────────────────────────────────────────────────────
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -116,6 +213,7 @@ export function BienForm() {
           pieces,
           points_forts: formData.points_forts || "À compléter",
           description_detaillee: formData.description_detaillee || undefined,
+          imported_photos: importedPhotos.length > 0 ? importedPhotos : undefined,
         }),
       })
 
@@ -150,19 +248,81 @@ export function BienForm() {
         <label htmlFor="lien_annonce" className="block text-body-sm font-semibold text-primary mb-1.5">
           Lien d{"'"}annonce existante <span className="text-caption text-neutral-500 font-normal">(optionnel)</span>
         </label>
-        <input
-          id="lien_annonce"
-          name="lien_annonce"
-          type="url"
-          value={formData.lien_annonce}
-          onChange={handleChange}
-          placeholder="Colle le lien SeLoger, LeBonCoin ou Bien'ici"
-          className="w-full h-12 px-4 rounded-lg border border-border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50"
-        />
-        <p className="text-caption text-neutral-500 mt-1.5">
-          On récupère les infos automatiquement — tu n{"'"}auras presque rien à remplir.
-        </p>
+        <div className="flex gap-2">
+          <input
+            id="lien_annonce"
+            name="lien_annonce"
+            type="url"
+            value={formData.lien_annonce}
+            onChange={handleChange}
+            placeholder="Colle le lien SeLoger, LeBonCoin ou Bien'ici"
+            className="flex-1 h-12 px-4 rounded-lg border border-border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50"
+          />
+          <button
+            type="button"
+            onClick={handleImport}
+            disabled={importing || !formData.lien_annonce.trim()}
+            className="flex-shrink-0 h-12 px-5 rounded-lg bg-primary text-white font-display font-bold text-body-sm hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            {importing ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
+                Import...
+              </>
+            ) : (
+              <>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                </svg>
+                Importer
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Import feedback */}
+        {importResult && (
+          <div className="mt-2 flex items-center gap-2 text-caption text-success-700 bg-success-50 rounded-lg px-3 py-2">
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Importé depuis {platformLabel(importResult.platform)} — {importResult.photoCount} photo{importResult.photoCount > 1 ? "s" : ""} récupérée{importResult.photoCount > 1 ? "s" : ""}. Vérifie et complète les infos ci-dessous.
+          </div>
+        )}
+        {importError && (
+          <div className="mt-2 flex items-center gap-2 text-caption text-error-700 bg-error-50 rounded-lg px-3 py-2">
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            {importError}
+          </div>
+        )}
+        {!importResult && !importError && (
+          <p className="text-caption text-neutral-500 mt-1.5">
+            Colle le lien et clique sur Importer — on récupère les infos et les photos automatiquement.
+          </p>
+        )}
       </div>
+
+      {/* Imported photos preview */}
+      {importedPhotos.length > 0 && (
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-body-sm font-semibold text-primary mb-3">
+            {importedPhotos.length} photo{importedPhotos.length > 1 ? "s" : ""} importée{importedPhotos.length > 1 ? "s" : ""}
+          </p>
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            {importedPhotos.map((key, i) => (
+              <img
+                key={key}
+                src={`/api/images/${encodeURIComponent(key)}`}
+                alt={`Photo importée ${i + 1}`}
+                className="w-24 h-18 rounded-lg object-cover flex-shrink-0 border border-border"
+                loading="lazy"
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Type de bien */}
       <div>
