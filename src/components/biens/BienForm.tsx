@@ -255,7 +255,7 @@ export function BienForm() {
             type="url"
             value={formData.lien_annonce}
             onChange={handleChange}
-            placeholder="Colle le lien SeLoger, LeBonCoin ou Bien'ici"
+            placeholder="Colle le lien LeBonCoin ou Bien'ici"
             className="flex-1 h-12 px-4 rounded-lg border border-border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50"
           />
           <button

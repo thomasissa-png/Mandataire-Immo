@@ -794,11 +794,11 @@ export default function OnboardingPage() {
                       onChange={(e) =>
                         updateBien(index, "lien_annonce", e.target.value)
                       }
-                      placeholder="https://www.seloger.com/annonces/..."
+                      placeholder="https://www.leboncoin.fr/annonces/..."
                       className="w-full h-12 px-4 rounded-md border border-secondary-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                     />
                     <p className="text-caption text-secondary-600 mt-1">
-                      Colle le lien de ton annonce SeLoger, LeBonCoin ou ton site — on s'en inspire pour rédiger une version qui claque.
+                      Colle le lien de ton annonce LeBonCoin, Bien{"'"}ici ou ton site — on s{"'"}en inspire pour rédiger une version qui claque.
                     </p>
                   </div>
 

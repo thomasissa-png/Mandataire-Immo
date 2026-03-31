@@ -129,7 +129,7 @@ export function MesBiensSection({ annonces = [] }: MesBiensSectionProps) {
             </p>
           ) : null}
           <p className="text-caption text-neutral-400 mb-4">
-            Tu peux aussi coller le lien d{"'"}une annonce existante (SeLoger, LeBonCoin) pour qu{"'"}on récupère les infos.
+            Tu peux aussi coller le lien d{"'"}une annonce existante (LeBonCoin, Bien{"'"}ici) pour qu{"'"}on récupère les infos.
           </p>
           <a
             href="/dashboard/biens/nouveau"

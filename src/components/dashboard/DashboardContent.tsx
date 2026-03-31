@@ -329,7 +329,7 @@ export function DashboardContent({
                 <div>
                   <p className="text-body-sm font-semibold text-primary">{counts.annonces.length} annonce{counts.annonces.length > 1 ? "s" : ""} prête{counts.annonces.length > 1 ? "s" : ""} pour les portails</p>
                   <p className="text-caption text-neutral-500">
-                    Copie-les sur SeLoger, LeBonCoin et Bien{"'"}ici. Chaque annonce inclut un lien vers ta page publique ImmoCrew.
+                    Copie-les sur LeBonCoin et Bien{"'"}ici. Chaque annonce inclut un lien vers ta page publique ImmoCrew.
                   </p>
                 </div>
               </div>
