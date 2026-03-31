@@ -99,7 +99,7 @@ export default async function CalendrierPage() {
           <h3 className="font-display text-h4 font-semibold text-primary mb-3">
             Détail des contenus
           </h3>
-          <div className="grid grid-cols-1 tablet:grid-cols-2 gap-3">
+          <div className="space-y-3">
             {thisMonthContent.map((d) => (
               <DeliverableCard
                 key={d.id}

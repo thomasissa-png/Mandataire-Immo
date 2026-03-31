@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import { getSessionUser } from "@/lib/getSessionUser"
 import { getDeliverables } from "@/lib/getDeliverables"
 import { DashboardPageLayout } from "@/components/dashboard/DashboardPageLayout"
-import { DeliverableCard } from "@/components/dashboard/DeliverableCard"
+import { AnnonceList } from "@/components/dashboard/AnnonceList"
 
 export default async function AnnoncesPage() {
   const user = await getSessionUser()
@@ -14,7 +14,7 @@ export default async function AnnoncesPage() {
     <DashboardPageLayout
       icon="🏡"
       title="Mes annonces"
-      description="Tes annonces immobilières rédigées pour donner envie de visiter."
+      description="Tes annonces immobilières prêtes à publier. Copie le texte et colle-le sur le portail de ton choix."
       count={annonces.length}
     >
       {annonces.length === 0 ? (
@@ -22,19 +22,7 @@ export default async function AnnoncesPage() {
           <p className="text-body text-neutral-500">Aucune annonce pour le moment — tes premières annonces arrivent bientôt.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-3">
-          {annonces.map((d) => (
-            <DeliverableCard
-              key={d.id}
-              id={d.id}
-              type={d.type}
-              typeLabel="Annonce"
-              typeColor="bg-secondary-50 text-secondary-600"
-              title={d.title}
-              status={d.status}
-            />
-          ))}
-        </div>
+        <AnnonceList annonces={annonces.map(d => ({ id: d.id, title: d.title, status: d.status, createdAt: d.created_at }))} />
       )}
     </DashboardPageLayout>
   )

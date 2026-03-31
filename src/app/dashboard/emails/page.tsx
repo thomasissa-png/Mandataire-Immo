@@ -32,7 +32,7 @@ export default async function EmailsPage() {
           <p className="text-body text-neutral-500">Aucun email pour le moment — tes premiers contenus arrivent bientôt.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-3">
+        <div className="space-y-3">
           {emails.map((d) => (
             <DeliverableCard key={d.id} id={d.id} type={d.type} typeLabel={TYPE_LABELS[d.type] || d.type} typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"} title={d.title} status={d.status} />
           ))}

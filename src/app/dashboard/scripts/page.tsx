@@ -22,7 +22,7 @@ export default async function ScriptsPage() {
           <p className="text-body text-neutral-500">Aucun script pour le moment — tes premiers contenus arrivent bientôt.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-3">
+        <div className="space-y-3">
           {scripts.map((d) => (
             <DeliverableCard key={d.id} id={d.id} type={d.type} typeLabel="Script vidéo" typeColor="bg-warning-50 text-warning-800" title={d.title} status={d.status} />
           ))}

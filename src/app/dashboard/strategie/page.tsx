@@ -33,7 +33,7 @@ export default async function StrategiePage() {
   if (!user) redirect("/login")
 
   const strategie = await getDeliverables(user.email, [
-    "bio", "brief_graphique", "calendrier", "positionnement", "landing_page",
+    "bio", "calendrier", "positionnement", "landing_page",
   ])
 
   // Dédupliquer par type (garde le plus récent)
@@ -54,7 +54,7 @@ export default async function StrategiePage() {
           <p className="text-body text-neutral-500">Aucun contenu stratégique pour le moment.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-3">
+        <div className="space-y-3">
           {uniqueStrategie.map((d) => (
             <div key={d.id}>
               <DeliverableCard id={d.id} type={d.type} typeLabel={TYPE_LABELS[d.type] || d.type} typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"} title={d.title} status={d.status} />
