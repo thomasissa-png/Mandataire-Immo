@@ -6,6 +6,7 @@ import { redirect } from "next/navigation"
 import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { ActivatePageButton, IndexationToggle } from "@/components/dashboard/AgentPageManager"
+import { DashboardPageLayout } from "@/components/dashboard/DashboardPageLayout"
 
 interface ClientRow {
   id: string
@@ -50,16 +51,12 @@ export default async function MaPageMandatairePage() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://immocrew.fr"
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-6">
-        <a
-          href="/dashboard"
-          className="text-body-sm text-neutral-500 hover:text-secondary-700 transition-colors duration-normal"
-        >
-          ← Retour au dashboard
-        </a>
-      </div>
-
+    <DashboardPageLayout
+      icon="🌐"
+      title="Ma page mandataire"
+      description="Gère ta vitrine publique visible par tes prospects."
+    >
+      <div className="max-w-2xl">
       {!agentPage ? (
         /* ── PAS DE PAGE ACTIVÉE ── */
         <div className="max-w-xl mx-auto text-center">
@@ -85,9 +82,6 @@ export default async function MaPageMandatairePage() {
         /* ── PAGE EXISTANTE ── */
         <div className="space-y-6">
           <div>
-            <h1 className="font-display text-h2 text-primary font-bold mb-2">
-              Ma page mandataire
-            </h1>
             <p className="text-body text-neutral-600">
               Ta page est accessible ici :{" "}
               <a
@@ -175,6 +169,7 @@ export default async function MaPageMandatairePage() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </DashboardPageLayout>
   )
 }

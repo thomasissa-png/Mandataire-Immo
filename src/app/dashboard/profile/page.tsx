@@ -8,6 +8,7 @@ import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { ProfileForm } from "@/components/dashboard/ProfileForm"
 import { ProfileSectionNav } from "@/components/dashboard/ProfileSectionNav"
+import { DashboardPageLayout } from "@/components/dashboard/DashboardPageLayout"
 
 interface ClientRow {
   email: string
@@ -57,23 +58,15 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-6">
-        <a
-          href="/dashboard"
-          className="text-body-sm text-neutral-500 hover:text-secondary-700 transition-colors duration-normal"
-        >
-          ← Retour au dashboard
-        </a>
+    <DashboardPageLayout
+      icon="👤"
+      title="Mon profil"
+      description="Modifie tes infos pour que tes contenus soient toujours dans le mille."
+    >
+      <div className="max-w-2xl">
+        <ProfileSectionNav />
+        <ProfileForm initialData={profile} />
       </div>
-      <h1 className="font-display text-h2 text-primary font-bold mb-2">
-        Mon profil
-      </h1>
-      <p className="text-body text-neutral-500 mb-8">
-        Modifie tes infos pour que tes contenus soient toujours dans le mille.
-      </p>
-      <ProfileSectionNav />
-      <ProfileForm initialData={profile} />
-    </div>
+    </DashboardPageLayout>
   )
 }

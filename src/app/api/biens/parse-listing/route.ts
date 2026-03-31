@@ -321,6 +321,77 @@ async function downloadPhotos(photos: string[], clientEmail: string): Promise<st
   return savedKeys
 }
 
+// ─── JSON-LD extraction (works on most real estate sites) ──────────
+
+function tryJsonLd($: cheerio.CheerioAPI): ParsedListing | null {
+  const result: ParsedListing = {
+    type_bien: "",
+    adresse: "",
+    prix: "",
+    surface: "",
+    pieces: "",
+    description: "",
+    points_forts: "",
+    photos: [],
+  }
+
+  let found = false
+
+  $('script[type="application/ld+json"]').each((_, el) => {
+    try {
+      const data = JSON.parse($(el).html() || "")
+      const items = Array.isArray(data) ? data : [data]
+
+      for (const item of items) {
+        // RealEstateListing, Product, Residence, Offer
+        if (item["@type"] === "RealEstateListing" || item["@type"] === "Product" || item["@type"] === "Residence" || item["@type"] === "Offer") {
+          if (item.name) {
+            result.type_bien = detectTypeBien(item.name)
+            found = true
+          }
+          if (item.description) {
+            result.description = cleanText(String(item.description)).slice(0, 500)
+          }
+
+          // Price
+          const offer = item.offers || item
+          if (offer.price) result.prix = String(offer.price)
+          else if (offer.lowPrice) result.prix = String(offer.lowPrice)
+
+          // Address
+          const addr = item.address || item.contentLocation?.address
+          if (addr) {
+            const parts = [addr.streetAddress, addr.postalCode, addr.addressLocality].filter(Boolean)
+            result.adresse = parts.join(", ")
+          }
+
+          // Photos
+          const images = item.image || item.photo
+          if (images) {
+            const imgArr = Array.isArray(images) ? images : [images]
+            for (const img of imgArr) {
+              const url = typeof img === "string" ? img : img?.url || img?.contentUrl
+              if (url && url.startsWith("http")) result.photos.push(url)
+            }
+          }
+
+          // Floor size
+          if (item.floorSize?.value) {
+            result.surface = String(item.floorSize.value)
+          }
+          if (item.numberOfRooms) {
+            result.pieces = String(item.numberOfRooms)
+          }
+        }
+      }
+    } catch {
+      // Invalid JSON-LD — skip
+    }
+  })
+
+  return found ? result : null
+}
+
 // ─── Handler ────────────────────────────────────────────────────────
 
 export async function POST(request: NextRequest) {
@@ -353,18 +424,42 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Fetch the page
+    const platform = detectPlatform(url)
+
+    // SeLoger & LeBonCoin use heavy JS rendering + WAF — try to extract data
+    // from JSON-LD / __NEXT_DATA__ / embedded JSON before falling back to HTML parsing
+    const browserHeaders: Record<string, string> = {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+      "Accept-Language": "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Cache-Control": "no-cache",
+      "Sec-Fetch-Dest": "document",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-Site": "none",
+      "Sec-Fetch-User": "?1",
+      "Upgrade-Insecure-Requests": "1",
+      "Referer": "https://www.google.com/",
+    }
+
     const response = await fetch(url, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.5",
-      },
+      headers: browserHeaders,
       signal: AbortSignal.timeout(15000),
       redirect: "follow",
     })
 
     if (!response.ok) {
+      // For SeLoger/LeBonCoin 403: suggest manual input instead of blocking
+      if (response.status === 403) {
+        return NextResponse.json(
+          {
+            error: "Ce site bloque l'import automatique. Copie-colle les infos manuellement depuis l'annonce.",
+            blocked: true,
+            platform,
+          },
+          { status: 422 }
+        )
+      }
       return NextResponse.json(
         { error: `Impossible de charger la page (${response.status}). Vérifie que le lien est accessible.` },
         { status: 422 }
@@ -373,22 +468,26 @@ export async function POST(request: NextRequest) {
 
     const html = await response.text()
     const $ = cheerio.load(html)
-    const platform = detectPlatform(url)
 
-    // Parse selon la plateforme
-    let parsed: ParsedListing
-    switch (platform) {
-      case "seloger":
-        parsed = parseSeLoger(html, $)
-        break
-      case "leboncoin":
-        parsed = parseLeBonCoin(html, $)
-        break
-      case "bienici":
-        parsed = parseBienIci(html, $)
-        break
-      default:
-        parsed = parseGeneric(html, $)
+    // Try JSON-LD extraction first (works even when HTML is JS-rendered)
+    let parsed: ParsedListing | null = null
+    parsed = tryJsonLd($)
+
+    // If JSON-LD didn't give us enough, fall back to platform-specific HTML parsing
+    if (!parsed || (!parsed.prix && !parsed.surface && !parsed.adresse)) {
+      switch (platform) {
+        case "seloger":
+          parsed = parseSeLoger(html, $)
+          break
+        case "leboncoin":
+          parsed = parseLeBonCoin(html, $)
+          break
+        case "bienici":
+          parsed = parseBienIci(html, $)
+          break
+        default:
+          parsed = parseGeneric(html, $)
+      }
     }
 
     // Dédupliquer les photos

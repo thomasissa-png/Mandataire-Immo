@@ -1,25 +1,11 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { DeliverableCard } from "./DeliverableCard"
 import { MesBiensSection } from "./MesBiensSection"
-
-type DeliverableType =
-  | "post"
-  | "article_seo"
-  | "annonce"
-  | "script_video"
-  | "newsletter"
-  | "email_prospection"
-  | "bio"
-  | "brief_graphique"
-  | "calendrier"
-  | "positionnement"
-  | "landing_page"
 
 interface Deliverable {
   id: string
-  type: DeliverableType
+  type: string
   title: string
   month: string
   status: "draft" | "delivered"
@@ -62,112 +48,6 @@ interface DashboardContentProps {
   profileIncomplete?: boolean
 }
 
-const TYPE_LABELS: Record<string, string> = {
-  post: "Post",
-  article_seo: "Article local",
-  annonce: "Annonce",
-  script_video: "Script vidéo",
-  newsletter: "Newsletter",
-  email_prospection: "Email prospection",
-  bio: "Bio",
-  brief_graphique: "Kit graphique",
-  calendrier: "Calendrier",
-  positionnement: "Positionnement",
-  landing_page: "Landing page",
-}
-
-const STRATEGY_HINTS: Record<string, string> = {
-  bio: "Copie-la sur Instagram, LinkedIn et Facebook",
-  positionnement: "Ton argumentaire unique — à utiliser dans tes échanges",
-  brief_graphique: "Pour tes visuels Canva ou ton graphiste",
-  calendrier: "Ton planning de publication pour le mois",
-  landing_page: "Ta page web personnalisée",
-}
-
-const TYPE_COLORS: Record<string, string> = {
-  post: "bg-secondary-50 text-secondary-700",
-  article_seo: "bg-blue-50 text-blue-700",
-  annonce: "bg-success-50 text-success-700",
-  script_video: "bg-warning-50 text-warning-800",
-  newsletter: "bg-primary-50 text-primary-700",
-  email_prospection: "bg-error-50 text-error-700",
-  bio: "bg-secondary-50 text-secondary-600",
-  brief_graphique: "bg-neutral-100 text-neutral-600",
-  calendrier: "bg-warning-50 text-warning-700",
-  positionnement: "bg-primary-50 text-primary-700",
-  landing_page: "bg-success-50 text-success-700",
-}
-
-
-function detectPlatform(title: string) {
-  const t = title.toLowerCase()
-  if (t.includes("instagram") || t.includes("reel") || t.includes("story")) return { icon: "📸", name: "Instagram" }
-  if (t.includes("linkedin")) return { icon: "💼", name: "LinkedIn" }
-  if (t.includes("facebook")) return { icon: "📘", name: "Facebook" }
-  if (t.includes("tiktok")) return { icon: "🎵", name: "TikTok" }
-  return { icon: "📱", name: "Post" }
-}
-
-/* ------------------------------------------------------------------ */
-/* NAV SECTION                                                         */
-/* ------------------------------------------------------------------ */
-
-interface NavItem { id: string; label: string; icon: string; count: number }
-
-function DashboardNav({ items, active, onSelect }: { items: NavItem[]; active: string; onSelect: (id: string) => void }) {
-  return (
-    <nav className="lg:hidden sticky top-14 z-10 bg-card/95 backdrop-blur-sm py-2 -mx-4 px-4 border-b border-border" aria-label="Sections">
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        {items.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => onSelect(item.id === active ? "" : item.id)}
-            className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 rounded-full text-body font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 ${
-              active === item.id
-                ? "bg-primary text-white"
-                : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
-            }`}
-          >
-            <span aria-hidden="true">{item.icon}</span>
-            {item.label}
-            {item.count > 0 ? <span className="text-caption opacity-70">({item.count})</span> : null}
-          </button>
-        ))}
-      </div>
-    </nav>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/* SECTION HEADER                                                      */
-/* ------------------------------------------------------------------ */
-
-function SectionHeader({ icon, title, count, isOpen, onToggle }: {
-  icon: string; title: string; count: number; isOpen: boolean; onToggle: () => void
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      className="w-full flex items-center justify-between py-3 group"
-      aria-expanded={isOpen}
-    >
-      <div className="flex items-center gap-2">
-        <span className="text-lg" aria-hidden="true">{icon}</span>
-        <h2 className="font-display text-h3 text-primary">{title}</h2>
-        <span className="text-caption text-neutral-400 ml-1">({count})</span>
-      </div>
-      <svg
-        className={`w-5 h-5 text-neutral-400 transition-transform duration-150 ${isOpen ? "rotate-180" : ""}`}
-        fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-      </svg>
-    </button>
-  )
-}
-
 /* ------------------------------------------------------------------ */
 /* MAIN COMPONENT                                                      */
 /* ------------------------------------------------------------------ */
@@ -181,17 +61,9 @@ export function DashboardContent({
   profile,
   profileIncomplete,
 }: DashboardContentProps) {
-  const [activeNav, setActiveNav] = useState("")
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
   const [showWelcome, setShowWelcome] = useState(() =>
     typeof window !== "undefined" && !localStorage.getItem("immocrew_welcome_dismissed")
   )
-
-  const toggle = (id: string) => setCollapsed((prev) => {
-    const next = new Set(prev)
-    next.has(id) ? next.delete(id) : next.add(id)
-    return next
-  })
 
   const firstName = profile?.prenom || userName.split(" ")[0] || userName
   const photoUrl = profile?.photo_profil_key ? `/api/images/${encodeURIComponent(profile.photo_profil_key)}` : null
@@ -212,36 +84,22 @@ export function DashboardContent({
 
   const currentMonth = new Date().toISOString().slice(0, 7)
 
-  // Group deliverables
-  const { posts, articles, annonces, scripts, emails, strategie } = useMemo(() => {
-    const r = { posts: [] as Deliverable[], articles: [] as Deliverable[], annonces: [] as Deliverable[], scripts: [] as Deliverable[], emails: [] as Deliverable[], strategie: [] as Deliverable[] }
+  // Group deliverables — counts for plan marketing, annonces for biens
+  const counts = useMemo(() => {
+    const r = { annonces: [] as Deliverable[], strategie: 0, posts: 0, postsThisMonth: 0, scripts: 0, articles: 0, emails: 0 }
     for (const d of deliverables) {
-      if (d.type === "post") r.posts.push(d)
-      else if (d.type === "article_seo") r.articles.push(d)
-      else if (d.type === "annonce") r.annonces.push(d)
-      else if (d.type === "script_video") r.scripts.push(d)
-      else if (d.type === "newsletter" || d.type === "email_prospection") r.emails.push(d)
-      else r.strategie.push(d)
+      if (d.type === "annonce") r.annonces.push(d)
+      else if (d.type === "post") {
+        r.posts++
+        if (d.month === currentMonth || d.created_at.startsWith(currentMonth)) r.postsThisMonth++
+      }
+      else if (d.type === "script_video") r.scripts++
+      else if (d.type === "article_seo") r.articles++
+      else if (d.type === "newsletter" || d.type === "email_prospection") r.emails++
+      else if (["bio", "brief_graphique", "calendrier", "positionnement", "landing_page"].includes(d.type)) r.strategie++
     }
-    r.posts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     return r
-  }, [deliverables])
-
-  const biensCount = profile?.biens.length ?? 0
-
-  const postsThisMonth = posts.filter(p => p.month === currentMonth || p.created_at.startsWith(currentMonth)).length
-
-  // Nav items
-  const navItems: NavItem[] = [
-    strategie.length > 0 ? { id: "identite", label: "Mon profil", icon: "👤", count: strategie.length } : null,
-    { id: "biens", label: "Biens & annonces", icon: "🏠", count: biensCount + annonces.length },
-    posts.length > 0 ? { id: "posts", label: "Calendrier & posts", icon: "📅", count: posts.length } : null,
-    articles.length > 0 ? { id: "articles", label: "Articles", icon: "📝", count: articles.length } : null,
-    scripts.length > 0 ? { id: "scripts", label: "Scripts vidéo", icon: "🎬", count: scripts.length } : null,
-    emails.length > 0 ? { id: "emails", label: "Emails", icon: "📧", count: emails.length } : null,
-  ].filter((x): x is NavItem => x !== null)
-
-  const isVisible = (id: string) => !activeNav || activeNav === id
+  }, [deliverables, currentMonth])
 
   // ============================================================
   // EMPTY STATE
@@ -427,84 +285,75 @@ export function DashboardContent({
 
           <div className="space-y-3">
             {/* STRATEGIE — bios & positionnement */}
-            {strategie.length > 0 ? (
+            {counts.strategie > 0 ? (
               <div className="flex items-start gap-3 p-3 rounded-lg bg-primary-50/50">
                 <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">👤</span>
                 <div>
                   <p className="text-body-sm font-semibold text-primary">Mets à jour tes bios et ton positionnement</p>
                   <p className="text-caption text-neutral-500">Copie-les sur Instagram, Facebook et LinkedIn.</p>
                   <p className="text-caption mt-1.5">
-                    <a href="#section-strategie" className="text-secondary-700 font-semibold hover:underline">Voir mes bios ci-dessous</a>
+                    <a href="/dashboard/strategie" className="text-secondary-700 font-semibold hover:underline">Voir mes bios →</a>
                   </p>
                 </div>
               </div>
             ) : null}
 
             {/* POSTS */}
-            {posts.length > 0 ? (
+            {counts.posts > 0 ? (
               <div className="flex items-start gap-3 p-3 rounded-lg bg-secondary-50/50">
                 <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">📱</span>
                 <div>
-                  <p className="text-body-sm font-semibold text-primary">Tes {postsThisMonth > 0 ? postsThisMonth : posts.length} posts sont prêts</p>
+                  <p className="text-body-sm font-semibold text-primary">Tes {counts.postsThisMonth > 0 ? counts.postsThisMonth : counts.posts} posts sont prêts</p>
                   <p className="text-caption text-neutral-500">
                     Publie sur Instagram et LinkedIn — tes deux meilleurs canaux pour toucher des vendeurs locaux. Le matin (7h-9h) sur LinkedIn pour les pros, le soir (18h-20h) sur Instagram pour les particuliers.
                   </p>
-                  <p className="text-caption mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
-                    <a href="#section-posts" className="text-secondary-700 font-semibold hover:underline">Voir mes posts ci-dessous</a>
-                    <span className="text-neutral-300 hidden tablet:inline" aria-hidden="true">|</span>
-                    <a href="/blog/calendrier-editorial-mandataire" className="text-neutral-500 hover:text-secondary-700 hover:underline">📖 Lire : Comment créer un calendrier éditorial efficace</a>
+                  <p className="text-caption mt-1.5">
+                    <a href="/dashboard/posts" className="text-secondary-700 font-semibold hover:underline">Voir mes posts →</a>
                   </p>
                 </div>
               </div>
             ) : null}
 
             {/* SCRIPTS VIDEO */}
-            {scripts.length > 0 ? (
+            {counts.scripts > 0 ? (
               <div className="flex items-start gap-3 p-3 rounded-lg bg-warning-50/50">
                 <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">🎬</span>
                 <div>
-                  <p className="text-body-sm font-semibold text-primary">{scripts.length} script{scripts.length > 1 ? "s" : ""} vidéo prêt{scripts.length > 1 ? "s" : ""} à tourner</p>
+                  <p className="text-body-sm font-semibold text-primary">{counts.scripts} script{counts.scripts > 1 ? "s" : ""} vidéo prêt{counts.scripts > 1 ? "s" : ""} à tourner</p>
                   <p className="text-caption text-neutral-500">
                     Format Reel (30-60 sec) vertical. Filme-toi face caméra en lumière naturelle. Pas besoin d{"'"}être parfaite — l{"'"}authenticité marche mieux que la production.
                   </p>
-                  <p className="text-caption mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
-                    <a href="#section-scripts" className="text-secondary-700 font-semibold hover:underline">Voir mes scripts ci-dessous</a>
-                    <span className="text-neutral-300 hidden tablet:inline" aria-hidden="true">|</span>
-                    <a href="/blog/se-differencier-mandataire-immobilier" className="text-neutral-500 hover:text-secondary-700 hover:underline">📖 Lire : Se différencier comme mandataire</a>
+                  <p className="text-caption mt-1.5">
+                    <a href="/dashboard/scripts" className="text-secondary-700 font-semibold hover:underline">Voir mes scripts →</a>
                   </p>
                 </div>
               </div>
             ) : null}
 
             {/* ANNONCES */}
-            {annonces.length > 0 ? (
+            {counts.annonces.length > 0 ? (
               <div className="flex items-start gap-3 p-3 rounded-lg bg-success-50/50">
                 <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">📝</span>
                 <div>
-                  <p className="text-body-sm font-semibold text-primary">{annonces.length} annonce{annonces.length > 1 ? "s" : ""} prête{annonces.length > 1 ? "s" : ""} pour les portails</p>
+                  <p className="text-body-sm font-semibold text-primary">{counts.annonces.length} annonce{counts.annonces.length > 1 ? "s" : ""} prête{counts.annonces.length > 1 ? "s" : ""} pour les portails</p>
                   <p className="text-caption text-neutral-500">
-                    Copie-les sur SeLoger, LeBonCoin et Bien{"'"}ici. Chaque annonce inclut un lien vers ta page publique ImmoCrew — partage-le aussi par SMS à tes acheteurs potentiels.
-                  </p>
-                  <p className="text-caption mt-1.5">
-                    <a href="#section-biens" className="text-secondary-700 font-semibold hover:underline">Voir mes annonces ci-dessous</a>
+                    Copie-les sur SeLoger, LeBonCoin et Bien{"'"}ici. Chaque annonce inclut un lien vers ta page publique ImmoCrew.
                   </p>
                 </div>
               </div>
             ) : null}
 
             {/* ARTICLES SEO */}
-            {articles.length > 0 ? (
+            {counts.articles > 0 ? (
               <div className="flex items-start gap-3 p-3 rounded-lg bg-blue-50/50">
                 <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">📰</span>
                 <div>
-                  <p className="text-body-sm font-semibold text-primary">{articles.length} article{articles.length > 1 ? "s" : ""} SEO pour ta visibilité locale</p>
+                  <p className="text-body-sm font-semibold text-primary">{counts.articles} article{counts.articles > 1 ? "s" : ""} SEO pour ta visibilité locale</p>
                   <p className="text-caption text-neutral-500">
                     Publie-les sur ton blog ou ta page Facebook. Le SEO local met 2-3 mois à porter ses fruits — la régularité est la clé.
                   </p>
-                  <p className="text-caption mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
-                    <a href="#section-articles" className="text-secondary-700 font-semibold hover:underline">Voir mes articles ci-dessous</a>
-                    <span className="text-neutral-300 hidden tablet:inline" aria-hidden="true">|</span>
-                    <a href="/blog/google-business-profile-mandataire" className="text-neutral-500 hover:text-secondary-700 hover:underline">📖 Lire : Google Business Profile pour mandataire</a>
+                  <p className="text-caption mt-1.5">
+                    <a href="/dashboard/articles" className="text-secondary-700 font-semibold hover:underline">Voir mes articles →</a>
                   </p>
                 </div>
               </div>
@@ -550,9 +399,7 @@ export function DashboardContent({
       {/* ============================================================ */}
       {/* MES BIENS (self-service — property_pages)                       */}
       {/* ============================================================ */}
-      <div id="section-biens">
-        <MesBiensSection annonces={annonces} />
-      </div>
+      <MesBiensSection annonces={counts.annonces} />
 
       {/* CTA Passer au mensuel — APRÈS le plan, pas avant */}
       {pack === "lancement" ? (
@@ -580,133 +427,6 @@ export function DashboardContent({
             </div>
           </div>
         </a>
-      ) : null}
-
-      {/* NAVIGATION */}
-      {navItems.length > 1 ? <DashboardNav items={navItems} active={activeNav} onSelect={setActiveNav} /> : null}
-
-      {/* ============================================================ */}
-      {/* 1. MON IDENTITÉ PRO (stratégie — EN PREMIER)                  */}
-      {/* ============================================================ */}
-      {isVisible("identite") && strategie.length > 0 ? (() => {
-        // Dédupliquer par type (garde le plus récent)
-        const uniqueStrategie = strategie.reduce<Deliverable[]>((acc, d) => {
-          if (!acc.find(x => x.type === d.type)) acc.push(d)
-          return acc
-        }, [])
-        return (
-        <section id="section-strategie">
-          <SectionHeader icon="👤" title="Mon profil et identité" count={uniqueStrategie.length} isOpen={!collapsed.has("identite")} onToggle={() => toggle("identite")} />
-          {!collapsed.has("identite") ? (
-            <div className="mt-3 grid grid-cols-1 tablet:grid-cols-2 gap-3">
-              {uniqueStrategie.map((d) => (
-                <div key={d.id}>
-                  <DeliverableCard id={d.id} type={d.type} typeLabel={TYPE_LABELS[d.type] || d.type} typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"} title={d.title} status={d.status} />
-                  {STRATEGY_HINTS[d.type] ? <p className="text-caption text-neutral-400 mt-1 ml-1">{STRATEGY_HINTS[d.type]}</p> : null}
-                </div>
-              ))}
-            </div>
-          ) : null}
-        </section>
-        )})() : null}
-
-      {/* Annonces fusionnées dans MesBiensSection — plus de section séparée */}
-
-      {/* ============================================================ */}
-      {/* 2. MON CALENDRIER & POSTS                                     */}
-      {/* ============================================================ */}
-      {isVisible("posts") && posts.length > 0 ? (
-        <section id="section-posts">
-          <SectionHeader icon="📅" title={`Mon calendrier — ${postsThisMonth > 0 ? `${postsThisMonth} posts ce mois` : `${posts.length} posts`}`} count={posts.length} isOpen={!collapsed.has("posts")} onToggle={() => toggle("posts")} />
-          {!collapsed.has("posts") ? (
-            <div className="mt-3">
-              <p className="text-caption text-neutral-400 mb-3">Copie, colle, publie. Ton équipe a fait le reste.</p>
-              <div className="relative">
-                <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-secondary/20" aria-hidden="true" />
-                <div className="space-y-2">
-                  {(() => {
-                    let lastMonth = ""
-                    return posts.map((post) => {
-                      const platform = detectPlatform(post.title)
-                      const monthKey = post.month || post.created_at.slice(0, 7)
-                      const showMonthHeader = monthKey !== lastMonth
-                      if (showMonthHeader) lastMonth = monthKey
-                      const monthLabel = monthKey ? new Date(monthKey + "-01").toLocaleDateString("fr-FR", { month: "long", year: "numeric" }) : ""
-                      return (
-                        <div key={post.id}>
-                          {showMonthHeader && monthLabel ? (
-                            <div className="flex items-center gap-3 py-3 pl-10">
-                              <div className="h-px flex-1 bg-border" />
-                              <span className="text-caption font-semibold text-primary capitalize">{monthLabel}</span>
-                              <div className="h-px flex-1 bg-border" />
-                            </div>
-                          ) : null}
-                          <div className="relative pl-10">
-                            <div className="absolute left-2 top-4 w-5 h-5 rounded-full bg-card border-2 border-secondary/30 flex items-center justify-center text-xs" aria-hidden="true">
-                              {platform.icon}
-                            </div>
-                            <DeliverableCard id={post.id} type={post.type} typeLabel={platform.name} typeColor="bg-secondary-50 text-secondary-700" title={post.title} status={post.status} />
-                          </div>
-                        </div>
-                      )
-                    })
-                  })()}
-                </div>
-              </div>
-            </div>
-          ) : null}
-        </section>
-      ) : null}
-
-      {/* ============================================================ */}
-      {/* 4. MES ARTICLES                                               */}
-      {/* ============================================================ */}
-      {isVisible("articles") && articles.length > 0 ? (
-        <section id="section-articles">
-          <SectionHeader icon="📝" title="Mes articles" count={articles.length} isOpen={!collapsed.has("articles")} onToggle={() => toggle("articles")} />
-          {!collapsed.has("articles") ? (
-            <div className="mt-3 space-y-3">
-              {articles.map((d) => (
-                <DeliverableCard key={d.id} id={d.id} type={d.type} typeLabel="Article local" typeColor="bg-blue-50 text-blue-700" title={d.title} status={d.status} />
-              ))}
-            </div>
-          ) : null}
-        </section>
-      ) : null}
-
-      {/* ============================================================ */}
-      {/* 5. MES SCRIPTS VIDÉO                                          */}
-      {/* ============================================================ */}
-      {isVisible("scripts") && scripts.length > 0 ? (
-        <section id="section-scripts">
-          <SectionHeader icon="🎬" title="Mes scripts vidéo" count={scripts.length} isOpen={!collapsed.has("scripts")} onToggle={() => toggle("scripts")} />
-          {!collapsed.has("scripts") ? (
-            <div className="mt-3">
-              <p className="text-caption text-neutral-400 mb-3">Filme-toi avec ton iPhone, c{"'"}est suffisant. Chaque script est prêt à lire face caméra.</p>
-              <div className="grid grid-cols-1 tablet:grid-cols-2 gap-3">
-                {scripts.map((d) => (
-                  <DeliverableCard key={d.id} id={d.id} type={d.type} typeLabel="Script vidéo" typeColor="bg-warning-50 text-warning-800" title={d.title} status={d.status} />
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </section>
-      ) : null}
-
-      {/* ============================================================ */}
-      {/* 6. MES EMAILS                                                 */}
-      {/* ============================================================ */}
-      {isVisible("emails") && emails.length > 0 ? (
-        <section>
-          <SectionHeader icon="📧" title="Mes emails" count={emails.length} isOpen={!collapsed.has("emails")} onToggle={() => toggle("emails")} />
-          {!collapsed.has("emails") ? (
-            <div className="mt-3 grid grid-cols-1 tablet:grid-cols-2 gap-3">
-              {emails.map((d) => (
-                <DeliverableCard key={d.id} id={d.id} type={d.type} typeLabel={TYPE_LABELS[d.type] || d.type} typeColor={TYPE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"} title={d.title} status={d.status} />
-              ))}
-            </div>
-          ) : null}
-        </section>
       ) : null}
 
       {/* FOOTER */}
