@@ -42,7 +42,7 @@ export function Pillars() {
   return (
     <section className="section-padding bg-background" id="piliers">
       <div className="container-immocrew">
-        <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-10 desktop:mb-16">
+        <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-6 desktop:mb-10">
           Voilà ce qui change dès le 1er mois.
         </h2>
 

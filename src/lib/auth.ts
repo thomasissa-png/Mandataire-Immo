@@ -1,6 +1,7 @@
-import type { NextAuthOptions, Session, User } from "next-auth"
+import type { NextAuthOptions, Session, User, Account } from "next-auth"
 import type { JWT } from "next-auth/jwt"
 import CredentialsProvider from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google"
 import { query } from "@/lib/db"
 
 /**
@@ -88,9 +89,58 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+        },
+      },
+    }),
   ],
 
   callbacks: {
+    async signIn({ user, account }: { user: User; account: Account | null }) {
+      // Google OAuth : créer le client dans la DB s'il n'existe pas
+      if (account?.provider === "google" && user.email) {
+        const email = user.email.toLowerCase().trim()
+        const { rows } = await query<{ id: string }>(
+          "SELECT id FROM clients WHERE email = $1 LIMIT 1",
+          [email]
+        )
+
+        if (rows.length === 0) {
+          // Créer le compte automatiquement
+          const nameParts = (user.name || "").split(" ")
+          const firstName = nameParts[0] || ""
+          const lastName = nameParts.slice(1).join(" ") || ""
+
+          await query(
+            `INSERT INTO clients (email, first_name, last_name, email_verified, status, created_at)
+             VALUES ($1, $2, $3, TRUE, 'pending', NOW())
+             ON CONFLICT (email) DO NOTHING`,
+            [email, firstName, lastName]
+          )
+        }
+
+        // Récupérer l'ID client pour le token
+        const { rows: clientRows } = await query<ClientRow>(
+          "SELECT id, email, first_name, last_name FROM clients WHERE email = $1 LIMIT 1",
+          [email]
+        )
+
+        if (clientRows[0]) {
+          user.id = clientRows[0].id
+          ;(user as User & { firstName?: string | null }).firstName = clientRows[0].first_name
+          user.name = [clientRows[0].first_name, clientRows[0].last_name].filter(Boolean).join(" ") || user.name
+        }
+      }
+
+      return true
+    },
+
     async jwt({
       token,
       user,

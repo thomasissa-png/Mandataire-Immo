@@ -3,7 +3,7 @@ import { CTAButton } from "./CTAButton"
 
 export function CTAFinal() {
   return (
-    <section className="section-padding bg-primary py-20 desktop:py-28">
+    <section className="section-padding bg-primary">
       <div className="container-immocrew text-center">
         <h2 className="font-display text-h1 desktop:text-display-lg text-background mb-4">
           Tu n&apos;as pas choisi l&apos;immobilier pour faire du marketing.

@@ -28,7 +28,7 @@ export function HowItWorks() {
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-4">
           Comment ça marche ?
         </h2>
-        <p className="text-center text-body-lg text-neutral-500 mb-10 desktop:mb-16 max-w-xl mx-auto">
+        <p className="text-center text-body-lg text-neutral-500 mb-6 desktop:mb-10 max-w-xl mx-auto">
           Tu t&apos;inscris, on personnalise tout, et chaque mois ton plan
           marketing arrive&nbsp;—&nbsp;prêt à publier.
         </p>

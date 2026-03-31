@@ -1,5 +1,15 @@
 # Lessons Learned — ImmoCrew
 
+## Session 9 — 2026-03-31
+
+### Learnings
+
+| Session | Date | Catégorie | Sévérité | Description | Correction appliquée | Recommandation framework | Cible propagation | Fichiers impactés | Statut correction | Statut propagation |
+|---------|------|-----------|----------|-------------|---------------------|-------------------------|-------------------|-------------------|-------------------|-------------------|
+| S9 | 2026-03-31 | insistance | P0 | [PRÉFÉRENCE FONDATEUR] : Les espacements entre sections de page sont systématiquement trop grands et vides. Thomas l'a signalé 2-3 fois sur plusieurs sites. Les agents @designer et @ux doivent TOUJOURS en tenir compte. La densité de contenu prime sur l'espace vide décoratif. | section-padding réduit de py-12/py-16/py-24 à py-8/py-12/py-16. Marges titre-contenu réduites de mb-10/mb-16 à mb-6/mb-10. | @designer et @ux : toujours auditer les espacements. Préférer des sections plus compactes. L'espace vide excessif donne une impression de "vide" pas de "premium". | règle-globale | CLAUDE.md, .claude/agents/design.md, .claude/agents/ux.md | fait | non-propagé |
+| S9 | 2026-03-31 | insistance | P0 | [PRÉFÉRENCE FONDATEUR] : Cohérence visuelle des pages du dashboard — chaque page doit avoir le même layout (titre, icône, description). Thomas l'a signalé comme friction récurrente. | DashboardPageLayout créé et appliqué à toutes les pages. | Tout nouveau dashboard page DOIT utiliser DashboardPageLayout. Ne jamais créer de page avec un titre/layout custom. | agent-spécifique | .claude/agents/fullstack.md | fait | non-propagé |
+| S9 | 2026-03-31 | problème | P1 | CTA orange (bg-secondary #F27A1A) avec texte bleu marine (text-primary #1B2A4A) = contraste insuffisant. Le combo orange foncé + bleu foncé manque de lisibilité. | Tous les boutons CTA bg-secondary passés en text-white (26 occurrences dans 15 fichiers). | Pour les boutons CTA orange : TOUJOURS text-white, jamais text-primary. Le contraste blanc sur orange (#F27A1A) passe WCAG AA. | règle-globale | CLAUDE.md | fait | non-propagé |
+
 ## Session 7 — 2026-03-28
 
 ### Learnings

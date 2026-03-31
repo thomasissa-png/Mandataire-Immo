@@ -430,7 +430,7 @@ export function AnnonceBlock({
       <button
         type="button"
         onClick={generate}
-        className="inline-flex items-center gap-2 min-h-[44px] px-6 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md transition-all duration-150"
+        className="inline-flex items-center gap-2 min-h-[44px] px-6 py-2.5 rounded-full bg-secondary text-white font-display font-bold text-body-sm shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md transition-all duration-150"
       >
         <svg
           className="w-4 h-4"

@@ -25,7 +25,7 @@ export function BeforeAfter() {
   return (
     <section className="section-padding bg-white" id="avant-apres">
       <div className="container-immocrew">
-        <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-10 desktop:mb-16">
+        <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-6 desktop:mb-10">
           La différence ? Regarde par toi-même.
         </h2>
 

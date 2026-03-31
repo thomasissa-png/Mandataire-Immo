@@ -516,7 +516,7 @@ export function BienForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="w-full tablet:w-auto flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-secondary text-primary font-display font-bold text-body-sm shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md transition-all duration-normal disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full tablet:w-auto flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-secondary text-white font-display font-bold text-body-sm shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md transition-all duration-normal disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {submitting ? (
           <>

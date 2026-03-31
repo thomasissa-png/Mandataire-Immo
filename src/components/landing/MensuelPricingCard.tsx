@@ -26,9 +26,9 @@ export function MensuelPricingCard() {
   const pack = isTrimestriel ? PACK_MENSUEL_TRIMESTRIEL : PACK_MENSUEL
 
   return (
-    <div className="rounded-xl p-8 flex flex-col bg-primary text-white shadow-xl tablet:scale-[1.02] relative pt-14">
-      {/* Badge — centré en haut de la card */}
-      <span className="absolute top-4 left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-1.5 rounded-full bg-secondary text-white text-body-sm font-bold text-center">
+    <div className="rounded-xl p-8 pt-10 flex flex-col bg-primary text-white shadow-xl tablet:scale-[1.02] relative">
+      {/* Badge — au-dessus de la card */}
+      <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-1.5 rounded-full bg-secondary text-white text-body-sm font-bold text-center shadow-md z-10">
         {PACK_MENSUEL.badge}
       </span>
 

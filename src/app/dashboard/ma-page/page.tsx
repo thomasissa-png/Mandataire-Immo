@@ -206,7 +206,7 @@ export default async function MaPageMandatairePage() {
               href={`/agent/${agentPage.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-secondary text-white font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm"
             >
               Voir ma page →
             </a>

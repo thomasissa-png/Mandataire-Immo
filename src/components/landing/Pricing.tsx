@@ -30,11 +30,11 @@ export function Pricing() {
         </h2>
         <p className="text-center text-body-lg text-neutral-500 mb-4 max-w-xl mx-auto">
           Un seul mandat supplémentaire dans l&apos;année rembourse
-          ton abonnement entier. Et ta commission moyenne, c&apos;est 3 000 à 5 000€.
+          ton abonnement entier. Et ta commission moyenne, c&apos;est 3&nbsp;000 à 5&nbsp;000&nbsp;€.
         </p>
 
         {/* Guidage decisionnel */}
-        <p className="text-center text-body-sm text-neutral-400 mb-10 desktop:mb-16">
+        <p className="text-center text-body-sm text-neutral-400 mb-6 desktop:mb-10">
           Nouvelle sur ImmoCrew ? → Pack Lancement.
           Déjà prête à t&apos;abonner ? → Pack Mensuel.
         </p>
@@ -42,10 +42,7 @@ export function Pricing() {
         {/* 2 packs principaux */}
         <div className="grid gap-6 tablet:grid-cols-2 items-stretch max-w-4xl mx-auto">
           {/* Pack Lancement */}
-          <div className="rounded-xl p-8 flex flex-col bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-[box-shadow,transform] duration-normal relative pt-14">
-            {/* Spacer pour aligner avec le badge de la card Mensuel */}
-            <div className="absolute top-0 left-0 right-0 h-10" />
-
+          <div className="rounded-xl p-8 flex flex-col bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-[box-shadow,transform] duration-normal relative">
             {/* Name */}
             <h3 className="font-display text-h3 mb-1 text-primary">
               {PACK_LANCEMENT.name}

@@ -156,7 +156,7 @@ export function DashboardContent({
               <p className="font-display text-h4 text-primary mb-1">Tu n{"'"}as pas encore de pack</p>
               <p className="text-body-sm text-neutral-600">Découvre nos offres et lance ta visibilité locale dès aujourd{"'"}hui.</p>
             </div>
-            <span className="flex-shrink-0 px-5 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm group-hover:bg-secondary-600 group-hover:text-white transition-all shadow-sm">
+            <span className="flex-shrink-0 px-5 py-2.5 rounded-full bg-secondary text-white font-display font-bold text-body-sm group-hover:bg-secondary-600 group-hover:text-white transition-all shadow-sm">
               Voir les offres →
             </span>
           </div>
@@ -247,7 +247,7 @@ export function DashboardContent({
           </div>
           <a
             href="/dashboard/ma-page"
-            className="px-4 py-2 rounded-full bg-secondary text-primary font-display font-bold text-caption hover:bg-secondary-600 hover:text-white transition-all shadow-sm"
+            className="px-4 py-2 rounded-full bg-secondary text-white font-display font-bold text-caption hover:bg-secondary-600 hover:text-white transition-all shadow-sm"
           >
             Gérer ma page →
           </a>
@@ -400,7 +400,7 @@ export function DashboardContent({
             <p className="font-display text-h4 text-white">Continue sur ta lancée — passe au mensuel</p>
             <p className="text-body-sm text-primary-200 mt-1">12 posts, 2 articles, 4 scripts, 4 annonces — livrés chaque mois. 150€/mois, sans engagement.</p>
           </div>
-          <a href="/api/checkout?pack=mensuel" className="flex-shrink-0 px-6 py-2.5 rounded-full bg-secondary text-primary font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm">
+          <a href="/api/checkout?pack=mensuel" className="flex-shrink-0 px-6 py-2.5 rounded-full bg-secondary text-white font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm">
             Commencer le mensuel →
           </a>
         </div>

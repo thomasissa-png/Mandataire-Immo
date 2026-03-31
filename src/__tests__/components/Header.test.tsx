@@ -45,7 +45,7 @@ describe("Header", () => {
     expect(ctaLinks.length).toBeGreaterThanOrEqual(1)
     ctaLinks.forEach((link) => {
       const anchor = link.closest("a")
-      expect(anchor).toHaveAttribute("href", "#pricing")
+      expect(anchor).toHaveAttribute("href", "/#pricing")
     })
   })
 

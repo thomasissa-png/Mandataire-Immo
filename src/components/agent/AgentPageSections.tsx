@@ -111,7 +111,7 @@ export function HeroSection({ profile }: HeroProps) {
           )}
           <a
             href="#contact"
-            className="inline-flex h-11 px-6 items-center gap-2 rounded-full bg-secondary text-primary font-display font-bold text-body-sm shadow-sm hover:bg-secondary-600 hover:text-white active:scale-[0.97] transition-all duration-normal"
+            className="inline-flex h-11 px-6 items-center gap-2 rounded-full bg-secondary text-white font-display font-bold text-body-sm shadow-sm hover:bg-secondary-600 hover:text-white active:scale-[0.97] transition-all duration-normal"
           >
             Me contacter
           </a>
@@ -475,7 +475,7 @@ export function ContactSection({ profile, email }: ContactProps) {
 
           <a
             href={`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(`Prise de contact — ${profile.prenom} ${profile.nom}`)}`}
-            className="inline-flex h-12 px-8 items-center gap-2 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+            className="inline-flex h-12 px-8 items-center gap-2 rounded-full bg-secondary text-white font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />

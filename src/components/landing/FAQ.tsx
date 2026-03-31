@@ -137,7 +137,7 @@ export function FAQ() {
   return (
     <section className="section-padding bg-background" id="faq">
       <div className="container-immocrew max-w-3xl">
-        <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-10 desktop:mb-16">
+        <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-6 desktop:mb-10">
           Tu as des questions ? C&apos;est normal.
         </h2>
 

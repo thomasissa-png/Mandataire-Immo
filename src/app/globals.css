@@ -36,7 +36,7 @@
   }
 
   .section-padding {
-    @apply py-12 tablet:py-16 desktop:py-24;
+    @apply py-8 tablet:py-12 desktop:py-16;
   }
 
   /* Prose styles for blog article content */

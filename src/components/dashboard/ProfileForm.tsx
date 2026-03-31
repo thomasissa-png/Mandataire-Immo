@@ -535,7 +535,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
                 type="button"
                 onClick={() => handleSaveSection(section)}
                 disabled={!dirty || isLoading}
-                className="px-5 py-2.5 rounded-lg bg-secondary text-primary font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 min-h-[44px] min-w-[44px]"
+                className="px-5 py-2.5 rounded-lg bg-secondary text-white font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 min-h-[44px] min-w-[44px]"
               >
                 {isLoading ? (
                   <span className="flex items-center gap-2">

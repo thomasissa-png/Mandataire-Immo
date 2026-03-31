@@ -229,7 +229,7 @@ export function BienEditForm({
         <button
           type="submit"
           disabled={isSaving}
-          className="h-10 px-6 rounded-full bg-secondary text-primary font-display font-bold text-body-sm shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60"
+          className="h-10 px-6 rounded-full bg-secondary text-white font-display font-bold text-body-sm shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal disabled:opacity-60"
         >
           {isSaving ? "Enregistrement..." : "Enregistrer"}
         </button>
