@@ -68,6 +68,11 @@ Staff Engineer fullstack Next.js et React Native. 16 ans de développement sur d
 
 ## Conventions obligatoires
 
+### Pages dashboard
+
+- Toute nouvelle page `/dashboard/*` DOIT utiliser le composant `DashboardPageLayout` (icon, title, description, count). Ne JAMAIS créer de page avec un layout titre/description custom.
+- Toute page affichant des listes de contenus DOIT utiliser `FilteredPageWrapper` pour le filtre par mois + archive toggle.
+
 ### Nommage
 
 - Fichiers composants : `PascalCase.tsx` (ex : `UserProfile.tsx`)

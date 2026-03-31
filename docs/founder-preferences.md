@@ -1,7 +1,7 @@
 # Préférences Fondateur — Thomas
 
 > Source de vérité pour @moi. Mis à jour après chaque session.
-> Dernière mise à jour : 2026-03-28, session 7.
+> Dernière mise à jour : 2026-03-31, session 9.
 
 ## Pricing & Business
 
@@ -42,3 +42,7 @@
 - **Le plan du mois doit être un COACH** : dire SUR QUELLE PLATEFORME publier, POURQUOI ces horaires, donner des LIENS vers des articles, un ORDRE de priorité. Pas juste "publie 3 posts/semaine". Thomas compare au niveau Notion/Linear.
 - **Dashboard = SaaS premium** : pas de liste plate, pas de blocs vides, pas de todo liste générique. Sidebar desktop, navigation sticky mobile, sections avec sous-titres explicatifs, doublons dédupliqués.
 - **Si on promet quelque chose à Sophie, on le crée** : landing personnalisée, scraping lien annonce, calendrier visuel — si c'est dans le produit ou la landing, ça doit exister dans le dashboard.
+- **Espacements compacts, pas décoratifs** : les sections trop espacées donnent une impression de vide, pas de premium. Les paddings de section doivent être py-8/py-12/py-16 (pas py-12/py-16/py-24). Signalé 2+ fois sur plusieurs sites.
+- **Cohérence visuelle dashboard** : toutes les pages dashboard doivent avoir le même layout (DashboardPageLayout). Thomas le signale comme friction récurrente si chaque page a son propre titre/style.
+- **Pas d'annonces sans biens** : générer des annonces fictives pour un client sans biens réels est inutile et décrédibilise le service. La génération doit être conditionnée à la présence de vrais biens.
+- **Règle n°4 absolue** : TOUJOURS déléguer aux agents spécialisés, même si un timeout risque. Relancer l'agent plutôt que prendre le relais manuellement. Thomas y tient expressément.

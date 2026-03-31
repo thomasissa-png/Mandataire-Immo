@@ -3,7 +3,7 @@
 > Ce fichier est lu par tous les agents avant toute action.
 > Remplis chaque champ. Les champs vides bloquent les agents.
 > **ATTENTION** : ce fichier peut contenir des informations stratégiques (budget, pricing, concurrents). S'assurer que le repo est **privé** si des données confidentielles y sont renseignées.
-> Dernière mise à jour : 2026-03-25
+> Dernière mise à jour : 2026-03-31
 
 ---
 
@@ -254,6 +254,14 @@ ImmoCrew n'est PAS un outil. C'est une ÉQUIPE. Le mandataire rêve d'avoir un d
 | @mandataire | 2026-03-28 | Audit onboarding complet — 9 étapes + 5 scénarios (`docs/reviews/sophie-audit-onboarding.md`) | Verdict À RETRAVAILLER. Score global 7.8/10. 5 PASS (étapes 1, 3, 4, 5, 6, 8), 3 FRICTION (étapes 2, 7, 9), 1 FAIL scénario S5 (fausse promesse lien d'annonce non implémentée). 2 P0 bloquants : (1) "on récupère tout automatiquement" sur le lien annonce non implémenté — aucun fetch côté code à l'étape 7, (2) absence de confirmation que les biens créés en onboarding apparaissent dans le dashboard. 6 P1/P2 mineurs : champ réseau en texte libre → select, helpers manquants étape 9, helper téléphone, bug placeholder étape 3, indication de temps étape 5, avertissement photo non persistée. | Audit terrain + scénarios de simulation (S1 premier accès 21h30, S2 abandon et retour, S3 étapes optionnelles, S4 biens dashboard, S5 lien annonce). Brouillon serveur + sessionStorage classé PASS — la reprise fonctionne bien. Étape 8 (La vidéo) classée 10/10 — modèle parfait de l'étape optionnelle : une question, ton juste, 10 secondes. Étape 5 (Ton style) classée meilleure étape obligatoire — questions terrain, ton naturel. Fausse promesse lien annonce classée P0 car impact direct sur la confiance dès les premières minutes d'usage. Alternative écartée : corriger le texte sans implémenter le scraping — solution trop défensive, le scraping est une vraie différenciation à implémenter. |
 | @orchestrator | 2026-03-31 | Session 8 — Corrections P0/P1 Sophie + Resend + accents UTF-8 | 5 P0 corrigés (lien annonce reformulé, bug "meublés", témoignages transparents, à propos Thomas/VERSI, accents prompts), 5 P1 corrigés (bouton modifier bien, intro monthly update, suivi admin livraison, FAQ accordéon, étape comptes onboarding renommée), intégration Resend email, passe accents UTF-8 sur 13 fichiers prompts. Mise à jour lessons-learned.md (6 statuts ouvert→appliqué). | Branche claude/session-recovery-analysis-hGjj4. Lien annonce : reformulation honnête plutôt que scraping (trop complexe pour la V1, le scraping reste dans le backlog). Témoignages : transparence ajoutée plutôt que suppression (la section social proof reste nécessaire). FAQ : accordéon client component séparé pour garder le JSON-LD en Server Component. Admin : sous-select SQL pour le suivi livraison mensuelle. Resend : mode log-only si RESEND_API_KEY absent. |
 | @product-manager | 2026-03-31 | Spec système parrainage (`docs/product/referral-spec.md`) | Règles métier : parrain +1 mois gratuit (Stripe Customer Balance), filleul +7j trial (trial_period_days), code format `IMMOCREW-{PRENOM}{4_ALPHANUM}`, déclencheur `invoice.payment_succeeded`, illimité. 2 tables SQL (referral_codes, referrals), 1 colonne users. 4 endpoints API (my-code, validate, webhook, list). 2 écrans UI avec 5 états. 10 critères d'acceptance. Events Umami. Plan d'exécution par dépendances en 8 étapes. | Stripe Customer Balance retenu pour le crédit parrain plutôt qu'un coupon Stripe car : le balance s'applique automatiquement à la prochaine facture sans créer de coupon à usage unique gérable manuellement. Trial Stripe natif (trial_period_days) pour le filleul plutôt qu'un prix temporaire réduit car : plus simple, pas de downgrade/upgrade à gérer. Code parrainage non-expirant (pas de date d'expiration) car : simplification BDD et le code est utile tant que le parrain est actif. Auto-parrainage bloqué côté API (pas seulement UI) pour éviter l'abus. Idempotence webhook obligatoire car Stripe peut rejouer les events. Alternative écartée : crédit via coupon Stripe avec ID unique — fragile (le coupon doit être créé avant d'être appliqué) et génère de la dette BDD. Alternative écartée : feature flags pour limiter le parrainage à certains plans — inutile au MVP, tout abonné actif peut parrainer. |
+| @fullstack | 2026-03-31 | Session 9 — Liens partageables annonces + photos ville blog + layout compact dashboard | URL publique `/annonce/[token]` pour partager une annonce. Photos Unsplash par ville/quartier sur les articles blog. Layout compact single-column pour toutes les pages dashboard (emails, calendrier, stratégie). | Token aléatoire plutôt que slug pour les liens partageables car les annonces n'ont pas de slug unique. Unsplash direct (images.unsplash.com) plutôt qu'API avec clé car les URLs directes sont stables et ne nécessitent pas de backend. |
+| @fullstack | 2026-03-31 | Session 9 — Filtre par mois + archivage sur 6 pages dashboard | FilteredPageWrapper + MonthFilter sur annonces, scripts, emails, stratégie, posts, articles SEO. Pattern : Server Component fetch → Client wrapper filtre. Archive toggle avec statut `archived` en BDD. | FilteredPageWrapper réutilisable plutôt que filtre par page car 6 pages identiques. `includeArchived: true` côté serveur + filtre client plutôt que re-fetch car évite les allers-retours réseau. |
+| @fullstack | 2026-03-31 | Session 9 — Calendrier éditorial visuel | Composant `EditorialCalendar.tsx` avec distribution 1 contenu/jour max, jours préférés par type, pas de dimanche. Page `/dashboard/calendrier`. | Annonces et emails de prospection exclus du calendrier car ce n'est pas du contenu éditorial (c'est du CRM/immobilier). Distribution par jours préférés (mardi/jeudi/samedi pour posts, etc.) plutôt que round-robin car aligne avec les meilleures pratiques social media. |
+| @fullstack | 2026-03-31 | Session 9 — Système parrainage complet | `referral.ts`, 4 routes API (my-code, validate, list, checkout), `ReferralSection.tsx`, `ReferralCodeInput.tsx`, `useReferralCode.ts`, 2 migrations SQL (015, 016). 57 tests ajoutés (referral, MonthFilter, sanitizer). | Code format IMMOCREW-PRENOM + 4 alphanum pour la viralité (facile à dicter). Stripe Customer Balance pour le crédit parrain (automatique). Trial 7j filleul via Stripe natif. Anti-auto-parrainage côté API. Rate limiting lazy (pas de setInterval). |
+| @fullstack | 2026-03-31 | Session 9 — Corrections blog (Sophie) + profil photo | H1 avant hero image (content-first). Hero réduit à 80px mobile. CategoryIcon au lieu de stock photos génériques. Fix `/api/images/[key]` : ajout préfixe `clients/` pour photos profil. | Content-first car les études UX montrent que le titre doit être immédiatement visible. Stock photos génériques supprimées car Sophie les trouve "pas crédibles". |
+| @fullstack | 2026-03-31 | Session 9 — Fix QA P1/P2 (annonce guard, breakpoints, tokens, grid) | Guard `ctx.biens.length > 0` dans pack-lancement. `sm:` → `tablet:` FilteredPageWrapper. `bg-blue-*` → `bg-info-*` ArticlesFiltered + DashboardContent. `grid-cols-5` → `grid-cols-4` calendrier. | Cohérence breakpoints custom (tablet: 768px) et design tokens (info au lieu de blue) dans tout le projet. |
+| @social | 2026-03-31 | Session 9 — Stratégie calendrier éditorial (`docs/social/editorial-calendar-strategy.md`) | Distribution 1/jour max, 26 jours dispo/mois, 19 contenus/mois. 5 piliers éditoriaux (expertise locale 35%, preuves sociales 25%, éducation 20%, personal branding 15%, engagement 5%). Règles par plateforme. 3 workflows repurposing. KPIs par plateforme avec seuils d'alerte. | Jours préférés par type de contenu basés sur les comportements audience immobilier (mardi/jeudi engagement max LinkedIn, samedi reach organique Instagram). Repurposing systématique car un article SEO peut devenir 3 posts + 1 thread — maximise le ROI contenu. |
+| @qa | 2026-03-31 | Session 9 — Audit QA corrections session | 3 P1 + 2 P2 identifiés : pack-lancement annonce guard, FilteredPageWrapper breakpoint, blue tokens, grid-cols calendrier. 284 tests passent (20 suites). | Audit ciblé sur les modifications de la session plutôt qu'audit exhaustif car les fondations sont stables (V5 GO sans réserve). |
 
 ---
 
@@ -298,43 +306,46 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 
 ---
 
-## Memo de reprise — derniere session
+## Memo de reprise — dernière session
 
-- **Date de cloture** : 2026-03-31, session 8
+- **Date de clôture** : 2026-03-31, session 9
 - **Branche** : `claude/session-recovery-analysis-hGjj4`
-- **Resume de la session** : Corrections de tous les P0 et P1 de l'audit Sophie recalibree (session 7). Integration Resend pour les emails reels. Passe accents UTF-8 sur les 13 fichiers de prompts IA. Mise a jour lessons-learned.md (6 learnings S6/S7 passes de "ouvert" a "applique").
-- **Travaux termines cette session** :
-  - P0-1 : Lien annonce reformule ("on s'en inspire pour rediger une version qui claque" — plus de fausse promesse)
-  - P0-2 : Bug "meubls" → "meubles" corrige dans bien/[id]/page.tsx
-  - P0-3 : Temoignages transparents (titre "Ce que nos premiers utilisateurs en pensent" + mention phase de test)
-  - P0-4 : Page a propos enrichie (Thomas nomme, parcours, VERSI, adresse)
-  - P0-5 : Accents UTF-8 corriges dans 13 fichiers prompts (specialise→specialise, redige→redige, etc.)
-  - P1-1 : Bouton "Modifier les infos" sur fiche bien (BienHeader + BienEditForm + PATCH /api/biens/[id])
-  - P1-2 : Intro monthly update avec contexte et benefice
-  - P1-3 : Suivi livraison admin (badge "Livre" / "En attente" par client)
-  - P1-4 : FAQ publique en accordeon (FAQAccordion client component, JSON-LD preserve)
-  - P1-5 : Etape "Tes comptes" → "Tes reseaux sociaux" avec description et placeholders
-  - Integration Resend (src/lib/email.ts, mode log-only si cle absente)
-  - lessons-learned.md : 6 statuts ouverts → appliques
-- **Promesses restantes a tenir pour Sophie** :
-  - Landing page personnalisee /landing/[slug] (mentionnee dans les deliverables, pas encore codee)
-  - Scraping/enrichissement lien annonce (le texte ne promet plus, mais la feature reste dans le backlog)
-  - Calendrier de publication visuel dans le dashboard (pas juste une liste de posts)
-- **Prochaines actions recommandees** :
-  1. **@mandataire : Re-audit Sophie** — verifier que les 10 P0/P1 corriges passent maintenant. Score cible : 8.5+/10.
-  2. **@fullstack : Promesses manquantes** — landing page /landing/[slug], calendrier visuel dashboard.
-  3. **@seo : Audit SEO pages publiques** — meta OG sur /bien/[slug], sitemap a jour avec les biens publies.
-  4. **@qa : Tests des nouveaux composants** — BienHeader, BienEditForm, FAQAccordion, email Resend.
-  5. **@fullstack : Stripe integration** — creer les produits Stripe, tester le checkout flow.
+- **Résumé de la session** : Session riche en features dashboard : liens partageables pour les annonces, photos de ville sur le blog, layout compact single-column, filtre par mois + archivage sur les 6 pages de contenus, calendrier éditorial visuel (1 contenu/jour, jours préférés par type), système de parrainage complet (code, UI, Stripe, 57 tests), corrections blog (recommandations Sophie : content-first, hero réduit), fix photo profil, fix QA (annonce guard, breakpoints, tokens design system, grid calendrier). @social a produit la stratégie calendrier éditorial.
+- **Travaux terminés cette session** :
+  - Liens publics partageables annonces (`/annonce/[token]`)
+  - Photos ville Unsplash sur blog articles + grille blog
+  - Layout compact single-column sur toutes les pages dashboard
+  - Filtre par mois + archive toggle sur 6 pages (annonces, scripts, emails, stratégie, posts, articles)
+  - Calendrier éditorial visuel (`EditorialCalendar.tsx`, page `/dashboard/calendrier`)
+  - Système parrainage complet (spec, 2 migrations SQL, 4 routes API, 3 composants UI, checkout intégré)
+  - Corrections blog Sophie (H1 avant hero, hero 80px mobile, CategoryIcon, max-w-4xl)
+  - Fix photo profil (préfixe `clients/` dans `/api/images/[key]`)
+  - Fix QA : guard annonces pack-lancement, breakpoint `tablet:`, tokens `info`, grid-cols-4
+  - Sécurité : XSS sanitizer renforcé, anti-auto-parrainage, rate limiting lazy, race condition archive
+  - Tests : 57 nouveaux (referral, MonthFilter, sanitizer), total 284 tests passent
+  - Stratégie calendrier éditorial (@social)
+- **Travaux en cours / non terminés** :
+  - Webhook Stripe `invoice.payment_succeeded` : logique crédit parrain pas encore implémentée
+  - Migrations SQL 015 + 016 (annonce share + referral) : à exécuter en production
+  - 3 learnings S9 P0/P1 propagés dans les fichiers cibles (CLAUDE.md, fullstack.md)
+- **Promesses restantes à tenir pour Sophie** :
+  - Landing page personnalisée `/agent/[slug]` (spec dans `docs/product/landing-mandataire-spec.md`, pas encore codée)
+  - Scraping/enrichissement lien annonce (texte reformulé, feature dans le backlog)
+- **Prochaines actions recommandées** :
+  1. **@fullstack : Stripe intégration** — créer les produits Stripe, tester le checkout flow, implémenter le webhook `invoice.payment_succeeded` avec logique parrainage. Priorité car bloque la mise en production.
+  2. **@fullstack : Landing page perso `/agent/[slug]`** — spec prête, dernière promesse manquante pour Sophie. Différenciateur fort vs concurrence.
+  3. **@mandataire : Re-audit Sophie complet** — vérifier toutes les features sessions 8+9. Score cible : 9+/10.
+  4. **@qa : Tests nouveaux composants** — EditorialCalendar, ReferralSection, FilteredPageWrapper, AnnonceList share/archive.
+  5. **@seo : Audit SEO pages publiques** — sitemap à jour, meta OG sur /annonce/[token] et /bien/[slug].
 - **Blockers** :
-  - ANTHROPIC_API_KEY necessaire pour la generation IA
-  - Migrations 008-012 a executer : `for f in sql/008*.sql sql/009*.sql sql/010*.sql sql/011*.sql sql/012*.sql; do psql $DATABASE_URL -f $f; done`
-  - Marque INPI "ImmoCrew" a verifier (collision SIRET 894616713 Auterive)
-  - RESEND_API_KEY pour emails reels (Resend integre, mode log-only actif)
+  - STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET + produits Stripe à créer (bloque le lancement)
+  - ANTHROPIC_API_KEY nécessaire pour la génération IA
+  - Migrations SQL à exécuter : `for f in sql/015*.sql sql/016*.sql; do psql $DATABASE_URL -f $f; done`
+  - RESEND_API_KEY pour emails réels (Resend intégré, mode log-only actif)
   - CRON_SECRET pour le cron nurturing
-  - STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET + produits Stripe a creer
-- **Commande de reprise suggeree** :
+  - Marque INPI "ImmoCrew" à vérifier
+- **Commande de reprise suggérée** :
 
 ```
-@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 8). Branche claude/session-recovery-analysis-hGjj4. Session 8 terminee : 5 P0 + 5 P1 Sophie corriges, Resend integre, accents UTF-8 corriges. Prochaines priorites : re-audit Sophie, landing perso /landing/[slug], calendrier visuel, tests nouveaux composants, Stripe.
+@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 9). Branche claude/session-recovery-analysis-hGjj4. Session 9 terminée : features dashboard avancées (parrainage, calendrier éditorial, filtres mois, liens partageables). 284 tests passent. Prochaines priorités : Stripe intégration + webhook parrainage, landing perso /agent/[slug], re-audit Sophie, tests nouveaux composants.
 ```

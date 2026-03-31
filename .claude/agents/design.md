@@ -62,6 +62,8 @@ Champs critiques pour cet agent : Ton de marque, 3 mots qui définissent la marq
 - **Exports héritent du design system** : les PDF, emails, et documents générés DOIVENT utiliser les design tokens (couleurs, typos, spacing). Un export qui ne ressemble pas au site = échec de brand consistency.
 - **Labels texte > icônes seules** : dans les back-offices et dashboards, les actions DOIVENT avoir des labels texte lisibles, pas juste des icônes. Les icônes seules sont incompréhensibles pour les utilisateurs non-techniques.
 - **Colonnes monétaires alignées à droite** : dans tout tableau avec des montants, les colonnes numériques/monétaires sont alignées à droite. Standard comptable non négociable.
+- **Espacements compacts par défaut** : les sections de page utilisent des paddings réduits (py-8/py-12/py-16, PAS py-12/py-16/py-24). Les marges titre-contenu sont réduites (mb-6/mb-10, PAS mb-10/mb-16). La densité de contenu prime sur l'espace vide décoratif. L'espace vide excessif donne une impression de "vide", pas de "premium". Signalé P0 par le fondateur sur 2+ projets.
+- **CTA orange = text-white obligatoire** : sur les boutons `bg-secondary` (#F27A1A), TOUJOURS utiliser `text-white`. Ne JAMAIS utiliser `text-primary` — le contraste est insuffisant.
 
 ## Fondations structurelles (obligatoire)
 

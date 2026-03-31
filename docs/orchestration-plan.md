@@ -183,14 +183,14 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 - **2026-03-25 S3** : DÉCOUVERTE CRITIQUE — pipeline IA non codé. Postmortem + roadmap services IA par @product-manager.
 - **2026-03-25 S3** : Règle n°5 ajoutée à CLAUDE.md : "Mindset IA, pas équipe humaine".
 - **2026-03-25 S3** : Clôture session. Phase 6 (pipeline IA) préparée mais non lancée.
+- **2026-03-31 S9** : Phase 9 — Features dashboard avancées : liens partageables annonces, photos ville blog, filtres mois + archive (6 pages), calendrier éditorial visuel (1/jour, jours préférés), parrainage complet (4 API + UI + Stripe), corrections blog Sophie, fix profil photo, QA 3P1+2P2 corrigés. 284 tests. @social stratégie calendrier éditorial.
 
 ## État pour reprise prochaine session
-- **Phases terminées** : 0, 1, 2, 3, 4, 5, 6 (pipeline IA livré — 9.2/10 revue V3), 7 (upload photos, profil, onboarding serveur, email nurturing, dashboard refondu, migration Umami)
-- **Phase en cours** : 8 (corrections P0/P1 Sophie + polish pré-lancement)
-  - Session 8 (2026-03-31) : 5 P0 corrigés (lien annonce, bug meublés, témoignages, à propos, accents)
-  - 5 P1 corrigés (modifier bien, monthly update, suivi admin, FAQ accordéon, comptes onboarding)
-  - Intégration Resend (mode log-only sans API key)
-  - Accents UTF-8 corrigés dans 13 fichiers prompts
-- **Prochaine phase** : 9 — Promesses restantes + Stripe + tests + re-audit Sophie
-- **Blockers** : ANTHROPIC_API_KEY, RESEND_API_KEY, STRIPE_*, migrations SQL, INPI
+- **Phases terminées** : 0, 1, 2, 3, 4, 5, 6 (pipeline IA livré — 9.2/10 revue V3), 7 (upload photos, profil, onboarding serveur, email nurturing, dashboard refondu, migration Umami), 8 (corrections P0/P1 Sophie + polish)
+- **Phase en cours** : 9 (features dashboard avancées + QA)
+  - Session 9 (2026-03-31) : Liens partageables annonces, photos ville blog, layout compact, filtre par mois + archive sur 6 pages, calendrier éditorial visuel, système parrainage complet, corrections blog (Sophie), fix profil photo, fix QA (annonce guard, breakpoints, tokens, grid)
+  - @social : stratégie calendrier éditorial produite (`docs/social/editorial-calendar-strategy.md`)
+  - @qa : audit 3 P1 + 2 P2, tous corrigés, 284 tests passent
+- **Prochaine phase** : 10 — Stripe intégration + landing page perso /agent/[slug] + re-audit Sophie + tests nouveaux composants
+- **Blockers** : ANTHROPIC_API_KEY, RESEND_API_KEY, STRIPE_* + produits Stripe à créer, migrations SQL (015, 016), INPI, webhook Stripe `invoice.payment_succeeded` pour crédits parrainage
 - **Pour reprendre** : voir mémo de reprise dans project-context.md
