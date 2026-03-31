@@ -128,10 +128,10 @@ export function IndexationToggle({ slug, initialValue }: IndexationToggleProps) 
   return (
     <div className="flex items-center justify-between gap-4">
       <div>
-        <p className="text-body-sm font-semibold text-primary">Indexation Google</p>
+        <p className="text-body-sm font-semibold text-primary">Visible sur Google</p>
         <p className="text-caption text-neutral-500">
           {enabled
-            ? "Activé — les prospects peuvent te trouver en cherchant ton nom sur Google."
+            ? "Activé — tes prospects peuvent te trouver en cherchant ton nom sur Google."
             : "Désactivé — ta page est accessible uniquement via le lien direct que tu partages."}
         </p>
       </div>
@@ -139,7 +139,7 @@ export function IndexationToggle({ slug, initialValue }: IndexationToggleProps) 
         type="button"
         role="switch"
         aria-checked={enabled}
-        aria-label="Indexation Google"
+        aria-label="Visible sur Google"
         onClick={handleToggle}
         disabled={saving}
         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:opacity-60 ${

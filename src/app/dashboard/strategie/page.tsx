@@ -45,7 +45,7 @@ export default async function StrategiePage() {
   return (
     <DashboardPageLayout
       icon="👤"
-      title="Mon identité et stratégie"
+      title="Mes bios et positionnement"
       description="Tes bios, ton positionnement et ton kit graphique. Copie-les sur tes réseaux."
       count={uniqueStrategie.length}
     >

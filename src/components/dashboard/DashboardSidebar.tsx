@@ -16,7 +16,7 @@ interface SidebarSection {
 const NAV_SECTIONS: SidebarSection[] = [
   {
     links: [
-      { href: "/dashboard", label: "Mon espace", icon: "🏠" },
+      { href: "/dashboard", label: "Tableau de bord", icon: "🏠" },
     ],
   },
   {
@@ -24,17 +24,22 @@ const NAV_SECTIONS: SidebarSection[] = [
     links: [
       { href: "/dashboard/profile", label: "Mon profil", icon: "👤" },
       { href: "/dashboard/ma-page", label: "Ma page mandataire", icon: "🌐" },
-      { href: "/dashboard/biens/nouveau", label: "Ajouter un bien", icon: "➕" },
     ],
   },
   {
     title: "Mes contenus",
     links: [
-      { href: "/dashboard/strategie", label: "Identité et stratégie", icon: "🎯" },
-      { href: "/dashboard/posts", label: "Posts et calendrier", icon: "📅" },
+      { href: "/dashboard/strategie", label: "Mes bios et positionnement", icon: "🎯" },
+      { href: "/dashboard/posts", label: "Mes posts", icon: "📅" },
       { href: "/dashboard/articles", label: "Articles SEO", icon: "📝" },
       { href: "/dashboard/scripts", label: "Scripts vidéo", icon: "🎬" },
       { href: "/dashboard/emails", label: "Emails", icon: "📧" },
+    ],
+  },
+  {
+    title: "Mes biens",
+    links: [
+      { href: "/dashboard/biens/nouveau", label: "Ajouter un bien", icon: "➕" },
     ],
   },
 ]
@@ -43,7 +48,7 @@ const NAV_SECTIONS: SidebarSection[] = [
 const MOBILE_NAV: SidebarLink[] = [
   { href: "/dashboard", label: "Accueil", icon: "🏠" },
   { href: "/dashboard/posts", label: "Posts", icon: "📅" },
-  { href: "/dashboard/profile", label: "Profil", icon: "👤" },
+  { href: "/dashboard/strategie", label: "Bios", icon: "🎯" },
   { href: "/dashboard/biens/nouveau", label: "Ajouter", icon: "➕" },
 ]
 

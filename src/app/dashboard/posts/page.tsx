@@ -24,7 +24,7 @@ export default async function PostsPage() {
   return (
     <DashboardPageLayout
       icon="📅"
-      title="Mon calendrier"
+      title="Mes posts"
       description={postsThisMonth > 0 ? `${postsThisMonth} posts ce mois` : `${posts.length} posts au total`}
       count={posts.length}
     >

@@ -164,10 +164,10 @@ describe("IndexationToggle", () => {
     expect(toggle).toHaveAttribute("aria-checked", "true")
   })
 
-  it("le switch a aria-label 'Indexation Google'", () => {
+  it("le switch a aria-label 'Visible sur Google'", () => {
     render(<IndexationToggle slug="sophie-martin" initialValue={false} />)
     const toggle = screen.getByRole("switch")
-    expect(toggle).toHaveAttribute("aria-label", "Indexation Google")
+    expect(toggle).toHaveAttribute("aria-label", "Visible sur Google")
   })
 
   it("toggle change l'état visuellement au clic", async () => {
