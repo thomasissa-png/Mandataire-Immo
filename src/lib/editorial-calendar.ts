@@ -179,7 +179,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Annonces",
     angle:
-      "Exemples concrets avant/apres de descriptions qui transforment une annonce banale en annonce irresistible",
+      "Exemples concrets avant/après de descriptions qui transforment une annonce banale en annonce irrésistible",
     priorite: 10,
     statut: "planifie",
   },
@@ -195,7 +195,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Annonces",
     angle:
-      "Specificites de LeBonCoin pour les pros et techniques pour maximiser la visibilite de ses annonces",
+      "Spécificités de LeBonCoin pour les pros et techniques pour maximiser la visibilité de ses annonces",
     priorite: 11,
     statut: "planifie",
   },
@@ -204,7 +204,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
   {
     slug: "referencement-local-immobilier-guide",
     titre:
-      "Referencement local pour mandataire immobilier : le guide pas-a-pas",
+      "Référencement local pour mandataire immobilier : le guide pas-à-pas",
     mot_cle_principal: "referencement local mandataire immobilier",
     mots_cles_secondaires: [
       "SEO local agent immobilier",
@@ -213,7 +213,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "SEO local",
     angle:
-      "Actions concretes pour apparaitre dans les resultats Google quand un vendeur cherche un mandataire dans ta ville",
+      "Actions concrètes pour apparaître dans les résultats Google quand un vendeur cherche un mandataire dans ta ville",
     priorite: 12,
     statut: "planifie",
   },
@@ -228,14 +228,14 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "SEO local",
     angle:
-      "Methode pour systematiser la collecte d'avis et les transformer en levier d'acquisition",
+      "Méthode pour systématiser la collecte d'avis et les transformer en levier d'acquisition",
     priorite: 13,
     statut: "planifie",
   },
   {
     slug: "seo-immobilier-mandataire-debutant",
     titre:
-      "SEO immobilier pour mandataire : les bases pour etre trouve sur Google",
+      "SEO immobilier pour mandataire : les bases pour être trouvé sur Google",
     mot_cle_principal: "SEO immobilier",
     mots_cles_secondaires: [
       "referencement naturel immobilier",
@@ -244,7 +244,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "SEO local",
     angle:
-      "Les fondamentaux du SEO expliques simplement pour un mandataire qui n'a jamais fait de referencement",
+      "Les fondamentaux du SEO expliqués simplement pour un mandataire qui n'a jamais fait de référencement",
     priorite: 14,
     statut: "planifie",
   },
@@ -262,7 +262,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Réseaux sociaux",
     angle:
-      "Strategie pour apporter de la valeur dans les groupes Facebook et convertir les membres en clients",
+      "Stratégie pour apporter de la valeur dans les groupes Facebook et convertir les membres en clients",
     priorite: 15,
     statut: "planifie",
   },
@@ -271,7 +271,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
   {
     slug: "marque-personnelle-mandataire-immobilier",
     titre:
-      "Marque personnelle pour mandataire immobilier : deviens la reference de ta ville",
+      "Marque personnelle pour mandataire immobilier : deviens la référence de ta ville",
     mot_cle_principal: "marque personnelle mandataire",
     mots_cles_secondaires: [
       "personal branding agent immobilier",
@@ -280,14 +280,14 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Personal branding",
     angle:
-      "Comment construire une identite forte qui fait que les vendeurs pensent a toi en premier",
+      "Comment construire une identité forte qui fait que les vendeurs pensent à toi en premier",
     priorite: 16,
     statut: "planifie",
   },
   {
     slug: "se-faire-connaitre-mandataire-immobilier",
     titre:
-      "Se faire connaitre en tant que mandataire immobilier : 10 actions a lancer cette semaine",
+      "Se faire connaître en tant que mandataire immobilier : 10 actions à lancer cette semaine",
     mot_cle_principal: "se faire connaitre mandataire",
     mots_cles_secondaires: [
       "visibilite mandataire immobilier",
@@ -296,7 +296,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Personal branding",
     angle:
-      "Actions immediates et gratuites pour gagner en visibilite locale en partant de zero",
+      "Actions immédiates et gratuites pour gagner en visibilité locale en partant de zéro",
     priorite: 17,
     statut: "planifie",
   },
@@ -305,7 +305,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
   {
     slug: "video-immobiliere-mandataire-guide",
     titre:
-      "Video immobiliere : le guide complet pour mandataires (meme si tu detestes la camera)",
+      "Vidéo immobilière : le guide complet pour mandataires (même si tu détestes la caméra)",
     mot_cle_principal: "video immobiliere",
     mots_cles_secondaires: [
       "video visite virtuelle",
@@ -314,14 +314,14 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Vidéo",
     angle:
-      "Pourquoi la video est devenue incontournable et comment s'y mettre sans stress ni materiel couteux",
+      "Pourquoi la vidéo est devenue incontournable et comment s'y mettre sans stress ni matériel coûteux",
     priorite: 18,
     statut: "planifie",
   },
   {
     slug: "reels-agent-immobilier-idees",
     titre:
-      "Reels pour mandataire immobilier : 15 idees de videos courtes qui marchent",
+      "Reels pour mandataire immobilier : 15 idées de vidéos courtes qui marchent",
     mot_cle_principal: "Reels agent immobilier",
     mots_cles_secondaires: [
       "reels instagram immobilier idees",
@@ -330,14 +330,14 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Vidéo",
     angle:
-      "Formats de Reels testes et approuves dans l'immobilier avec des scripts prets a tourner",
+      "Formats de Reels testés et approuvés dans l'immobilier avec des scripts prêts à tourner",
     priorite: 19,
     statut: "planifie",
   },
   {
     slug: "script-video-immobilier-templates",
     titre:
-      "Scripts video immobilier : 5 templates prets a l'emploi pour tes Reels et YouTube",
+      "Scripts vidéo immobilier : 5 templates prêts à l'emploi pour tes Reels et YouTube",
     mot_cle_principal: "script video immobilier",
     mots_cles_secondaires: [
       "scenario video immobilier",
@@ -346,7 +346,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Vidéo",
     angle:
-      "Templates de scripts mot-a-mot que le mandataire peut lire et tourner en 10 minutes",
+      "Templates de scripts mot-à-mot que le mandataire peut lire et tourner en 10 minutes",
     priorite: 20,
     statut: "planifie",
   },
@@ -365,7 +365,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Stratégie",
     angle:
-      "Les 4 leviers digitaux pour recevoir des mandats au lieu d'aller les chercher — chaque levier necessite du contenu regulier",
+      "Les 4 leviers digitaux pour recevoir des mandats au lieu d'aller les chercher — chaque levier nécessite du contenu régulier",
     priorite: 6, // Haute priorite — middle funnel, requete volumineuse
     statut: "planifie",
   },
@@ -382,7 +382,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Stratégie",
     angle:
-      "Comparatif honnete : freelance vs templates reseau vs service productise — sans nommer de concurrent, avec les vrais chiffres du marche",
+      "Comparatif honnête : freelance vs templates réseau vs service productisé — sans nommer de concurrent, avec les vrais chiffres du marché",
     priorite: 7, // Haute priorite — bottom funnel, intention commerciale
     statut: "planifie",
   },
