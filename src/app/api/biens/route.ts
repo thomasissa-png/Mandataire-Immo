@@ -23,7 +23,7 @@ export async function GET() {
 
   try {
     const { rows } = await query<PropertyPage>(
-      `SELECT id, client_id, client_email, titre, type_bien, adresse, prix, surface, pieces,
+      `SELECT id, client_id, client_email, titre, type_bien, COALESCE(transaction_type, 'vente') as transaction_type, adresse, prix, surface, pieces,
               points_forts, description_detaillee, annonce_longue, annonce_courte,
               titre_annonce, accroche_courte, photos_originales, photos_staging,
               status, slug, published_at, created_at, updated_at
@@ -48,6 +48,7 @@ export async function GET() {
 interface CreateBienBody {
   titre: string
   type_bien: string
+  transaction_type: "vente" | "location"
   adresse: string
   prix: number
   surface: number
@@ -70,6 +71,11 @@ function validateBody(body: unknown): { valid: true; data: CreateBienBody } | { 
     }
   }
 
+  const transactionType = typeof b.transaction_type === "string" ? b.transaction_type : "vente"
+  if (transactionType !== "vente" && transactionType !== "location") {
+    return { valid: false, error: "Type de transaction invalide (vente ou location)" }
+  }
+
   if (typeof b.prix !== "number" || b.prix <= 0) {
     return { valid: false, error: "Prix invalide — doit être un nombre positif" }
   }
@@ -85,6 +91,7 @@ function validateBody(body: unknown): { valid: true; data: CreateBienBody } | { 
     data: {
       titre: (b.titre as string).trim(),
       type_bien: (b.type_bien as string).trim(),
+      transaction_type: transactionType as "vente" | "location",
       adresse: (b.adresse as string).trim(),
       prix: b.prix as number,
       surface: b.surface as number,
@@ -164,15 +171,16 @@ export async function POST(request: NextRequest) {
   // Insérer le bien en base
   const { rows } = await query<{ id: string }>(
     `INSERT INTO property_pages (
-      client_id, client_email, titre, type_bien, adresse, prix, surface, pieces,
+      client_id, client_email, titre, type_bien, transaction_type, adresse, prix, surface, pieces,
       points_forts, description_detaillee, slug, status
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'draft')
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'draft')
     RETURNING id`,
     [
       user.id,
       user.email,
       data.titre,
       data.type_bien,
+      data.transaction_type,
       data.adresse,
       data.prix,
       data.surface,

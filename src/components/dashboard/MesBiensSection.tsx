@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { BienCard } from "@/components/biens/BienCard"
-import { DeliverableCard } from "./DeliverableCard"
 import type { PropertyPage } from "@/types/property"
 
 // ─── Types ────────────────────────────────────────────────────────
@@ -150,17 +149,6 @@ export function MesBiensSection({ annonces = [] }: MesBiensSectionProps) {
           </a>
         </div>
 
-        {/* Annonces générées (deliverables) rattachées aux biens */}
-        {annonces.length > 0 ? (
-          <div className="mt-4">
-            <h3 className="text-body-sm font-semibold text-primary mb-2">Tes annonces générées</h3>
-            <div className="space-y-2">
-              {annonces.map((a) => (
-                <DeliverableCard key={a.id} id={a.id} type={a.type} typeLabel="Annonce" typeColor="bg-success-50 text-success-700" title={a.title} status={a.status} />
-              ))}
-            </div>
-          </div>
-        ) : null}
       </section>
     )
   }
@@ -204,18 +192,6 @@ export function MesBiensSection({ annonces = [] }: MesBiensSectionProps) {
           <BienCard key={bien.id} bien={bien} />
         ))}
       </div>
-
-      {/* Annonces générées (deliverables) rattachées aux biens */}
-      {annonces.length > 0 ? (
-        <div className="mt-4">
-          <h3 className="text-body-sm font-semibold text-primary mb-2">Tes annonces générées ({annonces.length})</h3>
-          <div className="space-y-2">
-            {annonces.map((a) => (
-              <DeliverableCard key={a.id} id={a.id} type={a.type} typeLabel="Annonce" typeColor="bg-success-50 text-success-700" title={a.title} status={a.status} />
-            ))}
-          </div>
-        </div>
-      ) : null}
     </section>
   )
 }

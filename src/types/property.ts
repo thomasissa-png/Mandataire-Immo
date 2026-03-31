@@ -36,6 +36,7 @@ export interface PropertyPage {
   // Bien
   titre: string
   type_bien: string
+  transaction_type: "vente" | "location"
   adresse: string
   prix: number
   surface: number

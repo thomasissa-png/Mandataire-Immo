@@ -143,6 +143,7 @@ CREATE TABLE IF NOT EXISTS property_pages (
   -- Informations du bien
   titre TEXT NOT NULL,
   type_bien TEXT NOT NULL,
+  transaction_type TEXT NOT NULL DEFAULT 'vente',
   adresse TEXT NOT NULL,
   prix INTEGER NOT NULL,
   surface INTEGER NOT NULL,

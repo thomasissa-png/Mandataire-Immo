@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { PhotoUploader } from "./PhotoUploader"
 
 // ─── Types ────────────────────────────────────────────────────────
 
 interface BienFormData {
+  transaction_type: "vente" | "location"
   type_bien: string
   adresse: string
   prix: string
@@ -22,6 +23,13 @@ interface FormErrors {
   prix?: string
   surface?: string
   pieces?: string
+}
+
+interface AddressSuggestion {
+  label: string
+  postcode: string
+  city: string
+  context: string
 }
 
 const TYPES_BIEN = [
@@ -56,12 +64,61 @@ function validate(data: BienFormData): FormErrors {
   return errors
 }
 
+// ─── Hook autocomplétion adresse (API Adresse gouv) ──────────────
+
+function useAddressAutocomplete() {
+  const [query, setQuery] = useState("")
+  const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([])
+  const [isOpen, setIsOpen] = useState(false)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const search = useCallback((q: string) => {
+    setQuery(q)
+    if (q.length < 4) {
+      setSuggestions([])
+      setIsOpen(false)
+      return
+    }
+
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(q)}&limit=5&type=housenumber`
+        )
+        if (!res.ok) return
+        const data = await res.json()
+        const results: AddressSuggestion[] = (data.features || []).map(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (f: any) => ({
+            label: f.properties.label,
+            postcode: f.properties.postcode,
+            city: f.properties.city,
+            context: f.properties.context,
+          })
+        )
+        setSuggestions(results)
+        setIsOpen(results.length > 0)
+      } catch {
+        // Silently fail — user can still type manually
+      }
+    }, 300)
+  }, [])
+
+  const close = useCallback(() => {
+    setIsOpen(false)
+  }, [])
+
+  return { query, search, suggestions, isOpen, close }
+}
+
 // ─── Composant ────────────────────────────────────────────────────
 
 export function BienForm() {
   const router = useRouter()
 
   const [formData, setFormData] = useState<BienFormData>({
+    transaction_type: "vente",
     type_bien: "",
     adresse: "",
     prix: "",
@@ -78,6 +135,21 @@ export function BienForm() {
   const [step, setStep] = useState<"form" | "photos">("form")
   const [createdId, setCreatedId] = useState<string | null>(null)
 
+  // Autocomplétion adresse
+  const address = useAddressAutocomplete()
+  const addressContainerRef = useRef<HTMLDivElement>(null)
+
+  // Fermer les suggestions au clic extérieur
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (addressContainerRef.current && !addressContainerRef.current.contains(e.target as Node)) {
+        address.close()
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [address])
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
@@ -86,6 +158,19 @@ export function BienForm() {
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }))
     }
+  }
+
+  const handleAddressInput = (value: string) => {
+    setFormData((prev) => ({ ...prev, adresse: value }))
+    address.search(value)
+    if (errors.adresse) {
+      setErrors((prev) => ({ ...prev, adresse: undefined }))
+    }
+  }
+
+  const selectAddress = (suggestion: AddressSuggestion) => {
+    setFormData((prev) => ({ ...prev, adresse: suggestion.label }))
+    address.close()
   }
 
   // ─── Submit ─────────────────────────────────────────────────────
@@ -113,6 +198,7 @@ export function BienForm() {
         body: JSON.stringify({
           titre: `${formData.type_bien} — ${formData.adresse}`,
           type_bien: formData.type_bien,
+          transaction_type: formData.transaction_type,
           adresse: formData.adresse,
           prix,
           surface,
@@ -201,6 +287,37 @@ export function BienForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+      {/* Type de transaction — Toggle vente/location */}
+      <div>
+        <label className="block text-body-sm font-semibold text-primary mb-2">
+          Type de transaction
+        </label>
+        <div className="inline-flex rounded-lg border border-border overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setFormData((prev) => ({ ...prev, transaction_type: "vente" }))}
+            className={`px-5 py-2 text-body-sm font-medium transition-colors ${
+              formData.transaction_type === "vente"
+                ? "bg-primary text-white"
+                : "bg-card text-neutral-600 hover:bg-neutral-50"
+            }`}
+          >
+            Vente
+          </button>
+          <button
+            type="button"
+            onClick={() => setFormData((prev) => ({ ...prev, transaction_type: "location" }))}
+            className={`px-5 py-2 text-body-sm font-medium transition-colors ${
+              formData.transaction_type === "location"
+                ? "bg-primary text-white"
+                : "bg-card text-neutral-600 hover:bg-neutral-50"
+            }`}
+          >
+            Location
+          </button>
+        </div>
+      </div>
+
       {/* Type de bien */}
       <div>
         <label htmlFor="type_bien" className="block text-body-sm font-semibold text-primary mb-1.5">
@@ -231,8 +348,8 @@ export function BienForm() {
         )}
       </div>
 
-      {/* Adresse */}
-      <div>
+      {/* Adresse avec autocomplétion */}
+      <div ref={addressContainerRef} className="relative">
         <label htmlFor="adresse" className="block text-body-sm font-semibold text-primary mb-1.5">
           Adresse complète <span className="text-error" aria-hidden="true">*</span>
         </label>
@@ -241,18 +358,48 @@ export function BienForm() {
           name="adresse"
           type="text"
           value={formData.adresse}
-          onChange={handleChange}
-          placeholder="12 rue des Lilas, 69003 Lyon"
+          onChange={(e) => handleAddressInput(e.target.value)}
+          placeholder="Commence à taper une adresse..."
+          autoComplete="off"
           className={`w-full h-12 px-4 rounded-lg border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50 ${
             errors.adresse ? "border-error" : "border-border"
           }`}
           aria-invalid={!!errors.adresse}
           aria-describedby={errors.adresse ? "error-adresse" : undefined}
+          aria-autocomplete="list"
+          aria-controls="address-suggestions"
+          aria-expanded={address.isOpen}
         />
         {errors.adresse && (
           <p id="error-adresse" className="text-caption text-error mt-1" role="alert">
             {errors.adresse}
           </p>
+        )}
+
+        {/* Suggestions dropdown */}
+        {address.isOpen && (
+          <ul
+            id="address-suggestions"
+            role="listbox"
+            className="absolute z-20 left-0 right-0 mt-1 bg-white border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto"
+          >
+            {address.suggestions.map((s, i) => (
+              <li
+                key={i}
+                role="option"
+                aria-selected={false}
+                onClick={() => selectAddress(s)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") selectAddress(s)
+                }}
+                tabIndex={0}
+                className="px-4 py-3 cursor-pointer hover:bg-secondary-50 transition-colors border-b border-border last:border-b-0"
+              >
+                <p className="text-body-sm text-foreground font-medium">{s.label}</p>
+                <p className="text-caption text-neutral-500">{s.context}</p>
+              </li>
+            ))}
+          </ul>
         )}
       </div>
 
@@ -261,7 +408,7 @@ export function BienForm() {
         {/* Prix */}
         <div>
           <label htmlFor="prix" className="block text-body-sm font-semibold text-primary mb-1.5">
-            Prix <span className="text-error" aria-hidden="true">*</span>
+            {formData.transaction_type === "location" ? "Loyer mensuel" : "Prix"} <span className="text-error" aria-hidden="true">*</span>
           </label>
           <div className="relative">
             <input
@@ -270,23 +417,23 @@ export function BienForm() {
               type="number"
               inputMode="numeric"
               min="1"
-              step="1000"
+              step={formData.transaction_type === "location" ? "50" : "1000"}
               value={formData.prix}
               onChange={handleChange}
-              placeholder="285 000"
-              className={`w-full h-12 px-4 pr-10 rounded-lg border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50 ${
+              placeholder={formData.transaction_type === "location" ? "850" : "285 000"}
+              className={`w-full h-12 px-4 pr-14 rounded-lg border bg-card text-body-sm text-foreground placeholder:text-neutral-400 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50 ${
                 errors.prix ? "border-error" : "border-border"
               }`}
               aria-invalid={!!errors.prix}
               aria-describedby={errors.prix ? "error-prix" : "hint-prix"}
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-body-sm text-neutral-400" aria-hidden="true">
-              €
+              {formData.transaction_type === "location" ? "€/mois" : "€"}
             </span>
           </div>
           {formData.prix && !errors.prix && (
             <p id="hint-prix" className="text-caption text-neutral-500 mt-1">
-              {formatPrix(formData.prix)} €
+              {formatPrix(formData.prix)} {formData.transaction_type === "location" ? "€/mois" : "€"}
             </p>
           )}
           {errors.prix && (
