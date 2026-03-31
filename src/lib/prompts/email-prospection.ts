@@ -112,8 +112,8 @@ Réponds UNIQUEMENT avec un JSON valide, sans texte avant ni après :
     "html": "Le HTML complet de l'email avec inline styles",
     "texte_brut": "Version texte brut",
     "type": "${input.type_email}",
-    "cible": "${isProspection ? 'Proprietaires de la zone' : 'Acheteurs correspondant aux criteres'}",
-    "taux_ouverture_estime": "Estimation qualitative : eleve/moyen/faible avec justification"
+    "cible": "${isProspection ? 'Propriétaires de la zone' : 'Acheteurs correspondant aux critères'}",
+    "taux_ouverture_estime": "Estimation qualitative : élevé/moyen/faible avec justification"
   }
 }`
 
@@ -150,7 +150,7 @@ BIEN A PROMOUVOIR :
 - ${bien.titre} — ${bien.type}
 - Adresse : ${bien.adresse}
 - Prix : ${bien.prix.toLocaleString('fr-FR')}€
-- Surface : ${bien.surface}m², ${bien.pieces} pieces
+- Surface : ${bien.surface}m², ${bien.pieces} pièces
 - Points forts : ${bien.points_forts}
 ${bien.lien_annonce ? `- Lien annonce : ${bien.lien_annonce}` : ''}
 ${input.criteres_acheteurs ? `- Profil acheteur cible : ${input.criteres_acheteurs}` : ''}`
@@ -175,7 +175,7 @@ ${donneesLocales}
 CONSIGNES :
 - L'email doit être ultra-court (150-250 mots). Un email long = un email non lu.
 - L'objet doit contenir le nom de ${input.zone_geo.ville} ou d'un quartier pour la pertinence locale
-- Le HTML doit etre minimaliste : fond blanc, texte noir, une couleur d'accent (#2563EB), police systeme
+- Le HTML doit être minimaliste : fond blanc, texte noir, une couleur d'accent (#2563EB), police système
 - Inclure un placeholder désabonnement : {{unsubscribe_url}}
 - Signature OBLIGATOIRE avec les VRAIES coordonnées :
   ${input.prenom} ${input.nom} — Mandataire ${input.reseau}
