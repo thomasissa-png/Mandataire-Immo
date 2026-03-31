@@ -159,15 +159,8 @@ export default async function BlogArticlePage({
               </span>
             </nav>
 
-            {/* Hero image — ville ou catégorie */}
-            <ArticleHeroImage
-              title={article.title}
-              slug={article.slug}
-              category={article.category}
-            />
-
-            {/* Article header */}
-            <header className="mb-10">
+            {/* Article header — contenu d'abord, image après */}
+            <header className="mb-8">
               <div className="flex items-center gap-3 text-caption text-neutral-500 mb-4">
                 <span className="bg-primary-50 text-primary px-3 py-1 rounded-full font-medium text-caption">
                   {article.category}
@@ -191,6 +184,13 @@ export default async function BlogArticlePage({
                 {article.description}
               </p>
             </header>
+
+            {/* Hero image — uniquement pour les articles géolocalisés, compact sur mobile */}
+            <ArticleHeroImage
+              title={article.title}
+              slug={article.slug}
+              category={article.category}
+            />
 
             {/* Article content */}
             <div
