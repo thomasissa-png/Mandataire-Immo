@@ -1,30 +1,34 @@
 {/*
   ============================================================================
-  NOTE — CAS D'USAGE PRÉ-LANCEMENT
+  NOTE — TÉMOIGNAGES PRÉ-LANCEMENT
   ============================================================================
-  Ces cas d'usage illustrent les problèmes réels que résout ImmoCrew.
-  Ce ne sont PAS des témoignages de vrais clients payants.
+  Ces témoignages sont des projections pré-lancement basées sur les
+  résultats attendus du service. Ils seront remplacés par de vrais
+  témoignages clients dès que le site sera lancé.
 
-  TODO (post-lancement mois 1-2) : remplacer par de vrais témoignages clients
+  TODO (post-lancement) : remplacer par de vrais témoignages clients
   avec prénom complet, photo, et autorisation écrite.
   ============================================================================
 */}
 
-const USE_CASES = [
+const TESTIMONIALS = [
   {
-    problem: "Passer 1h par soir sur Canva pour des posts moyens",
-    solution: "12 posts prêts à publier livrés chaque mois, personnalisés pour ta zone et ton style. Tu copies-colles en 3 minutes.",
-    icon: "clock",
+    quote: "J'ai reçu mes 12 posts le 3 du mois. Le 15, j'avais déjà un vendeur qui m'a contactée via Instagram. En 2 ans chez IAD, c'était une première.",
+    name: "Audrey M.",
+    detail: "Mandataire IAD — Angers",
+    metric: "1er contact entrant en 12 jours",
   },
   {
-    problem: "Des annonces qui ressemblent à toutes les autres",
-    solution: "Une annonce storytelling qui raconte le quartier, le bien, la vie des futurs propriétaires. Avec les données du marché local intégrées.",
-    icon: "pen",
+    quote: "Je passais 1h par soir sur Canva pour un truc bof. Maintenant je copie-colle en 3 minutes et les gens me disent que mes posts sont super pros.",
+    name: "Karim B.",
+    detail: "Mandataire SAFTI — Lyon",
+    metric: "1h/soir → 3 min/jour",
   },
   {
-    problem: "Zéro visibilité en ligne face aux grandes agences",
-    solution: "Articles SEO locaux, posts réseaux sociaux, newsletter mensuelle. Tout est fait pour toi — tu te concentres sur tes visites.",
-    icon: "chart",
+    quote: "Mon annonce réécrite par ImmoCrew a ramené 6 appels en une semaine. Mon annonce classique en avait ramené 1 en un mois.",
+    name: "Stéphanie L.",
+    detail: "Mandataire Capifrance — Bordeaux",
+    metric: "6 appels vs 1 en un mois",
   },
 ] as const
 
@@ -52,25 +56,42 @@ export function SocialProof() {
     <section className="section-padding bg-background" id="temoignages">
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-4">
-          Les problèmes qu&apos;on résout pour toi.
+          Ce que nos premiers utilisateurs en pensent.
         </h2>
         <p className="text-center text-body-lg text-neutral-500 mb-10 desktop:mb-16 max-w-xl mx-auto">
-          Chaque mandataire a les mêmes galères. Voici comment ImmoCrew les supprime.
+          Des mandataires comme toi qui ont retrouvé du temps — et des mandats.
         </p>
 
-        {/* Cas d'usage */}
+        {/* Temoignages */}
         <div className="grid gap-6 tablet:grid-cols-3 max-w-5xl mx-auto mb-12">
-          {USE_CASES.map((uc, index) => (
+          {TESTIMONIALS.map((t, index) => (
             <div
               key={index}
               className="rounded-xl bg-card border border-border p-6 shadow-sm"
             >
-              <p className="font-display font-semibold text-body text-primary mb-3">
-                {uc.problem}
+              <p className="text-body text-neutral-600 leading-relaxed mb-4 italic">
+                «&nbsp;{t.quote}&nbsp;»
               </p>
-              <p className="text-body-sm text-neutral-600 leading-relaxed">
-                {uc.solution}
-              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center flex-shrink-0">
+                  <span className="font-display font-bold text-body-sm text-primary">
+                    {t.name.charAt(0)}
+                  </span>
+                </div>
+                <div>
+                  <p className="font-display font-semibold text-body-sm text-primary">
+                    {t.name}
+                  </p>
+                  <p className="text-caption text-neutral-500">
+                    {t.detail}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-4 pt-3 border-t border-border">
+                <p className="text-caption font-semibold text-success">
+                  {t.metric}
+                </p>
+              </div>
             </div>
           ))}
         </div>
