@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { PACK_MENSUEL, PACK_MENSUEL_TRIMESTRIEL } from "@/lib/pricing"
 import { CTAButton } from "./CTAButton"
+import { ReferralCodeInput } from "@/components/checkout/ReferralCodeInput"
+import { useReferralCode, appendReferralToHref } from "@/hooks/useReferralCode"
 
 const CHECK_ICON = (
   <svg
@@ -24,6 +26,9 @@ const CHECK_ICON = (
 export function MensuelPricingCard() {
   const [isTrimestriel, setIsTrimestriel] = useState(false)
   const pack = isTrimestriel ? PACK_MENSUEL_TRIMESTRIEL : PACK_MENSUEL
+  const prefillRef = useReferralCode()
+  const [validatedRef, setValidatedRef] = useState<string | null>(null)
+  const activeRef = validatedRef || prefillRef
 
   return (
     <div className="rounded-xl p-8 pt-10 flex flex-col bg-primary text-white shadow-xl tablet:scale-[1.02] relative">
@@ -118,10 +123,15 @@ export function MensuelPricingCard() {
         ))}
       </ul>
 
+      {/* Referral code input */}
+      <div className="mb-4">
+        <ReferralCodeInput onValidated={setValidatedRef} variant="dark" />
+      </div>
+
       {/* CTA */}
       <div className="mt-auto">
         <CTAButton
-          href={pack.ctaHref}
+          href={appendReferralToHref(pack.ctaHref, activeRef)}
           label={`${pack.cta} →`}
           location={`pricing_pack_mensuel${isTrimestriel ? "_trimestriel" : ""}`}
           variant="primary"

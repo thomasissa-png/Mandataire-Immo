@@ -25,6 +25,11 @@ type TrackingEvent =
   | "deliverable_feedback"
   | "deliverable_rewrite"
   | "deliverable_share"
+  | "referral_code_copied"
+  | "referral_code_validated"
+  | "referral_code_invalid"
+  | "referral_converted"
+  | "referral_credit_applied"
 
 interface TrackingProperties {
   [key: string]: string | number | boolean | null | undefined

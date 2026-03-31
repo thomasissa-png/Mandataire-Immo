@@ -29,9 +29,12 @@ const LOCALSTORAGE_KEY = "immocrew_referral_code"
 interface ReferralCodeInputProps {
   /** Called when validation state changes — parent can read the validated code */
   onValidated?: (code: string | null) => void
+  /** Visual variant — "dark" adapts text colors for dark backgrounds */
+  variant?: "light" | "dark"
 }
 
-export function ReferralCodeInput({ onValidated }: ReferralCodeInputProps) {
+export function ReferralCodeInput({ onValidated, variant = "light" }: ReferralCodeInputProps) {
+  const isDark = variant === "dark"
   const [code, setCode] = useState("")
   const [validationState, setValidationState] = useState<ValidationState>("idle")
   const [message, setMessage] = useState("")
@@ -95,7 +98,7 @@ export function ReferralCodeInput({ onValidated }: ReferralCodeInputProps) {
         setMessage(data.discount_label || "Code valide — 1 semaine offerte sur ton abonnement")
         localStorage.setItem(LOCALSTORAGE_KEY, trimmed)
         onValidated?.(trimmed)
-        track("referral_code_validated" as Parameters<typeof track>[0], {
+        track("referral_code_validated", {
           code: trimmed,
         })
       } else {
@@ -104,7 +107,7 @@ export function ReferralCodeInput({ onValidated }: ReferralCodeInputProps) {
         setMessage("Code invalide. Vérifie avec ton parrain.")
         localStorage.removeItem(LOCALSTORAGE_KEY)
         onValidated?.(null)
-        track("referral_code_invalid" as Parameters<typeof track>[0], {
+        track("referral_code_invalid", {
           code_prefix: trimmed.slice(0, 8),
         })
       }
@@ -161,8 +164,8 @@ export function ReferralCodeInput({ onValidated }: ReferralCodeInputProps) {
 
   return (
     <div className="space-y-1.5">
-      <label htmlFor="referral-code" className="text-body-sm font-medium text-neutral-700">
-        Code parrainage <span className="text-neutral-400 font-normal">(optionnel)</span>
+      <label htmlFor="referral-code" className={`text-body-sm font-medium ${isDark ? "text-primary-100" : "text-neutral-700"}`}>
+        Code parrainage <span className={isDark ? "text-primary-300 font-normal" : "text-neutral-400 font-normal"}>(optionnel)</span>
       </label>
 
       <div className={`flex items-center rounded-lg border bg-white transition-colors ${borderClass}`}>
@@ -232,10 +235,10 @@ export function ReferralCodeInput({ onValidated }: ReferralCodeInputProps) {
           aria-live="polite"
           className={`text-caption font-medium ${
             validationState === "valid"
-              ? "text-success-700"
+              ? isDark ? "text-success-300" : "text-success-700"
               : validationState === "invalid"
-                ? "text-error-600"
-                : "text-neutral-500"
+                ? isDark ? "text-error-300" : "text-error-600"
+                : isDark ? "text-primary-200" : "text-neutral-500"
           }`}
         >
           {validationState === "valid" && referrerName

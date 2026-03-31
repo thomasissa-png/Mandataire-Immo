@@ -6,6 +6,7 @@ import { getPackPrice } from "@/lib/pricing"
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
   const pack = searchParams.get("pack") as StripePriceKey | null
+  const referralCode = searchParams.get("ref") || null
 
   if (!pack || !(pack in STRIPE_PRICES)) {
     return NextResponse.json(
@@ -19,6 +20,9 @@ export async function GET(request: NextRequest) {
 
   // Determine payment mode based on pack type
   const isSubscription = pack === "mensuel" || pack === "mensuel-trimestriel"
+
+  // Referral code: if valid, apply 7-day trial for the referee
+  const hasReferralCode = Boolean(referralCode && referralCode.startsWith("IMMOCREW-"))
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -34,7 +38,16 @@ export async function GET(request: NextRequest) {
       metadata: {
         pack,
         ...(pack === "mensuel-trimestriel" && { engagement_months: "3" }),
+        ...(hasReferralCode && { referral_code: referralCode! }),
       },
+      ...(isSubscription && hasReferralCode && {
+        subscription_data: {
+          trial_period_days: 7,
+          metadata: {
+            referral_code: referralCode!,
+          },
+        },
+      }),
       allow_promotion_codes: true,
       billing_address_collection: "required",
       customer_creation: isSubscription ? undefined : "always",
