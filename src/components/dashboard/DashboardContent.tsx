@@ -470,6 +470,9 @@ export function DashboardContent({
                 <div>
                   <p className="text-body-sm font-semibold text-primary">Mets à jour tes bios et ton positionnement</p>
                   <p className="text-caption text-neutral-500">Copie-les sur Instagram, Facebook et LinkedIn.</p>
+                  <p className="text-caption mt-1.5">
+                    <a href="#section-strategie" className="text-secondary-700 font-semibold hover:underline">Voir mes bios ci-dessous</a>
+                  </p>
                 </div>
               </div>
             ) : null}
@@ -560,7 +563,9 @@ export function DashboardContent({
       {/* ============================================================ */}
       {/* MES BIENS (self-service — property_pages)                       */}
       {/* ============================================================ */}
-      <MesBiensSection annonces={annonces} />
+      <div id="section-biens">
+        <MesBiensSection annonces={annonces} />
+      </div>
 
       {/* CTA Passer au mensuel — APRÈS le plan, pas avant */}
       {pack === "lancement" ? (
@@ -603,7 +608,7 @@ export function DashboardContent({
           return acc
         }, [])
         return (
-        <section>
+        <section id="section-strategie">
           <SectionHeader icon="👤" title="Mon profil et identité" count={uniqueStrategie.length} isOpen={!collapsed.has("identite")} onToggle={() => toggle("identite")} />
           {!collapsed.has("identite") ? (
             <div className="mt-3 grid grid-cols-1 tablet:grid-cols-2 gap-3">
