@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
         type: "annonce",
         title: annonce.titre_annonce,
         content: annonce.annonce_complete,
-        metadata: { accroche_courte: annonce.accroche_courte, bien_titre: bien.titre, boost: true },
+        metadata: { accroche_courte: annonce.accroche_courte, bien_titre: bien.titre, boost: true, property_id: property_id || undefined },
         month,
       })
       deliverableIds.push(id)

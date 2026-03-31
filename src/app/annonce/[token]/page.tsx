@@ -8,6 +8,7 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { query } from "@/lib/db"
 import Link from "next/link"
+import Image from "next/image"
 
 interface AnnonceRow {
   id: string
@@ -19,6 +20,12 @@ interface AnnonceRow {
   client_first_name: string | null
   client_last_name: string | null
   client_phone: string | null
+  client_id: string
+}
+
+interface PhotoRow {
+  key: string
+  ordre: number
 }
 
 interface PageProps {
@@ -27,7 +34,7 @@ interface PageProps {
 
 async function getAnnonceByToken(token: string): Promise<AnnonceRow | null> {
   const { rows } = await query<AnnonceRow>(
-    `SELECT d.id, d.title, d.content, d.metadata, d.created_at,
+    `SELECT d.id, d.title, d.content, d.metadata, d.created_at, d.client_id,
             c.email AS client_email, c.first_name AS client_first_name,
             c.last_name AS client_last_name,
             (c.client_context->>'telephone')::text AS client_phone
@@ -38,6 +45,50 @@ async function getAnnonceByToken(token: string): Promise<AnnonceRow | null> {
     [token]
   )
   return rows[0] || null
+}
+
+/** Récupère les photos du bien associé à l'annonce */
+async function getAnnoncePhotos(annonce: AnnonceRow): Promise<string[]> {
+  const meta = annonce.metadata || {}
+  const bienTitre = typeof meta.bien_titre === "string" ? meta.bien_titre : null
+  const propertyId = typeof meta.property_id === "string" ? meta.property_id : null
+
+  // Priorité 1 : property_id explicite (boost-mandat)
+  if (propertyId) {
+    const { rows } = await query<{ photos_originales: PhotoRow[] | string | null; photos_staging: PhotoRow[] | string | null }>(
+      `SELECT photos_originales, photos_staging FROM property_pages WHERE id = $1 AND client_id = $2 LIMIT 1`,
+      [propertyId, annonce.client_id]
+    )
+    if (rows[0]) {
+      const photos = parsePhotos(rows[0].photos_staging) || parsePhotos(rows[0].photos_originales)
+      if (photos.length > 0) return photos.map((p) => `/api/photos/${p.key}`)
+    }
+  }
+
+  // Priorité 2 : match par titre du bien
+  if (bienTitre) {
+    const { rows } = await query<{ photos_originales: PhotoRow[] | string | null; photos_staging: PhotoRow[] | string | null }>(
+      `SELECT photos_originales, photos_staging FROM property_pages WHERE client_id = $1 AND (titre = $2 OR titre_annonce = $2) AND status = 'published' LIMIT 1`,
+      [annonce.client_id, bienTitre]
+    )
+    if (rows[0]) {
+      const photos = parsePhotos(rows[0].photos_staging) || parsePhotos(rows[0].photos_originales)
+      if (photos.length > 0) return photos.map((p) => `/api/photos/${p.key}`)
+    }
+  }
+
+  return []
+}
+
+function parsePhotos(raw: PhotoRow[] | string | null): PhotoRow[] {
+  if (!raw) return []
+  if (Array.isArray(raw)) return raw
+  try {
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
 }
 
 /**
@@ -97,6 +148,7 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
   })
 
   const agentName = [annonce.client_first_name, annonce.client_last_name].filter(Boolean).join(" ")
+  const photos = await getAnnoncePhotos(annonce)
 
   return (
     <main className="min-h-screen bg-[#F8F6F2]">
@@ -149,8 +201,36 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
         </div>
       )}
 
+      {/* Galerie photos du bien */}
+      {photos.length > 0 && (
+        <div className="max-w-3xl mx-auto px-6 pt-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 rounded-xl overflow-hidden">
+            {photos.slice(0, 6).map((url, i) => (
+              <div
+                key={url}
+                className={`relative ${i === 0 ? "col-span-2 row-span-2 min-h-[280px] md:min-h-[360px]" : "min-h-[140px] md:min-h-[170px]"}`}
+              >
+                <Image
+                  src={url}
+                  alt={`Photo ${i + 1} — ${annonce.title}`}
+                  fill
+                  className="object-cover"
+                  sizes={i === 0 ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 50vw, 33vw"}
+                  priority={i === 0}
+                />
+              </div>
+            ))}
+          </div>
+          {photos.length > 6 && (
+            <p className="text-caption text-neutral-400 mt-2 text-center">
+              +{photos.length - 6} autres photos
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Contenu de l'annonce */}
-      <article className="max-w-3xl mx-auto px-6 py-10">
+      <article className="max-w-3xl mx-auto px-6 py-8">
         <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 md:p-10">
           <AnnonceContent content={annonce.content} />
         </div>

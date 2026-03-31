@@ -96,6 +96,27 @@ export function HeroSection({ profile }: HeroProps) {
           <p className="text-body-lg text-white/80 max-w-2xl">{accroche}</p>
         )}
 
+        {/* Stats clés — expérience et transactions */}
+        {(profile.experience_annees || profile.nb_transactions_an) && (
+          <div className="flex items-center gap-6 mt-1">
+            {profile.experience_annees && (
+              <div className="text-center">
+                <p className="text-display-lg font-bold text-secondary">{profile.experience_annees}</p>
+                <p className="text-caption text-neutral-300">{Number(profile.experience_annees) > 1 ? "ans d'expérience" : "an d'expérience"}</p>
+              </div>
+            )}
+            {profile.experience_annees && profile.nb_transactions_an && (
+              <div className="w-px h-10 bg-white/20" aria-hidden="true" />
+            )}
+            {profile.nb_transactions_an && (
+              <div className="text-center">
+                <p className="text-display-lg font-bold text-secondary">{profile.nb_transactions_an}</p>
+                <p className="text-caption text-neutral-300">transactions/an</p>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* CTA rapide : téléphone + email */}
         <div className="flex flex-col tablet:flex-row items-center gap-3 mt-2">
           {profile.telephone && (
