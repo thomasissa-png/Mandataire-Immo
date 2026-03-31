@@ -16,6 +16,6 @@ export interface Deliverable {
   type: DeliverableType
   title: string
   month: string
-  status: "draft" | "delivered"
+  status: "draft" | "delivered" | "archived"
   created_at: string
 }
