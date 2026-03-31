@@ -202,7 +202,7 @@ PROFIL DU MANDATAIRE :
 - Années d'expérience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais écrire un autre nombre)
 - Confort caméra : ${confortLevel}
 - Format : ${input.format === 'mix' ? 'Mix Reels Instagram + YouTube Shorts' : input.format === 'reel' ? 'Reels Instagram' : 'YouTube Shorts'}
-- Type vidéo préféré : ${input.type_video === 'diaporama' ? 'Diaporama (photos + texte, sans se filmer)' : input.type_video === 'face_camera' ? 'Face caméra' : 'Mix (adapter au confort caméra)'}`
+- Type vidéo préféré : ${input.type_video === 'diaporama' ? 'Diaporama (photos + texte, sans se filmer)' : input.type_video === 'face_camera' ? 'Face caméra' : 'Mix (adapter au confort caméra)'}
 
 BIENS DISPONIBLES POUR LES SCRIPTS :
 ${biensStr || 'Aucun bien actif — concentre les scripts sur les conseils, le quartier et le marché.'}

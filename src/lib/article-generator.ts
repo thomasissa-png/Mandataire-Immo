@@ -47,50 +47,50 @@ export async function generateArticleFromTopic(topic: EditorialTopic) {
 - Inclure un CTA naturel en fin d'article vers ImmoCrew (150 EUR/mois, équipe marketing dédiée)
 - Le maillage interne : insérer 2-3 liens vers les articles déjà publiés du blog ImmoCrew (format markdown)
 
-Articles deja publies sur le blog (pour le maillage interne) :
+Articles déjà publiés sur le blog (pour le maillage interne) :
 ${publishedTitles.map((t, i) => `- Article ${i + 1} : "${t}"`).join("\n")}
 
 STRUCTURE JSON DE SORTIE :
-Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
+Réponds UNIQUEMENT avec un JSON valide, sans texte avant ni après :
 {
   "articles": [
     {
       "frontmatter": {
-        "title": "Titre H1 optimise SEO (50-65 caracteres)",
-        "meta_description": "Meta description (max 155 caracteres)",
-        "slug": "slug-url-optimise",
-        "mot_cle_principal": "requete cible principale",
-        "mots_cles_secondaires": ["requete 2", "requete 3"]
+        "title": "Titre H1 optimisé SEO (50-65 caractères)",
+        "meta_description": "Meta description (max 155 caractères)",
+        "slug": "slug-url-optimisé",
+        "mot_cle_principal": "requête cible principale",
+        "mots_cles_secondaires": ["requête 2", "requête 3"]
       },
       "contenu_markdown": "Article complet en Markdown avec titres H2/H3",
-      "liens_internes_suggeres": ["Titre article lie 1", "Titre article lie 2"],
+      "liens_internes_suggeres": ["Titre article lié 1", "Titre article lié 2"],
       "nombre_mots": 1050
     }
   ]
 }`
 
-  const userPrompt = `Redige 1 article SEO de 900-1200 mots pour le blog ImmoCrew.
+  const userPrompt = `Rédige 1 article SEO de 900-1200 mots pour le blog ImmoCrew.
 
 SUJET :
-- Titre prevu : ${topic.titre}
-- Mot-cle principal : ${topic.mot_cle_principal}
-- Mots-cles secondaires : ${topic.mots_cles_secondaires.join(", ")}
-- Categorie : ${topic.categorie}
-- Angle editorial : ${topic.angle}
+- Titre prévu : ${topic.titre}
+- Mot-clé principal : ${topic.mot_cle_principal}
+- Mots-clés secondaires : ${topic.mots_cles_secondaires.join(", ")}
+- Catégorie : ${topic.categorie}
+- Angle éditorial : ${topic.angle}
 
 CONTEXTE IMMOCREW :
-- ImmoCrew est une equipe marketing dediee aux mandataires immobiliers independants
-- Prix : 150 EUR/mois pour 12 posts/mois, 4 scripts video, 2 articles SEO, 1 newsletter, 4 annonces personnalisees
-- Cible : mandataires chez IAD, SAFTI, Capifrance qui n'ont ni le temps ni les competences marketing
-- Promesse : tout le contenu est personnalise (zone geo, biens, ton) — pas des templates generiques
-- Le CTA final doit etre naturel et pointer vers ImmoCrew comme solution
+- ImmoCrew est une équipe marketing dédiée aux mandataires immobiliers indépendants
+- Prix : 150 EUR/mois pour 12 posts/mois, 4 scripts vidéo, 2 articles SEO, 1 newsletter, 4 annonces personnalisées
+- Cible : mandataires chez IAD, SAFTI, Capifrance qui n'ont ni le temps ni les compétences marketing
+- Promesse : tout le contenu est personnalisé (zone géo, biens, ton) — pas des templates génériques
+- Le CTA final doit être naturel et pointer vers ImmoCrew comme solution
 
 CONSIGNES :
 - L'article s'adresse aux mandataires immobiliers (pas aux acheteurs/vendeurs)
 - Apporter une vraie valeur : conseils actionnables, pas du remplissage
 - Varier la structure : listes, paragraphes, sous-titres, exemples concrets
-- Inserer 2-3 liens internes vers les articles deja publies du blog
-- Le slug doit etre : ${topic.slug}`
+- Insérer 2-3 liens internes vers les articles déjà publiés du blog
+- Le slug doit être : ${topic.slug}`
 
   const { data, inputTokens, outputTokens } =
     await generateJSON<ArticleGenerated>({
@@ -101,7 +101,7 @@ CONSIGNES :
     })
 
   if (!data.articles || data.articles.length === 0) {
-    throw new Error("Aucun article genere dans la reponse")
+    throw new Error("Aucun article généré dans la réponse")
   }
 
   const article = data.articles[0]
@@ -120,11 +120,11 @@ CONSIGNES :
   const markdownContent = `# ${article.frontmatter.title}
 
 > Meta description : ${article.frontmatter.meta_description}
-> Mot-cle principal : ${article.frontmatter.mot_cle_principal}
-> Mots-cles secondaires : ${article.frontmatter.mots_cles_secondaires.join(", ")}
+> Mot-clé principal : ${article.frontmatter.mot_cle_principal}
+> Mots-clés secondaires : ${article.frontmatter.mots_cles_secondaires.join(", ")}
 > Temps de lecture : ${readingMinutes} min
 > Date : ${today}
-> Categorie : ${topic.categorie}
+> Catégorie : ${topic.categorie}
 
 ---
 
@@ -155,7 +155,7 @@ ${article.contenu_markdown}`
   }
 
   console.log(
-    `[generate-article] Article genere : ${filename} (${inputTokens}+${outputTokens} tokens)`
+    `[generate-article] Article généré : ${filename} (${inputTokens}+${outputTokens} tokens)`
   )
 
   return {
