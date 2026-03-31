@@ -97,7 +97,7 @@ export function SocialProof() {
         </div>
 
         <p className="text-center text-caption text-neutral-400 mt-6 mb-8">
-          Retours collectés lors de notre phase de test — vrais témoignages clients à venir.
+          Exemples de résultats attendus, basés sur notre connaissance du secteur — vrais témoignages clients à venir après lancement.
         </p>
 
         {/* Metriques */}

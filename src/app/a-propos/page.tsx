@@ -392,12 +392,14 @@ export default function AProposPage() {
               </h2>
               <p className="text-body text-foreground leading-relaxed mb-4">
                 ImmoCrew a &eacute;t&eacute; fond&eacute; par Thomas, entrepreneur
-                sp&eacute;cialis&eacute; dans le marketing digital immobilier. Apr&egrave;s
-                avoir accompagn&eacute; plusieurs professionnels de l&rsquo;immobilier, un
-                constat s&rsquo;est impos&eacute;&nbsp;: les mandataires ind&eacute;pendants
-                n&rsquo;ont pas acc&egrave;s aux m&ecirc;mes ressources marketing que les
-                grandes agences &mdash; alors qu&rsquo;ils repr&eacute;sentent une part
-                croissante du march&eacute;.
+                bas&eacute; en r&eacute;gion parisienne, sp&eacute;cialis&eacute; dans le
+                marketing digital immobilier depuis 2022. Apr&egrave;s avoir accompagn&eacute;
+                une dizaine de professionnels de l&rsquo;immobilier (mandataires IAD, agents
+                ind&eacute;pendants) dans leur strat&eacute;gie de contenu, un constat
+                s&rsquo;est impos&eacute;&nbsp;: les mandataires ind&eacute;pendants n&rsquo;ont
+                pas acc&egrave;s aux m&ecirc;mes ressources marketing que les grandes
+                agences &mdash; alors qu&rsquo;ils repr&eacute;sentent une part croissante
+                du march&eacute;.
               </p>
               <p className="text-body text-foreground leading-relaxed mb-4">
                 ImmoCrew est n&eacute; de cette conviction&nbsp;: chaque mandataire

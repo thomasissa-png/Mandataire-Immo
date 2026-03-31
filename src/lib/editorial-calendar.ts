@@ -20,7 +20,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
   {
     slug: "comment-rediger-annonce-immobiliere",
     titre:
-      "Comment rediger une annonce immobiliere qui fait appeler (guide mandataire 2026)",
+      "Comment rédiger une annonce immobilière qui fait appeler (guide mandataire 2026)",
     mot_cle_principal: "rediger annonce immobiliere",
     mots_cles_secondaires: [
       "comment ecrire une annonce immobiliere",
@@ -29,14 +29,14 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Annonces",
     angle:
-      "Methode pratique pour ecrire des annonces qui generent des appels, avec exemples avant/apres",
+      "Méthode pratique pour écrire des annonces qui génèrent des appels, avec exemples avant/après",
     priorite: 1,
     statut: "publie",
   },
   {
     slug: "calendrier-editorial-agent-immobilier",
     titre:
-      "Calendrier editorial pour mandataire immobilier : le plan sur 30 jours",
+      "Calendrier éditorial pour mandataire immobilier : le plan sur 30 jours",
     mot_cle_principal: "calendrier editorial agent immobilier",
     mots_cles_secondaires: [
       "calendrier editorial immobilier",
@@ -52,7 +52,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
   {
     slug: "se-differencier-mandataire-immobilier",
     titre:
-      "Se differencier quand on est mandataire immobilier : 7 leviers concrets",
+      "Se différencier quand on est mandataire immobilier : 7 leviers concrets",
     mot_cle_principal: "se demarquer mandataire immobilier",
     mots_cles_secondaires: [
       "differencier agent immobilier concurrent",
@@ -61,7 +61,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Stratégie",
     angle:
-      "Leviers de differenciation accessibles sans budget pour un mandataire solo",
+      "Leviers de différenciation accessibles sans budget pour un mandataire solo",
     priorite: 3,
     statut: "publie",
   },
@@ -77,7 +77,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "SEO local",
     angle:
-      "Pas-a-pas pour creer et optimiser sa fiche Google et apparaitre dans les resultats locaux",
+      "Pas-à-pas pour créer et optimiser sa fiche Google et apparaître dans les résultats locaux",
     priorite: 4,
     statut: "publie",
   },
@@ -93,7 +93,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Marketing digital",
     angle:
-      "Vue d'ensemble des canaux digitaux prioritaires pour un mandataire qui part de zero",
+      "Vue d'ensemble des canaux digitaux prioritaires pour un mandataire qui part de zéro",
     priorite: 5,
     statut: "publie",
   },
@@ -113,7 +113,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Réseaux sociaux",
     angle:
-      "Strategie Instagram concrete pour un mandataire solo qui veut transformer ses followers en clients",
+      "Stratégie Instagram concrète pour un mandataire solo qui veut transformer ses followers en clients",
     priorite: 6,
     statut: "planifie",
   },
@@ -129,14 +129,14 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Réseaux sociaux",
     angle:
-      "Comment utiliser LinkedIn pour generer des contacts entrants de vendeurs et investisseurs",
+      "Comment utiliser LinkedIn pour générer des contacts entrants de vendeurs et investisseurs",
     priorite: 7,
     statut: "planifie",
   },
   {
     slug: "community-manager-immobilier-faut-il-deleguer",
     titre:
-      "Community manager immobilier : faut-il deleguer ses reseaux sociaux ?",
+      "Community manager immobilier : faut-il déléguer ses réseaux sociaux ?",
     mot_cle_principal: "community manager immobilier",
     mots_cles_secondaires: [
       "externaliser marketing immobilier",
@@ -145,7 +145,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Marketing digital",
     angle:
-      "Comparatif faire soi-meme vs CM freelance vs service automatise — avantages et couts reels",
+      "Comparatif faire soi-même vs CM freelance vs service automatisé — avantages et coûts réels",
     priorite: 8,
     statut: "planifie",
   },
@@ -154,7 +154,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
   {
     slug: "photos-immobilieres-smartphone",
     titre:
-      "Photos immobilieres au smartphone : 10 astuces pour des visuels pros",
+      "Photos immobilières au smartphone : 10 astuces pour des visuels pros",
     mot_cle_principal: "photos immobilieres smartphone",
     mots_cles_secondaires: [
       "photo annonce immobiliere",
@@ -163,14 +163,14 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     ],
     categorie: "Annonces",
     angle:
-      "Techniques simples pour prendre des photos vendables avec un telephone, sans materiel pro",
+      "Techniques simples pour prendre des photos vendables avec un téléphone, sans matériel pro",
     priorite: 9,
     statut: "planifie",
   },
   {
     slug: "description-bien-immobilier-exemples",
     titre:
-      "Description de bien immobilier : 5 exemples qui font la difference",
+      "Description de bien immobilier : 5 exemples qui font la différence",
     mot_cle_principal: "description bien immobilier",
     mots_cles_secondaires: [
       "texte annonce immobiliere exemple",

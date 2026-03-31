@@ -98,84 +98,84 @@ export function buildAnnonceEnrichiePrompt(input: AnnonceEnrichieInput): {
   const ecartDvf = Math.round(((prixM2Bien - input.dvf.prix_median_m2) / input.dvf.prix_median_m2) * 100)
   const positionMarche =
     ecartDvf > 10
-      ? 'au-dessus de la mediane du quartier'
+      ? 'au-dessus de la médiane du quartier'
       : ecartDvf < -10
-        ? 'en dessous de la mediane du quartier'
-        : 'dans la mediane du quartier'
+        ? 'en dessous de la médiane du quartier'
+        : 'dans la médiane du quartier'
 
   // Label DPE lisible
   const dpeLabels: Record<string, string> = {
-    A: 'tres performant (classe A)',
+    A: 'très performant (classe A)',
     B: 'performant (classe B)',
     C: 'bon (classe C)',
     D: 'moyen (classe D)',
     E: 'passable (classe E)',
-    F: 'peu performant (classe F) — passoire energetique',
-    G: 'tres peu performant (classe G) — passoire energetique',
+    F: 'peu performant (classe F) — passoire énergétique',
+    G: 'très peu performant (classe G) — passoire énergétique',
   }
   const dpeLabel = dpeLabels[input.dpe.classe_dpe] || input.dpe.classe_dpe
 
-  const system = `Tu es un rédacteur immobilier expert du marché français. Tu rédiges des annonces immobilières storytelling enrichies avec des donnees publiques vérifiées (DVF, DPE).
+  const system = `Tu es un rédacteur immobilier expert du marché français. Tu rédiges des annonces immobilières storytelling enrichies avec des données publiques vérifiées (DVF, DPE).
 
-## Regles anti-erreur absolues
-- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
-- NE JAMAIS inventer de chiffres. Les seuls chiffres autorises sont ceux fournis dans les donnees ci-dessous.
-- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
+## Règles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, écoles, restaurants, marchés ou lieux qui ne sont pas dans les données fournies. Si les données locales détaillées ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de détails spécifiques.
+- NE JAMAIS inventer de chiffres. Les seuls chiffres autorisés sont ceux fournis dans les données ci-dessous.
+- L'année courante est 2026. Ne jamais mentionner 2024 ou 2025 comme année courante.
 - Le professionnel est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire".
 - L'IA est INVISIBLE : ne jamais mentionner l'IA, l'intelligence artificielle, ou les algorithmes.
 
-## Donnees DVF — FAITS VERIFIES (source : ${input.dvf.source})
-Ces donnees sont des faits publics officiels. Les presenter comme tels dans le texte, pas comme des estimations :
-- Prix median au m2 dans le secteur : ${input.dvf.prix_median_m2.toLocaleString('fr-FR')} EUR/m2
-- Periode de reference : ${input.dvf.periode}
-- Nombre de transactions sur la periode : ${input.dvf.nb_transactions}
-- Prix au m2 de ce bien : ${prixM2Bien.toLocaleString('fr-FR')} EUR/m2 (${positionMarche}, ecart ${ecartDvf > 0 ? '+' : ''}${ecartDvf}%)
+## Données DVF — FAITS VÉRIFIÉS (source : ${input.dvf.source})
+Ces données sont des faits publics officiels. Les présenter comme tels dans le texte, pas comme des estimations :
+- Prix médian au m2 dans le secteur : ${input.dvf.prix_median_m2.toLocaleString('fr-FR')} EUR/m2
+- Période de référence : ${input.dvf.periode}
+- Nombre de transactions sur la période : ${input.dvf.nb_transactions}
+- Prix au m2 de ce bien : ${prixM2Bien.toLocaleString('fr-FR')} EUR/m2 (${positionMarche}, écart ${ecartDvf > 0 ? '+' : ''}${ecartDvf}%)
 
-## Donnees DPE — FAITS VERIFIES (source : ${input.dpe.source})
-Ces donnees sont des diagnostics officiels. Ne JAMAIS les omettre (obligation legale) :
-- Classe energetique : ${input.dpe.classe_dpe} — ${dpeLabel}
-- Emissions GES : ${input.dpe.classe_ges}
+## Données DPE — FAITS VÉRIFIÉS (source : ${input.dpe.source})
+Ces données sont des diagnostics officiels. Ne JAMAIS les omettre (obligation légale) :
+- Classe énergétique : ${input.dpe.classe_dpe} — ${dpeLabel}
+- Émissions GES : ${input.dpe.classe_ges}
 ${input.dpe.consommation_kwh ? `- Consommation : ${input.dpe.consommation_kwh} kWh/m2/an` : ''}
 ${input.dpe.emissions_co2 ? `- Emissions CO2 : ${input.dpe.emissions_co2} kgCO2/m2/an` : ''}
 ${input.dpe.date_diagnostic ? `- Date du diagnostic : ${input.dpe.date_diagnostic}` : ''}
 
-## Integration des donnees dans le texte
-- DVF : integrer naturellement les donnees de prix ("le quartier affiche un prix median de X EUR/m2 sur la periode Y, avec Z transactions enregistrees")
-- DPE : integrer comme atout si classe A-C, mentionner factuellement si classe D-E, signaler les implications si classe F-G
-- Ne JAMAIS presenter les donnees DVF/DPE comme des estimations — ce sont des faits publics verifies
-- Citer la source en fin d'annonce : "Donnees DVF: [source]. DPE: [source]."
+## Intégration des données dans le texte
+- DVF : intégrer naturellement les données de prix ("le quartier affiche un prix médian de X EUR/m2 sur la période Y, avec Z transactions enregistrées")
+- DPE : intégrer comme atout si classe A-C, mentionner factuellement si classe D-E, signaler les implications si classe F-G
+- Ne JAMAIS présenter les données DVF/DPE comme des estimations — ce sont des faits publics vérifiés
+- Citer la source en fin d'annonce : "Données DVF: [source]. DPE: [source]."
 
-## Regles editoriales
-- Version LONGUE : 600-800 mots, storytelling immersif ImmoCrew (accroche quartier → decouverte bien → projection de vie → chiffres verifies → CTA)
-- Version COURTE : 1500 caracteres max, format portail SeLoger/LeBonCoin (factuel, structure, les donnees cles en premier)
+## Règles éditoriales
+- Version LONGUE : 600-800 mots, storytelling immersif ImmoCrew (accroche quartier → découverte bien → projection de vie → chiffres vérifiés → CTA)
+- Version COURTE : 1500 caractères max, format portail SeLoger/LeBonCoin (factuel, structuré, les données clés en premier)
 - Tutoie le lecteur (l'acheteur potentiel)
-- Pas de cliches immobiliers : "bel appartement lumineux", "proche commerces", "ecrin de verdure"
-- Inclure les mentions legales : prix, surface, DPE obligatoire, charges si disponibles
+- Pas de clichés immobiliers : "bel appartement lumineux", "proche commerces", "écrin de verdure"
+- Inclure les mentions légales : prix, surface, DPE obligatoire, charges si disponibles
 
 ## Format de sortie
-Reponds UNIQUEMENT avec un JSON valide :
+Réponds UNIQUEMENT avec un JSON valide :
 {
   "version_longue": {
-    "titre": "Titre accrocheur (~60 caracteres)",
-    "texte": "Texte complet 600-800 mots avec donnees DVF/DPE integrees, en Markdown",
-    "mentions_legales": "Prix, surface Carrez, DPE, sources des donnees"
+    "titre": "Titre accrocheur (~60 caractères)",
+    "texte": "Texte complet 600-800 mots avec données DVF/DPE intégrées, en Markdown",
+    "mentions_legales": "Prix, surface Carrez, DPE, sources des données"
   },
   "version_courte": {
-    "titre": "Titre SeLoger (~50 caracteres)",
-    "texte": "Texte <=1500 caracteres, factuel, structure",
+    "titre": "Titre SeLoger (~50 caractères)",
+    "texte": "Texte <=1500 caractères, factuel, structuré",
     "caracteres": 0
   },
-  "mots_cles_seo": ["mot-cle-1", "mot-cle-2"]
+  "mots_cles_seo": ["mot-clé-1", "mot-clé-2"]
 }`
 
   // Construction des donnees locales
   const donneesLocalesStr = donneesLocalesDisponibles
     ? `
-DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references, ne rien inventer) :
+DONNÉES LOCALES VÉRIFIÉES (utilise UNIQUEMENT ces références, ne rien inventer) :
 ${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
 ${input.donnees_locales!.dernieres_transactions?.length ? `- Dernières transactions DVF : ${input.donnees_locales!.dernieres_transactions.slice(0, 3).map(t => `${t.type} ${t.surface}m² à ${t.prix_m2}€/m²`).join(', ')}` : ''}`
     : `
-DONNEES LOCALES : non disponibles en dehors des donnees DVF/DPE ci-dessus. Rester general sur les references locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, ecoles ou transports.`
+DONNÉES LOCALES : non disponibles en dehors des données DVF/DPE ci-dessus. Rester général sur les références locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, écoles ou transports.`
 
   // Caracteristiques complementaires du bien
   const caracComplementaires: string[] = []
@@ -197,7 +197,7 @@ DONNEES LOCALES : non disponibles en dehors des donnees DVF/DPE ci-dessus. Reste
       `Taxe fonciere : ${input.bien.taxe_fonciere.toLocaleString('fr-FR')} EUR/an`
     )
 
-  const user = `Redige une annonce enrichie pour ce bien immobilier (version longue + version courte).
+  const user = `Rédige une annonce enrichie pour ce bien immobilier (version longue + version courte).
 
 ## Le bien
 - Titre : ${input.bien.titre}
@@ -208,11 +208,11 @@ DONNEES LOCALES : non disponibles en dehors des donnees DVF/DPE ci-dessus. Reste
 - Pieces : ${input.bien.pieces}
 - Points forts : ${input.bien.points_forts}
 ${caracComplementaires.length > 0 ? `- Autres : ${caracComplementaires.join(', ')}` : ''}
-${input.bien.description_detaillee ? `- Description detaillee : ${input.bien.description_detaillee}` : ''}
+${input.bien.description_detaillee ? `- Description détaillée : ${input.bien.description_detaillee}` : ''}
 
-## Prix au m2 de ce bien vs marche
+## Prix au m2 de ce bien vs marché
 - Prix/m2 du bien : ${prixM2Bien.toLocaleString('fr-FR')} EUR
-- Mediane DVF du secteur : ${input.dvf.prix_median_m2.toLocaleString('fr-FR')} EUR/m2
+- Médiane DVF du secteur : ${input.dvf.prix_median_m2.toLocaleString('fr-FR')} EUR/m2
 - Position : ${positionMarche} (${ecartDvf > 0 ? '+' : ''}${ecartDvf}%)
 - Base : ${input.dvf.nb_transactions} transactions sur ${input.dvf.periode}
 
@@ -224,7 +224,7 @@ ${input.dpe.consommation_kwh ? `- Consommation : ${input.dpe.consommation_kwh} k
 ## Le mandataire
 - ${input.prenom} ${input.nom}, mandataire ${input.reseau}
 - Zone : ${input.zone_geo.ville} (${input.zone_geo.departement}), quartiers : ${input.zone_geo.quartiers.join(', ') || input.zone_geo.ville}
-- Specialite : ${input.specialite}
+- Spécialité : ${input.specialite}
 - Ton : ${input.ton}
 - Valeurs : ${input.valeurs}
 ${input.telephone_contact ? `- Tel : ${input.telephone_contact}` : ''}
@@ -234,9 +234,9 @@ ${input.email_contact ? `- Email : ${input.email_contact}` : ''}
 ${donneesLocalesStr}
 
 ## Consignes
-- Version LONGUE : 600-800 mots, storytelling ImmoCrew. Integrer les donnees DVF et DPE comme des faits naturellement dans le recit (pas en bloc separe).
-- Version COURTE : <=1500 caracteres, format SeLoger. Structure : titre, localisation, surface/pieces, DPE, prix/m2 vs marche, points forts, contact. Factuel et dense.
-- Les donnees DVF/DPE sont des FAITS publics verifies — les presenter comme tels.
+- Version LONGUE : 600-800 mots, storytelling ImmoCrew. Intégrer les données DVF et DPE comme des faits naturellement dans le récit (pas en bloc séparé).
+- Version COURTE : <=1500 caractères, format SeLoger. Structure : titre, localisation, surface/pièces, DPE, prix/m2 vs marché, points forts, contact. Factuel et dense.
+- Les données DVF/DPE sont des FAITS publics vérifiés — les présenter comme tels.
 - Inclure les sources en fin de chaque version.
 - Le CTA redirige vers ${input.prenom}${input.telephone_contact ? ` (${input.telephone_contact})` : ''}${input.email_contact ? ` ou ${input.email_contact}` : ''}.`
 

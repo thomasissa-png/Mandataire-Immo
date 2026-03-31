@@ -43,32 +43,32 @@ export interface HomeStagingInput {
 
 // Labels lisibles pour l'injection dans le prompt
 const LABELS_PIECE: Record<HomeStagingInput['type_piece'], string> = {
-  salon: 'salon / piece de vie',
-  chambre: 'chambre a coucher',
+  salon: 'salon / pièce de vie',
+  chambre: 'chambre à coucher',
   cuisine: 'cuisine',
   salle_de_bain: 'salle de bain',
   bureau: 'bureau / espace de travail',
-  entree: 'entree / hall',
-  salle_a_manger: 'salle a manger',
+  entree: 'entrée / hall',
+  salle_a_manger: 'salle à manger',
 }
 
 const LABELS_STYLE: Record<HomeStagingInput['style'], string> = {
-  moderne: 'moderne et epure — lignes droites, materiaux nobles (bois, metal, verre), palette neutre avec touches de couleur',
-  scandinave: 'scandinave — bois clair, blanc dominant, textiles chaleureux, plantes vertes, luminosite maximale',
-  classique: 'classique elegant — meubles de caractere, tissus riches, symetrie, couleurs chaudes (beige, taupe, bordeaux)',
-  cosy: 'cosy et chaleureux — plaids, coussins, eclairage doux, bois, tapis moelleux, ambiance cocon',
-  industriel: 'industriel chic — metal brut, bois recycle, briques apparentes, luminaires statement, palette sombre',
-  minimaliste: 'minimaliste — tres peu de meubles, lignes pures, espace vide delibere, palette monochrome',
+  moderne: 'moderne et épuré — lignes droites, matériaux nobles (bois, métal, verre), palette neutre avec touches de couleur',
+  scandinave: 'scandinave — bois clair, blanc dominant, textiles chaleureux, plantes vertes, luminosité maximale',
+  classique: 'classique élégant — meubles de caractère, tissus riches, symétrie, couleurs chaudes (beige, taupe, bordeaux)',
+  cosy: 'cosy et chaleureux — plaids, coussins, éclairage doux, bois, tapis moelleux, ambiance cocon',
+  industriel: 'industriel chic — métal brut, bois recyclé, briques apparentes, luminaires statement, palette sombre',
+  minimaliste: 'minimaliste — très peu de meubles, lignes pures, espace vide délibéré, palette monochrome',
 }
 
 const MOBILIER_PAR_PIECE: Record<HomeStagingInput['type_piece'], string> = {
-  salon: 'canape 2 ou 3 places, table basse, meuble TV bas, tapis, lampe sur pied, quelques coussins, 1-2 cadres au mur, plante verte',
-  chambre: 'lit double avec tete de lit, 2 tables de chevet, lampes de chevet, linge de lit soigne, petit tapis, commode ou armoire, 1 cadre au mur',
-  cuisine: 'ustensiles sur le plan de travail (planche a decouper, bocaux), tabourets de bar si ilot, corbeille de fruits, herbes aromatiques, torchon design',
-  salle_de_bain: 'serviettes roulees, panier en osier, plante verte, distributeur de savon, bougies, petit tabouret ou echelle porte-serviettes',
-  bureau: 'bureau epure, chaise ergonomique, lampe de bureau, quelques livres, plante, organiseur, ecran (optionnel)',
-  entree: 'console etroite, miroir, patere ou porte-manteaux, petit vide-poches, plante, tapis d entree',
-  salle_a_manger: 'table a manger 4-6 places, chaises assorties, suspension au-dessus de la table, chemin de table, bougeoir, vaisselle decorative',
+  salon: 'canapé 2 ou 3 places, table basse, meuble TV bas, tapis, lampe sur pied, quelques coussins, 1-2 cadres au mur, plante verte',
+  chambre: 'lit double avec tête de lit, 2 tables de chevet, lampes de chevet, linge de lit soigné, petit tapis, commode ou armoire, 1 cadre au mur',
+  cuisine: 'ustensiles sur le plan de travail (planche à découper, bocaux), tabourets de bar si îlot, corbeille de fruits, herbes aromatiques, torchon design',
+  salle_de_bain: 'serviettes roulées, panier en osier, plante verte, distributeur de savon, bougies, petit tabouret ou échelle porte-serviettes',
+  bureau: 'bureau épuré, chaise ergonomique, lampe de bureau, quelques livres, plante, organiseur, écran (optionnel)',
+  entree: 'console étroite, miroir, patère ou porte-manteaux, petit vide-poches, plante, tapis d\'entrée',
+  salle_a_manger: 'table à manger 4-6 places, chaises assorties, suspension au-dessus de la table, chemin de table, bougeoir, vaisselle décorative',
 }
 
 /**
@@ -95,60 +95,60 @@ export function buildHomeStagingPrompt(input: HomeStagingInput): string {
 
   // Contraintes physiques
   const contraintesLines: string[] = []
-  contraintesLines.push(`Lumiere naturelle : ${input.contraintes.lumiere_naturelle}`)
-  contraintesLines.push(`Forme de la piece : ${input.contraintes.forme_piece}`)
+  contraintesLines.push(`Lumière naturelle : ${input.contraintes.lumiere_naturelle}`)
+  contraintesLines.push(`Forme de la pièce : ${input.contraintes.forme_piece}`)
   if (input.contraintes.hauteur_plafond)
     contraintesLines.push(`Hauteur sous plafond : ${input.contraintes.hauteur_plafond}`)
   if (input.contraintes.sol_existant)
-    contraintesLines.push(`Sol existant (a conserver tel quel) : ${input.contraintes.sol_existant}`)
+    contraintesLines.push(`Sol existant (à conserver tel quel) : ${input.contraintes.sol_existant}`)
   if (input.contraintes.murs_existants)
-    contraintesLines.push(`Murs existants (a conserver tels quels) : ${input.contraintes.murs_existants}`)
+    contraintesLines.push(`Murs existants (à conserver tels quels) : ${input.contraintes.murs_existants}`)
   if (input.contraintes.elements_fixes?.length)
     contraintesLines.push(
-      `Elements fixes a conserver : ${input.contraintes.elements_fixes.join(', ')}`
+      `Éléments fixes à conserver : ${input.contraintes.elements_fixes.join(', ')}`
     )
 
   // Gamme de mobilier
   const gammeStr =
     input.gamme_prix === 'premium'
-      ? 'Mobilier haut de gamme, materiaux nobles, finitions soignees.'
+      ? 'Mobilier haut de gamme, matériaux nobles, finitions soignées.'
       : input.gamme_prix === 'entree'
         ? 'Mobilier accessible et fonctionnel, style IKEA/Maisons du Monde, propre et moderne.'
-        : 'Mobilier milieu de gamme, bon rapport qualite/aspect, marques type AM.PM, La Redoute Interieurs.'
+        : 'Mobilier milieu de gamme, bon rapport qualité/aspect, marques type AM.PM, La Redoute Intérieurs.'
 
   // Description photo source
   const photoDesc = input.description_photo_source
-    ? `La photo montre : ${input.description_photo_source}. Garde cette structure exacte de la piece.`
+    ? `La photo montre : ${input.description_photo_source}. Garde cette structure exacte de la pièce.`
     : ''
 
   const prompt = `Photographie professionnelle de home staging virtuel d'un(e) ${pieceLabel}, style ${styleLabel}.
 
-REGLE ABSOLUE — GARDER LA STRUCTURE IDENTIQUE :
-- Ne PAS modifier la structure de la piece (murs, portes, fenetres, plafond).
-- Ne PAS ajouter de fenetres, portes, veliux ou ouvertures qui n'existent pas.
-- Ne PAS changer le sol ni les murs — conserver les revetements existants.
-- Ne PAS deplacer les elements fixes (cheminee, poutres, radiateurs).
-- UNIQUEMENT ajouter du mobilier, de la decoration et de l'eclairage d'appoint.
+RÈGLE ABSOLUE — GARDER LA STRUCTURE IDENTIQUE :
+- Ne PAS modifier la structure de la pièce (murs, portes, fenêtres, plafond).
+- Ne PAS ajouter de fenêtres, portes, vélux ou ouvertures qui n'existent pas.
+- Ne PAS changer le sol ni les murs — conserver les revêtements existants.
+- Ne PAS déplacer les éléments fixes (cheminée, poutres, radiateurs).
+- UNIQUEMENT ajouter du mobilier, de la décoration et de l'éclairage d'appoint.
 
 ${photoDesc}
 
-PIECE ET DIMENSIONS :
+PIÈCE ET DIMENSIONS :
 ${dimensionsStr}
 ${contraintesLines.join('\n')}
 
-MOBILIER A AJOUTER (proportions realistes par rapport a la taille de la piece) :
+MOBILIER À AJOUTER (proportions réalistes par rapport à la taille de la pièce) :
 ${mobilierSuggere}
 ${gammeStr}
 
-QUALITE IMAGE :
-- Eclairage naturel realiste, pas de lumiere artificielle visible sauf lampes decoratives
-- Proportions correctes du mobilier par rapport a la piece (un canape 3 places ne rentre pas dans 8m2)
-- Ombres coherentes avec les sources de lumiere
-- Rendu photoraliste haute resolution, angle de prise de vue immobilier standard (legere contre-plongee)
+QUALITÉ IMAGE :
+- Éclairage naturel réaliste, pas de lumière artificielle visible sauf lampes décoratives
+- Proportions correctes du mobilier par rapport à la pièce (un canapé 3 places ne rentre pas dans 8m2)
+- Ombres cohérentes avec les sources de lumière
+- Rendu photoréaliste haute résolution, angle de prise de vue immobilier standard (légère contre-plongée)
 - Pas de personnes dans l'image
 - Couleurs naturelles, pas de filtres excessifs
 
-MENTION OBLIGATOIRE : cette image est un home staging virtuel — les meubles presentes ne sont pas inclus dans la vente.`
+MENTION OBLIGATOIRE : cette image est un home staging virtuel — les meubles présentés ne sont pas inclus dans la vente.`
 
   return prompt
 }
@@ -162,17 +162,17 @@ export function buildHomeStagingPromptPair(input: HomeStagingInput): {
   system: string
   user: string
 } {
-  const system = `Tu es un expert en home staging virtuel. Tu génères des descriptions precises de mises en scene d'interieur pour des biens immobiliers a la vente. Chaque description sera utilisee pour générer une image photoraliste.
+  const system = `Tu es un expert en home staging virtuel. Tu génères des descriptions précises de mises en scène d'intérieur pour des biens immobiliers à la vente. Chaque description sera utilisée pour générer une image photoréaliste.
 
 ## Garde-fous absolus
-- JAMAIS de modification structurelle : pas d'ajout de fenetres, portes, cloisons
-- JAMAIS de changement de sol ou de murs — on garde les revetements existants
-- JAMAIS de deformation des proportions — le mobilier doit etre a l'echelle de la piece
-- UNIQUEMENT ajout de mobilier, decoration, textiles et eclairage d'appoint
+- JAMAIS de modification structurelle : pas d'ajout de fenêtres, portes, cloisons
+- JAMAIS de changement de sol ou de murs — on garde les revêtements existants
+- JAMAIS de déformation des proportions — le mobilier doit être à l'échelle de la pièce
+- UNIQUEMENT ajout de mobilier, décoration, textiles et éclairage d'appoint
 - Mention obligatoire : "Home staging virtuel — mobilier non inclus dans la vente"
 
 ## Objectif
-Creer une image qui aide l'acheteur a se projeter dans la piece vide, sans le tromper sur l'etat reel du bien.`
+Créer une image qui aide l'acheteur à se projeter dans la pièce vide, sans le tromper sur l'état réel du bien.`
 
   const user = buildHomeStagingPrompt(input)
 

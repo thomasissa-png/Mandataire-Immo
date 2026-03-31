@@ -88,36 +88,36 @@ export function buildLandingBienPrompt(input: LandingBienInput): { system: strin
     const prixM2Bien = Math.round(input.bien.prix / input.bien.surface)
     const ecartDvf = Math.round(((prixM2Bien - input.dvf!.prix_median_m2) / input.dvf!.prix_median_m2) * 100)
     dvfSection = `
-## Donnees DVF verifiees (source : ${input.dvf!.source})
-Integrer ces donnees dans une section "Marche local" de la page :
-- Prix median au m2 du secteur : ${input.dvf!.prix_median_m2.toLocaleString('fr-FR')} EUR/m2
-- Periode : ${input.dvf!.periode}
-- Transactions enregistrees : ${input.dvf!.nb_transactions}
-- Prix/m2 de ce bien : ${prixM2Bien.toLocaleString('fr-FR')} EUR/m2 (ecart ${ecartDvf > 0 ? '+' : ''}${ecartDvf}% vs mediane)
-Presenter comme des FAITS publics verifies, pas des estimations. Citer la source en footer.`
+## Données DVF vérifiées (source : ${input.dvf!.source})
+Intégrer ces données dans une section "Marché local" de la page :
+- Prix médian au m2 du secteur : ${input.dvf!.prix_median_m2.toLocaleString('fr-FR')} EUR/m2
+- Période : ${input.dvf!.periode}
+- Transactions enregistrées : ${input.dvf!.nb_transactions}
+- Prix/m2 de ce bien : ${prixM2Bien.toLocaleString('fr-FR')} EUR/m2 (écart ${ecartDvf > 0 ? '+' : ''}${ecartDvf}% vs médiane)
+Présenter comme des FAITS publics vérifiés, pas des estimations. Citer la source en footer.`
   }
 
   let dpeSection = ''
   if (hasDpeData) {
     const dpeLabels: Record<string, string> = {
-      A: 'Tres performant', B: 'Performant', C: 'Bon', D: 'Moyen',
-      E: 'Passable', F: 'Peu performant — passoire energetique', G: 'Tres peu performant — passoire energetique',
+      A: 'Très performant', B: 'Performant', C: 'Bon', D: 'Moyen',
+      E: 'Passable', F: 'Peu performant — passoire énergétique', G: 'Très peu performant — passoire énergétique',
     }
     dpeSection = `
-## Donnees DPE verifiees (source : ${input.dpe_data!.source})
-Integrer dans la section caractéristiques avec un badge visuel colore :
-- Classe energetique : ${input.dpe_data!.classe_dpe} — ${dpeLabels[input.dpe_data!.classe_dpe] || input.dpe_data!.classe_dpe}
-- Emissions GES : ${input.dpe_data!.classe_ges}
+## Données DPE vérifiées (source : ${input.dpe_data!.source})
+Intégrer dans la section caractéristiques avec un badge visuel coloré :
+- Classe énergétique : ${input.dpe_data!.classe_dpe} — ${dpeLabels[input.dpe_data!.classe_dpe] || input.dpe_data!.classe_dpe}
+- Émissions GES : ${input.dpe_data!.classe_ges}
 ${input.dpe_data!.consommation_kwh ? `- Consommation : ${input.dpe_data!.consommation_kwh} kWh/m2/an` : ''}
 ${input.dpe_data!.emissions_co2 ? `- Emissions : ${input.dpe_data!.emissions_co2} kgCO2/m2/an` : ''}
-Utiliser les couleurs standard du DPE francais (vert fonce pour A → rouge pour G) pour le badge.`
+Utiliser les couleurs standard du DPE français (vert foncé pour A → rouge pour G) pour le badge.`
   }
 
   let visuelsSection = ''
   if (hasVisuels) {
     visuelsSection = `
 ## Visuels home staging (Versiroom)
-La page DOIT inclure une section "Visuels de mise en scene" avec les images home staging :
+La page DOIT inclure une section "Visuels de mise en scène" avec les images home staging :
 ${input.visuels_home_staging!.map((v, i) => `- Image ${i + 1} : ${v.piece} (style ${v.style}) — URL : ${v.url}`).join('\n')}
 Ajouter une mention visible sous chaque image : "Home staging virtuel — mobilier non inclus dans la vente"
 Afficher les images dans une grille responsive (1 colonne mobile, 2 colonnes tablette, 3 colonnes desktop).`
@@ -127,26 +127,26 @@ Afficher les images dans une grille responsive (1 colonne mobile, 2 colonnes tab
   if (hasCoordonnees) {
     carteSection = `
 ## Localisation
-Ajouter une section carte avec une iframe OpenStreetMap centree sur les coordonnees :
+Ajouter une section carte avec une iframe OpenStreetMap centrée sur les coordonnées :
 - Latitude : ${input.coordonnees_geo!.latitude}
 - Longitude : ${input.coordonnees_geo!.longitude}
 - Adresse BAN : ${input.coordonnees_geo!.adresse_ban}
-Utiliser une iframe OpenStreetMap (pas de JS necessaire) : https://www.openstreetmap.org/export/embed.html?bbox=...&layer=mapnik&marker=lat,lon`
+Utiliser une iframe OpenStreetMap (pas de JS nécessaire) : https://www.openstreetmap.org/export/embed.html?bbox=...&layer=mapnik&marker=lat,lon`
   }
 
-  const system = `Tu es un développeur web et copywriter spécialisé en immobilier. Tu crées des mini landing pages élégantes et efficaces pour presenter un bien immobilier a la vente.
+  const system = `Tu es un développeur web et copywriter spécialisé en immobilier. Tu crées des mini landing pages élégantes et efficaces pour présenter un bien immobilier à la vente.
 
-## Ton role
-Générer le code HTML complet d'une page standalone de presentation d'un bien immobilier. Cette page sera hebergee telle quelle — elle doit etre autonome (CSS inline, pas de dependances externes sauf Google Fonts).
+## Ton rôle
+Générer le code HTML complet d'une page standalone de présentation d'un bien immobilier. Cette page sera hébergée telle quelle — elle doit être autonome (CSS inline, pas de dépendances externes sauf Google Fonts).
 
-## Regles anti-erreur absolues
-- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
-- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis.
-- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
+## Règles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, écoles, restaurants, marchés ou lieux qui ne sont pas dans les données fournies. Si les données locales détaillées ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de détails spécifiques.
+- NE JAMAIS inventer de chiffres d'expérience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis.
+- L'année courante est 2026. Ne jamais mentionner 2024 ou 2025 comme année courante.
 - Le professionnel est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "Mandataire" dans les textes de la page (ex: "Votre mandataire", pas "Votre agent immobilier").
-- UTILISER LES VRAIES COORDONNEES du mandataire fournies ci-dessous. Ne JAMAIS ecrire "06 00 00 00 00" ou un email placeholder.
+- UTILISER LES VRAIES COORDONNÉES du mandataire fournies ci-dessous. Ne JAMAIS écrire "06 00 00 00 00" ou un email placeholder.
 - Le domaine email IAD est "iadfrance.fr", PAS "iad.fr".
-${hasDvf || hasDpeData ? '\n- Les donnees DVF et DPE sont des FAITS publics verifies — les presenter comme tels, jamais comme des estimations. Citer les sources en footer.' : ''}
+${hasDvf || hasDpeData ? '\n- Les données DVF et DPE sont des FAITS publics vérifiés — les présenter comme tels, jamais comme des estimations. Citer les sources en footer.' : ''}
 
 ## Règles techniques
 - HTML5 valide, responsive (mobile-first), accessible (aria-labels, contrastes WCAG AA)
@@ -154,20 +154,20 @@ ${hasDvf || hasDpeData ? '\n- Les donnees DVF et DPE sont des FAITS publics veri
 - Police : Inter (Google Fonts) avec fallback system-ui
 - Palette : ${input.couleur_principale || '#1B2A4A'} pour les titres, ${input.couleur_accent || '#F27A1A'} pour les CTA, blanc/gris clair pour le fond
 - Section hero avec le titre du bien et l'accroche
-- Section description avec le texte storytelling (fourni ou a generer)
-${!input.annonce_storytelling ? '- IMPORTANT : si aucune annonce storytelling n\'est fournie, tu DOIS generer une description immersive du bien de MINIMUM 300 mots. Decrire piece par piece avec projection de vie, pas une fiche technique. L\'acheteur doit pouvoir s\'imaginer vivre dans ce bien en lisant la description.' : ''}
-- Section caractéristiques (surface, pieces, prix, points forts${hasDpeData ? ', badge DPE colore' : ''}) en grille
-${hasDvf ? '- Section "Marche local" avec donnees DVF (prix median, nb transactions, positionnement du bien)' : ''}
-- Section quartier (description locale, commodites, transports${hasCoordonnees ? ', carte OpenStreetMap' : ''})
-${hasVisuels ? '- Section "Visuels de mise en scene" avec grille d\'images home staging + mention legale' : ''}
-- Section contact avec les coordonnees du mandataire et un lien mailto + tel
-- Footer avec mentions légales minimales (nom, réseau, "Non contractuel"${hasDvf || hasDpeData ? ', sources des donnees DVF/DPE' : ''})
+- Section description avec le texte storytelling (fourni ou à générer)
+${!input.annonce_storytelling ? '- IMPORTANT : si aucune annonce storytelling n\'est fournie, tu DOIS générer une description immersive du bien de MINIMUM 300 mots. Décrire pièce par pièce avec projection de vie, pas une fiche technique. L\'acheteur doit pouvoir s\'imaginer vivre dans ce bien en lisant la description.' : ''}
+- Section caractéristiques (surface, pièces, prix, points forts${hasDpeData ? ', badge DPE coloré' : ''}) en grille
+${hasDvf ? '- Section "Marché local" avec données DVF (prix médian, nb transactions, positionnement du bien)' : ''}
+- Section quartier (description locale, commodités, transports${hasCoordonnees ? ', carte OpenStreetMap' : ''})
+${hasVisuels ? '- Section "Visuels de mise en scène" avec grille d\'images home staging + mention légale' : ''}
+- Section contact avec les coordonnées du mandataire et un lien mailto + tel
+- Footer avec mentions légales minimales (nom, réseau, "Non contractuel"${hasDvf || hasDpeData ? ', sources des données DVF/DPE' : ''})
 - Pas de JavaScript — page purement statique
-- Le prix doit etre affiche en format francais (espaces, EUR)
-${!hasVisuels ? '- Ne pas utiliser de placeholder d\'images — utiliser des blocs colores avec des icones CSS' : ''}
+- Le prix doit être affiché en format français (espaces, EUR)
+${!hasVisuels ? '- Ne pas utiliser de placeholder d\'images — utiliser des blocs colorés avec des icônes CSS' : ''}
 
 ## Format de sortie
-Reponds UNIQUEMENT avec un objet JSON valide :
+Réponds UNIQUEMENT avec un objet JSON valide :
 {
   "titre_page": "Titre pour la balise <title>",
   "meta_description": "Description pour le meta tag",
@@ -190,28 +190,28 @@ Reponds UNIQUEMENT avec un objet JSON valide :
 
   const donneesLocalesSection = donneesLocalesDisponibles
     ? `
-DONNEES LOCALES VERIFIEES pour la section quartier (utilise UNIQUEMENT ces references) :
+DONNÉES LOCALES VÉRIFIÉES pour la section quartier (utilise UNIQUEMENT ces références) :
 ${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
 ${input.donnees_locales!.dernieres_transactions?.length ? `- Dernières transactions DVF : ${input.donnees_locales!.dernieres_transactions.slice(0, 3).map(t => `${t.type} ${t.surface}m² à ${t.prix_m2}€/m²`).join(', ')}` : ''}`
     : `
-DONNEES LOCALES : non disponibles. Pour la section quartier, rester general (nom de ville et quartier uniquement). NE PAS inventer de commodites, ecoles ou transports.`
+DONNÉES LOCALES : non disponibles. Pour la section quartier, rester général (nom de ville et quartier uniquement). NE PAS inventer de commodités, écoles ou transports.`
 
   // DPE : priorite aux donnees structurees Versiroom, fallback sur le champ legacy
   const dpeDisplay = hasDpeData
     ? `${input.dpe_data!.classe_dpe} (GES: ${input.dpe_data!.classe_ges})${input.dpe_data!.consommation_kwh ? ` — ${input.dpe_data!.consommation_kwh} kWh/m2/an` : ''}`
-    : input.bien.dpe || '[DPE : information en cours — sera communique avant publication]'
+    : input.bien.dpe || '[DPE : information en cours — sera communiqué avant publication]'
 
   // DVF contexte prix pour le user prompt
   let dvfUserSection = ''
   if (hasDvf) {
     const prixM2Bien = Math.round(input.bien.prix / input.bien.surface)
     dvfUserSection = `
-## Donnees marche local (DVF)
-- Prix median du secteur : ${input.dvf!.prix_median_m2.toLocaleString('fr-FR')} EUR/m2
+## Données marché local (DVF)
+- Prix médian du secteur : ${input.dvf!.prix_median_m2.toLocaleString('fr-FR')} EUR/m2
 - Prix de ce bien : ${prixM2Bien.toLocaleString('fr-FR')} EUR/m2
-- Periode : ${input.dvf!.periode} (${input.dvf!.nb_transactions} transactions)
+- Période : ${input.dvf!.periode} (${input.dvf!.nb_transactions} transactions)
 - Source : ${input.dvf!.source}
-Integrer ces donnees dans une section dediee "Marche local" avec un visuel clair (barre ou badge).`
+Intégrer ces données dans une section dédiée "Marché local" avec un visuel clair (barre ou badge).`
   }
 
   // Visuels home staging pour le user prompt
@@ -231,11 +231,11 @@ Afficher dans une grille avec la mention "Home staging virtuel — mobilier non 
     const bbox = `${lon - 0.005},${lat - 0.005},${lon + 0.005},${lat + 0.005}`
     carteUserSection = `
 ## Localisation
-Adresse normalisee : ${input.coordonnees_geo!.adresse_ban}
+Adresse normalisée : ${input.coordonnees_geo!.adresse_ban}
 Iframe carte : <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lon}" style="width:100%;height:300px;border:0"></iframe>`
   }
 
-  const user = `Cree une mini landing page pour ce bien immobilier :
+  const user = `Crée une mini landing page pour ce bien immobilier :
 
 ## Le bien
 - Titre : ${input.bien.titre}
@@ -243,7 +243,7 @@ Iframe carte : <iframe src="https://www.openstreetmap.org/export/embed.html?bbox
 - Adresse : ${hasCoordonnees ? input.coordonnees_geo!.adresse_ban : input.bien.adresse}
 - Prix : ${input.bien.prix.toLocaleString("fr-FR")} EUR
 - Surface : ${input.bien.surface} m2
-- Pieces : ${input.bien.pieces}
+- Pièces : ${input.bien.pieces}
 - Points forts : ${input.bien.points_forts}
 - DPE : ${dpeDisplay}
 ${annonceSection}
@@ -258,14 +258,14 @@ ${carteUserSection}
 - Ton : ${input.ton}
 ${contactSection}
 
-IMPORTANT : utiliser les VRAIES coordonnees ci-dessus dans les liens mailto: et tel:. Aucun placeholder.
+IMPORTANT : utiliser les VRAIES coordonnées ci-dessus dans les liens mailto: et tel:. Aucun placeholder.
 
 ## Contexte local
 - Ville : ${input.zone_geo.ville}
-- Quartiers de reference : ${input.zone_geo.quartiers.join(", ") || input.bien.adresse}
+- Quartiers de référence : ${input.zone_geo.quartiers.join(", ") || input.bien.adresse}
 ${donneesLocalesSection}
 
-Génère le HTML complet. La page doit donner envie de contacter le mandataire pour une visite. Le titre professionnel affiche sur la page doit etre "Mandataire ${input.reseau}", jamais "Agent immobilier".${hasDvf || hasDpeData ? '\nLes donnees DVF et DPE sont des FAITS publics verifies — citer les sources dans le footer.' : ''}`
+Génère le HTML complet. La page doit donner envie de contacter le mandataire pour une visite. Le titre professionnel affiché sur la page doit être "Mandataire ${input.reseau}", jamais "Agent immobilier".${hasDvf || hasDpeData ? '\nLes données DVF et DPE sont des FAITS publics vérifiés — citer les sources dans le footer.' : ''}`
 
   return { system, user }
 }
