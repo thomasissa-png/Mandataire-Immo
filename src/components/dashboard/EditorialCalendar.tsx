@@ -56,6 +56,56 @@ function getDeliverableDay(d: Deliverable): number | null {
   return null
 }
 
+/**
+ * Jours de publication recommandés par type de contenu.
+ * Objectif : répartir les contenus sur le mois pour un vrai calendrier éditorial
+ * au lieu de tout empiler le jour de création du pack.
+ */
+const PUBLICATION_SCHEDULE: Record<string, number[]> = {
+  post: [2, 5, 9, 12, 16, 19, 23, 26, 30],        // Mar, Ven → ~2/sem
+  article_seo: [8, 22],                              // 2x/mois, milieu de semaine
+  script_video: [4, 11, 18, 25],                     // Chaque jeudi
+  annonce: [3, 10, 17, 24],                           // Chaque mercredi
+  newsletter: [15],                                    // Milieu de mois
+  email_prospection: [1, 15],                          // Début + milieu
+}
+
+/**
+ * Distribue les livrables du mois sur des jours de publication optimaux
+ * au lieu de les empiler sur leur date de création.
+ */
+function distributeDeliverables(
+  deliverables: Deliverable[],
+  daysInMonth: number
+): Map<number, Deliverable[]> {
+  const map = new Map<number, Deliverable[]>()
+
+  // Grouper par type
+  const byType: Record<string, Deliverable[]> = {}
+  for (const d of deliverables) {
+    if (!byType[d.type]) byType[d.type] = []
+    byType[d.type].push(d)
+  }
+
+  // Distribuer chaque type sur ses jours prévus
+  const types = Object.keys(byType)
+  for (const type of types) {
+    const items = byType[type]
+    const schedule = PUBLICATION_SCHEDULE[type] || [1, 8, 15, 22]
+    // Filtrer les jours valides pour ce mois
+    const validDays = schedule.filter((d) => d <= daysInMonth)
+
+    for (let idx = 0; idx < items.length; idx++) {
+      const day = validDays[idx % validDays.length]
+      const existing = map.get(day) || []
+      existing.push(items[idx])
+      map.set(day, existing)
+    }
+  }
+
+  return map
+}
+
 function getDeliverableYearMonth(d: Deliverable): string {
   // Préférer le champ month (YYYY-MM), fallback sur created_at
   if (d.month && /^\d{4}-\d{2}$/.test(d.month)) return d.month
@@ -101,24 +151,11 @@ export function EditorialCalendar({
     [deliverables, monthKey],
   )
 
-  // Grouper par jour
-  const deliverablesByDay = useMemo(() => {
-    const map = new Map<number, Deliverable[]>()
-    for (const d of monthDeliverables) {
-      const day = getDeliverableDay(d)
-      if (day !== null) {
-        const existing = map.get(day) || []
-        existing.push(d)
-        map.set(day, existing)
-      }
-    }
-    return map
-  }, [monthDeliverables])
-
-  // Deliverables sans jour précis (seulement month, pas de created_at jour)
-  const unscheduled = useMemo(
-    () => monthDeliverables.filter((d) => getDeliverableDay(d) === null),
-    [monthDeliverables],
+  // Distribuer les livrables sur des jours de publication optimaux
+  // au lieu de les empiler sur leur date de création
+  const deliverablesByDay = useMemo(
+    () => distributeDeliverables(monthDeliverables, getDaysInMonth(year, month)),
+    [monthDeliverables, year, month],
   )
 
   const daysInMonth = getDaysInMonth(year, month)
@@ -341,26 +378,6 @@ export function EditorialCalendar({
           </div>
         )}
       </div>
-
-      {/* Contenus sans date précise */}
-      {unscheduled.length > 0 && (
-        <div className="rounded-xl bg-card border border-border p-4 tablet:p-5">
-          <h3 className="font-display text-h5 text-primary mb-3">
-            Contenus du mois (sans date précise)
-          </h3>
-          <div className="space-y-2">
-            {unscheduled.map((d) => (
-              <div key={d.id} className="flex items-center gap-2.5 py-1.5">
-                <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${TYPE_DOT_COLORS[d.type] || "bg-neutral-400"}`} />
-                <span className="text-body-sm text-primary truncate">{d.title}</span>
-                <span className="text-caption text-neutral-400 flex-shrink-0">
-                  {TYPE_LABELS[d.type] || d.type}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Résumé du mois */}
       {monthDeliverables.length > 0 && (

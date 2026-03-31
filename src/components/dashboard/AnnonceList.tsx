@@ -235,6 +235,26 @@ function AnnonceRow({ annonce, onArchiveToggle }: { annonce: Annonce; onArchiveT
               )}
             </button>
 
+            {/* Archiver/Désarchiver — visible dans le header */}
+            {onArchiveToggle && (
+              <button
+                type="button"
+                onClick={handleArchive}
+                disabled={archiving}
+                className={`p-2 rounded-lg transition-colors ${
+                  isArchived
+                    ? "text-success-600 hover:text-success-700 hover:bg-success-50"
+                    : "text-neutral-400 hover:text-neutral-600 hover:bg-neutral-50"
+                }`}
+                aria-label={isArchived ? "Désarchiver cette annonce" : "Archiver cette annonce"}
+                title={isArchived ? "Désarchiver" : "Archiver"}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                </svg>
+              </button>
+            )}
+
             {/* Voir/masquer */}
             <button
               type="button"
@@ -289,23 +309,6 @@ function AnnonceRow({ annonce, onArchiveToggle }: { annonce: Annonce; onArchiveT
             dangerouslySetInnerHTML={{ __html: markdownToHtml(content) }}
           />
 
-          {/* Archive button */}
-          {onArchiveToggle && (
-            <div className="px-4 pb-3 flex justify-end">
-              <button
-                type="button"
-                onClick={handleArchive}
-                disabled={archiving}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-caption font-medium text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 transition-colors disabled:opacity-50"
-                aria-label={isArchived ? "Désarchiver cette annonce" : "Archiver cette annonce"}
-              >
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                </svg>
-                {isArchived ? "Désarchiver" : "Archiver"}
-              </button>
-            </div>
-          )}
         </div>
       )}
     </article>

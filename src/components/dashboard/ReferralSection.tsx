@@ -64,7 +64,7 @@ function CopyButton({ text, label, type }: { text: string; label: string; type: 
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      track("referral_code_copied" as Parameters<typeof track>[0], { type })
+      track("referral_code_copied", { type })
       setTimeout(() => setCopied(false), 2000)
     } catch {
       // Fallback for older browsers
@@ -77,7 +77,7 @@ function CopyButton({ text, label, type }: { text: string; label: string; type: 
       document.execCommand("copy")
       document.body.removeChild(textarea)
       setCopied(true)
-      track("referral_code_copied" as Parameters<typeof track>[0], { type })
+      track("referral_code_copied", { type })
       setTimeout(() => setCopied(false), 2000)
     }
   }, [text, type])
@@ -276,7 +276,7 @@ export function ReferralSection() {
           </div>
           <div>
             <h2 className="font-display text-h4 text-white">Parraine tes collègues mandataires</h2>
-            <p className="text-body-sm text-primary-200">Gagne 1 mois gratuit par filleul abonné</p>
+            <p className="text-body-sm text-primary-200">Gagne 1 mois gratuit par filleul abonné — ton filleul reçoit 1 semaine offerte</p>
           </div>
         </div>
       </div>
