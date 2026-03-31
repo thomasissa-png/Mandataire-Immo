@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { PhotoUploader } from "./PhotoUploader"
 
 // ─── Types ────────────────────────────────────────────────────────
 
@@ -73,6 +74,10 @@ export function BienForm() {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
+  // Étape 2 : upload photos après création
+  const [step, setStep] = useState<"form" | "photos">("form")
+  const [createdId, setCreatedId] = useState<string | null>(null)
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
@@ -123,7 +128,8 @@ export function BienForm() {
       }
 
       const { id } = await res.json()
-      router.push(`/dashboard/biens/${id}`)
+      setCreatedId(id)
+      setStep("photos")
     } catch (err) {
       setSubmitError(
         err instanceof Error
@@ -140,6 +146,55 @@ export function BienForm() {
     if (!value || isNaN(num)) return ""
     return new Intl.NumberFormat("fr-FR").format(num)
   }
+
+  // ─── Étape 2 : Upload photos ───────────────────────────────────
+
+  if (step === "photos" && createdId) {
+    return (
+      <div className="space-y-6">
+        {/* Succès création */}
+        <div className="rounded-lg bg-success-50 border border-success-200 p-4 flex items-center gap-3">
+          <svg className="w-5 h-5 text-success-700 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p className="text-body-sm text-success-800 font-semibold">
+            Bien créé ! Ajoute maintenant tes photos.
+          </p>
+        </div>
+
+        {/* Zone upload */}
+        <div className="rounded-xl border border-border bg-card p-5">
+          <h3 className="font-display text-h4 font-semibold text-primary mb-1">
+            Photos du bien
+          </h3>
+          <p className="text-body-sm text-neutral-500 mb-4">
+            Tes photos seront utilisées pour ta landing page, tes annonces, tes emails et tes posts réseaux sociaux.
+          </p>
+          <PhotoUploader propertyId={createdId} initialPhotos={[]} />
+        </div>
+
+        {/* Actions */}
+        <div className="flex flex-col tablet:flex-row gap-3">
+          <button
+            type="button"
+            onClick={() => router.push(`/dashboard/biens/${createdId}`)}
+            className="flex-1 flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-secondary text-white font-display font-bold text-body-sm shadow-sm hover:bg-secondary-600 hover:shadow-md transition-all duration-normal"
+          >
+            Voir la fiche du bien
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push(`/dashboard/biens/${createdId}`)}
+            className="flex items-center justify-center h-12 px-6 rounded-full text-body-sm text-neutral-500 hover:text-primary transition-colors"
+          >
+            Continuer sans photos
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ─── Étape 1 : Formulaire ──────────────────────────────────────
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
