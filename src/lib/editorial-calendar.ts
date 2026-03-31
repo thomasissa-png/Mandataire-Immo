@@ -267,7 +267,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
     statut: "planifie",
   },
 
-  // Cluster 5 — Personal branding
+  // Cluster 5 — Image pro
   {
     slug: "marque-personnelle-mandataire-immobilier",
     titre:
@@ -278,7 +278,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
       "se faire connaitre mandataire immobilier",
       "image de marque immobilier",
     ],
-    categorie: "Personal branding",
+    categorie: "Image pro",
     angle:
       "Comment construire une identité forte qui fait que les vendeurs pensent à toi en premier",
     priorite: 16,
@@ -294,7 +294,7 @@ export const EDITORIAL_TOPICS: EditorialTopic[] = [
       "comment avoir plus de mandats",
       "generer mandats entrants",
     ],
-    categorie: "Personal branding",
+    categorie: "Image pro",
     angle:
       "Actions immédiates et gratuites pour gagner en visibilité locale en partant de zéro",
     priorite: 17,

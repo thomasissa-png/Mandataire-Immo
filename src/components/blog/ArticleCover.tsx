@@ -36,7 +36,7 @@ const CATEGORY_STYLES: Record<string, CategoryStyle> = {
     icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z",
     iconViewBox: "0 0 24 24",
   },
-  "Personal branding": {
+  "Image pro": {
     gradient: "from-success-500/80 to-success-800",
     icon: "M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z",
     iconViewBox: "0 0 24 24",
@@ -67,7 +67,7 @@ export function ArticleCover({ category, title, size = "md" }: ArticleCoverProps
   const style = getStyle(category)
   const iconSize = size === "sm" ? "w-6 h-6" : size === "featured" ? "w-14 h-14" : "w-10 h-10"
   const textSize = size === "sm" ? "text-caption" : size === "featured" ? "text-body" : "text-body-sm"
-  const aspect = size === "featured" ? "aspect-[16/6]" : "aspect-[16/7]"
+  const aspect = size === "featured" ? "aspect-[16/5]" : "aspect-[16/7]"
 
   return (
     <div
@@ -92,16 +92,16 @@ export function ArticleCover({ category, title, size = "md" }: ArticleCoverProps
         <path d={style.icon} />
       </svg>
 
-      {/* Catégorie */}
-      <span className="text-white/50 text-caption font-medium uppercase tracking-widest mb-1">
-        {category}
-      </span>
-
-      {/* Titre (tronqué) */}
+      {/* Catégorie — visible uniquement sur le featured (pas de doublon card) */}
       {title && (
-        <p className={`text-white/90 font-display font-semibold ${textSize} text-center line-clamp-2 max-w-[85%] leading-snug`}>
-          {title}
-        </p>
+        <>
+          <span className="text-white/50 text-caption font-medium uppercase tracking-widest mb-1">
+            {category}
+          </span>
+          <p className={`text-white/90 font-display font-semibold ${textSize} text-center line-clamp-2 max-w-[85%] leading-snug`}>
+            {title}
+          </p>
+        </>
       )}
     </div>
   )

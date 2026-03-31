@@ -1,6 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation"
+import { signOut } from "next-auth/react"
 
 interface SidebarLink {
   href: string
@@ -24,22 +25,19 @@ const NAV_SECTIONS: SidebarSection[] = [
     links: [
       { href: "/dashboard/profile", label: "Mon profil", icon: "👤" },
       { href: "/dashboard/ma-page", label: "Ma page mandataire", icon: "🌐" },
+      { href: "/dashboard/biens/nouveau", label: "Mes biens", icon: "🏡" },
     ],
   },
   {
     title: "Mes contenus",
     links: [
       { href: "/dashboard/strategie", label: "Mes bios et positionnement", icon: "🎯" },
+      { href: "/dashboard/annonces", label: "Mes annonces", icon: "🏡" },
+      { href: "/dashboard/calendrier", label: "Calendrier éditorial", icon: "📆" },
       { href: "/dashboard/posts", label: "Mes posts", icon: "📅" },
       { href: "/dashboard/articles", label: "Articles SEO", icon: "📝" },
       { href: "/dashboard/scripts", label: "Scripts vidéo", icon: "🎬" },
       { href: "/dashboard/emails", label: "Emails", icon: "📧" },
-    ],
-  },
-  {
-    title: "Mes biens",
-    links: [
-      { href: "/dashboard/biens/nouveau", label: "Ajouter un bien", icon: "➕" },
     ],
   },
 ]
@@ -48,7 +46,7 @@ const NAV_SECTIONS: SidebarSection[] = [
 const MOBILE_NAV: SidebarLink[] = [
   { href: "/dashboard", label: "Accueil", icon: "🏠" },
   { href: "/dashboard/posts", label: "Posts", icon: "📅" },
-  { href: "/dashboard/strategie", label: "Bios", icon: "🎯" },
+  { href: "/dashboard/annonces", label: "Annonces", icon: "🏡" },
   { href: "/dashboard/biens/nouveau", label: "Ajouter", icon: "➕" },
 ]
 
@@ -99,6 +97,14 @@ export function DashboardSidebar() {
             <span className="text-sm" aria-hidden="true">💬</span>
             <span>Support</span>
           </a>
+          <button
+            type="button"
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="w-full text-left px-3 py-2 rounded-lg text-body-sm flex items-center gap-2 text-neutral-600 hover:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+          >
+            <span className="text-sm" aria-hidden="true">🚪</span>
+            <span>Se déconnecter</span>
+          </button>
         </div>
       </aside>
 

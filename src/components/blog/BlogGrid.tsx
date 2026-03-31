@@ -36,7 +36,10 @@ export function BlogGrid({ articles }: BlogGridProps) {
 
   const [featured, ...rest] = filtered
 
-  if (!featured) return null
+  const isNew = (date: string) => {
+    const diff = Date.now() - new Date(date).getTime()
+    return diff < 14 * 24 * 60 * 60 * 1000
+  }
 
   return (
     <>
@@ -45,7 +48,17 @@ export function BlogGrid({ articles }: BlogGridProps) {
         <CategoryFilter categories={categories} onFilter={handleFilter} />
       </div>
 
+      {/* Empty state */}
+      {!featured && (
+        <div className="text-center py-12">
+          <p className="text-body text-neutral-500">
+            Aucun article dans cette catégorie pour l&apos;instant — d&apos;autres arrivent prochainement.
+          </p>
+        </div>
+      )}
+
       {/* Featured article — full width */}
+      {featured && (
       <Link
         href={`/blog/${featured.slug}`}
         className="group flex flex-col tablet:flex-row bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal overflow-hidden mb-6"
@@ -53,12 +66,16 @@ export function BlogGrid({ articles }: BlogGridProps) {
         <div className="tablet:w-1/2">
           <ArticleCover
             category={featured.category}
-            title={featured.title}
             size="featured"
           />
         </div>
         <div className="flex flex-col justify-center p-5 tablet:p-6 tablet:w-1/2">
           <div className="flex items-center gap-3 text-caption text-neutral-500 mb-2">
+            {isNew(featured.date) && (
+              <span className="px-2 py-0.5 rounded bg-success-50 text-success-800 text-caption font-semibold">
+                Nouveau
+              </span>
+            )}
             <span className="px-2 py-0.5 rounded bg-neutral-100 text-neutral-600 text-caption font-medium">
               {featured.category}
             </span>
@@ -72,7 +89,7 @@ export function BlogGrid({ articles }: BlogGridProps) {
             <span aria-hidden="true">&middot;</span>
             <span>{featured.readingTime} de lecture</span>
           </div>
-          <h2 className="font-display text-h3 font-semibold text-foreground group-hover:text-secondary transition-colors duration-normal mb-2">
+          <h2 className="font-display text-h2 font-semibold text-foreground group-hover:text-secondary transition-colors duration-normal mb-2">
             {featured.title}
           </h2>
           <p className="text-body-sm text-neutral-500 line-clamp-2">
@@ -83,6 +100,7 @@ export function BlogGrid({ articles }: BlogGridProps) {
           </span>
         </div>
       </Link>
+      )}
 
       {/* Grid — 2 columns */}
       {rest.length > 0 && (
@@ -95,7 +113,6 @@ export function BlogGrid({ articles }: BlogGridProps) {
             >
               <ArticleCover
                 category={article.category}
-                title={article.title}
               />
 
               <div className="flex flex-col flex-1 p-4">

@@ -5,6 +5,8 @@ import { track } from "@/lib/tracking"
 import { markdownToHtml, stripMarkdown } from "@/lib/markdownRenderer"
 import type { DeliverableType } from "@/types/deliverable"
 
+type Feedback = "like" | "dislike" | null
+
 const TYPE_ACCENT_COLORS: Record<DeliverableType, string> = {
   post: "border-l-secondary",
   article_seo: "border-l-info",
@@ -60,6 +62,10 @@ export function DeliverableCard({
   const [content, setContent] = useState<string | null>(initialContent ?? null)
   const [loadingContent, setLoadingContent] = useState(false)
   const [loadError, setLoadError] = useState(false)
+  const [feedback, setFeedback] = useState<Feedback>(null)
+  const [rewriteCount, setRewriteCount] = useState(0)
+  const [rewriting, setRewriting] = useState(false)
+  const MAX_REWRITES = 3
 
   const deliverableType = type as DeliverableType
   const accentColor = TYPE_ACCENT_COLORS[deliverableType] || "border-l-neutral-300"
@@ -131,6 +137,42 @@ export function DeliverableCard({
     } catch {
       // Clipboard API non autorisée (contexte non-sécurisé ou refus utilisateur)
       setLoadError(true)
+    }
+  }
+
+  const handleFeedback = async (value: Feedback) => {
+    setFeedback(value)
+    track("deliverable_feedback", { deliverable_id: id, type, feedback: value })
+    try {
+      await fetch(`/api/deliverables/${id}/feedback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ feedback: value }),
+      })
+    } catch {
+      // silently fail — feedback is tracked client-side
+    }
+  }
+
+  const handleRewrite = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (rewriteCount >= MAX_REWRITES || rewriting) return
+    setRewriting(true)
+    track("deliverable_rewrite", { deliverable_id: id, type, attempt: rewriteCount + 1 })
+    try {
+      const res = await fetch(`/api/deliverables/${id}/rewrite`, { method: "POST" })
+      if (res.ok) {
+        const data = await res.json()
+        if (data.content) {
+          setContent(data.content)
+          setRewriteCount((c) => c + 1)
+          setFeedback(null)
+        }
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setRewriting(false)
     }
   }
 
@@ -342,6 +384,61 @@ export function DeliverableCard({
             </span>
           )}
         </div>
+
+        {/* Feedback — like/dislike + rewrite */}
+        {expanded && status === "delivered" && (
+          <div className="flex items-center gap-3 mt-3 pt-3 border-t border-border">
+            <span className="text-caption text-neutral-400">Ce contenu te plaît ?</span>
+            <button
+              type="button"
+              aria-label="J'aime ce contenu"
+              aria-pressed={feedback === "like"}
+              onClick={(e) => { e.stopPropagation(); void handleFeedback(feedback === "like" ? null : "like") }}
+              className={`p-1.5 rounded-lg transition-colors ${feedback === "like" ? "bg-success-50 text-success-700" : "text-neutral-400 hover:text-success-600 hover:bg-success-50"}`}
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Je n'aime pas ce contenu"
+              aria-pressed={feedback === "dislike"}
+              onClick={(e) => { e.stopPropagation(); void handleFeedback(feedback === "dislike" ? null : "dislike") }}
+              className={`p-1.5 rounded-lg transition-colors ${feedback === "dislike" ? "bg-error-50 text-error-700" : "text-neutral-400 hover:text-error-600 hover:bg-error-50"}`}
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10 15v4a3 3 0 003 3l4-9V2H5.72a2 2 0 00-2 1.7l-1.38 9a2 2 0 002 2.3H10z" />
+              </svg>
+            </button>
+            {feedback === "dislike" && rewriteCount < MAX_REWRITES && (
+              <button
+                type="button"
+                disabled={rewriting}
+                onClick={handleRewrite}
+                className="ml-auto text-body-sm font-semibold text-secondary hover:text-secondary-700 transition-colors disabled:text-neutral-400 disabled:cursor-wait flex items-center gap-1.5"
+              >
+                {rewriting ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-secondary/30 border-t-secondary rounded-full animate-spin" aria-hidden="true" />
+                    Réécriture...
+                  </>
+                ) : (
+                  <>Réécrire ({MAX_REWRITES - rewriteCount} restante{MAX_REWRITES - rewriteCount > 1 ? "s" : ""})</>
+                )}
+              </button>
+            )}
+            {rewriteCount >= MAX_REWRITES && feedback === "dislike" && (
+              <a
+                href={`mailto:support@immocrew.fr?subject=Contenu%20%C3%A0%20revoir&body=ID%20:%20${id}`}
+                className="ml-auto text-body-sm font-semibold text-secondary hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Contacter le support
+              </a>
+            )}
+          </div>
+        )}
 
         {/* Aide contextuelle — visible quand expanded */}
         {expanded && status === "delivered" && (

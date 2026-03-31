@@ -36,10 +36,10 @@ export default function BlogPage() {
                 Le marketing immobilier, sans les prises de tête
               </h1>
               <p className="mt-3 text-body-lg text-neutral-500">
-                Guides pratiques pour ta présence digitale : posts, annonces, SEO local, personal branding.
+                Des conseils concrets écrits pour les mandataires — pas pour les agences de com&apos;.
               </p>
               <p className="mt-2 text-body-sm text-neutral-400">
-                {articles.length} guides gratuits · Mis à jour chaque mois
+                Nouveaux guides chaque mois · 100% gratuit
               </p>
             </div>
           </div>
