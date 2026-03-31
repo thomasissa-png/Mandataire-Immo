@@ -16,6 +16,9 @@ interface AnnonceRow {
   metadata: Record<string, unknown>
   created_at: string
   client_email: string
+  client_first_name: string | null
+  client_last_name: string | null
+  client_phone: string | null
 }
 
 interface PageProps {
@@ -24,9 +27,13 @@ interface PageProps {
 
 async function getAnnonceByToken(token: string): Promise<AnnonceRow | null> {
   const { rows } = await query<AnnonceRow>(
-    `SELECT id, title, content, metadata, created_at, client_email
-     FROM deliverables
-     WHERE share_token = $1 AND type = 'annonce' AND status = 'delivered'
+    `SELECT d.id, d.title, d.content, d.metadata, d.created_at,
+            c.email AS client_email, c.first_name AS client_first_name,
+            c.last_name AS client_last_name,
+            (c.client_context->>'telephone')::text AS client_phone
+     FROM deliverables d
+     JOIN clients c ON d.client_id = c.id
+     WHERE d.share_token = $1 AND d.type = 'annonce' AND d.status = 'delivered'
      LIMIT 1`,
     [token]
   )
@@ -89,6 +96,8 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
     year: "numeric",
   })
 
+  const agentName = [annonce.client_first_name, annonce.client_last_name].filter(Boolean).join(" ")
+
   return (
     <main className="min-h-screen bg-[#F8F6F2]">
       {/* Header branded */}
@@ -100,11 +109,45 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
           <h1 className="text-2xl md:text-3xl font-bold leading-tight">
             {annonce.title}
           </h1>
-          <p className="text-neutral-400 text-sm mt-3">
-            Publiée le {formattedDate}
-          </p>
+          <div className="flex items-center gap-4 mt-3 text-sm text-neutral-400">
+            <span>Publiée le {formattedDate}</span>
+            {agentName && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>Par {agentName}</span>
+              </>
+            )}
+          </div>
         </div>
       </header>
+
+      {/* Bouton contact mandataire */}
+      {(annonce.client_phone || annonce.client_email) && (
+        <div className="max-w-3xl mx-auto px-6 -mb-4 pt-6">
+          <div className="flex items-center gap-3 flex-wrap">
+            {annonce.client_phone && (
+              <a
+                href={`tel:${annonce.client_phone}`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-secondary text-white font-bold text-sm hover:bg-secondary-600 transition-all shadow-sm"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                </svg>
+                Appeler {agentName || "le mandataire"}
+              </a>
+            )}
+            <a
+              href={`mailto:${annonce.client_email}`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-primary text-primary font-bold text-sm hover:bg-primary hover:text-white transition-all"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
+              Envoyer un email
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* Contenu de l'annonce */}
       <article className="max-w-3xl mx-auto px-6 py-10">
@@ -117,7 +160,7 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
       <footer className="border-t border-neutral-200 bg-white">
         <div className="max-w-3xl mx-auto px-6 py-8 text-center">
           <p className="text-neutral-500 text-sm mb-2">
-            Annonce générée par
+            Annonce{agentName ? ` de ${agentName},` : ""} générée par
           </p>
           <Link
             href="/"

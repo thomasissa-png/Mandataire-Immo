@@ -7,6 +7,7 @@ import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { ActivatePageButton, IndexationToggle } from "@/components/dashboard/AgentPageManager"
 import { DashboardPageLayout } from "@/components/dashboard/DashboardPageLayout"
+import { CopyLinkButton } from "@/components/ui/CopyLinkButton"
 
 interface ClientRow {
   id: string
@@ -125,7 +126,7 @@ export default async function MaPageMandatairePage() {
       ) : (
         /* ── PAGE EXISTANTE ── */
         <div className="space-y-6">
-          <div>
+          <div className="flex items-center gap-3 flex-wrap">
             <p className="text-body text-neutral-600">
               Ta page est accessible ici :{" "}
               <a
@@ -137,11 +138,38 @@ export default async function MaPageMandatairePage() {
                 {baseUrl}/agent/{agentPage.slug}
               </a>
             </p>
+            <CopyLinkButton url={`${baseUrl}/agent/${agentPage.slug}`} />
+          </div>
+
+          {/* Lien édition profil */}
+          <div className="rounded-lg bg-info-50 border border-info-200 p-4">
+            <div className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-info-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+              </svg>
+              <div>
+                <p className="text-body-sm font-semibold text-info-800">
+                  Envie de modifier ta page ?
+                </p>
+                <p className="text-caption text-info-700 mt-1">
+                  Les modifications de ton profil se reflètent automatiquement sur ta page publique.
+                </p>
+                <a
+                  href="/dashboard/profile"
+                  className="inline-flex items-center gap-1 mt-2 text-caption font-semibold text-info-800 hover:underline"
+                >
+                  Modifier mon profil →
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Toggle indexation */}
           <div className="rounded-lg bg-card border border-border p-5">
             <IndexationToggle slug={agentPage.slug} initialValue={agentPage.indexation} />
+            <p className="text-caption text-neutral-400 mt-2">
+              Active cette option pour que ta page apparaisse dans les résultats Google quand quelqu{"'"}un cherche ton nom + ta ville.
+            </p>
           </div>
 
           {/* Avertissement edition_locked */}
@@ -198,9 +226,18 @@ export default async function MaPageMandatairePage() {
                 {agentPage.bio_generee}
               </p>
             ) : (
-              <p className="text-body-sm text-neutral-400 italic mb-4">
-                Aucune bio générée pour le moment.
-              </p>
+              <div className="mb-4">
+                <p className="text-body-sm text-neutral-400 italic">
+                  Aucune bio générée pour le moment.
+                </p>
+                <p className="text-caption text-neutral-400 mt-1">
+                  Ta bio sera générée automatiquement lors de ta prochaine production de contenus.
+                  En attendant, tu peux{" "}
+                  <a href="/dashboard/profile" className="text-secondary-700 font-semibold hover:underline">
+                    rédiger ta propre bio depuis ton profil
+                  </a>.
+                </p>
+              </div>
             )}
             <a
               href={`/agent/${agentPage.slug}`}
