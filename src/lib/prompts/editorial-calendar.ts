@@ -52,7 +52,7 @@ export function buildEditorialCalendarPrompt(input: EditorialCalendarInput): { s
   const dateDebut = input.date_debut || new Date().toISOString().slice(0, 10)
   const frequence = input.frequence_hebdo || 5
 
-  const system = `Tu es un community manager expert en immobilier, specialise dans la creation de calendriers editoriaux pour des mandataires independants en France.
+  const system = `Tu es un community manager expert en immobilier, spécialisé dans la creation de calendriers éditoriaux pour des mandataires independants en France.
 
 ## Ton role
 Produire un calendrier editorial de 30 jours, concret et actionnable, adapte au profil du mandataire, a sa zone geographique et a son style de communication.
@@ -62,7 +62,7 @@ Produire un calendrier editorial de 30 jours, concret et actionnable, adapte au 
 - NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
 - Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
 - L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
-- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le réseau du client utilise un autre terme.
 
 ## Regles editoriales
 - Chaque entree doit etre suffisamment detaillee pour qu'un autre agent IA puisse rediger le post complet sans contexte supplementaire
@@ -115,13 +115,13 @@ ${input.donnees_locales!.dernieres_transactions?.length ? `- Dernières transact
     input.reseaux_sociaux.instagram ? `Instagram: ${input.reseaux_sociaux.instagram}` : null,
     input.reseaux_sociaux.facebook ? `Facebook: ${input.reseaux_sociaux.facebook}` : null,
     input.reseaux_sociaux.linkedin ? `LinkedIn: ${input.reseaux_sociaux.linkedin}` : null,
-  ].filter(Boolean).join(", ") || "Aucun reseau configure"
+  ].filter(Boolean).join(", ") || "Aucun réseau configuré"
 
   const user = `Cree un calendrier editorial de 30 jours pour ce mandataire immobilier :
 
 ## Profil
 - Nom : ${input.prenom} ${input.nom}
-- Reseau : ${input.reseau}
+- Réseau : ${input.reseau}
 - Specialite : ${input.specialite}
 - Annees d'experience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais ecrire un autre nombre)
 - Volume : ${input.nb_transactions_an} transactions/an
@@ -132,7 +132,7 @@ ${input.gamme_prix ? `- Gamme de prix : ${input.gamme_prix}` : ''}
 - Ce qui le differencie : ${input.ce_qui_differencie}
 - Valeurs : ${input.valeurs}
 - Ton : ${input.ton}
-- Reseaux sociaux actifs : ${reseauxSection}
+- Réseaux sociaux actifs : ${reseauxSection}
 ${biensSection}
 ${donneesLocalesSection}
 ${evenementsSection}
@@ -143,7 +143,7 @@ ${sujetsSection}
 - Frequence : ${frequence} publications/semaine
 - Duree : 30 jours
 
-Genere exactement 30 jours de calendrier. Chaque entree doit etre unique et localisee.`
+Génère exactement 30 jours de calendrier. Chaque entree doit etre unique et localisee.`
 
   return { system, user }
 }

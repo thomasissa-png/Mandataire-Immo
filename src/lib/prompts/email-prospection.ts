@@ -176,15 +176,15 @@ CONSIGNES :
 - L'email doit être ultra-court (150-250 mots). Un email long = un email non lu.
 - L'objet doit contenir le nom de ${input.zone_geo.ville} ou d'un quartier pour la pertinence locale
 - Le HTML doit etre minimaliste : fond blanc, texte noir, une couleur d'accent (#2563EB), police systeme
-- Inclure un placeholder desabonnement : {{unsubscribe_url}}
-- Signature OBLIGATOIRE avec les VRAIES coordonnees :
+- Inclure un placeholder désabonnement : {{unsubscribe_url}}
+- Signature OBLIGATOIRE avec les VRAIES coordonnées :
   ${input.prenom} ${input.nom} — Mandataire ${input.reseau}
   Email : ${input.email_contact}
   ${input.telephone_contact ? `Telephone : ${input.telephone_contact}` : ''}
   ${input.zone_geo.ville}
 - Le mailto dans le HTML doit pointer vers ${input.email_contact} (PAS un placeholder)
-- ${input.telephone_contact ? `Le lien tel: doit pointer vers ${input.telephone_contact}` : 'Pas de numero de telephone fourni — ne pas inventer de numero.'}
-- Le CTA doit etre une action simple : repondre a l'email, appeler, ou cliquer sur un lien unique`
+- ${input.telephone_contact ? `Le lien tel: doit pointer vers ${input.telephone_contact}` : 'Pas de numéro de téléphone fourni — ne pas inventer de numéro.'}
+- Le CTA doit être une action simple : répondre à l'email, appeler, ou cliquer sur un lien unique`
 
   return { system, user }
 }
