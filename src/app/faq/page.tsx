@@ -4,6 +4,7 @@ import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
 import { JsonLd } from "@/components/JsonLd"
 import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice, formatPriceTTC } from "@/lib/pricing"
+import { FAQAccordion } from "@/components/faq/FAQAccordion"
 
 export const metadata: Metadata = {
   title: "FAQ ImmoCrew — Toutes les réponses pour les mandataires immobiliers",
@@ -134,22 +135,8 @@ export default function FAQPage() {
               et les garanties du service.
             </p>
 
-            {/* FAQ items */}
-            <div className="space-y-8">
-              {FAQ_ITEMS.map((item, index) => (
-                <section
-                  key={index}
-                  className="rounded-xl bg-card border border-border p-6 desktop:p-8"
-                >
-                  <h2 className="font-display text-h4 font-bold text-primary-800 mb-3">
-                    {item.question}
-                  </h2>
-                  <p className="text-body text-foreground leading-relaxed">
-                    {item.answer}
-                  </p>
-                </section>
-              ))}
-            </div>
+            {/* FAQ items — accordéon interactif */}
+            <FAQAccordion items={FAQ_ITEMS} />
 
             {/* CTA */}
             <div className="mt-14 rounded-xl bg-primary p-8 desktop:p-10 text-center">

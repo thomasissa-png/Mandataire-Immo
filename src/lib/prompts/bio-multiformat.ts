@@ -46,52 +46,52 @@ export function buildBioMultiformatPrompt(input: BioMultiformatInput): {
   system: string
   user: string
 } {
-  const system = `Tu es un specialiste du personal branding digital pour les professionnels de l'immobilier. Tu rediges des bios optimisees pour chaque plateforme, en respectant les contraintes de caracteres et les codes de chaque reseau.
+  const system = `Tu es un spécialiste du personal branding digital pour les professionnels de l'immobilier. Tu rédiges des bios optimisées pour chaque plateforme, en respectant les contraintes de caractères et les codes de chaque réseau.
 
-## Regles anti-erreur absolues
-- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
-- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
-- Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
-- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
-- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+## Règles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, écoles, restaurants, marchés ou lieux qui ne sont pas dans les données fournies. Si les données locales détaillées ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de détails spécifiques.
+- NE JAMAIS inventer de chiffres d'expérience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- Ne JAMAIS écrire un nombre d'années d'expérience différent de celui fourni. Si annees_experience = ${input.annees_experience}, écrire "${input.annees_experience} ans", jamais un autre chiffre.
+- L'année courante est 2026. Ne jamais mentionner 2024 ou 2025 comme année courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le réseau du client utilise un autre terme.
 
-REGLES EDITORIALES :
-- Chaque bio respecte STRICTEMENT la limite de caracteres de sa plateforme
-- Tutoie le lecteur quand le format le permet (Instagram, general) — vouvoiement acceptable sur LinkedIn et Google Business si le ton du mandataire est formel
-- L'IA est INVISIBLE : ces bios sont ecrites comme si ${input.prenom} les avait redigees
-- Zero jargon marketing
-- Chaque bio mentionne la zone geographique precise (pas "en France" mais "${input.zone_geo.ville}")
-- Les bios doivent etre coherentes entre elles (meme message, adapte au format)
-- Pas de liste generique de qualites ("a l'ecoute, reactif, professionnel") — utiliser des preuves concretes
+RÈGLES ÉDITORIALES :
+- Chaque bio respecte STRICTEMENT la limite de caractères de sa plateforme
+- Tutoie le lecteur quand le format le permet (Instagram, général) — vouvoiement acceptable sur LinkedIn et Google Business si le ton du mandataire est formel
+- L'IA est INVISIBLE : ces bios sont écrites comme si ${input.prenom} les avait rédigées
+- Zéro jargon marketing
+- Chaque bio mentionne la zone géographique précise (pas "en France" mais "${input.zone_geo.ville}")
+- Les bios doivent être cohérentes entre elles (même message, adapté au format)
+- Pas de liste générique de qualités ("à l'écoute, réactif, professionnel") — utiliser des preuves concrètes
 
 CONTRAINTES PAR PLATEFORME :
 
-**Instagram (150 caracteres max)** :
-- Chaque caractere compte — aller a l'essentiel
-- Format : ligne 1 = qui + ou | ligne 2 = specialite ou accroche | ligne 3 = CTA ou emoji
-- Emojis acceptes (2-3 max, pertinents)
+**Instagram (150 caractères max)** :
+- Chaque caractère compte — aller à l'essentiel
+- Format : ligne 1 = qui + où | ligne 2 = spécialité ou accroche | ligne 3 = CTA ou emoji
+- Emojis acceptés (2-3 max, pertinents)
 - Pas de hashtags dans la bio Instagram
 
-**LinkedIn (300 caracteres max — section "titre")** :
+**LinkedIn (300 caractères max — section "titre")** :
 - Ton plus professionnel
-- Inclure : poste + reseau + zone + specialite
+- Inclure : poste + réseau + zone + spécialité
 - Pas d'emojis (ou 1 maximum)
-- Mots-cles SEO LinkedIn (visibles dans les recherches)
+- Mots-clés SEO LinkedIn (visibles dans les recherches)
 
-**Google Business (750 caracteres max)** :
+**Google Business (750 caractères max)** :
 - Ton expert et local
-- Cible les proprietaires et acheteurs qui cherchent un professionnel
-- Inclure : zone, specialite, anciennete, argument de confiance
+- Cible les propriétaires et acheteurs qui cherchent un professionnel
+- Inclure : zone, spécialité, ancienneté, argument de confiance
 - Pas d'emojis
 - Penser SEO local : "mandataire immobilier [ville]", "estimation gratuite [ville]"
 
-**Presentation generale (500-800 mots)** :
-- Texte complet reutilisable sur site web, profil reseau, signature email longue
-- Storytelling court : parcours, motivation, methode, zone d'expertise
-- ${input.accroche_identitaire ? `Integrer l'accroche identitaire : "${input.accroche_identitaire}"` : 'Creer une accroche identitaire coherente avec les bios courtes'}
+**Présentation générale (500-800 mots)** :
+- Texte complet réutilisable sur site web, profil réseau, signature email longue
+- Storytelling court : parcours, motivation, méthode, zone d'expertise
+- ${input.accroche_identitaire ? `Intégrer l'accroche identitaire : "${input.accroche_identitaire}"` : 'Créer une accroche identitaire cohérente avec les bios courtes'}
 
 STRUCTURE JSON DE SORTIE :
-Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
+Réponds UNIQUEMENT avec un JSON valide, sans texte avant ni après :
 {
   "bios": {
     "instagram": {
@@ -123,44 +123,44 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
 
   const positionnementStr = input.accroche_identitaire
     ? `
-POSITIONNEMENT DEJA DEFINI (L1 — a respecter) :
+POSITIONNEMENT DÉJÀ DÉFINI (L1 — à respecter) :
 - Accroche identitaire : "${input.accroche_identitaire}"
-${input.piliers_differenciation?.length ? `- Piliers de differenciation : ${input.piliers_differenciation.join(' | ')}` : ''}`
+${input.piliers_differenciation?.length ? `- Piliers de différenciation : ${input.piliers_differenciation.join(' | ')}` : ''}`
     : ''
 
-  const user = `Redige les 4 versions de bio pour ${input.prenom} ${input.nom}, mandataire immobilier chez ${input.reseau}.
+  const user = `Rédige les 4 versions de bio pour ${input.prenom} ${input.nom}, mandataire immobilier chez ${input.reseau}.
 
 PROFIL COMPLET :
 - Zone : ${input.zone_geo.ville} (${input.zone_geo.departement}), quartiers : ${quartiersStr}
-- Anciennete : ${input.annees_experience} ans
-- Specialite : ${input.specialite}
+- Ancienneté : ${input.annees_experience} ans
+- Spécialité : ${input.specialite}
 - Volume : ${input.nb_transactions_an} transactions/an
 - Gamme de prix : ${input.gamme_prix}
 - Cible clients : ${input.cible_clients}
-- Ton souhaite : ${input.ton}
+- Ton souhaité : ${input.ton}
 - Valeurs : ${input.valeurs}
-- Ce qui la/le differencie : ${input.ce_qui_differencie}
+- Ce qui la/le différencie : ${input.ce_qui_differencie}
 ${input.certifications?.length ? `- Certifications : ${input.certifications.join(', ')}` : ''}
 ${input.langues?.length ? `- Langues : ${input.langues.join(', ')}` : ''}
-${input.hobbies_pro ? `- Centre d'interet pro : ${input.hobbies_pro}` : ''}
+${input.hobbies_pro ? `- Centre d'intérêt pro : ${input.hobbies_pro}` : ''}
 ${input.histoire?.parcours_avant_immo ? `- Parcours avant l'immobilier : ${input.histoire.parcours_avant_immo}` : ''}
 ${input.histoire?.pourquoi_immobilier ? `- Pourquoi l'immobilier : ${input.histoire.pourquoi_immobilier}` : ''}
-${input.histoire?.anecdote_memorable ? `- Anecdote memorable : ${input.histoire.anecdote_memorable}` : ''}
+${input.histoire?.anecdote_memorable ? `- Anecdote mémorable : ${input.histoire.anecdote_memorable}` : ''}
 ${biensResume}
 ${positionnementStr}
 
 PRESENCE EN LIGNE ACTUELLE :
-${input.reseaux_sociaux.instagram ? `- Instagram : ${input.reseaux_sociaux.instagram}` : '- Instagram : a creer'}
-${input.reseaux_sociaux.linkedin ? `- LinkedIn : ${input.reseaux_sociaux.linkedin}` : '- LinkedIn : a creer'}
+${input.reseaux_sociaux.instagram ? `- Instagram : ${input.reseaux_sociaux.instagram}` : '- Instagram : à créer'}
+${input.reseaux_sociaux.linkedin ? `- LinkedIn : ${input.reseaux_sociaux.linkedin}` : '- LinkedIn : à créer'}
 ${input.reseaux_sociaux.site_web ? `- Site web : ${input.reseaux_sociaux.site_web}` : '- Site web : aucun'}
 
 CONSIGNES :
-- La bio Instagram doit IMPERATIVEMENT tenir en 150 caracteres — compte chaque caractere. Si ca depasse, raccourcis.
-- La bio LinkedIn doit fonctionner comme un titre de recherche : quand quelqu'un cherche "mandataire immobilier ${input.zone_geo.ville}" sur LinkedIn, ${input.prenom} doit apparaitre
-- La bio Google Business est cruciale pour le SEO local : integrer naturellement les mots-cles "mandataire immobilier ${input.zone_geo.ville}", "estimation gratuite", le nom des quartiers
-- La presentation generale doit pouvoir etre utilisee telle quelle sur une page "A propos" d'un site web
-- Les 4 bios doivent raconter la meme histoire, adaptee au format — pas 4 messages contradictoires
-- ${input.accroche_identitaire ? `L'accroche identitaire "${input.accroche_identitaire}" doit etre integree ou adaptee dans chaque format` : 'Proposer une accroche identitaire coherente qui se decline sur les 4 formats'}`
+- La bio Instagram doit IMPÉRATIVEMENT tenir en 150 caractères — compte chaque caractère. Si ça dépasse, raccourcis.
+- La bio LinkedIn doit fonctionner comme un titre de recherche : quand quelqu'un cherche "mandataire immobilier ${input.zone_geo.ville}" sur LinkedIn, ${input.prenom} doit apparaître
+- La bio Google Business est cruciale pour le SEO local : intégrer naturellement les mots-clés "mandataire immobilier ${input.zone_geo.ville}", "estimation gratuite", le nom des quartiers
+- La présentation générale doit pouvoir être utilisée telle quelle sur une page "À propos" d'un site web
+- Les 4 bios doivent raconter la même histoire, adaptée au format — pas 4 messages contradictoires
+- ${input.accroche_identitaire ? `L'accroche identitaire "${input.accroche_identitaire}" doit être intégrée ou adaptée dans chaque format` : 'Proposer une accroche identitaire cohérente qui se décline sur les 4 formats'}`
 
   return { system, user }
 }

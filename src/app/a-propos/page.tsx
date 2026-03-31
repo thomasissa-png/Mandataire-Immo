@@ -391,17 +391,25 @@ export default function AProposPage() {
                 L&rsquo;&eacute;quipe
               </h2>
               <p className="text-body text-foreground leading-relaxed mb-4">
-                ImmoCrew a &eacute;t&eacute; fond&eacute; en 2026 par un entrepreneur
-                sp&eacute;cialis&eacute; dans le marketing immobilier. Le constat de d&eacute;part :
-                les mandataires ind&eacute;pendants n&rsquo;ont pas acc&egrave;s aux m&ecirc;mes
-                ressources marketing que les grandes agences, alors qu&rsquo;ils repr&eacute;sentent
-                une part croissante du march&eacute; immobilier fran&ccedil;ais.
+                ImmoCrew a &eacute;t&eacute; fond&eacute; par Thomas, entrepreneur
+                sp&eacute;cialis&eacute; dans le marketing digital immobilier. Apr&egrave;s
+                avoir accompagn&eacute; plusieurs professionnels de l&rsquo;immobilier, un
+                constat s&rsquo;est impos&eacute;&nbsp;: les mandataires ind&eacute;pendants
+                n&rsquo;ont pas acc&egrave;s aux m&ecirc;mes ressources marketing que les
+                grandes agences &mdash; alors qu&rsquo;ils repr&eacute;sentent une part
+                croissante du march&eacute;.
+              </p>
+              <p className="text-body text-foreground leading-relaxed mb-4">
+                ImmoCrew est n&eacute; de cette conviction&nbsp;: chaque mandataire
+                m&eacute;rite une pr&eacute;sence en ligne professionnelle, sans y consacrer
+                ses soir&eacute;es. L&rsquo;&eacute;quipe combine expertise en marketing
+                digital, r&eacute;daction immobili&egrave;re et technologie pour produire
+                des contenus hyper-personnalis&eacute;s. Chaque contenu est relu et
+                valid&eacute; avant livraison.
               </p>
               <p className="text-body text-foreground leading-relaxed">
-                L&rsquo;&eacute;quipe combine expertise en marketing digital, r&eacute;daction
-                immobili&egrave;re et technologie IA pour produire des contenus personnalis&eacute;s
-                &agrave; grande &eacute;chelle. Chaque livrable est relu et valid&eacute; par
-                l&rsquo;&eacute;quipe avant livraison.
+                ImmoCrew est &eacute;dit&eacute; par VERSI &mdash; 54 rue Henri Barbusse,
+                92000 Nanterre.
               </p>
             </section>
 

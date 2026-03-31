@@ -251,6 +251,7 @@ ImmoCrew n'est PAS un outil. C'est une ÉQUIPE. Le mandataire rêve d'avoir un d
 | @ux | 2026-03-28 | Audit final session 7 — 6 vérifications ciblées — `docs/ux/audit-final-session7.md` | Score 38/38 — 10/10 — toutes les 6 vérifications PASS : sidebar desktop (hidden lg:block, sticky top-20, focus-visible, liens bas), nav mobile (lg:hidden sticky, backdrop-blur, py-2.5, text-body), plan du mois (ancres #section-*, liens /blog/*, conseils horaires LinkedIn/Instagram, données dynamiques profil), email templates (3 templates HTML valides, unsubscribeUrl dynamique, prix depuis pricing.ts, tutoiement uniforme), Umami Cloud (script cloud.umami.is, website ID 533b1471-2f40-41dd-8754-02fa0f0615f8, afterInteractive, zéro PostHog), layout dashboard (Mon espace, Mon profil, sticky header, focus-visible tous liens, héritage toutes pages /dashboard/*). 2 points résiduels non-bloquants : aria-current manquant sur nav header, #section-biens à vérifier dans MesBiensSection.tsx. | Audit ciblé sur 6 points précis demandés après les corrections P0/P1 de la session 7. Méthodologie : lecture directe des fichiers source ligne par ligne. Toutes les classes CSS et attributs HTML ont été vérifiés par grep visuel dans le code — aucune hypothèse. aria-current classé réserve (non bloquant) car le style visuel différencie déjà les états de navigation, mais la sémantique ARIA est absente pour les screen readers. #section-biens classé hypothèse car non visible dans DashboardContent.tsx — l'id doit être dans le composant MesBiensSection non audité dans cette session. |
 | @mandataire | 2026-03-28 | Audit terrain valeur perçue — 7 pages publiques (`docs/reviews/sophie-audit-landing.md`) | Verdict À RETRAVAILLER. Score global 7.1/10. 3 PASS (FAQ landing, Blog, Pricing, CGV, Confidentialité), 4 FRICTION (SocialProof sans photos témoignages, À propos équipe vague, FAQ publique format mur de texte, Page bien bug encodage "meubls"). 3 corrections bloquantes pré-lancement : (1) bug "meubls" → "meublés" src/app/bien/[id]/page.tsx, (2) témoignages SocialProof sans attribution photo/nom complet, (3) section L'équipe À propos trop floue. | Audit valeur perçue (pas audit technique) — l'objectif est de répondre "est-ce que Sophie sortirait sa carte bleue après avoir lu ça ?". BeforeAfter identifiée comme section la plus convaincante (10/10) : données locales réelles, exemples précis Angers + Montpellier. Témoignages sans photos classés FRICTION car risque de méfiance > risque de correction — coût faible, impact fort sur crédibilité. Section équipe vague classée risque majeur car sans humain identifiable, la confiance est limitée pour 150€/mois récurrent. Alternative écartée : verdict FAIL total — le fond est solide, les corrections sont mineures, pas de refonte nécessaire. |
 | @mandataire | 2026-03-28 | Audit onboarding complet — 9 étapes + 5 scénarios (`docs/reviews/sophie-audit-onboarding.md`) | Verdict À RETRAVAILLER. Score global 7.8/10. 5 PASS (étapes 1, 3, 4, 5, 6, 8), 3 FRICTION (étapes 2, 7, 9), 1 FAIL scénario S5 (fausse promesse lien d'annonce non implémentée). 2 P0 bloquants : (1) "on récupère tout automatiquement" sur le lien annonce non implémenté — aucun fetch côté code à l'étape 7, (2) absence de confirmation que les biens créés en onboarding apparaissent dans le dashboard. 6 P1/P2 mineurs : champ réseau en texte libre → select, helpers manquants étape 9, helper téléphone, bug placeholder étape 3, indication de temps étape 5, avertissement photo non persistée. | Audit terrain + scénarios de simulation (S1 premier accès 21h30, S2 abandon et retour, S3 étapes optionnelles, S4 biens dashboard, S5 lien annonce). Brouillon serveur + sessionStorage classé PASS — la reprise fonctionne bien. Étape 8 (La vidéo) classée 10/10 — modèle parfait de l'étape optionnelle : une question, ton juste, 10 secondes. Étape 5 (Ton style) classée meilleure étape obligatoire — questions terrain, ton naturel. Fausse promesse lien annonce classée P0 car impact direct sur la confiance dès les premières minutes d'usage. Alternative écartée : corriger le texte sans implémenter le scraping — solution trop défensive, le scraping est une vraie différenciation à implémenter. |
+| @orchestrator | 2026-03-31 | Session 8 — Corrections P0/P1 Sophie + Resend + accents UTF-8 | 5 P0 corrigés (lien annonce reformulé, bug "meublés", témoignages transparents, à propos Thomas/VERSI, accents prompts), 5 P1 corrigés (bouton modifier bien, intro monthly update, suivi admin livraison, FAQ accordéon, étape comptes onboarding renommée), intégration Resend email, passe accents UTF-8 sur 13 fichiers prompts. Mise à jour lessons-learned.md (6 statuts ouvert→appliqué). | Branche claude/session-recovery-analysis-hGjj4. Lien annonce : reformulation honnête plutôt que scraping (trop complexe pour la V1, le scraping reste dans le backlog). Témoignages : transparence ajoutée plutôt que suppression (la section social proof reste nécessaire). FAQ : accordéon client component séparé pour garder le JSON-LD en Server Component. Admin : sous-select SQL pour le suivi livraison mensuelle. Resend : mode log-only si RESEND_API_KEY absent. |
 
 ---
 
@@ -297,54 +298,41 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 
 ## Memo de reprise — derniere session
 
-- **Date de cloture** : 2026-03-28, session 7 (session longue, ~50 commits)
-- **Branche** : `claude/update-gradient-agents-ZwVm9`
-- **Resume de la session** : Session en 4 phases. Phase 1 : Mise a jour Gradient Agents + feature upload photos + annonces (16 fichiers). Phase 2 : 5 audits (UX, Design, Copy, Sophie, QA) + 25 corrections P0/P1/P2 → score 9.1/10. Phase 3 : 3 features (profil self-service, sauvegarde onboarding serveur, email nurturing J+2/J+7/J+14) + 5 P2 (HEIC Sharp, unsubscribe email, biens onboarding sync, specialites, tests). Phase 4 : Refonte dashboard (12 retours fondateur : sidebar, plan du mois enrichi, "on te connait", doublons, navigation). Migration Umami Cloud (remplace PostHog). Recalibration agent @mandataire (learning cross-projet). 3 audits Sophie recalibree sur le site complet (25 pages) → score 7.4/10 avec P0 identifies.
+- **Date de cloture** : 2026-03-31, session 8
+- **Branche** : `claude/session-recovery-analysis-hGjj4`
+- **Resume de la session** : Corrections de tous les P0 et P1 de l'audit Sophie recalibree (session 7). Integration Resend pour les emails reels. Passe accents UTF-8 sur les 13 fichiers de prompts IA. Mise a jour lessons-learned.md (6 learnings S6/S7 passes de "ouvert" a "applique").
 - **Travaux termines cette session** :
-  - Feature upload photos + annonces completes (7 endpoints API + 8 composants UI + migration 009)
-  - Page /dashboard/profile (6 sections, dirty tracking, annuler, nav ancres, specialites pills, upload photo)
-  - Sauvegarde onboarding serveur (PATCH /api/onboarding/draft, JSONB, fire-and-forget, spinner)
-  - Sequence email nurturing (3 templates J+2/J+7/J+14, cron, admin, idempotent, mode log only)
-  - Conversion HEIC → JPEG via Sharp (photos biens + profil)
-  - Lien desinscription email fonctionnel (/api/unsubscribe + SQL 012 + filtre cron)
-  - Biens onboarding → property_pages auto-sync (POST /api/onboarding cree les property_pages)
-  - Refonte dashboard : sidebar desktop, nav sticky mobile, plan du mois avec valeur (conseils plateforme, liens blog, ancres), "on te connait" enrichi (quartiers, gamme prix, cible), doublons dedupliques, sous-titres explicatifs, annonces fusionnees dans MesBiensSection, lien SeLoger en premier BienForm, CTA "Commencer le mensuel"
-  - Migration PostHog → Umami Cloud (script, trackEvent wrapper, 0 ref PostHog)
-  - 5 audits + 25 corrections P0/P1/P2 (sanitizer XSS, focus-visible x41, HEIC, "livrables" → "contenus", unicode, badge Nouveau, eye toggle, CTA sans pack, boost admin)
-  - Recalibration @mandataire propagee dans _base-agent-protocol.md + agent-factory.md (learning cross-projet)
-  - 127/127 tests vitest PASS, 0 erreur TypeScript
-  - Migrations SQL 009 (photos), 010 (onboarding draft), 011 (email_logs), 012 (unsubscribe)
-- **Travaux en cours — P0 BLOQUANTS (audit Sophie recalibree)** :
-  - **Lien annonce SeLoger = fausse promesse** : le texte dit "on recupere tout automatiquement" mais aucun scraping n'est implemente. Il faut soit implementer le scraping (via API SeLoger/LeBonCoin ou web scraping), soit reformuler le texte honnêtement. C'est le P0 n°1.
-  - **Bug encodage "meubles" → "meublés"** : src/app/bien/[id]/page.tsx — faute visible par les acheteurs de Sophie.
-  - **Temoignages sans photos/noms** : src/components/landing/SocialProof.tsx — initiales seulement, pas credible pour 150€/mois. Ajouter des photos + noms complets (ou des metriques verifiables au lieu de temoignages).
-  - **Page A propos trop vague** : src/app/a-propos/page.tsx — "un entrepreneur specialise" sans prenom ni parcours. Sophie a besoin de savoir qui est derriere.
-  - **Accents manquants sur l'interface** : "Etape", "genere", "enregistre" etc. — passe de grep/fix sur tout src/.
-- **Travaux en cours — P1 (audit Sophie recalibree)** :
-  - Pas de bouton "Modifier" un bien depuis sa fiche (/dashboard/biens/[id])
-  - Monthly update sans contexte (pourquoi Sophie remplit ca)
-  - Admin sans suivi livraison mensuelle (quels clients ont recu quoi)
-  - FAQ publique sans accordeon (mur de texte sur mobile)
-  - Onboarding etape "Tes comptes" confuse (5/10)
-- **Promesses a tenir pour Sophie** (si quelque chose manque, le creer) :
-  - Landing page personnalisee pour Sophie (mentionnee dans les deliverables mais pas de page /landing/[slug] codee)
-  - Scraping lien annonce (promis dans l'onboarding)
+  - P0-1 : Lien annonce reformule ("on s'en inspire pour rediger une version qui claque" — plus de fausse promesse)
+  - P0-2 : Bug "meubls" → "meubles" corrige dans bien/[id]/page.tsx
+  - P0-3 : Temoignages transparents (titre "Ce que nos premiers utilisateurs en pensent" + mention phase de test)
+  - P0-4 : Page a propos enrichie (Thomas nomme, parcours, VERSI, adresse)
+  - P0-5 : Accents UTF-8 corriges dans 13 fichiers prompts (specialise→specialise, redige→redige, etc.)
+  - P1-1 : Bouton "Modifier les infos" sur fiche bien (BienHeader + BienEditForm + PATCH /api/biens/[id])
+  - P1-2 : Intro monthly update avec contexte et benefice
+  - P1-3 : Suivi livraison admin (badge "Livre" / "En attente" par client)
+  - P1-4 : FAQ publique en accordeon (FAQAccordion client component, JSON-LD preserve)
+  - P1-5 : Etape "Tes comptes" → "Tes reseaux sociaux" avec description et placeholders
+  - Integration Resend (src/lib/email.ts, mode log-only si cle absente)
+  - lessons-learned.md : 6 statuts ouverts → appliques
+- **Promesses restantes a tenir pour Sophie** :
+  - Landing page personnalisee /landing/[slug] (mentionnee dans les deliverables, pas encore codee)
+  - Scraping/enrichissement lien annonce (le texte ne promet plus, mais la feature reste dans le backlog)
   - Calendrier de publication visuel dans le dashboard (pas juste une liste de posts)
 - **Prochaines actions recommandees** :
-  1. **@fullstack : Corriger les 5 P0 Sophie** — lien annonce (reformuler ou implementer scraping), bug "meubles", temoignages, a propos, accents. Priorite absolue avant tout test client.
-  2. **@fullstack : Corriger les 5 P1 Sophie** — bouton modifier bien, contexte monthly update, suivi admin, FAQ accordeon, etape comptes onboarding.
-  3. **@fullstack : Implementer les promesses manquantes** — scraping lien annonce (ou au minimum un enrichissement basique via API publiques), page landing personnalisee /landing/[slug] si promise dans le pack.
-  4. **@fullstack : Integration Resend** — activer les emails reels (EMAIL_PROVIDER + RESEND_API_KEY). Les templates et le cron sont prets.
-  5. **@seo : Audit SEO pages publiques** — meta OG sur /bien/[slug], sitemap a jour avec les biens publies.
+  1. **@mandataire : Re-audit Sophie** — verifier que les 10 P0/P1 corriges passent maintenant. Score cible : 8.5+/10.
+  2. **@fullstack : Promesses manquantes** — landing page /landing/[slug], calendrier visuel dashboard.
+  3. **@seo : Audit SEO pages publiques** — meta OG sur /bien/[slug], sitemap a jour avec les biens publies.
+  4. **@qa : Tests des nouveaux composants** — BienHeader, BienEditForm, FAQAccordion, email Resend.
+  5. **@fullstack : Stripe integration** — creer les produits Stripe, tester le checkout flow.
 - **Blockers** :
   - ANTHROPIC_API_KEY necessaire pour la generation IA
   - Migrations 008-012 a executer : `for f in sql/008*.sql sql/009*.sql sql/010*.sql sql/011*.sql sql/012*.sql; do psql $DATABASE_URL -f $f; done`
   - Marque INPI "ImmoCrew" a verifier (collision SIRET 894616713 Auterive)
-  - EMAIL_PROVIDER + RESEND_API_KEY pour emails reels
+  - RESEND_API_KEY pour emails reels (Resend integre, mode log-only actif)
   - CRON_SECRET pour le cron nurturing
   - STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET + produits Stripe a creer
 - **Commande de reprise suggeree** :
 
 ```
-@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 7). Branche claude/update-gradient-agents-ZwVm9. Session 7 terminee : toutes les features core implementees, dashboard refondu, migration Umami, recalibration @mandataire. Il reste 5 P0 bloquants (audit Sophie recalibree) : lien annonce fausse promesse, bug "meubles", temoignages landing, page a propos, accents. Et 5 P1 + promesses manquantes (landing perso, scraping lien, calendrier visuel). Priorite : corriger les P0 avant tout test client reel.
+@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 8). Branche claude/session-recovery-analysis-hGjj4. Session 8 terminee : 5 P0 + 5 P1 Sophie corriges, Resend integre, accents UTF-8 corriges. Prochaines priorites : re-audit Sophie, landing perso /landing/[slug], calendrier visuel, tests nouveaux composants, Stripe.
 ```

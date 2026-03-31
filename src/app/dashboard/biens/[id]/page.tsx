@@ -12,6 +12,7 @@ import type { PropertyPage } from "@/types/property"
 import { PhotoUploader } from "@/components/biens/PhotoUploader"
 import { AnnonceBlock } from "@/components/biens/AnnonceBlock"
 import { BienFicheClient } from "@/components/biens/BienFicheClient"
+import { BienHeader } from "@/components/biens/BienHeader"
 
 export default async function BienDetailPage({
   params,
@@ -55,14 +56,6 @@ export default async function BienDetailPage({
       }
     : null
 
-  const formatPrix = (prix: number): string => {
-    return new Intl.NumberFormat("fr-FR", {
-      style: "currency",
-      currency: "EUR",
-      maximumFractionDigits: 0,
-    }).format(prix)
-  }
-
   return (
     <div className="max-w-3xl mx-auto">
       {/* Retour */}
@@ -87,45 +80,17 @@ export default async function BienDetailPage({
         Retour au dashboard
       </a>
 
-      {/* En-tête bien */}
-      <div className="rounded-lg bg-card border border-border p-5 mb-6">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h1 className="font-display text-h2 text-primary font-bold mb-1 break-words">
-              {bien.titre || `${bien.type_bien} — ${bien.adresse}`}
-            </h1>
-            <div className="flex flex-wrap items-center gap-2 mt-2">
-              <span className="px-2.5 py-0.5 rounded bg-primary-50 text-caption font-medium text-primary-700">
-                {bien.type_bien}
-              </span>
-              <span className="text-body-sm text-neutral-500">
-                {bien.adresse}
-              </span>
-            </div>
-          </div>
-          <p className="text-h3 font-display font-bold text-secondary-700 flex-shrink-0 break-words">
-            {formatPrix(bien.prix)}
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-2 mt-3">
-          {bien.surface > 0 && (
-            <span className="px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600">
-              {bien.surface} m²
-            </span>
-          )}
-          {bien.pieces > 0 && (
-            <span className="px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600">
-              {bien.pieces} pièce{bien.pieces > 1 ? "s" : ""}
-            </span>
-          )}
-          {bien.points_forts && (
-            <span className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700">
-              {bien.points_forts}
-            </span>
-          )}
-        </div>
-      </div>
+      {/* En-tête bien (Client Component — édition inline) */}
+      <BienHeader
+        propertyId={bien.id}
+        titre={bien.titre}
+        type_bien={bien.type_bien}
+        adresse={bien.adresse}
+        prix={bien.prix}
+        surface={bien.surface}
+        pieces={bien.pieces}
+        points_forts={bien.points_forts}
+      />
 
       {/* Sections — gérées par le Client Component pour la réactivité photos→annonce */}
       <BienFicheClient

@@ -49,8 +49,9 @@ const STEPS = [
     optional: true,
   },
   {
-    title: "Tes comptes",
+    title: "Tes réseaux sociaux",
     subtitle: "Optionnel — on peut travailler sans",
+    description: "On utilise tes liens pour personnaliser tes posts avec les bons @mentions et liens de redirection. Si tu n'as pas encore de compte, pas de souci — on t'aide à tout mettre en place.",
     fields: ["instagram", "facebook", "site_web"],
     optional: true,
   },
@@ -193,22 +194,22 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
   },
   instagram: {
     label: "Instagram",
-    placeholder: "@sophie.immo",
+    placeholder: "https://instagram.com/ton_compte",
     type: "text",
   },
   facebook: {
     label: "Page Facebook",
-    placeholder: "facebook.com/sophie.immo",
+    placeholder: "https://facebook.com/ta-page",
     type: "text",
   },
   linkedin: {
     label: "LinkedIn",
-    placeholder: "linkedin.com/in/sophie-martin",
+    placeholder: "https://linkedin.com/in/ton-profil",
     type: "text",
   },
   site_web: {
     label: "Site web (si existant)",
-    placeholder: "www.sophie-immo.fr",
+    placeholder: "https://www.ton-site.fr",
     type: "text",
   },
 }
@@ -715,6 +716,11 @@ export default function OnboardingPage() {
                   {step.subtitle}
                 </p>
               )}
+              {"description" in step && step.description && (
+                <p className="text-body-sm text-neutral-500 mt-2 max-w-md leading-relaxed">
+                  {step.description}
+                </p>
+              )}
             </div>
             <span className="text-caption text-neutral-500">
               Étape {currentStep + 1} sur {STEPS.length}{"optional" in step && step.optional ? " (optionnel)" : ""} · ~8 min
@@ -785,7 +791,7 @@ export default function OnboardingPage() {
                       className="w-full h-12 px-4 rounded-md border border-secondary-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                     />
                     <p className="text-caption text-secondary-600 mt-1">
-                      Colle le lien SeLoger, LeBonCoin, ou ton site — on récupère tout automatiquement.
+                      Colle le lien de ton annonce SeLoger, LeBonCoin ou ton site — on s'en inspire pour rédiger une version qui claque.
                     </p>
                   </div>
 

@@ -105,7 +105,7 @@ Presenter comme des FAITS publics verifies, pas des estimations. Citer la source
     }
     dpeSection = `
 ## Donnees DPE verifiees (source : ${input.dpe_data!.source})
-Integrer dans la section caracteristiques avec un badge visuel colore :
+Integrer dans la section caractéristiques avec un badge visuel colore :
 - Classe energetique : ${input.dpe_data!.classe_dpe} — ${dpeLabels[input.dpe_data!.classe_dpe] || input.dpe_data!.classe_dpe}
 - Emissions GES : ${input.dpe_data!.classe_ges}
 ${input.dpe_data!.consommation_kwh ? `- Consommation : ${input.dpe_data!.consommation_kwh} kWh/m2/an` : ''}
@@ -134,10 +134,10 @@ Ajouter une section carte avec une iframe OpenStreetMap centree sur les coordonn
 Utiliser une iframe OpenStreetMap (pas de JS necessaire) : https://www.openstreetmap.org/export/embed.html?bbox=...&layer=mapnik&marker=lat,lon`
   }
 
-  const system = `Tu es un developpeur web et copywriter specialise en immobilier. Tu crees des mini landing pages elegantes et efficaces pour presenter un bien immobilier a la vente.
+  const system = `Tu es un développeur web et copywriter spécialisé en immobilier. Tu crées des mini landing pages élégantes et efficaces pour presenter un bien immobilier a la vente.
 
 ## Ton role
-Generer le code HTML complet d'une page standalone de presentation d'un bien immobilier. Cette page sera hebergee telle quelle — elle doit etre autonome (CSS inline, pas de dependances externes sauf Google Fonts).
+Générer le code HTML complet d'une page standalone de presentation d'un bien immobilier. Cette page sera hebergee telle quelle — elle doit etre autonome (CSS inline, pas de dependances externes sauf Google Fonts).
 
 ## Regles anti-erreur absolues
 - NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
@@ -148,7 +148,7 @@ Generer le code HTML complet d'une page standalone de presentation d'un bien imm
 - Le domaine email IAD est "iadfrance.fr", PAS "iad.fr".
 ${hasDvf || hasDpeData ? '\n- Les donnees DVF et DPE sont des FAITS publics verifies — les presenter comme tels, jamais comme des estimations. Citer les sources en footer.' : ''}
 
-## Regles techniques
+## Règles techniques
 - HTML5 valide, responsive (mobile-first), accessible (aria-labels, contrastes WCAG AA)
 - CSS inline dans une balise <style> — pas de fichier externe
 - Police : Inter (Google Fonts) avec fallback system-ui
@@ -156,12 +156,12 @@ ${hasDvf || hasDpeData ? '\n- Les donnees DVF et DPE sont des FAITS publics veri
 - Section hero avec le titre du bien et l'accroche
 - Section description avec le texte storytelling (fourni ou a generer)
 ${!input.annonce_storytelling ? '- IMPORTANT : si aucune annonce storytelling n\'est fournie, tu DOIS generer une description immersive du bien de MINIMUM 300 mots. Decrire piece par piece avec projection de vie, pas une fiche technique. L\'acheteur doit pouvoir s\'imaginer vivre dans ce bien en lisant la description.' : ''}
-- Section caracteristiques (surface, pieces, prix, points forts${hasDpeData ? ', badge DPE colore' : ''}) en grille
+- Section caractéristiques (surface, pieces, prix, points forts${hasDpeData ? ', badge DPE colore' : ''}) en grille
 ${hasDvf ? '- Section "Marche local" avec donnees DVF (prix median, nb transactions, positionnement du bien)' : ''}
 - Section quartier (description locale, commodites, transports${hasCoordonnees ? ', carte OpenStreetMap' : ''})
 ${hasVisuels ? '- Section "Visuels de mise en scene" avec grille d\'images home staging + mention legale' : ''}
 - Section contact avec les coordonnees du mandataire et un lien mailto + tel
-- Footer avec mentions legales minimales (nom, reseau, "Non contractuel"${hasDvf || hasDpeData ? ', sources des donnees DVF/DPE' : ''})
+- Footer avec mentions légales minimales (nom, réseau, "Non contractuel"${hasDvf || hasDpeData ? ', sources des donnees DVF/DPE' : ''})
 - Pas de JavaScript — page purement statique
 - Le prix doit etre affiche en format francais (espaces, EUR)
 ${!hasVisuels ? '- Ne pas utiliser de placeholder d\'images — utiliser des blocs colores avec des icones CSS' : ''}
@@ -176,7 +176,7 @@ Reponds UNIQUEMENT avec un objet JSON valide :
 
   const annonceSection = input.annonce_storytelling
     ? `\nAnnonce storytelling deja generee (a integrer dans la section description) :\n${input.annonce_storytelling}`
-    : "\nPas d'annonce pre-generee — redige une description attractive du bien en te basant sur ses caracteristiques."
+    : "\nPas d'annonce pré-générée — rédige une description attractive du bien en te basant sur ses caractéristiques."
 
   const contactSection = [
     `Email : ${input.email_contact}`,
@@ -265,7 +265,7 @@ IMPORTANT : utiliser les VRAIES coordonnees ci-dessus dans les liens mailto: et 
 - Quartiers de reference : ${input.zone_geo.quartiers.join(", ") || input.bien.adresse}
 ${donneesLocalesSection}
 
-Genere le HTML complet. La page doit donner envie de contacter le mandataire pour une visite. Le titre professionnel affiche sur la page doit etre "Mandataire ${input.reseau}", jamais "Agent immobilier".${hasDvf || hasDpeData ? '\nLes donnees DVF et DPE sont des FAITS publics verifies — citer les sources dans le footer.' : ''}`
+Génère le HTML complet. La page doit donner envie de contacter le mandataire pour une visite. Le titre professionnel affiche sur la page doit etre "Mandataire ${input.reseau}", jamais "Agent immobilier".${hasDvf || hasDpeData ? '\nLes donnees DVF et DPE sont des FAITS publics verifies — citer les sources dans le footer.' : ''}`
 
   return { system, user }
 }

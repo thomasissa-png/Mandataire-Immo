@@ -57,58 +57,58 @@ export function buildArticleSeoPrompt(input: ArticleSeoInput): {
   const isLinkedin = input.format === 'linkedin'
   const wordRange = isLinkedin ? '400 et 600' : '900 et 1200'
 
-  const system = `Tu es un redacteur SEO specialise dans l'immobilier local en France. Tu rediges des ${isLinkedin ? 'articles courts pour LinkedIn' : 'articles de blog optimises pour le referencement naturel'}, destines a positionner un mandataire immobilier ${isLinkedin ? 'comme expert local sur LinkedIn' : 'en premiere page Google sur des requetes locales'}.
+  const system = `Tu es un rédacteur SEO spécialisé dans l'immobilier local en France. Tu rédiges des ${isLinkedin ? 'articles courts pour LinkedIn' : 'articles de blog optimisés pour le référencement naturel'}, destinés à positionner un mandataire immobilier ${isLinkedin ? 'comme expert local sur LinkedIn' : 'en première page Google sur des requêtes locales'}.
 
-## Regles anti-erreur absolues
-- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
-- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
-- Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
-- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
-- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
-- VARIATION PRIX : ne pas citer le prix au m2 exact a chaque paragraphe. Varier entre fourchettes, tendances qualitatives ("quartier accessible", "en hausse"), et references sans chiffre. Maximum 2 mentions chiffrees du prix/m2 par article.
+## Règles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, écoles, restaurants, marchés ou lieux qui ne sont pas dans les données fournies. Si les données locales détaillées ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de détails spécifiques.
+- NE JAMAIS inventer de chiffres d'expérience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- Ne JAMAIS écrire un nombre d'années d'expérience différent de celui fourni. Si annees_experience = ${input.annees_experience}, écrire "${input.annees_experience} ans", jamais un autre chiffre.
+- L'année courante est 2026. Ne jamais mentionner 2024 ou 2025 comme année courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le réseau du client utilise un autre terme.
+- VARIATION PRIX : ne pas citer le prix au m2 exact à chaque paragraphe. Varier entre fourchettes, tendances qualitatives ("quartier accessible", "en hausse"), et références sans chiffre. Maximum 2 mentions chiffrées du prix/m2 par article.
 
-REGLES EDITORIALES :
-- Chaque article fait entre ${wordRange} mots${isLinkedin ? ' — format LinkedIn, pas de frontmatter SEO' : ' — assez long pour le SEO, assez concis pour etre lu'}
-- Le mot-cle principal doit apparaitre dans le titre H1, le premier paragraphe, au moins 2 sous-titres H2, et dans la meta description
-- Densite de mots-cles naturelle : 1-2% max. Pas de keyword stuffing
-- Chaque article DOIT contenir des donnees locales reelles : prix au m2, noms de quartiers, ecoles, transports, commerces
+RÈGLES ÉDITORIALES :
+- Chaque article fait entre ${wordRange} mots${isLinkedin ? ' — format LinkedIn, pas de frontmatter SEO' : ' — assez long pour le SEO, assez concis pour être lu'}
+- Le mot-clé principal doit apparaître dans le titre H1, le premier paragraphe, au moins 2 sous-titres H2, et dans la meta description
+- Densité de mots-clés naturelle : 1-2% max. Pas de keyword stuffing
+- Chaque article DOIT contenir des données locales réelles : prix au m2, noms de quartiers, écoles, transports, commerces
 - Tutoie le lecteur (l'acheteur ou vendeur potentiel)
 - Le ton est expert mais accessible — un pro qui partage son savoir, pas un cours magistral
 - L'IA est INVISIBLE : ne jamais mentionner l'IA, l'intelligence artificielle, les algorithmes
-- Zero jargon marketing (pas de "optimiser votre investissement", "maximiser votre ROI")
-- Pas de promesse de resultat chiffree
-- Inclure un appel a l'action naturel vers ${input.prenom} en fin d'article
-- Le maillage interne est prepare : suggerer 2-3 liens internes vers d'autres articles potentiels
+- Zéro jargon marketing (pas de "optimiser votre investissement", "maximiser votre ROI")
+- Pas de promesse de résultat chiffrée
+- Inclure un appel à l'action naturel vers ${input.prenom} en fin d'article
+- Le maillage interne est préparé : suggérer 2-3 liens internes vers d'autres articles potentiels
 
-TYPES D'ARTICLES A PRODUIRE (varier) :
-1. Guide quartier : "Vivre a [quartier] : le guide complet pour s'installer"
-2. Guide vendeur : "Vendre son appartement a [ville] : les etapes cles"
-3. Guide acheteur : "Acheter a [quartier] : ce que les annonces ne disent pas"
-4. Marche local : "Prix immobilier a [ville] en [annee] : analyse quartier par quartier"
-5. Conseil pratique : "Premiere visite a [ville] : 7 choses a verifier avant de signer"
-6. Comparatif quartiers : "[Quartier A] vs [Quartier B] : ou acheter a [ville] ?"
+TYPES D'ARTICLES À PRODUIRE (varier) :
+1. Guide quartier : "Vivre à [quartier] : le guide complet pour s'installer"
+2. Guide vendeur : "Vendre son appartement à [ville] : les étapes clés"
+3. Guide acheteur : "Acheter à [quartier] : ce que les annonces ne disent pas"
+4. Marché local : "Prix immobilier à [ville] en [année] : analyse quartier par quartier"
+5. Conseil pratique : "Première visite à [ville] : 7 choses à vérifier avant de signer"
+6. Comparatif quartiers : "[Quartier A] vs [Quartier B] : où acheter à [ville] ?"
 
 STRUCTURE DE CHAQUE ARTICLE :
 1. **Frontmatter** : title, meta_description (155 car. max), slug, mot_cle_principal, mots_cles_secondaires
-2. **Introduction** (100-150 mots) : accroche concrete, promesse de l'article, mot-cle dans les 2 premieres phrases
-3. **Corps** (600-800 mots) : 3-5 sections H2, chacune avec un angle precis, des donnees locales, des conseils actionnables
-4. **Conclusion + CTA** (100-150 mots) : resume des points cles, appel a l'action vers ${input.prenom}
-5. **Liens internes suggeres** : 2-3 titres d'articles complementaires
+2. **Introduction** (100-150 mots) : accroche concrète, promesse de l'article, mot-clé dans les 2 premières phrases
+3. **Corps** (600-800 mots) : 3-5 sections H2, chacune avec un angle précis, des données locales, des conseils actionnables
+4. **Conclusion + CTA** (100-150 mots) : résumé des points clés, appel à l'action vers ${input.prenom}
+5. **Liens internes suggérés** : 2-3 titres d'articles complémentaires
 
 STRUCTURE JSON DE SORTIE :
-Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
+Réponds UNIQUEMENT avec un JSON valide, sans texte avant ni après :
 {
   "articles": [
     {
       "frontmatter": {
-        "title": "Titre H1 optimise SEO (50-65 caracteres)",
-        "meta_description": "Meta description (max 155 caracteres)",
-        "slug": "slug-url-optimise",
-        "mot_cle_principal": "requete cible principale",
-        "mots_cles_secondaires": ["requete 2", "requete 3"]
+        "title": "Titre H1 optimisé SEO (50-65 caractères)",
+        "meta_description": "Meta description (max 155 caractères)",
+        "slug": "slug-url-optimisé",
+        "mot_cle_principal": "requête cible principale",
+        "mots_cles_secondaires": ["requête 2", "requête 3"]
       },
       "contenu_markdown": "Article complet en Markdown avec titres H2/H3",
-      "liens_internes_suggeres": ["Titre article lie 1", "Titre article lie 2"],
+      "liens_internes_suggeres": ["Titre article lié 1", "Titre article lié 2"],
       "nombre_mots": 1050
     }
   ]
@@ -119,11 +119,11 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
     : input.zone_geo.ville
 
   const motsClesStr = input.mots_cles_cibles?.length
-    ? `Mots-cles cibles fournis : ${input.mots_cles_cibles.join(', ')}.`
-    : `Genere des mots-cles pertinents bases sur : "mandataire immobilier ${input.zone_geo.ville}", "vendre appartement ${input.zone_geo.ville}", "acheter maison ${input.zone_geo.quartiers[0] || input.zone_geo.ville}", "prix immobilier ${input.zone_geo.ville}", "estimation gratuite ${input.zone_geo.ville}".`
+    ? `Mots-clés cibles fournis : ${input.mots_cles_cibles.join(', ')}.`
+    : `Génère des mots-clés pertinents basés sur : "mandataire immobilier ${input.zone_geo.ville}", "vendre appartement ${input.zone_geo.ville}", "acheter maison ${input.zone_geo.quartiers[0] || input.zone_geo.ville}", "prix immobilier ${input.zone_geo.ville}", "estimation gratuite ${input.zone_geo.ville}".`
 
   const articlesExistantsStr = input.articles_deja_rediges?.length
-    ? `Articles deja publies (ne pas refaire les memes sujets) : ${input.articles_deja_rediges.join(', ')}.`
+    ? `Articles déjà publiés (ne pas refaire les mêmes sujets) : ${input.articles_deja_rediges.join(', ')}.`
     : ''
 
   const donneesLocalesDisponibles = input.donnees_locales &&
@@ -131,31 +131,31 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
 
   const donneesLocales = donneesLocalesDisponibles
     ? `
-DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references, ne rien inventer) :
+DONNÉES LOCALES VÉRIFIÉES (utilise UNIQUEMENT ces références, ne rien inventer) :
 ${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
 ${input.donnees_locales!.dernieres_transactions?.length ? `- Dernières transactions DVF : ${input.donnees_locales!.dernieres_transactions.slice(0, 3).map(t => `${t.type} ${t.surface}m² à ${t.prix_m2}€/m²`).join(', ')}` : ''}`
     : `
-DONNEES LOCALES : non disponibles. Rester general sur les references locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, ecoles, arrets de transport ou marches.`
+DONNÉES LOCALES : non disponibles. Rester général sur les références locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, écoles, arrêts de transport ou marchés.`
 
   const biensStr = input.biens.length > 0
     ? input.biens
         .map(
           (b) =>
-            `- ${b.titre} : ${b.type}, ${b.adresse}, ${b.prix.toLocaleString('fr-FR')}€, ${b.surface}m², ${b.pieces} pieces`
+            `- ${b.titre} : ${b.type}, ${b.adresse}, ${b.prix.toLocaleString('fr-FR')}€, ${b.surface}m², ${b.pieces} pièces`
         )
         .join('\n')
     : 'Aucun bien actif.'
 
-  const user = `Redige ${input.nombre_articles} ${isLinkedin ? 'article(s) LinkedIn (400-600 mots)' : 'article(s) SEO local (900-1200 mots)'} pour ${input.prenom} ${input.nom}, mandataire chez ${input.reseau}.
+  const user = `Rédige ${input.nombre_articles} ${isLinkedin ? 'article(s) LinkedIn (400-600 mots)' : 'article(s) SEO local (900-1200 mots)'} pour ${input.prenom} ${input.nom}, mandataire chez ${input.reseau}.
 
 PROFIL DU MANDATAIRE :
 - Zone : ${input.zone_geo.ville} (${input.zone_geo.departement}), quartiers : ${quartiersStr}
-- Specialite : ${input.specialite}
-- Annees d'experience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais ecrire un autre nombre)
+- Spécialité : ${input.specialite}
+- Années d'expérience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais écrire un autre nombre)
 - Volume : ${input.nb_transactions_an} transactions/an
 - Ton : ${input.ton}
 - Valeurs : ${input.valeurs}
-- Ce qui la/le differencie : ${input.ce_qui_differencie}
+- Ce qui la/le différencie : ${input.ce_qui_differencie}
 - Cible clients : ${input.cible_clients}
 - Gamme de prix : ${input.gamme_prix}
 ${input.reseaux_sociaux.site_web ? `- Site web : ${input.reseaux_sociaux.site_web}` : ''}
@@ -167,14 +167,14 @@ ${donneesLocales}
 CONSIGNES SEO :
 ${motsClesStr}
 ${articlesExistantsStr}
-${input.mois_cible ? `Mois de publication cible : ${input.mois_cible} — adapter les references saisonnieres.` : ''}
+${input.mois_cible ? `Mois de publication cible : ${input.mois_cible} — adapter les références saisonnières.` : ''}
 
-- Varie les types d'articles (guide quartier, guide vendeur, guide acheteur, marche local, conseil pratique)
-- Chaque article doit cibler une requete longue traine differente
-- Utilise des donnees locales precises — pas de "proche commerces" mais le nom du commerce — UNIQUEMENT si ces noms sont dans les donnees locales ci-dessus. NE RIEN INVENTER.
+- Varie les types d'articles (guide quartier, guide vendeur, guide acheteur, marché local, conseil pratique)
+- Chaque article doit cibler une requête longue traîne différente
+- Utilise des données locales précises — pas de "proche commerces" mais le nom du commerce — UNIQUEMENT si ces noms sont dans les données locales ci-dessus. NE RIEN INVENTER.
 - L'article doit apporter une vraie valeur au lecteur, pas juste du remplissage SEO
-- Le CTA en fin d'article doit etre naturel : ${input.prenom} est presente(e) comme l'expert(e) local(e) a contacter
-- L'annee courante est 2026. Toute reference temporelle doit utiliser 2026, jamais 2024 ou 2025.`
+- Le CTA en fin d'article doit être naturel : ${input.prenom} est présenté(e) comme l'expert(e) local(e) à contacter
+- L'année courante est 2026. Toute référence temporelle doit utiliser 2026, jamais 2024 ou 2025.`
 
   return { system, user }
 }

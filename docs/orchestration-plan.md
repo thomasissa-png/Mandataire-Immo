@@ -185,12 +185,12 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 - **2026-03-25 S3** : Clôture session. Phase 6 (pipeline IA) préparée mais non lancée.
 
 ## État pour reprise prochaine session
-- **Phases terminées** : 0, 1, 2, 3, 4, 5, 6 (pipeline IA livré — 9.2/10 revue V3)
-- **Phase en cours** : 7 (qualité production + nouvelles features)
-  - Dashboard réécrit en "coach marketing" — 18/18 gates QA PASS
-  - Landing page enrichie (coaching, HowItWorks, FAQ)
-  - Onboarding corrigé (mobile, navigation, bannière profil incomplet)
-  - Spec "Upload photos + annonces complètes" terminée (docs/product/photo-upload-spec.md)
-- **Prochaine phase** : 8 — Implémentation upload photos + annonces + page édition profil
-- **Blockers** : ANTHROPIC_API_KEY (clé payante), migration 008 à exécuter
+- **Phases terminées** : 0, 1, 2, 3, 4, 5, 6 (pipeline IA livré — 9.2/10 revue V3), 7 (upload photos, profil, onboarding serveur, email nurturing, dashboard refondu, migration Umami)
+- **Phase en cours** : 8 (corrections P0/P1 Sophie + polish pré-lancement)
+  - Session 8 (2026-03-31) : 5 P0 corrigés (lien annonce, bug meublés, témoignages, à propos, accents)
+  - 5 P1 corrigés (modifier bien, monthly update, suivi admin, FAQ accordéon, comptes onboarding)
+  - Intégration Resend (mode log-only sans API key)
+  - Accents UTF-8 corrigés dans 13 fichiers prompts
+- **Prochaine phase** : 9 — Promesses restantes + Stripe + tests + re-audit Sophie
+- **Blockers** : ANTHROPIC_API_KEY, RESEND_API_KEY, STRIPE_*, migrations SQL, INPI
 - **Pour reprendre** : voir mémo de reprise dans project-context.md

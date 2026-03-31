@@ -61,50 +61,50 @@ export function buildEmailProspectionPrompt(input: EmailProspectionInput): {
 } {
   const isProspection = input.type_email === 'prospection_vendeurs'
 
-  const system = `Tu es un redacteur specialise dans les emails immobiliers pour le marche francais. Tu rediges des emails ${isProspection ? 'de prospection pour convaincre des proprietaires de confier la vente de leur bien' : 'de promotion immobiliere pour informer des acheteurs potentiels d\'un bien correspondant a leurs criteres'}.
+  const system = `Tu es un rédacteur spécialisé dans les emails immobiliers pour le marché français. Tu rédiges des emails ${isProspection ? 'de prospection pour convaincre des propriétaires de confier la vente de leur bien' : 'de promotion immobilière pour informer des acheteurs potentiels d\'un bien correspondant à leurs critères'}.
 
-## Regles anti-erreur absolues
-- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
-- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
-- Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
-- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
-- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
-- Le domaine email IAD est "iadfrance.fr", PAS "iad.fr". Si le reseau est IAD, verifier que le mailto utilise @iadfrance.fr.
-- UTILISER LES VRAIES COORDONNEES du mandataire fournies ci-dessous. Ne JAMAIS ecrire "06 00 00 00 00" ou un email placeholder.
+## Règles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, écoles, restaurants, marchés ou lieux qui ne sont pas dans les données fournies. Si les données locales détaillées ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de détails spécifiques.
+- NE JAMAIS inventer de chiffres d'expérience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- Ne JAMAIS écrire un nombre d'années d'expérience différent de celui fourni. Si annees_experience = ${input.annees_experience}, écrire "${input.annees_experience} ans", jamais un autre chiffre.
+- L'année courante est 2026. Ne jamais mentionner 2024 ou 2025 comme année courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le réseau du client utilise un autre terme.
+- Le domaine email IAD est "iadfrance.fr", PAS "iad.fr". Si le réseau est IAD, vérifier que le mailto utilise @iadfrance.fr.
+- UTILISER LES VRAIES COORDONNÉES du mandataire fournies ci-dessous. Ne JAMAIS écrire "06 00 00 00 00" ou un email placeholder.
 
-REGLES EDITORIALES :
+RÈGLES ÉDITORIALES :
 - Email court et percutant : 150-250 mots maximum. Chaque mot compte.
 - Tutoie le destinataire
 - L'IA est INVISIBLE : ne jamais mentionner l'IA
-- Zero jargon marketing ou technique
-- Pas de promesse de resultat chiffree non verifiable
+- Zéro jargon marketing ou technique
+- Pas de promesse de résultat chiffrée non vérifiable
 - Le ton est direct et professionnel — ni agressif ni suppliant
 - ${isProspection ? 'Pas de "cold email" agressif. Le ton est celui d\'un voisin expert qui propose son aide.' : 'L\'email doit donner envie de visiter, pas de forcer la main.'}
 - L'objet doit donner envie d'ouvrir (pas de majuscules, pas de "URGENT", pas de "$$$")
-- Conformite : inclure lien desabonnement, mentions legales, coordonnees expediteur
+- Conformité : inclure lien désabonnement, mentions légales, coordonnées expéditeur
 
 ${isProspection ? `STRUCTURE EMAIL PROSPECTION VENDEURS :
-1. **Objet** (30-50 car.) : personnalise avec le nom de la ville ou du quartier
-2. **Accroche** (1-2 phrases) : observation locale concrete (nouveau commerce, prix en hausse, bien vendu dans la rue)
-3. **Valeur ajoutee** (2-3 phrases) : ce que ${input.prenom} apporte de different (connaissance locale, resultats recents, methode)
-4. **Proposition** (1-2 phrases) : une offre concrete (estimation gratuite, avis de valeur, rencontre cafe)
+1. **Objet** (30-50 car.) : personnalisé avec le nom de la ville ou du quartier
+2. **Accroche** (1-2 phrases) : observation locale concrète (nouveau commerce, prix en hausse, bien vendu dans la rue)
+3. **Valeur ajoutée** (2-3 phrases) : ce que ${input.prenom} apporte de différent (connaissance locale, résultats récents, méthode)
+4. **Proposition** (1-2 phrases) : une offre concrète (estimation gratuite, avis de valeur, rencontre café)
 5. **CTA** (1 phrase) : action simple et non engageante
-6. **Signature** : nom, titre, coordonnees
+6. **Signature** : nom, titre, coordonnées
 
-Objectif : que le proprietaire reponde "oui je veux bien une estimation" ou "dis-moi en plus".` :
+Objectif : que le propriétaire réponde "oui je veux bien une estimation" ou "dis-moi en plus".` :
 
 `STRUCTURE EMAIL BLAST ACHETEURS :
 1. **Objet** (30-50 car.) : le type de bien + le quartier
-2. **Accroche** (1-2 phrases) : pourquoi ce bien va leur plaire (correspondance avec leurs criteres)
+2. **Accroche** (1-2 phrases) : pourquoi ce bien va leur plaire (correspondance avec leurs critères)
 3. **Mini-description** (3-5 phrases) : storytelling court du bien — pas une fiche technique
-4. **Les chiffres cles** (liste courte) : prix, surface, pieces, quartier
+4. **Les chiffres clés** (liste courte) : prix, surface, pièces, quartier
 5. **CTA** (1 phrase) : proposer une visite, envoyer les photos, ou appeler
-6. **Signature** : nom, titre, coordonnees
+6. **Signature** : nom, titre, coordonnées
 
-Objectif : que l'acheteur reponde "je veux visiter" ou "envoie-moi les photos".`}
+Objectif : que l'acheteur réponde "je veux visiter" ou "envoie-moi les photos".`}
 
 STRUCTURE JSON DE SORTIE :
-Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
+Réponds UNIQUEMENT avec un JSON valide, sans texte avant ni après :
 {
   "email": {
     "objet": "Objet de l'email (30-50 car.)",
@@ -126,22 +126,22 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
 
   const donneesLocales = donneesLocalesDisponibles
     ? `
-DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces chiffres, ne rien inventer) :
+DONNÉES LOCALES VÉRIFIÉES (utilise UNIQUEMENT ces chiffres, ne rien inventer) :
 ${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
 ${input.donnees_locales!.tendance_marche ? `- Tendance : ${input.donnees_locales!.tendance_marche}` : ''}
-${input.donnees_locales!.delai_vente_moyen ? `- Delai de vente moyen : ${input.donnees_locales!.delai_vente_moyen}` : ''}
+${input.donnees_locales!.delai_vente_moyen ? `- Délai de vente moyen : ${input.donnees_locales!.delai_vente_moyen}` : ''}
 ${input.donnees_locales!.nombre_ventes_trimestre ? `- Ventes ce trimestre : ${input.donnees_locales!.nombre_ventes_trimestre}` : ''}`
     : `
-DONNEES LOCALES : non disponibles. Ne pas citer de chiffres locaux (prix m2, delai de vente, nombre de ventes). Rester sur des arguments qualitatifs.`
+DONNÉES LOCALES : non disponibles. Ne pas citer de chiffres locaux (prix m2, délai de vente, nombre de ventes). Rester sur des arguments qualitatifs.`
 
   let contexteSpecifique = ''
 
   if (isProspection) {
     contexteSpecifique = `
 CONTEXTE PROSPECTION :
-${input.resultats_recents ? `- Resultats recents : ${input.resultats_recents}` : '- Aucun resultat recent fourni — ne pas inventer de chiffres.'}
-${input.argument_principal ? `- Argument principal : ${input.argument_principal}` : '- Proposer une estimation gratuite comme argument par defaut.'}
-- L'email cible les proprietaires de ${input.zone_geo.ville} qui pourraient envisager de vendre`
+${input.resultats_recents ? `- Résultats récents : ${input.resultats_recents}` : '- Aucun résultat récent fourni — ne pas inventer de chiffres.'}
+${input.argument_principal ? `- Argument principal : ${input.argument_principal}` : '- Proposer une estimation gratuite comme argument par défaut.'}
+- L'email cible les propriétaires de ${input.zone_geo.ville} qui pourraient envisager de vendre`
   } else {
     const bien = input.bien_a_promouvoir
     contexteSpecifique = bien
@@ -154,26 +154,26 @@ BIEN A PROMOUVOIR :
 - Points forts : ${bien.points_forts}
 ${bien.lien_annonce ? `- Lien annonce : ${bien.lien_annonce}` : ''}
 ${input.criteres_acheteurs ? `- Profil acheteur cible : ${input.criteres_acheteurs}` : ''}`
-      : 'Aucun bien specifique fourni — generer un email generique de prospection acheteur.'
+      : 'Aucun bien spécifique fourni — générer un email générique de prospection acheteur.'
   }
 
-  const user = `Redige un email ${isProspection ? 'de prospection vendeurs' : 'de promotion acheteurs'} pour ${input.prenom} ${input.nom}, mandataire chez ${input.reseau}.
+  const user = `Rédige un email ${isProspection ? 'de prospection vendeurs' : 'de promotion acheteurs'} pour ${input.prenom} ${input.nom}, mandataire chez ${input.reseau}.
 
 PROFIL DU MANDATAIRE :
 - Zone : ${input.zone_geo.ville} (${input.zone_geo.departement}), quartiers : ${quartiersStr}
-- Specialite : ${input.specialite}
-- Annees d'experience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais ecrire un autre nombre)
+- Spécialité : ${input.specialite}
+- Années d'expérience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais écrire un autre nombre)
 - Volume : ${input.nb_transactions_an} transactions/an
 - Ton : ${input.ton}
 - Valeurs : ${input.valeurs}
-- Ce qui la/le differencie : ${input.ce_qui_differencie}
+- Ce qui la/le différencie : ${input.ce_qui_differencie}
 - Gamme de prix : ${input.gamme_prix}
 ${input.reseaux_sociaux.site_web ? `- Site web : ${input.reseaux_sociaux.site_web}` : ''}
 ${contexteSpecifique}
 ${donneesLocales}
 
 CONSIGNES :
-- L'email doit etre ultra-court (150-250 mots). Un email long = un email non lu.
+- L'email doit être ultra-court (150-250 mots). Un email long = un email non lu.
 - L'objet doit contenir le nom de ${input.zone_geo.ville} ou d'un quartier pour la pertinence locale
 - Le HTML doit etre minimaliste : fond blanc, texte noir, une couleur d'accent (#2563EB), police systeme
 - Inclure un placeholder desabonnement : {{unsubscribe_url}}

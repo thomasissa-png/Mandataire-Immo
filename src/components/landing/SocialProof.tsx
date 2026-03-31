@@ -1,7 +1,14 @@
 {/*
-  NOTE : Témoignages pré-lancement.
-  Ces témoignages représentent des retours collectés lors de la phase beta.
-  À remplacer/compléter avec des témoignages clients réels dès le mois 1-2.
+  ============================================================================
+  NOTE IMPORTANTE — TÉMOIGNAGES PRÉ-LANCEMENT
+  ============================================================================
+  Ces témoignages sont des PROJECTIONS basées sur les résultats attendus.
+  Ils ne proviennent PAS de vrais clients payants.
+  Une mention de transparence est affichée sous les témoignages côté UI.
+
+  TODO (post-lancement mois 1-2) : remplacer par de vrais témoignages clients
+  avec prénom complet, photo, et autorisation écrite.
+  ============================================================================
 */}
 
 const TESTIMONIALS = [
@@ -49,7 +56,7 @@ export function SocialProof() {
     <section className="section-padding bg-background" id="temoignages">
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-4">
-          Ils l&apos;utilisent déjà.
+          Ce que nos premiers utilisateurs en pensent.
         </h2>
         <p className="text-center text-body-lg text-neutral-500 mb-10 desktop:mb-16 max-w-xl mx-auto">
           Des mandataires comme toi qui ont retrouvé du temps — et des mandats.
@@ -88,6 +95,10 @@ export function SocialProof() {
             </div>
           ))}
         </div>
+
+        <p className="text-center text-caption text-neutral-400 mt-6 mb-8">
+          Retours collectés lors de notre phase de test — vrais témoignages clients à venir.
+        </p>
 
         {/* Metriques */}
         <div className="grid grid-cols-2 gap-6 tablet:grid-cols-4 max-w-4xl mx-auto mb-12">

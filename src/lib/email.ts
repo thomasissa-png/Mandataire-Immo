@@ -1,11 +1,24 @@
 /**
  * Utilitaire d'envoi d'emails — ImmoCrew
  *
- * Mode "log only" par défaut : enregistre dans email_logs + console.log.
- * Quand EMAIL_PROVIDER est configuré (ex: "resend"), l'envoi réel sera branché ici.
+ * Si RESEND_API_KEY est configuré : envoi réel via Resend.
+ * Sinon : mode "log only" — console.log + enregistrement dans email_logs.
  */
 
+import { Resend } from "resend"
 import { query } from "@/lib/db"
+
+// ---------------------------------------------------------------------------
+// Resend client — instancié uniquement si la clé API est présente
+// ---------------------------------------------------------------------------
+
+const DEFAULT_SENDER = "ImmoCrew <contact@immocrew.fr>"
+
+function getResendClient(): Resend | null {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) return null
+  return new Resend(apiKey)
+}
 
 // ---------------------------------------------------------------------------
 // Utilitaire — URL de désinscription
@@ -69,11 +82,10 @@ export async function isEmailSent(
 // ---------------------------------------------------------------------------
 
 /**
- * Envoie un email (ou le log en mode développement).
+ * Envoie un email via Resend (ou log en console si RESEND_API_KEY absent).
  *
  * - Vérifie l'idempotence via email_logs avant d'envoyer.
- * - En mode "log only" (pas de EMAIL_PROVIDER), log dans la console + email_logs.
- * - Prêt pour Resend/Postmark : ajouter le provider dans le switch ci-dessous.
+ * - Sender par défaut : ImmoCrew <contact@immocrew.fr>
  */
 export async function sendEmail(params: SendEmailParams): Promise<SendEmailResult> {
   const { to, subject, html, text, clientId, emailType, metadata = {} } = params
@@ -88,40 +100,45 @@ export async function sendEmail(params: SendEmailParams): Promise<SendEmailResul
     }
   }
 
-  const provider = process.env.EMAIL_PROVIDER
+  const resend = getResendClient()
 
   try {
-    // 2. Dispatch selon le provider
-    switch (provider) {
-      // Quand Resend sera configuré :
-      // case "resend":
-      //   await sendViaResend({ to, subject, html, text })
-      //   break
+    // 2. Envoi via Resend ou mode "log only"
+    if (resend) {
+      const { error } = await resend.emails.send({
+        from: DEFAULT_SENDER,
+        to,
+        subject,
+        html,
+        text,
+      })
 
-      default:
-        // Mode "log only" — pas de SMTP réel
-        console.log("─────────────────────────────────────────")
-        console.log(`[EMAIL] Mode log only — pas d'envoi réel`)
-        console.log(`  To:      ${to}`)
-        console.log(`  Subject: ${subject}`)
-        console.log(`  Type:    ${emailType}`)
-        console.log(`  Client:  ${clientId}`)
-        console.log(`  Text preview: ${text.substring(0, 200)}...`)
-        console.log("─────────────────────────────────────────")
-        break
+      if (error) {
+        throw new Error(`Resend error: ${error.message}`)
+      }
+    } else {
+      // Mode "log only" — pas de clé Resend configurée
+      console.log("─────────────────────────────────────────")
+      console.log(`[EMAIL] Mode log only — RESEND_API_KEY absent`)
+      console.log(`  To:      ${to}`)
+      console.log(`  Subject: ${subject}`)
+      console.log(`  Type:    ${emailType}`)
+      console.log(`  Client:  ${clientId}`)
+      console.log(`  Text preview: ${text.substring(0, 200)}...`)
+      console.log("─────────────────────────────────────────")
     }
 
     // 3. Enregistrer dans email_logs
     await query(
       `INSERT INTO email_logs (client_id, email_type, status, metadata)
        VALUES ($1, $2, 'sent', $3)`,
-      [clientId, emailType, JSON.stringify({ to, subject, provider: provider ?? "log_only", ...metadata })]
+      [clientId, emailType, JSON.stringify({ to, subject, provider: resend ? "resend" : "log_only", ...metadata })]
     )
 
     return {
       success: true,
       status: "sent",
-      message: `Email ${emailType} envoyé à ${to}${!provider ? " (log only)" : ""}`,
+      message: `Email ${emailType} envoyé à ${to}${!resend ? " (log only)" : ""}`,
     }
   } catch (err) {
     console.error(`[EMAIL] Erreur envoi ${emailType} à ${to}:`, err)

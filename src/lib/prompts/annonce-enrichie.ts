@@ -1,7 +1,7 @@
 /**
  * Prompt — Annonce immobiliere enrichie DVF/DPE (version longue + courte)
  * Utilise pour : Versiroom integration — annonce avec donnees publiques verifiees
- * Genere 2 versions : longue storytelling ImmoCrew (600-800 mots) + courte portail (SeLoger 1500 car. max)
+ * Génère 2 versions : longue storytelling ImmoCrew (600-800 mots) + courte portail (SeLoger 1500 car. max)
  * Modele cible : Claude Sonnet (meilleur ratio qualite/cout pour du redactionnel long)
  */
 
@@ -115,7 +115,7 @@ export function buildAnnonceEnrichiePrompt(input: AnnonceEnrichieInput): {
   }
   const dpeLabel = dpeLabels[input.dpe.classe_dpe] || input.dpe.classe_dpe
 
-  const system = `Tu es un redacteur immobilier expert du marche francais. Tu rediges des annonces immobilieres storytelling enrichies avec des donnees publiques verifiees (DVF, DPE).
+  const system = `Tu es un rédacteur immobilier expert du marché français. Tu rédiges des annonces immobilières storytelling enrichies avec des donnees publiques vérifiées (DVF, DPE).
 
 ## Regles anti-erreur absolues
 - NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.

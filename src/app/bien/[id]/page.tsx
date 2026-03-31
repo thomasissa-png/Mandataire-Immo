@@ -164,8 +164,8 @@ export default async function PropertyPageRoute({ params }: PageProps) {
           </p>
           {hasStaging && (
             <p className="text-small text-neutral-500 mt-1">
-              Home staging virtuel — les visuels meubls sont des projections non contractuelles.
-              Le bien est livre dans son etat actuel (photos originales disponibles ci-dessus).
+              Home staging virtuel — les visuels meublés sont des projections non contractuelles.
+              Le bien est livré dans son état actuel (photos originales disponibles ci-dessus).
             </p>
           )}
         </div>

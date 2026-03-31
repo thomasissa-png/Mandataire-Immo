@@ -68,71 +68,71 @@ export function buildScriptVideoPrompt(input: ScriptVideoInput): {
   const confortLevel = input.confort_camera || 'debutant'
 
   const confortInstructions: Record<string, string> = {
-    debutant: `Le mandataire n'est pas a l'aise devant la camera (ou n'a pas precise son niveau). Les scripts doivent etre :
+    debutant: `Le mandataire n'est pas à l'aise devant la caméra (ou n'a pas précisé son niveau). Les scripts doivent être :
 - Courts (15-30 secondes max)
-- Avec des textes a l'ecran plutot que de la voix off quand possible
+- Avec des textes à l'écran plutôt que de la voix off quand possible
 - Des plans simples (pas de mouvements complexes)
-- Des phrases courtes et naturelles (comme si on parlait a un ami)
-- Option "face camera" minimale — privilegier les plans du bien/quartier avec texte superpose
-- PRIVILEGIER le format diaporama : photos avec texte anime, musique tendance, pas besoin de se filmer`,
+- Des phrases courtes et naturelles (comme si on parlait à un ami)
+- Option "face caméra" minimale — privilégier les plans du bien/quartier avec texte superposé
+- PRIVILÉGIER le format diaporama : photos avec texte animé, musique tendance, pas besoin de se filmer`,
 
-    a_laise: `Le mandataire est a l'aise devant la camera. Les scripts peuvent :
+    a_laise: `Le mandataire est à l'aise devant la caméra. Les scripts peuvent :
 - Durer 30-60 secondes
-- Alterner face camera et plans du bien/quartier
+- Alterner face caméra et plans du bien/quartier
 - Inclure de la voix off naturelle
 - Proposer des transitions dynamiques`,
 
-    expert: `Le mandataire est tres a l'aise devant la camera. Les scripts peuvent :
-- Durer jusqu'a 90 secondes
-- Inclure des sequences face camera elaborees
+    expert: `Le mandataire est très à l'aise devant la caméra. Les scripts peuvent :
+- Durer jusqu'à 90 secondes
+- Inclure des séquences face caméra élaborées
 - Proposer des formats storytelling complets
-- Utiliser des techniques avancees (POV, time-lapse, before/after)`
+- Utiliser des techniques avancées (POV, time-lapse, before/after)`
   }
 
   const diaporamaInstructions = input.type_video === 'diaporama' || (confortLevel === 'debutant' && input.type_video !== 'face_camera')
     ? `
 FORMAT DIAPORAMA (prioritaire pour ce mandataire) :
-- Les scripts "diaporama" utilisent des PHOTOS statiques avec texte anime par-dessus
+- Les scripts "diaporama" utilisent des PHOTOS statiques avec texte animé par-dessus
 - Pas besoin de se filmer — le mandataire prend des photos et l'appli fait le montage
 - Structure : photo 1 (3s) + texte hook -> photo 2 (3s) + texte info -> photo 3 (3s) + texte CTA
-- Indiquer pour chaque scene : quelle photo prendre (ex: "Photo de la facade depuis le trottoir d'en face")
-- Suggerer l'appli de montage : CapCut ou InShot (gratuit)
-- Musique tendance Instagram suggeree pour chaque script`
+- Indiquer pour chaque scène : quelle photo prendre (ex: "Photo de la façade depuis le trottoir d'en face")
+- Suggérer l'appli de montage : CapCut ou InShot (gratuit)
+- Musique tendance Instagram suggérée pour chaque script`
     : ''
 
-  const system = `Tu es un scenariste specialise dans les videos courtes pour les professionnels de l'immobilier. Tu crees des scripts Reels/Shorts detailles, scene par scene, que le mandataire peut tourner seul avec son smartphone.
+  const system = `Tu es un scénariste spécialisé dans les vidéos courtes pour les professionnels de l'immobilier. Tu crées des scripts Reels/Shorts détaillés, scène par scène, que le mandataire peut tourner seul avec son smartphone.
 
-## Regles anti-erreur absolues
-- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
-- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
-- Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
-- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
-- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+## Règles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, écoles, restaurants, marchés ou lieux qui ne sont pas dans les données fournies. Si les données locales détaillées ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de détails spécifiques.
+- NE JAMAIS inventer de chiffres d'expérience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- Ne JAMAIS écrire un nombre d'années d'expérience différent de celui fourni. Si annees_experience = ${input.annees_experience}, écrire "${input.annees_experience} ans", jamais un autre chiffre.
+- L'année courante est 2026. Ne jamais mentionner 2024 ou 2025 comme année courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le réseau du client utilise un autre terme.
 
-REGLES EDITORIALES :
-- Chaque script est decoupe scene par scene avec : duree, texte a dire OU texte a l'ecran, indication visuelle, musique/son suggere
-- Les scripts sont adaptes au niveau de confort camera du mandataire
-- Chaque video doit raconter quelque chose — pas de contenu generique "regardez ce bel appart"
-- Elements locaux obligatoires : nom du quartier, rue, commerce, point de repere
-- Tutoie le spectateur dans les textes a l'ecran et la voix off
+RÈGLES ÉDITORIALES :
+- Chaque script est découpé scène par scène avec : durée, texte à dire OU texte à l'écran, indication visuelle, musique/son suggéré
+- Les scripts sont adaptés au niveau de confort caméra du mandataire
+- Chaque vidéo doit raconter quelque chose — pas de contenu générique "regardez ce bel appart"
+- Éléments locaux obligatoires : nom du quartier, rue, commerce, point de repère
+- Tutoie le spectateur dans les textes à l'écran et la voix off
 - L'IA est INVISIBLE : ne jamais mentionner l'IA
-- Pas de materiel pro requis — tout se tourne au smartphone
-- Les premieres 3 secondes sont CRUCIALES : hook visuel ou textuel percutant
+- Pas de matériel pro requis — tout se tourne au smartphone
+- Les premières 3 secondes sont CRUCIALES : hook visuel ou textuel percutant
 - Chaque script se termine par un CTA clair (appeler ${input.prenom}, visiter le profil, envoyer un message)
 
 ${confortInstructions[confortLevel]}
 ${diaporamaInstructions}
 
-TYPES DE VIDEOS A ALTERNER :
-1. Visite bien : mini-visite guidee d'un bien en vente (le best-seller des Reels immo)
-2. Decouverte quartier : balade dans un quartier avec tips locaux
-3. Conseil pro : astuce acheteur/vendeur delivree en face camera ou texte
-4. Coulisse metier : une journee type, une estimation, une signature
-5. Avant/apres : transformation d'un bien, ou difference entre annonce classique et annonce storytelling
-6. Tendance marche : chiffre cle du marche local presente de maniere visuelle
+TYPES DE VIDÉOS À ALTERNER :
+1. Visite bien : mini-visite guidée d'un bien en vente (le best-seller des Reels immo)
+2. Découverte quartier : balade dans un quartier avec tips locaux
+3. Conseil pro : astuce acheteur/vendeur délivrée en face caméra ou texte
+4. Coulisse métier : une journée type, une estimation, une signature
+5. Avant/après : transformation d'un bien, ou différence entre annonce classique et annonce storytelling
+6. Tendance marché : chiffre clé du marché local présenté de manière visuelle
 
 STRUCTURE JSON DE SORTIE :
-Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
+Réponds UNIQUEMENT avec un JSON valide, sans texte avant ni après :
 {
   "scripts": [
     {
@@ -144,13 +144,13 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
         {
           "numero": 1,
           "duree_secondes": 5,
-          "visuel": "Description precise de ce qu'on voit a l'ecran",
-          "texte_ecran": "Texte superpose a l'ecran (ou null si voix off)",
+          "visuel": "Description précise de ce qu'on voit à l'écran",
+          "texte_ecran": "Texte superposé à l'écran (ou null si voix off)",
           "voix_off": "Ce que le mandataire dit (ou null si texte ecran)",
           "indication_tournage": "Conseil pratique pour filmer cette scene"
         }
       ],
-      "musique_suggeree": "Type de musique ou titre/artiste sugger",
+      "musique_suggeree": "Type de musique ou titre/artiste suggéré",
       "cta_final": "L'appel a l'action de fin",
       "brief_tournage": "Resume des lieux et moments necessaires pour tourner ce Reel"
     }
@@ -166,16 +166,16 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
   const biensStr = biensATraiter
     .map(
       (b, i) =>
-        `Bien ${i + 1}: ${b.titre} — ${b.type}, ${b.adresse}, ${b.prix.toLocaleString('fr-FR')}€, ${b.surface}m², ${b.pieces} pieces. Points forts: ${b.points_forts}`
+        `Bien ${i + 1}: ${b.titre} — ${b.type}, ${b.adresse}, ${b.prix.toLocaleString('fr-FR')}€, ${b.surface}m², ${b.pieces} pièces. Points forts: ${b.points_forts}`
     )
     .join('\n')
 
   const sujetsInstr = input.sujets_prioritaires?.length
-    ? `Sujets prioritaires a traiter : ${input.sujets_prioritaires.join(', ')}.`
+    ? `Sujets prioritaires à traiter : ${input.sujets_prioritaires.join(', ')}.`
     : ''
 
   const historiqueInstr = input.historique_sujets?.length
-    ? `Sujets deja traites (a ne pas repeter) : ${input.historique_sujets.join(', ')}.`
+    ? `Sujets déjà traités (à ne pas répéter) : ${input.historique_sujets.join(', ')}.`
     : ''
 
   const donneesLocalesDisponibles = input.donnees_locales &&
@@ -183,39 +183,39 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres :
 
   const donneesLocales = donneesLocalesDisponibles
     ? `
-DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references, ne rien inventer) :
+DONNÉES LOCALES VÉRIFIÉES (utilise UNIQUEMENT ces références, ne rien inventer) :
 ${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
 ${input.donnees_locales!.dernieres_transactions?.length ? `- Dernières transactions DVF : ${input.donnees_locales!.dernieres_transactions.slice(0, 3).map(t => `${t.type} ${t.surface}m² à ${t.prix_m2}€/m²`).join(', ')}` : ''}`
     : `
-DONNEES LOCALES : non disponibles. Rester general sur les references locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, ecoles, arrets de transport ou marches.`
+DONNÉES LOCALES : non disponibles. Rester général sur les références locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, écoles, arrêts de transport ou marchés.`
 
-  const user = `Cree ${input.nombre_scripts} script(s) video pour ${input.prenom} ${input.nom}, mandataire chez ${input.reseau}.
+  const user = `Crée ${input.nombre_scripts} script(s) vidéo pour ${input.prenom} ${input.nom}, mandataire chez ${input.reseau}.
 
 PROFIL DU MANDATAIRE :
 - Zone : ${input.zone_geo.ville} (${input.zone_geo.departement}), quartiers : ${quartiersStr}
-- Specialite : ${input.specialite}
-- Experience : ${input.nb_transactions_an} transactions/an
+- Spécialité : ${input.specialite}
+- Expérience : ${input.nb_transactions_an} transactions/an
 - Ton : ${input.ton}
 - Valeurs : ${input.valeurs}
-- Ce qui la/le differencie : ${input.ce_qui_differencie}
+- Ce qui la/le différencie : ${input.ce_qui_differencie}
 - Cible clients : ${input.cible_clients}
-- Annees d'experience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais ecrire un autre nombre)
-- Confort camera : ${confortLevel}
+- Années d'expérience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais écrire un autre nombre)
+- Confort caméra : ${confortLevel}
 - Format : ${input.format === 'mix' ? 'Mix Reels Instagram + YouTube Shorts' : input.format === 'reel' ? 'Reels Instagram' : 'YouTube Shorts'}
-- Type video prefere : ${input.type_video === 'diaporama' ? 'Diaporama (photos + texte, sans se filmer)' : input.type_video === 'face_camera' ? 'Face camera' : 'Mix (adapter au confort camera)'}
+- Type vidéo préféré : ${input.type_video === 'diaporama' ? 'Diaporama (photos + texte, sans se filmer)' : input.type_video === 'face_camera' ? 'Face caméra' : 'Mix (adapter au confort caméra)'}`
 
 BIENS DISPONIBLES POUR LES SCRIPTS :
-${biensStr || 'Aucun bien actif — concentre les scripts sur les conseils, le quartier et le marche.'}
+${biensStr || 'Aucun bien actif — concentre les scripts sur les conseils, le quartier et le marché.'}
 ${donneesLocales}
 
 CONSIGNES :
 ${sujetsInstr}
 ${historiqueInstr}
-- Varie les types de videos (visite, quartier, conseil, coulisse, avant/apres, marche)
-- ${input.bien_unique ? 'Ce script est pour un Boost Mandat : concentre-toi sur ce bien specifique. Mets en valeur ses points forts uniques.' : 'Ne fais pas plus de 50% de videos "visite bien" — alterner avec du contenu conseil et quartier.'}
-- Chaque script doit etre realisable par ${input.prenom} seul(e) avec un smartphone
-- Les indications de tournage doivent etre concretes : "Filme depuis l'entree en marchant lentement vers le salon" pas "Plan du salon"
-- Le hook des 3 premieres secondes doit arreter le scroll`
+- Varie les types de vidéos (visite, quartier, conseil, coulisse, avant/après, marché)
+- ${input.bien_unique ? 'Ce script est pour un Boost Mandat : concentre-toi sur ce bien spécifique. Mets en valeur ses points forts uniques.' : 'Ne fais pas plus de 50% de vidéos "visite bien" — alterner avec du contenu conseil et quartier.'}
+- Chaque script doit être réalisable par ${input.prenom} seul(e) avec un smartphone
+- Les indications de tournage doivent être concrètes : "Filme depuis l'entrée en marchant lentement vers le salon" pas "Plan du salon"
+- Le hook des 3 premières secondes doit arrêter le scroll`
 
   return { system, user }
 }

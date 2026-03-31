@@ -249,6 +249,18 @@ export default function MonthlyUpdatePage() {
 
   return (
     <div className="max-w-xl mx-auto px-4 py-4 desktop:py-8">
+      {/* Introduction — contexte et bénéfice */}
+      <div className="rounded-lg bg-primary-50 border border-primary-100 p-5 mb-8">
+        <h1 className="font-display text-h2 text-primary font-bold mb-2">
+          Dis-nous ce qui a changé ce mois-ci
+        </h1>
+        <p className="text-body text-neutral-600 leading-relaxed">
+          Ces infos nous permettent de personnaliser tes contenus du mois prochain.
+          Plus tu nous en dis, plus tes posts et articles collent à ta réalité terrain.
+          Ça prend 5 minutes.
+        </p>
+      </div>
+
       {/* Progress bar */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">

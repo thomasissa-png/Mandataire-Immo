@@ -11,6 +11,7 @@ interface Client {
   status: string | null
   paid_at: string | null
   created_at: string
+  deliverables_this_month: number
 }
 
 const STATUS_BADGES: Record<string, string> = {
@@ -24,7 +25,13 @@ export default async function AdminPage() {
   // Auth gérée par le layout admin (cookie ADMIN_PASSWORD)
 
   const { rows: clientList } = await query<Client>(
-    "SELECT * FROM clients ORDER BY created_at DESC"
+    `SELECT c.*,
+       (SELECT COUNT(*) FROM deliverables d
+        WHERE d.client_id = c.id
+          AND d.created_at >= date_trunc('month', CURRENT_DATE)
+          AND d.status = 'delivered') AS deliverables_this_month
+     FROM clients c
+     ORDER BY c.created_at DESC`
   )
 
   // Stats
@@ -121,6 +128,9 @@ export default async function AdminPage() {
                       Statut
                     </th>
                     <th className="text-left text-caption font-semibold text-neutral-600 px-4 py-3">
+                      Livraison
+                    </th>
+                    <th className="text-left text-caption font-semibold text-neutral-600 px-4 py-3">
                       Date
                     </th>
                     <th className="text-left text-caption font-semibold text-neutral-600 px-4 py-3">
@@ -157,6 +167,17 @@ export default async function AdminPage() {
                         >
                           {client.status || "pending"}
                         </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        {client.deliverables_this_month > 0 ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-caption font-semibold bg-success-50 text-success-800">
+                            Livré ({client.deliverables_this_month})
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-caption font-semibold bg-warning-50 text-warning-800">
+                            En attente
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-body-sm text-neutral-500">
                         {client.paid_at

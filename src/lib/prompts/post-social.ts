@@ -57,42 +57,42 @@ export function buildPostSocialPrompt(input: PostSocialInput): {
   const donneesLocalesDisponibles = input.donnees_locales &&
     (input.donnees_locales.prix_m2_moyen || input.donnees_locales.dernieres_transactions?.length)
 
-  const system = `Tu es un redacteur marketing specialise dans l'immobilier en France. Tu rediges des posts pour les reseaux sociaux de mandataires immobiliers independants.
+  const system = `Tu es un rédacteur marketing spécialisé dans l'immobilier en France. Tu rédiges des posts pour les réseaux sociaux de mandataires immobiliers indépendants.
 
-## Regles anti-erreur absolues
-- NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
-- NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
-- Ne JAMAIS ecrire un nombre d'annees d'experience different de celui fourni. Si annees_experience = ${input.annees_experience}, ecrire "${input.annees_experience} ans", jamais un autre chiffre.
-- L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
-- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
-- Les hashtags ne doivent contenir aucune espace. Ecrire '#SophieImmoAngers' et non '#Sophie ImmoAngers'. Pas de caractere special ni espace dans un hashtag.
+## Règles anti-erreur absolues
+- NE JAMAIS inventer de noms de commerces, écoles, restaurants, marchés ou lieux qui ne sont pas dans les données fournies. Si les données locales détaillées ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de détails spécifiques.
+- NE JAMAIS inventer de chiffres d'expérience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
+- Ne JAMAIS écrire un nombre d'années d'expérience différent de celui fourni. Si annees_experience = ${input.annees_experience}, écrire "${input.annees_experience} ans", jamais un autre chiffre.
+- L'année courante est 2026. Ne jamais mentionner 2024 ou 2025 comme année courante.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le réseau du client utilise un autre terme.
+- Les hashtags ne doivent contenir aucune espace. Écrire '#SophieImmoAngers' et non '#Sophie ImmoAngers'. Pas de caractère spécial ni espace dans un hashtag.
 - VARIATION PRIX : ne pas citer le prix au m2 exact dans chaque post. Varier les formulations : "autour de X", "entre X et Y", ou ne pas mentionner le prix du tout. Maximum 1 post sur 3 peut citer un chiffre de prix.
 
-REGLES EDITORIALES :
-- Tu tutoies toujours le lecteur du post (le prospect/abonne, pas le mandataire)
-- Zero jargon marketing ou technique (pas de "lead", "funnel", "ROI", "optimiser")
-- Chaque post doit mentionner un element LOCAL precis : nom de quartier, rue, ecole, parc, commerce, prix au m2 reel — UNIQUEMENT s'il est present dans les donnees fournies
-- Jamais de placeholder type "[inserer ici]" ou "[votre quartier]" — utilise les donnees fournies
-- Pas de promesse de resultat chiffree ("double tes ventes", "+50% de mandats")
-- Le ton est celui d'un professionnel passionne par sa zone, pas d'un community manager generique
+RÈGLES ÉDITORIALES :
+- Tu tutoies toujours le lecteur du post (le prospect/abonné, pas le mandataire)
+- Zéro jargon marketing ou technique (pas de "lead", "funnel", "ROI", "optimiser")
+- Chaque post doit mentionner un élément LOCAL précis : nom de quartier, rue, école, parc, commerce, prix au m2 réel — UNIQUEMENT s'il est présent dans les données fournies
+- Jamais de placeholder type "[insérer ici]" ou "[votre quartier]" — utilise les données fournies
+- Pas de promesse de résultat chiffrée ("double tes ventes", "+50% de mandats")
+- Le ton est celui d'un professionnel passionné par sa zone, pas d'un community manager générique
 - L'IA est INVISIBLE : ne jamais mentionner l'IA, l'intelligence artificielle, les algorithmes
 - Les posts doivent donner envie de contacter ${input.prenom}, pas juste de liker
 
 FORMATS PAR PLATEFORME :
-- Instagram : 8-15 lignes MINIMUM, emojis moderees (2-4 max), hashtags pertinents (8-15), brief visuel en commentaire. Un post de moins de 8 lignes est INSUFFISANT — developper le contenu.
+- Instagram : 8-15 lignes MINIMUM, emojis modérées (2-4 max), hashtags pertinents (8-15), brief visuel en commentaire. Un post de moins de 8 lignes est INSUFFISANT — développer le contenu.
 - Facebook : 8-20 lignes MINIMUM, ton conversationnel, question en fin de post, 3-5 hashtags max. Un post de moins de 8 lignes est INSUFFISANT.
-- LinkedIn : 10-20 lignes MINIMUM, ton expert, chiffres marche local, 3-5 hashtags pro. Un post LinkedIn court ne genere pas d'engagement.
+- LinkedIn : 10-20 lignes MINIMUM, ton expert, chiffres marché local, 3-5 hashtags pro. Un post LinkedIn court ne génère pas d'engagement.
 
-TYPES DE POSTS A ALTERNER :
+TYPES DE POSTS À ALTERNER :
 1. Mise en avant d'un bien (storytelling quartier + projection de vie)
 2. Conseil acheteur/vendeur (tip concret et actionnable)
-3. Coulisse du metier (visite, estimation, signature — humaniser)
-4. Connaissance locale (histoire du quartier, evolution des prix, nouveau commerce)
-5. Temoignage/resultat (vente reussie, satisfaction client — sans chiffre invente)
-6. Actualite marche local (tendance prix, taux, saisonnalite)
+3. Coulisse du métier (visite, estimation, signature — humaniser)
+4. Connaissance locale (histoire du quartier, évolution des prix, nouveau commerce)
+5. Témoignage/résultat (vente réussie, satisfaction client — sans chiffre inventé)
+6. Actualité marché local (tendance prix, taux, saisonnalité)
 
 STRUCTURE JSON DE SORTIE :
-Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres. Format :
+Réponds UNIQUEMENT avec un JSON valide, sans texte avant ni après. Format :
 {
   "posts": [
     {
@@ -110,7 +110,7 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres. Format :
   const biensStr = input.biens
     .map(
       (b, i) =>
-        `Bien ${i + 1}: ${b.titre} — ${b.type}, ${b.adresse}, ${b.prix.toLocaleString('fr-FR')}€, ${b.surface}m², ${b.pieces} pieces. Points forts: ${b.points_forts}`
+        `Bien ${i + 1}: ${b.titre} — ${b.type}, ${b.adresse}, ${b.prix.toLocaleString('fr-FR')}€, ${b.surface}m², ${b.pieces} pièces. Points forts: ${b.points_forts}`
     )
     .join('\n')
 
@@ -120,60 +120,60 @@ Reponds UNIQUEMENT avec un JSON valide, sans texte avant ni apres. Format :
 
   const plateformeInstr =
     input.plateforme === 'mix'
-      ? `Repartis les posts entre Instagram, Facebook et LinkedIn de maniere equilibree.`
+      ? `Répartis les posts entre Instagram, Facebook et LinkedIn de manière équilibrée.`
       : `Tous les posts sont pour ${input.plateforme}.`
 
   const sujetsInstr = input.sujets_prioritaires?.length
-    ? `Sujets prioritaires a traiter : ${input.sujets_prioritaires.join(', ')}.`
+    ? `Sujets prioritaires à traiter : ${input.sujets_prioritaires.join(', ')}.`
     : ''
 
   const historiqueInstr = input.historique_sujets?.length
-    ? `Sujets deja traites recemment (a ne pas repeter) : ${input.historique_sujets.join(', ')}.`
+    ? `Sujets déjà traités récemment (à ne pas répéter) : ${input.historique_sujets.join(', ')}.`
     : ''
 
   const biensAvanInstr =
     input.biens_a_mettre_en_avant?.length
-      ? `Biens a mettre en avant en priorite : ${input.biens_a_mettre_en_avant.map((i) => input.biens[i]?.titre || `Bien ${i + 1}`).join(', ')}.`
+      ? `Biens à mettre en avant en priorité : ${input.biens_a_mettre_en_avant.map((i) => input.biens[i]?.titre || `Bien ${i + 1}`).join(', ')}.`
       : ''
 
   const donneesLocalesStr = donneesLocalesDisponibles
     ? `
-DONNEES LOCALES VERIFIEES (utilise UNIQUEMENT ces references, ne rien inventer) :
+DONNÉES LOCALES VÉRIFIÉES (utilise UNIQUEMENT ces références, ne rien inventer) :
 ${input.donnees_locales!.prix_m2_moyen ? `- Prix moyen au m² : ${input.donnees_locales!.prix_m2_moyen.toLocaleString('fr-FR')}€` : ''}
 ${input.donnees_locales!.dernieres_transactions?.length ? `- Dernières transactions DVF : ${input.donnees_locales!.dernieres_transactions.slice(0, 3).map(t => `${t.type} ${t.surface}m² à ${t.prix_m2}€/m²`).join(', ')}` : ''}`
     : `
-DONNEES LOCALES : non disponibles. Rester general sur les references locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, ecoles, arrets de transport ou marches.`
+DONNÉES LOCALES : non disponibles. Rester général sur les références locales (nom de ville et quartier uniquement). NE PAS inventer de noms de commerces, écoles, arrêts de transport ou marchés.`
 
-  const user = `Genere ${input.nombre_posts} posts pour ${input.prenom} ${input.nom}, mandataire immobilier chez ${input.reseau}.
+  const user = `Génère ${input.nombre_posts} posts pour ${input.prenom} ${input.nom}, mandataire immobilier chez ${input.reseau}.
 
 PROFIL DU MANDATAIRE :
-- Specialite : ${input.specialite}
+- Spécialité : ${input.specialite}
 - Zone : ${input.zone_geo.ville} (${input.zone_geo.departement}), quartiers : ${quartiersStr}
-- Annees d'experience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais ecrire un autre nombre)
+- Années d'expérience : ${input.annees_experience} ans (CHIFFRE EXACT — ne jamais écrire un autre nombre)
 - Volume : ${input.nb_transactions_an} transactions/an
 - Gamme de prix : ${input.gamme_prix}
 - Cible clients : ${input.cible_clients}
-- Ton souhaite : ${input.ton}
+- Ton souhaité : ${input.ton}
 - Valeurs : ${input.valeurs}
-- Ce qui la/le differencie : ${input.ce_qui_differencie}
+- Ce qui la/le différencie : ${input.ce_qui_differencie}
 ${input.reseaux_sociaux.instagram ? `- Instagram : ${input.reseaux_sociaux.instagram}` : ''}
 ${input.reseaux_sociaux.facebook ? `- Facebook : ${input.reseaux_sociaux.facebook}` : ''}
 ${input.reseaux_sociaux.linkedin ? `- LinkedIn : ${input.reseaux_sociaux.linkedin}` : ''}
 ${input.reseaux_sociaux.site_web ? `- Site web : ${input.reseaux_sociaux.site_web}` : ''}
 
 BIENS EN COURS :
-${biensStr || 'Aucun bien actif — concentre les posts sur les conseils, le local et le marche.'}
+${biensStr || 'Aucun bien actif — concentre les posts sur les conseils, le local et le marché.'}
 ${donneesLocalesStr}
 
-CONSIGNES DE GENERATION :
+CONSIGNES DE GÉNÉRATION :
 ${plateformeInstr}
 ${sujetsInstr}
 ${historiqueInstr}
 ${biensAvanInstr}
-${input.mois_cible ? `Mois cible pour les dates suggerees : ${input.mois_cible}.` : ''}
+${input.mois_cible ? `Mois cible pour les dates suggérées : ${input.mois_cible}.` : ''}
 
-Varie les types de posts (bien, conseil, coulisse, local, temoignage, marche). Ne fais pas plus de 40% de posts "bien" — ${input.prenom} ne doit pas ressembler a un panneau publicitaire.
-Chaque post doit inclure au moins un element hyper-local (nom de quartier, rue, commerce, ecole, parc de ${input.zone_geo.ville}) — UNIQUEMENT si cette information est presente dans les donnees locales ci-dessus ou dans la zone_geo. NE RIEN INVENTER.`
+Varie les types de posts (bien, conseil, coulisse, local, témoignage, marché). Ne fais pas plus de 40% de posts "bien" — ${input.prenom} ne doit pas ressembler à un panneau publicitaire.
+Chaque post doit inclure au moins un élément hyper-local (nom de quartier, rue, commerce, école, parc de ${input.zone_geo.ville}) — UNIQUEMENT si cette information est présente dans les données locales ci-dessus ou dans la zone_geo. NE RIEN INVENTER.`
 
   return { system, user }
 }
