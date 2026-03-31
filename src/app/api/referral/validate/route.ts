@@ -4,6 +4,7 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { query } from "@/lib/db"
+import { getSessionUser } from "@/lib/getSessionUser"
 
 interface ReferralCodeRow {
   id: string
@@ -38,17 +39,21 @@ function checkRateLimit(ip: string): boolean {
   return true
 }
 
-// Nettoyage periodique pour eviter les fuites memoire
-setInterval(() => {
+// Nettoyage lazy — pas de setInterval pour eviter les fuites memoire
+let lastCleanup = Date.now()
+function lazyCleanup() {
   const now = Date.now()
-  rateLimitMap.forEach((entry, ip) => {
-    if (now > entry.resetAt) {
-      rateLimitMap.delete(ip)
-    }
-  })
-}, 60_000)
+  if (now - lastCleanup < 60_000) return
+  lastCleanup = now
+  const keys = Array.from(rateLimitMap.keys())
+  for (const ip of keys) {
+    const entry = rateLimitMap.get(ip)
+    if (entry && now > entry.resetAt) rateLimitMap.delete(ip)
+  }
+}
 
 export async function POST(request: NextRequest) {
+  lazyCleanup()
   // Rate limit par IP
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -90,6 +95,18 @@ export async function POST(request: NextRequest) {
   }
 
   const referralCode = codes[0]
+
+  // Bloquer l'auto-parrainage
+  const user = await getSessionUser()
+  if (user) {
+    const { rows: self } = await query<{ id: string }>(
+      `SELECT id FROM clients WHERE email = $1 LIMIT 1`,
+      [user.email]
+    )
+    if (self.length > 0 && self[0].id === referralCode.user_id) {
+      return NextResponse.json({ valid: false, error: "self_referral" })
+    }
+  }
 
   // Recuperer le prenom du parrain pour l'affichage
   const { rows: clients } = await query<ClientRow>(

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { MonthFilter } from "@/components/dashboard/MonthFilter"
 import type { Deliverable } from "@/types/deliverable"
 
@@ -28,6 +28,11 @@ export function FilteredPageWrapper({
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null)
   const [showArchived, setShowArchived] = useState(false)
   const [items, setItems] = useState(deliverables)
+
+  // Synchroniser quand les props changent (navigation, revalidation SSR)
+  useEffect(() => {
+    setItems(deliverables)
+  }, [deliverables])
 
   // Extraire les mois disponibles à partir des données
   const availableMonths = useMemo(() => {

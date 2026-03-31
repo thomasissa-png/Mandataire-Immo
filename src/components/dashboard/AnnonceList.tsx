@@ -145,8 +145,11 @@ function AnnonceRow({ annonce, onArchiveToggle }: { annonce: Annonce; onArchiveT
   const handleArchive = async () => {
     if (!onArchiveToggle || archiving) return
     setArchiving(true)
-    onArchiveToggle(annonce.id)
-    setArchiving(false)
+    try {
+      await onArchiveToggle(annonce.id)
+    } finally {
+      setArchiving(false)
+    }
   }
 
   return (

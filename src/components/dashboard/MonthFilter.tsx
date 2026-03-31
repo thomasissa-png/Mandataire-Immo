@@ -61,7 +61,7 @@ export function MonthFilter({ selectedMonth, onChange, availableMonths }: MonthF
       <button
         type="button"
         onClick={() => onChange(null)}
-        className={`flex-shrink-0 px-3 py-1.5 rounded-full text-caption font-semibold transition-all whitespace-nowrap ${
+        className={`flex-shrink-0 px-3 py-1.5 min-h-[44px] rounded-full text-caption font-semibold transition-all whitespace-nowrap ${
           selectedMonth === null
             ? "bg-primary text-white shadow-sm"
             : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
@@ -77,7 +77,7 @@ export function MonthFilter({ selectedMonth, onChange, availableMonths }: MonthF
           key={m}
           type="button"
           onClick={() => onChange(m)}
-          className={`flex-shrink-0 px-3 py-1.5 rounded-full text-caption font-semibold transition-all whitespace-nowrap ${
+          className={`flex-shrink-0 px-3 py-1.5 min-h-[44px] rounded-full text-caption font-semibold transition-all whitespace-nowrap ${
             selectedMonth === m
               ? "bg-primary text-white shadow-sm"
               : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"

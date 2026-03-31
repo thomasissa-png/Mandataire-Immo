@@ -153,21 +153,31 @@ export function markdownToHtml(md: string): string {
  * <form>, <input>, on* event handlers, javascript: URLs.
  */
 function sanitizeHtml(html: string): string {
-  return html
+  // First: decode HTML entities that could bypass checks (&#58; → :, &#x6A; → j, etc.)
+  const decoded = html.replace(/&#x?[0-9a-fA-F]+;/g, (match) => {
+    const el = typeof document !== "undefined" ? document.createElement("span") : null
+    if (el) { el.innerHTML = match; return el.textContent || "" }
+    // Server-side fallback: decode common numeric entities
+    const hex = match.startsWith("&#x")
+    const num = hex ? parseInt(match.slice(3, -1), 16) : parseInt(match.slice(2, -1), 10)
+    return isNaN(num) ? match : String.fromCharCode(num)
+  })
+
+  return decoded
     // Remove <script>...</script> (including content)
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
     // Remove self-closing <script/>
     .replace(/<script\b[^>]*\/?>/gi, "")
-    // Remove <iframe>, <object>, <embed>, <form>, <input>, <style> tags (with content)
-    .replace(/<(iframe|object|embed|form|input|style)\b[^>]*>[\s\S]*?<\/\1>/gi, "")
+    // Remove <iframe>, <object>, <embed>, <form>, <input>, <style>, <svg>, <math> tags (with content)
+    .replace(/<(iframe|object|embed|form|input|style|svg|math)\b[^>]*>[\s\S]*?<\/\1>/gi, "")
     // Remove self-closing variants
-    .replace(/<(iframe|object|embed|form|input|style)\b[^>]*\/?>/gi, "")
-    // Remove on* event attributes (onclick, onerror, onload, etc.)
+    .replace(/<(iframe|object|embed|form|input|style|svg|math)\b[^>]*\/?>/gi, "")
+    // Remove on* event attributes — handle whitespace/tab variations
     .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "")
-    // Remove javascript: URLs in href/src/action attributes
-    .replace(/(href|src|action)\s*=\s*(?:"javascript:[^"]*"|'javascript:[^']*')/gi, '$1=""')
+    // Remove javascript: URLs in any attribute (href, src, action, etc.) — case-insensitive, whitespace-tolerant
+    .replace(/(href|src|action|formaction|xlink:href)\s*=\s*(?:"[^"]*javascript\s*:[^"]*"|'[^']*javascript\s*:[^']*')/gi, '$1=""')
     // Remove data: URLs in src (potential SVG/HTML injection)
-    .replace(/src\s*=\s*(?:"data:text\/html[^"]*"|'data:text\/html[^']*')/gi, 'src=""')
+    .replace(/src\s*=\s*(?:"data:(?:text\/html|image\/svg)[^"]*"|'data:(?:text\/html|image\/svg)[^']*')/gi, 'src=""')
 }
 
 /**
