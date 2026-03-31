@@ -240,6 +240,16 @@ DONNÉES LOCALES : non disponibles. Pour la section quartier, rester général (
 Intégrer ces données dans une section dédiée "Marché local" avec un visuel clair (barre ou badge).`
   }
 
+  // Photos réelles pour le user prompt
+  let photosUserSection = ''
+  if (hasPhotos) {
+    const sortedPhotos = [...input.photos_originales!].sort((a, b) => a.ordre - b.ordre)
+    photosUserSection = `
+## Photos réelles du bien
+${sortedPhotos.map((p, i) => `- Photo ${i + 1} : <img src="${p.url}" alt="Photo ${i + 1} du bien" loading="lazy">`).join('\n')}
+Afficher la première photo en grand (pleine largeur) comme photo principale, puis les suivantes en grille responsive.${hasVisuels ? '\nPlacer cette section AVANT la section home staging.' : ''}`
+  }
+
   // Visuels home staging pour le user prompt
   let visuelsUserSection = ''
   if (hasVisuels) {
@@ -274,6 +284,7 @@ Iframe carte : <iframe src="https://www.openstreetmap.org/export/embed.html?bbox
 - DPE : ${dpeDisplay}
 ${annonceSection}
 ${dvfUserSection}
+${photosUserSection}
 ${visuelsUserSection}
 ${carteUserSection}
 
