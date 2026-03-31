@@ -229,6 +229,20 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
         </div>
       )}
 
+      {/* Message si pas de photos */}
+      {photos.length === 0 && (
+        <div className="max-w-3xl mx-auto px-6 pt-6">
+          <div className="flex items-center gap-2 rounded-lg bg-neutral-100 px-4 py-3">
+            <svg className="w-5 h-5 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91M3.75 21h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
+            </svg>
+            <p className="text-body-sm text-neutral-500">
+              Photos disponibles sur demande — contacte {agentName || "le mandataire"} directement.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Contenu de l'annonce */}
       <article className="max-w-3xl mx-auto px-6 py-8">
         <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 tablet:p-10">
