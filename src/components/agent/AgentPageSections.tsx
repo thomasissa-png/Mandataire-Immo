@@ -413,8 +413,10 @@ export function TemoignagesSection({ profile }: TemoignagesProps) {
               </p>
               <div>
                 <p className="text-body-sm font-semibold text-primary">{t.nom}</p>
-                {t.contexte && (
-                  <p className="text-caption text-muted-foreground">{t.contexte}</p>
+                {(t.contexte || t.date) && (
+                  <p className="text-caption text-muted-foreground">
+                    {t.contexte}{t.contexte && t.date ? " · " : ""}{t.date}
+                  </p>
                 )}
               </div>
             </div>

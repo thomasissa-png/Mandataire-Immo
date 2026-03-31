@@ -43,6 +43,7 @@ export interface AgentTemoignage {
   nom: string
   texte: string
   contexte: string
+  date?: string
 }
 
 export interface AgentBienSummary {
