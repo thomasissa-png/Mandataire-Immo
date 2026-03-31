@@ -280,6 +280,19 @@ export function DashboardContent({
             Commence par mettre à jour tes bios (une seule fois), puis publie tes posts au fil de la semaine, et tourne tes vidéos quand tu as un créneau calme.
           </p>
 
+          {/* Lien calendrier éditorial — vue d'ensemble du mois */}
+          <a
+            href="/dashboard/calendrier"
+            className="group flex items-center gap-3 p-4 mb-4 rounded-lg border-l-4 border-l-secondary bg-secondary-50/40 hover:bg-secondary-50 transition-all"
+          >
+            <span className="text-2xl flex-shrink-0" aria-hidden="true">📆</span>
+            <div className="flex-1">
+              <p className="text-body-sm font-semibold text-primary group-hover:text-secondary-700 transition-colors">Voir ton calendrier éditorial</p>
+              <p className="text-caption text-neutral-500">Visualise tous tes contenus du mois sur un calendrier</p>
+            </div>
+            <span className="text-secondary-600 font-semibold text-body-sm group-hover:translate-x-0.5 transition-transform" aria-hidden="true">→</span>
+          </a>
+
           <div className="space-y-3">
             {/* STRATEGIE — bios & positionnement */}
             {counts.strategie > 0 ? (
