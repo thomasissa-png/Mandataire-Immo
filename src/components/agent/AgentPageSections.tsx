@@ -83,6 +83,27 @@ export function HeroSection({ profile }: HeroProps) {
         {accroche && (
           <p className="text-body-lg text-white/80 max-w-2xl">{accroche}</p>
         )}
+
+        {/* CTA rapide : téléphone + email */}
+        <div className="flex flex-col tablet:flex-row items-center gap-3 mt-2">
+          {profile.telephone && (
+            <a
+              href={`tel:${profile.telephone.replace(/\s/g, "")}`}
+              className="inline-flex h-11 px-6 items-center gap-2 rounded-full bg-white text-primary font-display font-bold text-body-sm shadow-sm hover:bg-neutral-100 active:scale-[0.97] transition-all duration-normal"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+              </svg>
+              Appeler
+            </a>
+          )}
+          <a
+            href="#contact"
+            className="inline-flex h-11 px-6 items-center gap-2 rounded-full bg-secondary text-primary font-display font-bold text-body-sm shadow-sm hover:bg-secondary-600 hover:text-white active:scale-[0.97] transition-all duration-normal"
+          >
+            Me contacter
+          </a>
+        </div>
       </div>
     </section>
   )
@@ -256,9 +277,15 @@ export function MesBiensSection({ biens }: MesBiensProps) {
             <svg className="w-10 h-10 text-neutral-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819" />
             </svg>
-            <p className="text-body text-muted-foreground">
-              Pas encore de biens en portefeuille — contactez-moi pour discuter de votre projet.
+            <p className="text-body text-muted-foreground mb-3">
+              Aucun bien en vente actuellement — contactez-moi pour discuter de votre projet.
             </p>
+            <a
+              href="#contact"
+              className="inline-flex h-10 px-5 items-center rounded-full bg-primary text-white font-display font-bold text-body-sm hover:bg-primary-700 transition-colors shadow-sm"
+            >
+              Me contacter →
+            </a>
           </div>
         ) : (
 
@@ -332,12 +359,14 @@ export function ContactSection({ profile, email }: ContactProps) {
   const tagline = profile.ce_qui_te_differencie
 
   return (
-    <section className="section-padding bg-primary">
+    <section id="contact" className="section-padding bg-primary">
       <div className="container-immocrew text-center max-w-2xl">
         <h2 className="text-h2 font-display text-white mb-4">Me contacter</h2>
 
-        {tagline && (
+        {tagline ? (
           <p className="text-body-lg text-white/80 mb-8">{tagline}</p>
+        ) : (
+          <p className="text-body-lg text-white/80 mb-8">Parlons de votre projet immobilier</p>
         )}
 
         <div className="flex flex-col tablet:flex-row items-center justify-center gap-4">
