@@ -30,7 +30,7 @@ export default function BlogPage() {
       <main className="bg-background min-h-screen">
         {/* Hero section */}
         <section className="section-padding border-b border-border">
-          <div className="container-immocrew">
+          <div className="container-immocrew max-w-4xl">
             <div className="max-w-2xl">
               <h1 className="font-display text-h1 desktop:text-display-lg font-bold text-primary">
                 Le marketing immobilier, sans les prises de tête
@@ -47,7 +47,7 @@ export default function BlogPage() {
 
         {/* Articles */}
         <section className="section-padding">
-          <div className="container-immocrew">
+          <div className="container-immocrew max-w-4xl">
             <BlogGrid
               articles={articles.map((a) => ({
                 slug: a.slug,
