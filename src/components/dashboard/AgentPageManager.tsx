@@ -110,7 +110,9 @@ export function IndexationToggle({ slug, initialValue }: IndexationToggleProps) 
       <div>
         <p className="text-body-sm font-semibold text-primary">Indexation Google</p>
         <p className="text-caption text-neutral-500">
-          Rends ta page visible dans les résultats Google
+          {enabled
+            ? "Activé — les prospects peuvent te trouver en cherchant ton nom sur Google."
+            : "Désactivé — ta page est accessible uniquement via le lien direct que tu partages."}
         </p>
       </div>
       <button

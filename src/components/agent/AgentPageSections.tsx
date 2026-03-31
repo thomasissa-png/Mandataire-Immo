@@ -248,6 +248,17 @@ export function MesBiensSection({ biens }: MesBiensProps) {
       <div className="container-immocrew">
         <h2 className="text-h2 font-display text-primary mb-8">Mes biens en vente</h2>
 
+        {biens.length === 0 ? (
+          <div className="rounded-xl border border-border bg-background p-8 text-center max-w-md mx-auto">
+            <svg className="w-10 h-10 text-neutral-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819" />
+            </svg>
+            <p className="text-body text-muted-foreground">
+              Pas encore de biens en portefeuille — contactez-moi pour discuter de votre projet.
+            </p>
+          </div>
+        ) : (
+
         <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-6">
           {biens.map((bien) => {
             const photo =
@@ -277,7 +288,9 @@ export function MesBiensSection({ biens }: MesBiensProps) {
                   </div>
                 ) : (
                   <div className="aspect-[4/3] bg-neutral-100 flex items-center justify-center">
-                    <span className="text-neutral-400 text-caption">Pas de photo</span>
+                    <svg className="w-12 h-12 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1} aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819" />
+                    </svg>
                   </div>
                 )}
 
@@ -298,6 +311,8 @@ export function MesBiensSection({ biens }: MesBiensProps) {
             )
           })}
         </div>
+
+        )}
       </div>
     </section>
   )
@@ -322,12 +337,29 @@ export function ContactSection({ profile, email }: ContactProps) {
           <p className="text-body-lg text-white/80 mb-8">{tagline}</p>
         )}
 
-        <a
-          href={`mailto:${email}?subject=Prise de contact — ${profile.prenom} ${profile.nom}`}
-          className="inline-flex h-12 px-8 items-center rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
-        >
-          Envoyer un email
-        </a>
+        <div className="flex flex-col tablet:flex-row items-center justify-center gap-4">
+          {profile.telephone && (
+            <a
+              href={`tel:${profile.telephone.replace(/\s/g, "")}`}
+              className="inline-flex h-12 px-8 items-center gap-2 rounded-full bg-white text-primary font-display font-bold text-body shadow-sm hover:bg-neutral-100 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+              </svg>
+              Appeler
+            </a>
+          )}
+
+          <a
+            href={`mailto:${email}?subject=Prise de contact — ${profile.prenom} ${profile.nom}`}
+            className="inline-flex h-12 px-8 items-center gap-2 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+            Envoyer un email
+          </a>
+        </div>
       </div>
     </section>
   )
@@ -352,7 +384,7 @@ export function ReseauxSection({ profile }: ReseauxProps) {
   return (
     <section className="section-padding">
       <div className="container-immocrew text-center">
-        <h2 className="text-h2 font-display text-primary mb-8">Retrouvez-moi</h2>
+        <h2 className="text-h2 font-display text-primary mb-8">Mes réseaux</h2>
 
         <div className="flex justify-center gap-6">
           {links.map((link) => (
@@ -361,10 +393,14 @@ export function ReseauxSection({ profile }: ReseauxProps) {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`${link.label} de ${profile.prenom} ${profile.nom}`}
-              className="w-12 h-12 rounded-full bg-primary-50 text-primary-700 flex items-center justify-center hover:bg-primary-100 transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="flex flex-col items-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg p-2"
             >
-              <link.icon />
+              <span className="w-12 h-12 rounded-full bg-primary-50 text-primary-700 flex items-center justify-center group-hover:bg-primary-100 transition-colors duration-normal">
+                <link.icon />
+              </span>
+              <span className="text-caption text-muted-foreground group-hover:text-primary-700 transition-colors">
+                {link.label}
+              </span>
             </a>
           ))}
         </div>

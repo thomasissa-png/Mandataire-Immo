@@ -93,6 +93,7 @@ async function getAgentData(slug: string): Promise<{
   const profile: AgentProfile = {
     prenom: getString("prenom") || row.first_name || "",
     nom: getString("nom") || row.last_name || "",
+    telephone: getString("telephone"),
     photo_profil_key: getString("photo_profil_key"),
     reseau: getString("reseau"),
     ville: getString("ville"),
@@ -202,7 +203,7 @@ export default async function AgentPageRoute({ params }: PageProps) {
         <HeroSection profile={profile} />
         <QuiSuisJeSection profile={profile} bioGeneree={page.bio_generee} />
         <MaZoneSection profile={profile} />
-        {biens.length > 0 && <MesBiensSection biens={biens} />}
+        <MesBiensSection biens={biens} />
         <ContactSection profile={profile} email={email} />
         <ReseauxSection profile={profile} />
       </main>

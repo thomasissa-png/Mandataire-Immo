@@ -16,6 +16,7 @@ export interface AgentPage {
 export interface AgentProfile {
   prenom: string
   nom: string
+  telephone: string
   photo_profil_key: string
   reseau: string
   ville: string
