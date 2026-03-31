@@ -150,6 +150,8 @@ export async function POST(
       points_forts: bien.points_forts || "",
       description_detaillee: bien.description_detaillee || undefined,
       dpe: bien.dpe_classe || undefined,
+      photo_count: photos.length,
+      page_url: pageUrl || undefined,
     },
     nombre_annonces: 1,
     telephone_contact: clientContext.telephone || bien.telephone_contact || undefined,

@@ -50,6 +50,8 @@ export interface AnnonceStorytellingInput {
     points_forts: string
     description_detaillee?: string
     dpe?: string
+    photo_count?: number // nombre de photos disponibles
+    page_url?: string // URL de la page publique du bien
   }
   nombre_annonces?: number
   // Contact mandataire pour le CTA
@@ -127,7 +129,7 @@ Prix : ${b.prix.toLocaleString('fr-FR')}€
 Surface : ${b.surface}m²
 Pièces : ${b.pieces}
 Points forts : ${b.points_forts}
-DPE : ${'dpe' in b && b.dpe ? b.dpe : '[DPE : information en cours — sera communiqué avant publication]'}${'description_detaillee' in b && b.description_detaillee ? `\nDescription détaillée : ${b.description_detaillee}` : ''}`
+DPE : ${'dpe' in b && b.dpe ? b.dpe : '[DPE : information en cours — sera communiqué avant publication]'}${'description_detaillee' in b && b.description_detaillee ? `\nDescription détaillée : ${b.description_detaillee}` : ''}${'photo_count' in b && b.photo_count ? `\nPhotos : ${b.photo_count} photo${b.photo_count > 1 ? 's' : ''} disponible${b.photo_count > 1 ? 's' : ''}` : ''}${'page_url' in b && b.page_url ? `\nPage avec photos : ${b.page_url}` : ''}`
     )
     .join('\n\n')
 

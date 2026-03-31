@@ -45,6 +45,7 @@ export interface EmailProspectionInput {
     pieces: number
     points_forts: string
     lien_annonce?: string
+    photo_url?: string // URL de la photo principale du bien
   }
   criteres_acheteurs?: string // ex: "T3/T4, budget 200-300K, famille"
   donnees_locales?: {
@@ -153,6 +154,7 @@ BIEN A PROMOUVOIR :
 - Surface : ${bien.surface}m², ${bien.pieces} pièces
 - Points forts : ${bien.points_forts}
 ${bien.lien_annonce ? `- Lien annonce : ${bien.lien_annonce}` : ''}
+${bien.photo_url ? `- Photo principale du bien (à inclure en <img> dans le HTML de l'email) : ${bien.photo_url}` : ''}
 ${input.criteres_acheteurs ? `- Profil acheteur cible : ${input.criteres_acheteurs}` : ''}`
       : 'Aucun bien spécifique fourni — générer un email générique de prospection acheteur.'
   }

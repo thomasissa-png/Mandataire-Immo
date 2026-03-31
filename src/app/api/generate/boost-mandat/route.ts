@@ -20,9 +20,16 @@ interface BienInput {
   points_forts: string
 }
 
+interface PhotoRow {
+  key: string
+  url: string
+  ordre: number
+}
+
 interface BoostMandatBody {
   client_id: string
   bien: BienInput
+  property_id?: string // si le bien existe en DB, on récupère ses photos
 }
 
 interface DeliverableRow {
@@ -48,7 +55,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
 
-  const { client_id, bien } = body
+  const { client_id, bien, property_id } = body
   if (!client_id || !bien || !bien.titre) {
     return NextResponse.json(
       { error: "client_id et bien (avec titre) sont requis" },
@@ -81,13 +88,38 @@ export async function POST(request: NextRequest) {
     bien_titre: bien.titre,
   })
 
+  // Récupérer les photos si le bien existe en DB
+  let photos: PhotoRow[] = []
+  let pageUrl: string | null = null
+  if (property_id) {
+    const { rows: propRows } = await query<{ photos_originales: PhotoRow[] | null; slug: string | null }>(
+      `SELECT photos_originales, slug FROM property_pages WHERE id = $1 AND client_id = $2`,
+      [property_id, client_id]
+    )
+    if (propRows[0]) {
+      photos = propRows[0].photos_originales || []
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://immocrew.fr"
+      pageUrl = propRows[0].slug ? `${baseUrl}/bien/${propRows[0].slug}` : null
+    }
+  }
+
+  const photoUrls = photos.map((p) => ({
+    url: `/api/photos/${encodeURIComponent(p.key)}`,
+    ordre: p.ordre ?? 0,
+  }))
+  const firstPhotoUrl = photoUrls[0]?.url || undefined
+
   const deliverableIds: string[] = []
 
   try {
     // B1 : Annonce storytelling pour le bien
     const annoncePrompt = buildAnnonceStorytellingPrompt({
       ...ctx,
-      bien_unique: bien,
+      bien_unique: {
+        ...bien,
+        photo_count: photos.length || undefined,
+        page_url: pageUrl || undefined,
+      },
       nombre_annonces: 1,
     })
     const annonceResult = await generateJSON<{ annonces: Array<{ bien_titre: string; annonce_complete: string; accroche_courte: string; titre_annonce: string; mots_cles_seo: string[] }> }>(
@@ -167,6 +199,7 @@ export async function POST(request: NextRequest) {
       annonce_storytelling: annonceText,
       email_contact: clientEmail,
       telephone_contact: ctx.telephone || undefined,
+      photos_originales: photoUrls.length > 0 ? photoUrls : undefined,
     })
     const landingResult = await generateJSON<{ titre_page: string; meta_description: string; html: string }>(
       { ...landingPrompt, maxTokens: 16384 }
@@ -186,7 +219,11 @@ export async function POST(request: NextRequest) {
     const emailPrompt = buildEmailProspectionPrompt({
       ...ctx,
       type_email: "blast_acheteurs",
-      bien_a_promouvoir: bien,
+      bien_a_promouvoir: {
+        ...bien,
+        lien_annonce: pageUrl || undefined,
+        photo_url: firstPhotoUrl,
+      },
       biens: [bien],
       email_contact: clientEmail,
       telephone_contact: ctx.telephone,

@@ -71,6 +71,11 @@ export interface LandingBienInput {
     piece: string // ex: "salon", "chambre"
     style: string // ex: "scandinave"
   }>
+  // Photos originales du bien (uploadees par le mandataire)
+  photos_originales?: Array<{
+    url: string
+    ordre: number
+  }>
   // Personnalisation visuelle optionnelle
   couleur_principale?: string // ex: "#1B2A4A" (defaut: bleu nuit)
   couleur_accent?: string // ex: "#F27A1A" (defaut: orange)
@@ -123,6 +128,26 @@ Ajouter une mention visible sous chaque image : "Home staging virtuel — mobili
 Afficher les images dans une grille responsive (1 colonne mobile, 2 colonnes tablette, 3 colonnes desktop).`
   }
 
+  const hasPhotos = input.photos_originales && input.photos_originales.length > 0
+  let photosSection = ''
+  if (hasPhotos && !hasVisuels) {
+    // Photos originales en fallback si pas de visuels home staging
+    const sortedPhotos = [...input.photos_originales!].sort((a, b) => a.ordre - b.ordre)
+    photosSection = `
+## Photos du bien (uploadées par le mandataire)
+La page DOIT inclure une galerie photo avec les images réelles du bien :
+${sortedPhotos.map((p, i) => `- Photo ${i + 1} : <img src="${p.url}" alt="Photo ${i + 1} du bien" loading="lazy">`).join('\n')}
+Afficher les photos dans une grille responsive (1 colonne mobile, 2 colonnes tablette, 3 colonnes desktop).
+La première photo doit être affichée en plus grand (pleine largeur) comme photo principale.`
+  } else if (hasPhotos && hasVisuels) {
+    const sortedPhotos = [...input.photos_originales!].sort((a, b) => a.ordre - b.ordre)
+    photosSection = `
+## Photos réelles du bien
+En plus des visuels home staging, inclure une section "Photos du bien" avec les images réelles :
+${sortedPhotos.map((p, i) => `- Photo ${i + 1} : <img src="${p.url}" alt="Photo ${i + 1} du bien" loading="lazy">`).join('\n')}
+Placer cette section AVANT la section home staging.`
+  }
+
   let carteSection = ''
   if (hasCoordonnees) {
     carteSection = `
@@ -164,7 +189,8 @@ ${hasVisuels ? '- Section "Visuels de mise en scène" avec grille d\'images home
 - Footer avec mentions légales minimales (nom, réseau, "Non contractuel"${hasDvf || hasDpeData ? ', sources des données DVF/DPE' : ''})
 - Pas de JavaScript — page purement statique
 - Le prix doit être affiché en format français (espaces, EUR)
-${!hasVisuels ? '- Ne pas utiliser de placeholder d\'images — utiliser des blocs colorés avec des icônes CSS' : ''}
+${!hasVisuels && !hasPhotos ? '- Ne pas utiliser de placeholder d\'images — utiliser des blocs colorés avec des icônes CSS' : ''}
+${hasPhotos ? '- Section "Photos du bien" avec galerie des photos réelles uploadées par le mandataire' : ''}
 
 ## Format de sortie
 Réponds UNIQUEMENT avec un objet JSON valide :
@@ -172,7 +198,7 @@ Réponds UNIQUEMENT avec un objet JSON valide :
   "titre_page": "Titre pour la balise <title>",
   "meta_description": "Description pour le meta tag",
   "html": "<!DOCTYPE html>\\n<html>... code HTML complet ...</html>"
-}${dvfSection}${dpeSection}${visuelsSection}${carteSection}`
+}${dvfSection}${dpeSection}${photosSection}${visuelsSection}${carteSection}`
 
   const annonceSection = input.annonce_storytelling
     ? `\nAnnonce storytelling deja generee (a integrer dans la section description) :\n${input.annonce_storytelling}`
