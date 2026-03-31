@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react"
 import { MesBiensSection } from "./MesBiensSection"
+import { ReferralSection } from "./ReferralSection"
 import type { Deliverable } from "@/types/deliverable"
 
 interface DashboardContentProps {
@@ -405,6 +406,11 @@ export function DashboardContent({
           </div>
         </div>
       ) : null}
+
+      {/* ============================================================ */}
+      {/* PARRAINAGE — abonnés Pack Mensuel uniquement                    */}
+      {/* ============================================================ */}
+      {pack === "mensuel" && <ReferralSection />}
 
       {/* ============================================================ */}
       {/* MES BIENS (self-service — property_pages)                       */}
