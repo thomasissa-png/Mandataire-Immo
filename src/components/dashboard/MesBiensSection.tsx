@@ -128,9 +128,6 @@ export function MesBiensSection({ annonces = [] }: MesBiensSectionProps) {
               Tu as déjà {annonces.length} annonce{annonces.length > 1 ? "s" : ""} générée{annonces.length > 1 ? "s" : ""} par ton équipe. Ajoute tes biens pour recevoir des annonces avec TES photos.
             </p>
           ) : null}
-          <p className="text-caption text-neutral-400 mb-4">
-            Tu peux aussi coller le lien d{"'"}une annonce existante (LeBonCoin, Bien{"'"}ici) pour qu{"'"}on récupère les infos.
-          </p>
           <a
             href="/dashboard/biens/nouveau"
             className="inline-flex items-center gap-2 min-h-[44px] px-6 py-2.5 rounded-full bg-secondary text-white font-display font-bold text-body-sm shadow-sm hover:bg-secondary-600 hover:text-white hover:shadow-md transition-all duration-150"
