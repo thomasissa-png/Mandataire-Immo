@@ -220,6 +220,7 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [acceptCgv, setAcceptCgv] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
 
@@ -230,6 +231,12 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
 
     if (password.length < 8) {
       setError("Le mot de passe doit contenir au moins 8 caractères.")
+      setIsLoading(false)
+      return
+    }
+
+    if (!acceptCgv) {
+      setError("Tu dois accepter les conditions générales pour créer un compte.")
       setIsLoading(false)
       return
     }
@@ -368,6 +375,26 @@ function SignUpForm({ onSwitchMode }: { onSwitchMode: () => void }) {
           </div>
           <PasswordStrength password={password} />
         </div>
+
+        {/* CGV acceptance */}
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={acceptCgv}
+            onChange={(e) => setAcceptCgv(e.target.checked)}
+            className="mt-0.5 w-5 h-5 rounded border-neutral-300 text-secondary focus-visible:ring-secondary accent-secondary flex-shrink-0"
+          />
+          <span className="text-caption text-neutral-500 leading-relaxed">
+            J&apos;accepte les{" "}
+            <a href="/cgv" target="_blank" rel="noopener noreferrer" className="text-secondary underline underline-offset-2 hover:text-secondary-700">
+              Conditions Générales de Vente
+            </a>{" "}
+            et la{" "}
+            <a href="/confidentialite" target="_blank" rel="noopener noreferrer" className="text-secondary underline underline-offset-2 hover:text-secondary-700">
+              Politique de confidentialité
+            </a>.
+          </span>
+        </label>
 
         {error && (
           <p className="text-body-sm text-error" role="alert">

@@ -31,12 +31,11 @@ export default function MentionsLegalesPage() {
               <dl className="mt-4 space-y-2">
                 <InfoRow label="Raison sociale" value="VERSI" />
                 <InfoRow label="Forme juridique" value="SAS" />
-                <InfoRow label="Capital social" value="Selon statuts" />
+                <InfoRow label="Capital social" value="1 000 &euro;" />
                 <InfoRow label="Si&egrave;ge social" value="54 rue Henri Barbusse, 92000 Nanterre" />
                 <InfoRow label="SIRET" value="91286261200013" />
                 <InfoRow label="RCS" value="Nanterre B 912862612" />
                 <InfoRow label="Num&eacute;ro de TVA intracommunautaire" value="FR91912862612" />
-                <InfoRow label="T&eacute;l&eacute;phone" value="contact@immocrew.fr" />
                 <InfoRow label="Email" value="contact@immocrew.fr" />
               </dl>
             </Section>

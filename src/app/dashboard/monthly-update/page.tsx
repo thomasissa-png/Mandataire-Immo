@@ -43,11 +43,11 @@ const TENDANCE_OPTIONS = [
 ]
 
 const SUJETS_OPTIONS = [
-  "Primo-accedants",
+  "Primo-accédants",
   "Investissement locatif",
   "Vente de maisons",
   "Estimation / prospection vendeurs",
-  "Marche local / prix",
+  "Marché local / prix",
   "Conseils acheteurs",
   "Vie de quartier",
 ]
@@ -220,14 +220,14 @@ export default function MonthlyUpdatePage() {
           </svg>
         </div>
         <h1 className="font-display text-h1 text-primary mb-4">
-          C&apos;est enregistre !
+          C&apos;est enregistré !
         </h1>
         <p className="text-body text-neutral-600 mb-2">
           On s&apos;occupe du reste. Tes contenus arrivent sous 48h.
         </p>
         <p className="text-body-sm text-neutral-400 mb-8">
           Tes infos du mois vont rendre ta newsletter, tes posts et tes annonces
-          encore plus personnalises.
+          encore plus personnalisés.
         </p>
         <a
           href="/dashboard"
@@ -268,7 +268,7 @@ export default function MonthlyUpdatePage() {
             {stepTitles[currentStep]}
           </span>
           <span className="text-caption text-neutral-500">
-            Etape {currentStep + 1} sur {TOTAL_STEPS}
+            Étape {currentStep + 1} sur {TOTAL_STEPS}
           </span>
         </div>
         <div className="h-1.5 bg-neutral-200 rounded-full overflow-hidden">
@@ -509,12 +509,12 @@ export default function MonthlyUpdatePage() {
               id="anecdote_mois"
               value={anecdoteMois}
               onChange={(e) => setAnecdoteMois(e.target.value)}
-              placeholder="Ex: J'ai vendu le T3 Beaurepaire en 48h. Le couple m'a remerciee en pleurant le jour de la signature."
+              placeholder="Ex: J'ai vendu le T3 Beaurepaire en 48h. Le couple m'a remerciée en pleurant le jour de la signature."
               rows={3}
               className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast resize-y"
             />
             <p className="text-caption text-neutral-400 mt-1">
-              Facultatif — ca rend ta newsletter unique. 2 phrases suffisent.
+              Facultatif — ça rend ta newsletter unique. 2 phrases suffisent.
             </p>
           </div>
 
@@ -524,13 +524,13 @@ export default function MonthlyUpdatePage() {
               htmlFor="evenements_locaux"
               className="block text-caption font-medium text-neutral-600 mb-1"
             >
-              Un evenement dans ta zone ce mois-ci ?
+              Un événement dans ta zone ce mois-ci ?
             </label>
             <textarea
               id="evenements_locaux"
               value={evenementsLocaux}
               onChange={(e) => setEvenementsLocaux(e.target.value)}
-              placeholder="Ex: Foire d'Angers du 12 au 15, marche de Noel place du Ralliement, ouverture du nouveau tram"
+              placeholder="Ex: Foire d'Angers du 12 au 15, marché de Noël place du Ralliement, ouverture du nouveau tram"
               rows={2}
               className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast resize-y"
             />
@@ -572,7 +572,7 @@ export default function MonthlyUpdatePage() {
               id="tendance_detail"
               value={tendanceDetail}
               onChange={(e) => setTendanceDetail(e.target.value)}
-              placeholder="Ex: Beaucoup de biens en vente dans le centre, les acheteurs negocient plus qu'avant"
+              placeholder="Ex: Beaucoup de biens en vente dans le centre, les acheteurs négocient plus qu'avant"
               rows={2}
               className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast resize-y"
             />
@@ -608,7 +608,7 @@ export default function MonthlyUpdatePage() {
                   type="text"
                   value={sujetAutre}
                   onChange={(e) => setSujetAutre(e.target.value)}
-                  placeholder="Un sujet specifique..."
+                  placeholder="Un sujet spécifique..."
                   className="flex-1 h-12 px-4 rounded-md border border-neutral-300 bg-white text-body-sm text-foreground placeholder:text-neutral-400 focus-visible:border-secondary focus-visible:outline-none transition-all duration-fast"
                 />
               </div>
@@ -621,7 +621,7 @@ export default function MonthlyUpdatePage() {
       {currentStep === 2 && (
         <div className="space-y-4">
           <p className="text-body text-neutral-600 mb-4">
-            Voici le resume de tes infos du mois. Verifie et valide.
+            Voici le résumé de tes infos du mois. Vérifie et valide.
           </p>
 
           {/* Biens recap */}
@@ -644,17 +644,17 @@ export default function MonthlyUpdatePage() {
                 ? anecdoteMois.length > 100
                   ? anecdoteMois.slice(0, 100) + "..."
                   : anecdoteMois
-                : "Non renseigne"}
+                : "Non renseigné"}
             </p>
           </div>
 
           {/* Evenements recap */}
           <div className="p-4 rounded-xl border border-neutral-200 bg-white shadow-xs">
             <p className="text-caption font-medium text-neutral-500 mb-1">
-              Evenements locaux
+              Événements locaux
             </p>
             <p className="text-body-sm text-foreground">
-              {evenementsLocaux.trim() || "Non renseigne"}
+              {evenementsLocaux.trim() || "Non renseigné"}
             </p>
           </div>
 
@@ -666,7 +666,7 @@ export default function MonthlyUpdatePage() {
             <p className="text-body-sm text-foreground">
               {tendanceMarche
                 ? TENDANCE_OPTIONS.find((o) => o.value === tendanceMarche)?.label || tendanceMarche
-                : "Non renseigne"}
+                : "Non renseigné"}
               {tendanceDetail.trim() ? ` — ${tendanceDetail}` : ""}
             </p>
           </div>
@@ -679,7 +679,7 @@ export default function MonthlyUpdatePage() {
             <p className="text-body-sm text-foreground">
               {sujetsPrioritaires.length > 0 || sujetAutre.trim()
                 ? [...sujetsPrioritaires, ...(sujetAutre.trim() ? [sujetAutre.trim()] : [])].join(", ")
-                : "Non renseigne"}
+                : "Non renseigné"}
             </p>
           </div>
 

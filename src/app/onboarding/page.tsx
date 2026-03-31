@@ -101,8 +101,21 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
   },
   reseau: {
     label: "Ton réseau",
-    placeholder: "IAD, SAFTI, Capifrance, indépendant...",
-    type: "text",
+    placeholder: "Choisis ton réseau...",
+    type: "select",
+    options: [
+      { value: "", label: "Choisis ton réseau..." },
+      { value: "IAD", label: "IAD" },
+      { value: "SAFTI", label: "SAFTI" },
+      { value: "Capifrance", label: "Capifrance" },
+      { value: "Optimhome", label: "Optimhome" },
+      { value: "BSK Immobilier", label: "BSK Immobilier" },
+      { value: "Expertimo", label: "Expertimo" },
+      { value: "MegAgence", label: "MegAgence" },
+      { value: "iad", label: "iad (autre franchise)" },
+      { value: "Indépendant", label: "Indépendant (sans réseau)" },
+      { value: "Autre", label: "Autre" },
+    ],
   },
   experience_annees: {
     label: "Années d'expérience",
@@ -117,7 +130,7 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
   ville: { label: "Ville principale", placeholder: "Angers", type: "text" },
   quartiers: {
     label: "Quartiers où tu travailles",
-    placeholder: "La Doutre, Centre-ville, Doutre...",
+    placeholder: "La Doutre, Centre-ville, Saint-Serge...",
     type: "textarea",
   },
   departement: {
@@ -200,11 +213,6 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
   facebook: {
     label: "Page Facebook",
     placeholder: "https://facebook.com/ta-page",
-    type: "text",
-  },
-  linkedin: {
-    label: "LinkedIn",
-    placeholder: "https://linkedin.com/in/ton-profil",
     type: "text",
   },
   site_web: {

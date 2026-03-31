@@ -102,6 +102,16 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
     answer:
       "Oui. Chaque Pack Mensuel inclut 2 articles SEO local par mois. Ces articles ciblent des requêtes comme « mandataire immobilier [ville] », « vendre appartement [quartier] » ou « estimation bien immobilier [zone] ». Ils sont structurés pour améliorer la visibilité organique du mandataire dans les résultats Google locaux.",
   },
+  {
+    question: "Le contenu généré par IA sera-t-il détecté par Google ou mes clients ?",
+    answer:
+      "Chaque contenu est personnalisé avec des données locales réelles (prix au m², quartiers, commerces) et relu avant livraison. Google valorise le contenu utile et pertinent, quelle que soit sa méthode de production. Le risque de détection est faible car les textes sont uniques, contextualisés et non génériques. Ce qui compte : que le contenu soit utile à tes lecteurs et bien référencé.",
+  },
+  {
+    question: "En combien de temps vais-je voir des résultats ?",
+    answer:
+      "Le SEO local prend 3 à 6 mois pour produire des résultats visibles sur Google. La visibilité sur les réseaux sociaux se construit en publiant régulièrement — les premiers retours arrivent généralement après 4 à 8 semaines de publication. Dès le premier mois, tu as du contenu professionnel à publier. Les contacts entrants via tes posts ou ton blog arrivent en général après 2 à 3 mois de publication régulière.",
+  },
 ]
 
 const faqJsonLd = {

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Blog ImmoCrew — Marketing et SEO pour mandataires immobiliers",
     description:
-      "Guides pratiques pour votre présence digitale : posts, annonces, SEO local, Google Business Profile.",
+      "Guides pratiques pour ta présence digitale : posts, annonces, SEO local, Google Business Profile.",
     url: "/blog",
     type: "website",
   },
@@ -88,6 +88,24 @@ export default function BlogPage() {
                 </Link>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="section-padding border-t border-border">
+          <div className="container-immocrew text-center">
+            <p className="font-display text-h2 font-bold text-primary mb-3">
+              Tu veux que quelqu&apos;un le fasse à ta place ?
+            </p>
+            <p className="text-body-lg text-neutral-500 mb-6 max-w-lg mx-auto">
+              Posts, articles SEO, annonces storytelling — 100% personnalisés pour ta zone. À partir de 150&nbsp;€/mois.
+            </p>
+            <Link
+              href="/#pricing"
+              className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
+            >
+              Découvrir les offres
+            </Link>
           </div>
         </section>
       </main>

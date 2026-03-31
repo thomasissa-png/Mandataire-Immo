@@ -31,7 +31,7 @@ export default function CGVPage() {
                 r&eacute;gissent les relations contractuelles entre :
               </p>
               <p className="mt-3">
-                <strong>VERSI</strong>, SAS, au capital social selon statuts,
+                <strong>VERSI</strong>, SAS, au capital social de 1&nbsp;000&nbsp;&euro;,
                 immatricul&eacute;e au RCS de Nanterre sous le num&eacute;ro SIRET 91286261200013,
                 dont le si&egrave;ge social est situ&eacute; au 54 rue Henri Barbusse, 92000 Nanterre,
                 num&eacute;ro de TVA intracommunautaire : FR91912862612,
