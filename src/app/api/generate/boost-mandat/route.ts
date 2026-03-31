@@ -9,6 +9,7 @@ import { buildPostSocialPrompt } from "@/lib/prompts/post-social"
 import { buildScriptVideoPrompt } from "@/lib/prompts/script-video"
 import { buildEmailProspectionPrompt } from "@/lib/prompts/email-prospection"
 import { buildLandingBienPrompt } from "@/lib/prompts/landing-bien"
+import type { PropertyPhoto } from "@/types/property"
 
 interface BienInput {
   titre: string
@@ -18,12 +19,6 @@ interface BienInput {
   surface: number
   pieces: number
   points_forts: string
-}
-
-interface PhotoRow {
-  key: string
-  url: string
-  ordre: number
 }
 
 interface BoostMandatBody {
@@ -89,22 +84,22 @@ export async function POST(request: NextRequest) {
   })
 
   // Récupérer les photos si le bien existe en DB
-  let photos: PhotoRow[] = []
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://immocrew.fr"
+  let photos: PropertyPhoto[] = []
   let pageUrl: string | null = null
   if (property_id) {
-    const { rows: propRows } = await query<{ photos_originales: PhotoRow[] | null; slug: string | null }>(
+    const { rows: propRows } = await query<{ photos_originales: PropertyPhoto[] | null; slug: string | null }>(
       `SELECT photos_originales, slug FROM property_pages WHERE id = $1 AND client_id = $2`,
       [property_id, client_id]
     )
     if (propRows[0]) {
       photos = propRows[0].photos_originales || []
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://immocrew.fr"
       pageUrl = propRows[0].slug ? `${baseUrl}/bien/${propRows[0].slug}` : null
     }
   }
 
   const photoUrls = photos.map((p) => ({
-    url: `/api/photos/${encodeURIComponent(p.key)}`,
+    url: `${baseUrl}/api/photos/${p.key}`,
     ordre: p.ordre ?? 0,
   }))
   const firstPhotoUrl = photoUrls[0]?.url || undefined

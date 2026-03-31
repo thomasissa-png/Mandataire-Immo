@@ -167,8 +167,11 @@ export function BienForm() {
           <h3 className="font-display text-h4 font-semibold text-primary mb-1">
             Photos du bien
           </h3>
-          <p className="text-body-sm text-neutral-500 mb-4">
+          <p className="text-body-sm text-neutral-500 mb-2">
             Tes photos seront utilisées pour ta landing page, tes annonces, tes emails et tes posts réseaux sociaux.
+          </p>
+          <p className="text-caption text-neutral-400 mb-4">
+            Formats acceptés : JPG, PNG, WebP. Jusqu'à 10 photos. 5 Mo max par photo.
           </p>
           <PhotoUploader propertyId={createdId} initialPhotos={[]} />
         </div>
