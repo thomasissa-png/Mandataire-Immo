@@ -180,7 +180,7 @@ CONSIGNES :
 - Signature OBLIGATOIRE avec les VRAIES coordonnées :
   ${input.prenom} ${input.nom} — Mandataire ${input.reseau}
   Email : ${input.email_contact}
-  ${input.telephone_contact ? `Telephone : ${input.telephone_contact}` : ''}
+  ${input.telephone_contact ? `Téléphone : ${input.telephone_contact}` : ''}
   ${input.zone_geo.ville}
 - Le mailto dans le HTML doit pointer vers ${input.email_contact} (PAS un placeholder)
 - ${input.telephone_contact ? `Le lien tel: doit pointer vers ${input.telephone_contact}` : 'Pas de numéro de téléphone fourni — ne pas inventer de numéro.'}
