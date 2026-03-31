@@ -9,6 +9,7 @@ interface Annonce {
   title: string
   status: "draft" | "delivered"
   createdAt?: string
+  shareToken?: string | null
 }
 
 interface AnnonceListProps {
@@ -36,6 +37,8 @@ function AnnonceRow({ annonce }: { annonce: Annonce }) {
   const [content, setContent] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState<string | null>(null)
+  const [shareLoading, setShareLoading] = useState(false)
+  const [shareUrl, setShareUrl] = useState<string | null>(null)
 
   const isNew = annonce.createdAt
     ? Date.now() - new Date(annonce.createdAt).getTime() < 48 * 60 * 60 * 1000
@@ -110,6 +113,30 @@ function AnnonceRow({ annonce }: { annonce: Annonce }) {
     }
   }
 
+  const handleShare = async () => {
+    setShareLoading(true)
+    try {
+      const res = await fetch(`/api/deliverables/${annonce.id}/share`, {
+        method: "POST",
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setShareUrl(data.shareUrl)
+        await navigator.clipboard.writeText(data.shareUrl)
+        setCopied("share")
+        setTimeout(() => setCopied(null), 3000)
+        track("deliverable_share", {
+          deliverable_id: annonce.id,
+          type: "annonce",
+        })
+      }
+    } catch {
+      // Erreur réseau
+    } finally {
+      setShareLoading(false)
+    }
+  }
+
   return (
     <article className="rounded-lg bg-card border border-border border-l-4 border-l-success overflow-hidden shadow-xs hover:shadow-sm transition-shadow">
       {/* Header — compact row */}
@@ -140,6 +167,33 @@ function AnnonceRow({ annonce }: { annonce: Annonce }) {
         {/* Actions rapides — toujours visibles */}
         {annonce.status === "delivered" && (
           <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Partager — lien public */}
+            <button
+              type="button"
+              onClick={handleShare}
+              disabled={shareLoading}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-caption font-semibold transition-all ${
+                copied === "share"
+                  ? "bg-success-50 text-success-700"
+                  : "bg-primary-50 text-primary-700 hover:bg-primary-100"
+              }`}
+              aria-label={copied === "share" ? "Lien copié" : "Partager l'annonce"}
+            >
+              {shareLoading ? (
+                <div className="w-3.5 h-3.5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+              ) : copied === "share" ? (
+                <>
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                  Lien copié
+                </>
+              ) : (
+                <>
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                  Partager
+                </>
+              )}
+            </button>
+
             {/* Copier tout */}
             <button
               type="button"

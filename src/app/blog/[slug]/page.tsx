@@ -11,6 +11,7 @@ import {
   getRelatedArticles,
 } from "@/lib/blog"
 import { CategoryIcon, getCategoryStyle } from "@/components/blog/ArticleCover"
+import { ArticleHeroImage } from "@/components/blog/ArticleHeroImage"
 import { PACK_MENSUEL, formatPrice } from "@/lib/pricing"
 
 interface BlogArticlePageProps {
@@ -157,6 +158,13 @@ export default async function BlogArticlePage({
                 {article.title}
               </span>
             </nav>
+
+            {/* Hero image — ville ou catégorie */}
+            <ArticleHeroImage
+              title={article.title}
+              slug={article.slug}
+              category={article.category}
+            />
 
             {/* Article header */}
             <header className="mb-10">
