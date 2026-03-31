@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo, useEffect, useCallback } from "react"
 import { MonthFilter } from "@/components/dashboard/MonthFilter"
 import type { Deliverable } from "@/types/deliverable"
 
@@ -28,6 +28,7 @@ export function FilteredPageWrapper({
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null)
   const [showArchived, setShowArchived] = useState(false)
   const [items, setItems] = useState(deliverables)
+  const [archiveToast, setArchiveToast] = useState<{ type: "success" | "error"; message: string } | null>(null)
 
   // Synchroniser quand les props changent (navigation, revalidation SSR)
   useEffect(() => {
@@ -66,6 +67,12 @@ export function FilteredPageWrapper({
     [items]
   )
 
+  /** Affiche un toast temporaire (3s) */
+  const showToast = useCallback((type: "success" | "error", message: string) => {
+    setArchiveToast({ type, message })
+    setTimeout(() => setArchiveToast(null), 3000)
+  }, [])
+
   /** Bascule le statut d'un livrable localement après appel API */
   const handleArchiveToggle = async (id: string) => {
     try {
@@ -77,9 +84,12 @@ export function FilteredPageWrapper({
             d.id === id ? { ...d, status: data.status } : d
           )
         )
+        showToast("success", data.status === "archived" ? "Archivé !" : "Désarchivé !")
+      } else {
+        showToast("error", "Erreur lors de l'archivage — réessaie dans quelques secondes.")
       }
     } catch {
-      // Erreur réseau — pas de changement
+      showToast("error", "Erreur lors de l'archivage — réessaie dans quelques secondes.")
     }
   }
 
@@ -113,6 +123,22 @@ export function FilteredPageWrapper({
           </button>
         )}
       </div>
+
+      {/* Toast feedback archive */}
+      {archiveToast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-body-sm font-medium transition-all ${
+            archiveToast.type === "success"
+              ? "bg-success-50 text-success-700 border border-success-200"
+              : "bg-error-50 text-error-700 border border-error-200"
+          }`}
+        >
+          <span aria-hidden="true">{archiveToast.type === "success" ? "✓" : "✕"}</span>
+          {archiveToast.message}
+        </div>
+      )}
 
       {/* Contenu filtré */}
       {children(filtered, showArchived, handleArchiveToggle)}

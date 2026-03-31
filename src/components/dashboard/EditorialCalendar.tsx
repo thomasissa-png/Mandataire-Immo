@@ -75,8 +75,24 @@ const PREFERRED_WEEKDAYS: Record<string, number[]> = {
 }
 
 /**
+ * Hash déterministe simple pour un string → nombre positif.
+ * Utilisé pour assigner un jour stable à chaque deliverable.
+ */
+function stableHash(str: string): number {
+  let hash = 5381
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) + hash + str.charCodeAt(i)) | 0
+  }
+  return Math.abs(hash)
+}
+
+/**
  * Distribue les livrables sur le mois : 1 contenu par jour max,
  * types alternés, pas de dimanche, jours préférés par type.
+ *
+ * Le placement est DÉTERMINISTE : basé sur un hash de l'id du deliverable
+ * + le mois affiché, pour que la position reste stable entre les renders
+ * et la navigation mois précédent/suivant.
  */
 function distributeDeliverables(
   deliverables: Deliverable[],
@@ -94,6 +110,14 @@ function distributeDeliverables(
     if (weekday !== 0) availableDays.push(d) // Exclure dimanche
   }
 
+  // Index les jours disponibles par jour de semaine pour un accès rapide
+  const daysByWeekday: Record<number, number[]> = {}
+  for (const day of availableDays) {
+    const wd = new Date(year, month, day).getDay()
+    if (!daysByWeekday[wd]) daysByWeekday[wd] = []
+    daysByWeekday[wd].push(day)
+  }
+
   // Grouper par type et trier par priorité
   const byType: Record<string, Deliverable[]> = {}
   for (const d of deliverables) {
@@ -101,20 +125,28 @@ function distributeDeliverables(
     byType[d.type].push(d)
   }
 
-  // Trouver le meilleur jour libre pour un contenu
-  function findBestDay(type: string): number | null {
+  // Trier chaque groupe par hash déterministe pour un ordre stable
+  const monthSeed = `${year}-${month}`
+  for (const type of Object.keys(byType)) {
+    byType[type].sort((a, b) => stableHash(a.id + monthSeed) - stableHash(b.id + monthSeed))
+  }
+
+  // Trouver le meilleur jour libre pour un contenu, avec seed déterministe
+  function findBestDay(type: string, deliverableId: string): number | null {
     const preferred = PREFERRED_WEEKDAYS[type] || [2, 4]
-    // D'abord : jours préférés non utilisés
+    const hash = stableHash(deliverableId + monthSeed)
+
+    // D'abord : jours préférés non utilisés, choix stable via hash
     for (const prefWeekday of preferred) {
-      for (const day of availableDays) {
-        if (usedDays.has(day)) continue
-        const weekday = new Date(year, month, day).getDay()
-        if (weekday === prefWeekday) return day
+      const candidates = (daysByWeekday[prefWeekday] || []).filter((d) => !usedDays.has(d))
+      if (candidates.length > 0) {
+        return candidates[hash % candidates.length]
       }
     }
-    // Fallback : n'importe quel jour libre
-    for (const day of availableDays) {
-      if (!usedDays.has(day)) return day
+    // Fallback : n'importe quel jour libre, choix stable via hash
+    const remaining = availableDays.filter((d) => !usedDays.has(d))
+    if (remaining.length > 0) {
+      return remaining[hash % remaining.length]
     }
     return null
   }
@@ -125,7 +157,7 @@ function distributeDeliverables(
     if (!items) continue
 
     for (const item of items) {
-      const day = findBestDay(type)
+      const day = findBestDay(type, item.id)
       if (day === null) break // Plus de jours disponibles
       usedDays.add(day)
       map.set(day, [item]) // 1 seul contenu par jour
@@ -136,7 +168,7 @@ function distributeDeliverables(
   for (const type of Object.keys(byType)) {
     if (TYPE_PRIORITY.includes(type)) continue
     for (const item of byType[type]) {
-      const day = findBestDay(type)
+      const day = findBestDay(type, item.id)
       if (day === null) break
       usedDays.add(day)
       map.set(day, [item])

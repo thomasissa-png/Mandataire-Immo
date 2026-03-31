@@ -40,6 +40,8 @@ interface SectionConfig {
   id: string
   title: string
   icon: string
+  /** Texte d'aide affiché sous le titre de section — explique l'impact sur les contenus */
+  sectionHelper?: string
   fields: FieldDef[]
 }
 
@@ -68,6 +70,7 @@ const SECTIONS: SectionConfig[] = [
     id: "identite",
     title: "Ton identité",
     icon: "👤",
+    sectionHelper: "Ton prénom apparaît dans tes posts et emails — on s'adresse à tes prospects en ton nom.",
     fields: [
       { key: "prenom", label: "Prénom", type: "text", placeholder: "Sophie" },
       { key: "nom", label: "Nom", type: "text", placeholder: "Martin" },
@@ -78,6 +81,7 @@ const SECTIONS: SectionConfig[] = [
     id: "zone",
     title: "Ta zone",
     icon: "📍",
+    sectionHelper: "Tes articles SEO et posts mentionneront ces quartiers pour attirer des prospects locaux.",
     fields: [
       { key: "ville", label: "Ville principale", type: "text", placeholder: "Angers" },
       { key: "quartiers", label: "Quartiers où tu travailles", type: "textarea", placeholder: "La Doutre, Centre-ville, Saint-Serge..." },
@@ -88,6 +92,7 @@ const SECTIONS: SectionConfig[] = [
     id: "metier",
     title: "Ton métier",
     icon: "🏠",
+    sectionHelper: "Ces infos calibrent le vocabulaire et les arguments de tes contenus — types de biens, gamme de prix, cible.",
     fields: [
       {
         key: "reseau",
@@ -119,6 +124,7 @@ const SECTIONS: SectionConfig[] = [
     id: "communication",
     title: "Ton style",
     icon: "✍️",
+    sectionHelper: "Le ton de tes posts et articles est calqué sur ta façon de parler — pour que tes contenus sonnent comme toi.",
     fields: [
       {
         key: "ton_communication",
@@ -156,6 +162,7 @@ const SECTIONS: SectionConfig[] = [
     id: "reseaux",
     title: "Tes réseaux sociaux",
     icon: "🔗",
+    sectionHelper: "On inclut tes liens dans ta page mandataire et tes contenus pour diriger tes prospects vers tes profils.",
     fields: [
       { key: "linkedin_url", label: "LinkedIn", type: "url", placeholder: "https://linkedin.com/in/sophie-martin" },
       { key: "instagram", label: "Instagram", type: "text", placeholder: "@tonpseudo", helper: "Ton @ Instagram (ex : @sophie.immo)" },
@@ -167,6 +174,7 @@ const SECTIONS: SectionConfig[] = [
     id: "bio",
     title: "Ta bio",
     icon: "📝",
+    sectionHelper: "Ta bio donne de la personnalité à tes textes — on s'en sert pour raconter ton histoire dans tes contenus.",
     fields: [
       {
         key: "bio_personnelle",
@@ -437,10 +445,13 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
             className="rounded-lg bg-card border border-border p-5"
             aria-label={section.title}
           >
-            <h2 className="font-display text-h4 text-primary font-bold mb-4 flex items-center gap-2">
+            <h2 className="font-display text-h4 text-primary font-bold mb-1 flex items-center gap-2">
               <span aria-hidden="true">{section.icon}</span>
               {section.title}
             </h2>
+            {section.sectionHelper && (
+              <p className="text-caption text-neutral-400 mb-4">{section.sectionHelper}</p>
+            )}
 
             <div className="space-y-4">
               {section.fields.map((field) => (

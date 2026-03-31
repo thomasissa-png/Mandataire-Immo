@@ -181,6 +181,21 @@ export function DashboardContent({
         </a>
       ) : null}
 
+      {/* Monthly update banner — en haut pour visibilité maximale */}
+      {showMonthlyBanner ? (
+        <a href="/dashboard/monthly-update" className="group block rounded-lg border border-secondary/30 bg-gradient-to-r from-secondary-50 to-card p-4 hover:shadow-md transition-all">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-secondary-100 flex items-center justify-center flex-shrink-0">
+              <span className="text-secondary-700" aria-hidden="true">📝</span>
+            </div>
+            <div className="flex-1">
+              <p className="text-body-sm font-semibold text-primary">Dis-nous ce qui a changé ce mois-ci</p>
+              <p className="text-caption text-neutral-500">10 min, et tes prochains contenus seront encore plus dans le mille.</p>
+            </div>
+          </div>
+        </a>
+      ) : null}
+
       {/* ============================================================ */}
       {/* PROFILE CARD — compact, inline                                */}
       {/* ============================================================ */}
@@ -428,21 +443,6 @@ export function DashboardContent({
             Commencer le mensuel →
           </a>
         </div>
-      ) : null}
-
-      {/* Monthly update banner */}
-      {showMonthlyBanner ? (
-        <a href="/dashboard/monthly-update" className="group block rounded-lg border border-secondary/30 bg-gradient-to-r from-secondary-50 to-card p-4 hover:shadow-md transition-all">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-secondary-100 flex items-center justify-center flex-shrink-0">
-              <span className="text-secondary-700" aria-hidden="true">📝</span>
-            </div>
-            <div className="flex-1">
-              <p className="text-body-sm font-semibold text-primary">Dis-nous ce qui a changé ce mois-ci</p>
-              <p className="text-caption text-neutral-500">10 min, et tes prochains contenus seront encore plus dans le mille.</p>
-            </div>
-          </div>
-        </a>
       ) : null}
 
       {/* FOOTER */}
