@@ -2,15 +2,7 @@
 
 import { useState, useMemo } from "react"
 import { MesBiensSection } from "./MesBiensSection"
-
-interface Deliverable {
-  id: string
-  type: string
-  title: string
-  month: string
-  status: "draft" | "delivered"
-  created_at: string
-}
+import type { Deliverable } from "@/types/deliverable"
 
 interface DashboardContentProps {
   userName: string

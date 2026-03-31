@@ -6,11 +6,11 @@ import { DeliverableCard } from "@/components/dashboard/DeliverableCard"
 
 function detectPlatform(title: string) {
   const t = title.toLowerCase()
-  if (t.includes("instagram") || t.includes("reel") || t.includes("story")) return { icon: "📸", name: "Instagram" }
-  if (t.includes("linkedin")) return { icon: "💼", name: "LinkedIn" }
-  if (t.includes("facebook")) return { icon: "📘", name: "Facebook" }
-  if (t.includes("tiktok")) return { icon: "🎵", name: "TikTok" }
-  return { icon: "📱", name: "Post" }
+  if (t.includes("instagram") || t.includes("reel") || t.includes("story")) return { icon: "📸", name: "Instagram", hint: "Publie le soir (18h-20h) pour toucher les particuliers" }
+  if (t.includes("linkedin")) return { icon: "💼", name: "LinkedIn", hint: "Publie le matin (7h-9h) pour toucher les pros" }
+  if (t.includes("facebook")) return { icon: "📘", name: "Facebook", hint: "Publie en fin de journée (17h-19h)" }
+  if (t.includes("tiktok")) return { icon: "🎵", name: "TikTok", hint: "Publie entre 19h et 21h pour un max de vues" }
+  return { icon: "📱", name: "Post", hint: "" }
 }
 
 export default async function PostsPage() {
@@ -34,6 +34,25 @@ export default async function PostsPage() {
         </div>
       ) : (
         <>
+          {/* Progression mensuelle */}
+          {postsThisMonth > 0 && (
+            <div className="rounded-lg bg-card border border-border p-4 flex items-center gap-4">
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-1.5">
+                  <p className="text-body-sm font-semibold text-primary">Progression ce mois</p>
+                  <p className="text-caption font-semibold text-secondary-700">{postsThisMonth} post{postsThisMonth > 1 ? "s" : ""} prêt{postsThisMonth > 1 ? "s" : ""}</p>
+                </div>
+                <div className="w-full h-2 rounded-full bg-neutral-100 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-secondary transition-all"
+                    style={{ width: `${Math.min(100, (postsThisMonth / Math.max(postsThisMonth, 12)) * 100)}%` }}
+                  />
+                </div>
+                <p className="text-caption text-neutral-400 mt-1">Copie et publie-les au fil de la semaine pour rester visible.</p>
+              </div>
+            </div>
+          )}
+
           <p className="text-caption text-neutral-400">Copie, colle, publie. Ton équipe a fait le reste.</p>
           <div className="relative mt-2">
             <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-secondary/20" aria-hidden="true" />
@@ -60,6 +79,7 @@ export default async function PostsPage() {
                           {platform.icon}
                         </div>
                         <DeliverableCard id={post.id} type={post.type} typeLabel={platform.name} typeColor="bg-secondary-50 text-secondary-700" title={post.title} status={post.status} />
+                        {platform.hint && <p className="text-caption text-neutral-400 mt-1 ml-1">{platform.hint}</p>}
                       </div>
                     </div>
                   )

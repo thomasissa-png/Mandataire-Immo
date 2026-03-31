@@ -3,19 +3,7 @@
 import { useState, useCallback } from "react"
 import { track } from "@/lib/tracking"
 import { markdownToHtml, stripMarkdown } from "@/lib/markdownRenderer"
-
-type DeliverableType =
-  | "post"
-  | "article_seo"
-  | "annonce"
-  | "script_video"
-  | "newsletter"
-  | "email_prospection"
-  | "bio"
-  | "brief_graphique"
-  | "calendrier"
-  | "positionnement"
-  | "landing_page"
+import type { DeliverableType } from "@/types/deliverable"
 
 const TYPE_ACCENT_COLORS: Record<DeliverableType, string> = {
   post: "border-l-secondary",

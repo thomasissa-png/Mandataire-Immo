@@ -1,26 +1,7 @@
 import { query } from "@/lib/db"
+import type { DeliverableType, Deliverable } from "@/types/deliverable"
 
-export type DeliverableType =
-  | "post"
-  | "article_seo"
-  | "annonce"
-  | "script_video"
-  | "newsletter"
-  | "email_prospection"
-  | "bio"
-  | "brief_graphique"
-  | "calendrier"
-  | "positionnement"
-  | "landing_page"
-
-export interface Deliverable {
-  id: string
-  type: DeliverableType
-  title: string
-  month: string
-  status: "draft" | "delivered"
-  created_at: string
-}
+export type { DeliverableType, Deliverable }
 
 /**
  * Récupère les deliverables d'un client, optionnellement filtrés par type(s).

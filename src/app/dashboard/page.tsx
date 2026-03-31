@@ -1,28 +1,7 @@
 import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
+import { getDeliverables } from "@/lib/getDeliverables"
 import { DashboardContent } from "@/components/dashboard/DashboardContent"
-
-type DeliverableType =
-  | "post"
-  | "article_seo"
-  | "annonce"
-  | "script_video"
-  | "newsletter"
-  | "email_prospection"
-  | "bio"
-  | "brief_graphique"
-  | "calendrier"
-  | "positionnement"
-  | "landing_page"
-
-interface Deliverable {
-  id: string
-  type: DeliverableType
-  title: string
-  month: string
-  status: "draft" | "delivered"
-  created_at: string
-}
 
 interface ClientRow {
   id: string
@@ -94,19 +73,8 @@ export default async function DashboardPage() {
     }
   }
 
-  // Fetch deliverables (non-bloquant)
-  let monthDeliverables: Deliverable[] = []
-  try {
-    const { rows: deliverables } = await query<Deliverable>(
-      `SELECT id, type, title, status, month, created_at FROM deliverables
-       WHERE client_email = $1 AND status IN ('draft', 'delivered')
-       ORDER BY created_at DESC`,
-      [primaryEmail]
-    )
-    monthDeliverables = deliverables || []
-  } catch (err) {
-    console.error("[dashboard] Error fetching deliverables:", err)
-  }
+  // Fetch deliverables via shared helper
+  const monthDeliverables = await getDeliverables(primaryEmail)
 
   // Extraire les infos profil depuis le client_context
   const ctx = client?.client_context as Record<string, unknown> | null

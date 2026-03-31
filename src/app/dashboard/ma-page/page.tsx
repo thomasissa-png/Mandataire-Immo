@@ -14,6 +14,7 @@ interface ClientRow {
   first_name: string | null
   last_name: string | null
   pack: string | null
+  client_context: Record<string, unknown> | null
 }
 
 interface AgentPageRow {
@@ -33,7 +34,7 @@ export default async function MaPageMandatairePage() {
   }
 
   const { rows: clients } = await query<ClientRow>(
-    "SELECT id, email, first_name, last_name, pack FROM clients WHERE email = $1 LIMIT 1",
+    "SELECT id, email, first_name, last_name, pack, client_context FROM clients WHERE email = $1 LIMIT 1",
     [user.email]
   )
 
@@ -76,6 +77,49 @@ export default async function MaPageMandatairePage() {
             Ta page sera construite automatiquement à partir de ton profil (photo, bio, zone, biens).
             Tu pourras la modifier à tout moment.
           </p>
+
+          {/* Aperçu de ce qui sera affiché */}
+          {(() => {
+            const ctx = (client.client_context ?? {}) as Record<string, unknown>
+            const prenom = String(ctx.prenom || client.first_name || "")
+            const nom = String(ctx.nom || client.last_name || "")
+            const ville = String(ctx.ville || "")
+            const reseau = String(ctx.reseau || "")
+            const photoKey = String(ctx.photo_profil_key || "")
+            const hasProfile = prenom || nom || ville
+
+            if (!hasProfile) return null
+
+            return (
+              <div className="rounded-lg border border-border bg-card p-5 mb-6 text-left">
+                <p className="text-caption font-semibold text-neutral-400 uppercase tracking-wider mb-3">Aperçu de ta future page</p>
+                <div className="flex items-center gap-4">
+                  {photoKey ? (
+                    <img src={`/api/images/${encodeURIComponent(photoKey)}`} alt="" className="w-14 h-14 rounded-xl object-cover" />
+                  ) : (
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-secondary to-secondary-600 flex items-center justify-center">
+                      <span className="font-display text-h3 font-bold text-white">
+                        {(prenom[0] || "").toUpperCase()}{(nom[0] || "").toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-display text-h4 text-primary font-bold">{prenom} {nom}</p>
+                    {(reseau || ville) && (
+                      <p className="text-body-sm text-neutral-500">
+                        {reseau ? `Mandataire ${reseau}` : ""}{reseau && ville ? " · " : ""}{ville}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <p className="text-caption text-neutral-400 mt-3">
+                  Ces infos viennent de ton profil.{" "}
+                  <a href="/dashboard/profile" className="text-secondary-700 font-semibold hover:underline">Modifier mon profil</a>
+                </p>
+              </div>
+            )
+          })()}
+
           <ActivatePageButton pack={client.pack} />
         </div>
       ) : (
