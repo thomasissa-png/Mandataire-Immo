@@ -24,6 +24,7 @@ type TrackingEvent =
   | "subscription_upgrade"
   | "deliverable_feedback"
   | "deliverable_rewrite"
+  | "deliverable_share"
 
 interface TrackingProperties {
   [key: string]: string | number | boolean | null | undefined
