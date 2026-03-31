@@ -119,9 +119,13 @@ Réponds UNIQUEMENT avec un JSON valide, sans texte avant ni après :
     : input.biens
 
   const biensStr = biensATraiter
-    .map(
-      (b, i) =>
-        `--- Bien ${i + 1} ---
+    .map((b, i) => {
+      const dpe = 'dpe' in b && b.dpe ? b.dpe : '[DPE : information en cours — sera communiqué avant publication]'
+      const descLine = 'description_detaillee' in b && b.description_detaillee ? `\nDescription détaillée : ${b.description_detaillee}` : ''
+      const photoCount = 'photo_count' in b ? (b.photo_count as number | undefined) : undefined
+      const photoLine = photoCount ? `\nPhotos : ${photoCount} photo${photoCount > 1 ? 's' : ''} disponible${photoCount > 1 ? 's' : ''}` : ''
+      const urlLine = 'page_url' in b && b.page_url ? `\nPage avec photos : ${b.page_url}` : ''
+      return `--- Bien ${i + 1} ---
 Titre : ${b.titre}
 Type : ${b.type}
 Adresse : ${b.adresse}
@@ -129,8 +133,8 @@ Prix : ${b.prix.toLocaleString('fr-FR')}€
 Surface : ${b.surface}m²
 Pièces : ${b.pieces}
 Points forts : ${b.points_forts}
-DPE : ${'dpe' in b && b.dpe ? b.dpe : '[DPE : information en cours — sera communiqué avant publication]'}${'description_detaillee' in b && b.description_detaillee ? `\nDescription détaillée : ${b.description_detaillee}` : ''}${'photo_count' in b && b.photo_count ? `\nPhotos : ${b.photo_count} photo${b.photo_count > 1 ? 's' : ''} disponible${b.photo_count > 1 ? 's' : ''}` : ''}${'page_url' in b && b.page_url ? `\nPage avec photos : ${b.page_url}` : ''}`
-    )
+DPE : ${dpe}${descLine}${photoLine}${urlLine}`
+    })
     .join('\n\n')
 
   const donneesLocales = donneesLocalesDisponibles

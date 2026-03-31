@@ -27,7 +27,7 @@ export async function POST(
   }
 
   // Verify deliverable belongs to this user
-  const rows = await query<{ id: string }>(
+  const { rows } = await query<{ id: string }>(
     `SELECT d.id FROM deliverables d
      JOIN clients c ON d.client_id = c.id
      WHERE d.id = $1 AND c.email = $2`,

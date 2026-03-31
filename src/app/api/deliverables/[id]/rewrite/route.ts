@@ -15,7 +15,7 @@ export async function POST(
   const { id } = await params
 
   // Verify deliverable belongs to this user and get current content
-  const rows = await query<{ id: string; content: string; type: string; rewrite_count: number }>(
+  const { rows } = await query<{ id: string; content: string; type: string; rewrite_count: number }>(
     `SELECT d.id, d.content, d.type, COALESCE(d.rewrite_count, 0) as rewrite_count
      FROM deliverables d
      JOIN clients c ON d.client_id = c.id

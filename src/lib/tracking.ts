@@ -22,6 +22,8 @@ type TrackingEvent =
   | "home_staging_started"
   | "home_staging_completed"
   | "subscription_upgrade"
+  | "deliverable_feedback"
+  | "deliverable_rewrite"
 
 interface TrackingProperties {
   [key: string]: string | number | boolean | null | undefined
