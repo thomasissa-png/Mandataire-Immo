@@ -138,8 +138,8 @@ describe("POST /api/agent/activate", () => {
     mockQuery.mockResolvedValueOnce({ rows: [] })
     // SELECT slug conflicts (aucun)
     mockQuery.mockResolvedValueOnce({ rows: [] })
-    // INSERT
-    mockQuery.mockResolvedValueOnce({ rows: [] })
+    // INSERT RETURNING slug
+    mockQuery.mockResolvedValueOnce({ rows: [{ slug: "sophie-martin" }] })
 
     const response = await POST(makePostRequest({ pack: "lancement" }))
     expect(response.status).toBe(201)
@@ -160,7 +160,7 @@ describe("POST /api/agent/activate", () => {
     })
     mockQuery.mockResolvedValueOnce({ rows: [] })
     mockQuery.mockResolvedValueOnce({ rows: [] })
-    mockQuery.mockResolvedValueOnce({ rows: [] })
+    mockQuery.mockResolvedValueOnce({ rows: [{ slug: "helene-muller" }] })
 
     const response = await POST(makePostRequest({ pack: "mensuel" }))
     expect(response.status).toBe(201)
@@ -181,7 +181,7 @@ describe("POST /api/agent/activate", () => {
     mockQuery.mockResolvedValueOnce({ rows: [] })
     // slug conflicts : sophie-martin existe déjà
     mockQuery.mockResolvedValueOnce({ rows: [{ slug: "sophie-martin" }] })
-    mockQuery.mockResolvedValueOnce({ rows: [] })
+    mockQuery.mockResolvedValueOnce({ rows: [{ slug: "sophie-martin-2" }] })
 
     const response = await POST(makePostRequest({ pack: "lancement" }))
     expect(response.status).toBe(201)
@@ -204,7 +204,7 @@ describe("POST /api/agent/activate", () => {
     mockQuery.mockResolvedValueOnce({
       rows: [{ slug: "sophie-martin" }, { slug: "sophie-martin-2" }],
     })
-    mockQuery.mockResolvedValueOnce({ rows: [] })
+    mockQuery.mockResolvedValueOnce({ rows: [{ slug: "sophie-martin-3" }] })
 
     const response = await POST(makePostRequest({ pack: "lancement" }))
     expect(response.status).toBe(201)
@@ -246,7 +246,7 @@ describe("POST /api/agent/activate", () => {
     })
     mockQuery.mockResolvedValueOnce({ rows: [] })
     mockQuery.mockResolvedValueOnce({ rows: [] })
-    mockQuery.mockResolvedValueOnce({ rows: [] })
+    mockQuery.mockResolvedValueOnce({ rows: [{ slug: "marc-dupont" }] })
 
     await POST(makePostRequest({ pack: "mensuel" }))
 
@@ -268,7 +268,7 @@ describe("POST /api/agent/activate", () => {
     })
     mockQuery.mockResolvedValueOnce({ rows: [] })
     mockQuery.mockResolvedValueOnce({ rows: [] })
-    mockQuery.mockResolvedValueOnce({ rows: [] })
+    mockQuery.mockResolvedValueOnce({ rows: [{ slug: "jean-valjean" }] })
 
     const response = await POST(makePostRequest({ pack: "lancement" }))
     expect(response.status).toBe(201)

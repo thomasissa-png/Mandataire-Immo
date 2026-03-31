@@ -172,8 +172,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const { profile, page } = data
-  const title = `Mandataire ${profile.reseau} à ${profile.ville} — ${profile.prenom} ${profile.nom}`
-  const description = (page.bio_generee || profile.bio_personnelle || "").slice(0, 150)
+  const fullName = `${profile.prenom} ${profile.nom}`.trim()
+  const titleParts = [
+    profile.reseau ? `Mandataire ${profile.reseau}` : "Mandataire immobilier",
+    profile.ville ? `à ${profile.ville}` : null,
+    fullName || null,
+  ].filter(Boolean)
+  const title = titleParts.join(" — ")
+  const description = (page.bio_generee || profile.bio_personnelle || `${fullName}, mandataire immobilier`).slice(0, 150)
 
   const robots = page.indexation
     ? { index: true, follow: true }

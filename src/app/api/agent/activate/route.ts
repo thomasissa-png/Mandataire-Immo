@@ -99,12 +99,22 @@ export async function POST(request: NextRequest) {
     }
 
     let baseSlug = slugify(`${prenom} ${nom}`)
+
+    // P1: Guard slug vide (noms avec uniquement des caractères spéciaux)
+    if (!baseSlug) {
+      return NextResponse.json(
+        { error: "Impossible de générer un slug à partir de ton prénom/nom. Vérifie que ton profil contient des caractères valides." },
+        { status: 400 }
+      )
+    }
+
     let slug = baseSlug
 
-    // Gérer les collisions de slug
+    // Gérer les collisions de slug (escape % et _ pour LIKE)
+    const likePattern = baseSlug.replace(/%/g, "\\%").replace(/_/g, "\\_")
     const { rows: slugConflicts } = await query<{ slug: string }>(
-      "SELECT slug FROM agent_pages WHERE slug LIKE $1",
-      [`${baseSlug}%`]
+      "SELECT slug FROM agent_pages WHERE slug LIKE $1 ESCAPE '\\'",
+      [`${likePattern}%`]
     )
     if (slugConflicts.length > 0) {
       const existingSlugs = new Set(slugConflicts.map((r) => r.slug))
@@ -119,14 +129,16 @@ export async function POST(request: NextRequest) {
     // La génération IA sera activée quand ANTHROPIC_API_KEY sera configurée
     const bioGeneree = null
 
-    // 5. INSERT
-    await query(
+    // 5. INSERT avec ON CONFLICT pour éviter les race conditions
+    const { rows: inserted } = await query<{ slug: string }>(
       `INSERT INTO agent_pages (client_id, slug, status, bio_generee, activated_at)
-       VALUES ($1, $2, 'active', $3, NOW())`,
+       VALUES ($1, $2, 'active', $3, NOW())
+       ON CONFLICT (client_id) DO UPDATE SET client_id = agent_pages.client_id
+       RETURNING slug`,
       [client.id, slug, bioGeneree]
     )
 
-    return NextResponse.json({ slug, status: "active" }, { status: 201 })
+    return NextResponse.json({ slug: inserted[0].slug, status: "active" }, { status: 201 })
   } catch (err) {
     console.error("POST /api/agent/activate error:", err)
     return NextResponse.json(

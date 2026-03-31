@@ -208,11 +208,11 @@ describe("ContactSection", () => {
     const emailLink = screen.getByText("Envoyer un email").closest("a")
     expect(emailLink).toHaveAttribute(
       "href",
-      expect.stringContaining("mailto:sophie@immocrew.fr")
+      expect.stringContaining("mailto:sophie%40immocrew.fr")
     )
     expect(emailLink).toHaveAttribute(
       "href",
-      expect.stringContaining("Sophie Martin")
+      expect.stringContaining("subject=")
     )
   })
 })

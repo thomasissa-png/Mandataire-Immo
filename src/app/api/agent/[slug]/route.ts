@@ -62,8 +62,9 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
     const agentPage = rows[0]
 
-    // 2. Guard edition_locked
-    if (agentPage.edition_locked) {
+    // 2. Guard edition_locked (indexation reste modifiable même en mode locked)
+    const isIndexationOnly = Object.keys(body).length === 1 && "indexation" in body
+    if (agentPage.edition_locked && !isIndexationOnly) {
       return NextResponse.json(
         { error: "Ton accès en édition a expiré — passe au Pack Mensuel pour continuer à modifier ta page." },
         { status: 403 }

@@ -24,6 +24,18 @@ function formatPrice(prix: number): string {
   return prix.toLocaleString("fr-FR") + " €"
 }
 
+/** Sanitize un numéro de téléphone pour le href tel: (garde uniquement +, chiffres) */
+function sanitizePhone(phone: string): string {
+  return phone.replace(/[^\d+]/g, "")
+}
+
+/** Normalise une URL : ajoute https:// si pas de protocole */
+function normalizeUrl(url: string): string {
+  const trimmed = url.trim()
+  if (/^https?:\/\//i.test(trimmed)) return trimmed
+  return `https://${trimmed}`
+}
+
 // ─── 1. HeroSection ────────────────────────────────────────────────
 
 interface HeroProps {
@@ -88,7 +100,7 @@ export function HeroSection({ profile }: HeroProps) {
         <div className="flex flex-col tablet:flex-row items-center gap-3 mt-2">
           {profile.telephone && (
             <a
-              href={`tel:${profile.telephone.replace(/\s/g, "")}`}
+              href={`tel:${sanitizePhone(profile.telephone)}`}
               className="inline-flex h-11 px-6 items-center gap-2 rounded-full bg-white text-primary font-display font-bold text-body-sm shadow-sm hover:bg-neutral-100 active:scale-[0.97] transition-all duration-normal"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
@@ -451,7 +463,7 @@ export function ContactSection({ profile, email }: ContactProps) {
         <div className="flex flex-col tablet:flex-row items-center justify-center gap-4">
           {profile.telephone && (
             <a
-              href={`tel:${profile.telephone.replace(/\s/g, "")}`}
+              href={`tel:${sanitizePhone(profile.telephone)}`}
               className="inline-flex h-12 px-8 items-center gap-2 rounded-full bg-white text-primary font-display font-bold text-body shadow-sm hover:bg-neutral-100 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
@@ -462,7 +474,7 @@ export function ContactSection({ profile, email }: ContactProps) {
           )}
 
           <a
-            href={`mailto:${email}?subject=Prise de contact — ${profile.prenom} ${profile.nom}`}
+            href={`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(`Prise de contact — ${profile.prenom} ${profile.nom}`)}`}
             className="inline-flex h-12 px-8 items-center gap-2 rounded-full bg-secondary text-primary font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
@@ -501,7 +513,7 @@ export function ReseauxSection({ profile }: ReseauxProps) {
           {links.map((link) => (
             <a
               key={link.label}
-              href={link.url}
+              href={normalizeUrl(link.url)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg p-2"
