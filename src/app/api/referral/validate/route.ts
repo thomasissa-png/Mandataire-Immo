@@ -41,11 +41,11 @@ function checkRateLimit(ip: string): boolean {
 // Nettoyage periodique pour eviter les fuites memoire
 setInterval(() => {
   const now = Date.now()
-  for (const [ip, entry] of rateLimitMap) {
+  rateLimitMap.forEach((entry, ip) => {
     if (now > entry.resetAt) {
       rateLimitMap.delete(ip)
     }
-  }
+  })
 }, 60_000)
 
 export async function POST(request: NextRequest) {
