@@ -66,7 +66,7 @@ export function BlogGrid({ articles }: BlogGridProps) {
 
       {/* Grid uniforme — 2 colonnes, cards identiques avec thumbnail */}
       {filtered.length > 0 && (
-        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
           {filtered.map((article) => {
             const catStyle = getCategoryStyle(article.category)
             const thumb = getArticleThumbnail(article.title, article.slug, article.category)

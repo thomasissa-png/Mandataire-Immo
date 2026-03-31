@@ -4,9 +4,9 @@ export function Hero() {
   return (
     <section className="section-padding bg-background">
       <div className="container-immocrew">
-        <div className="desktop:flex desktop:items-center desktop:gap-16">
+        <div className="tablet:flex tablet:items-center tablet:gap-12 desktop:gap-16">
           {/* Texte */}
-          <div className="desktop:w-[60%]">
+          <div className="tablet:w-[60%]">
             <h1 className="font-display text-display-lg desktop:text-display-xl text-primary mb-4 desktop:mb-6">
               Tu n&apos;as pas choisi l&apos;immobilier pour passer tes
               soirées sur Canva.
@@ -41,7 +41,7 @@ export function Hero() {
           </div>
 
           {/* Mockup visuel (placeholder — decoratif) */}
-          <div className="mt-10 desktop:mt-0 desktop:w-[40%]" aria-hidden="true">
+          <div className="mt-10 tablet:mt-0 tablet:w-[40%]" aria-hidden="true">
             <div className="relative mx-auto max-w-sm desktop:max-w-none">
               <div className="rounded-xl bg-white border border-border shadow-md p-6 space-y-4">
                 <div className="flex items-center gap-3">

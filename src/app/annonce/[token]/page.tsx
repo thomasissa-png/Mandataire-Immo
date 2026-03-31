@@ -151,14 +151,14 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
   const photos = await getAnnoncePhotos(annonce)
 
   return (
-    <main className="min-h-screen bg-[#F8F6F2]">
+    <main className="min-h-screen bg-background">
       {/* Header branded */}
-      <header className="bg-[#1B2A4A] text-white">
+      <header className="bg-primary text-white">
         <div className="max-w-3xl mx-auto px-6 py-8">
-          <p className="text-[#F27A1A] font-semibold text-sm uppercase tracking-wider mb-3">
+          <p className="text-secondary font-semibold text-sm uppercase tracking-wider mb-3">
             Annonce immobilière
           </p>
-          <h1 className="text-2xl md:text-3xl font-bold leading-tight">
+          <h1 className="text-h2 tablet:text-h1 font-bold leading-tight">
             {annonce.title}
           </h1>
           <div className="flex items-center gap-4 mt-3 text-sm text-neutral-400">
@@ -175,7 +175,7 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
 
       {/* Bouton contact mandataire */}
       {(annonce.client_phone || annonce.client_email) && (
-        <div className="max-w-3xl mx-auto px-6 -mb-4 pt-6">
+        <div className="max-w-3xl mx-auto px-6 mt-6 mb-2">
           <div className="flex items-center gap-3 flex-wrap">
             {annonce.client_phone && (
               <a
@@ -204,11 +204,11 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
       {/* Galerie photos du bien */}
       {photos.length > 0 && (
         <div className="max-w-3xl mx-auto px-6 pt-8">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 rounded-xl overflow-hidden">
+          <div className="grid grid-cols-2 tablet:grid-cols-3 gap-2 rounded-xl overflow-hidden">
             {photos.slice(0, 6).map((url, i) => (
               <div
                 key={url}
-                className={`relative ${i === 0 ? "col-span-2 row-span-2 min-h-[280px] md:min-h-[360px]" : "min-h-[140px] md:min-h-[170px]"}`}
+                className={`relative ${i === 0 ? "col-span-2 row-span-2 min-h-[280px] tablet:min-h-[360px]" : "min-h-[140px] tablet:min-h-[170px]"}`}
               >
                 <Image
                   src={url}
@@ -231,7 +231,7 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
 
       {/* Contenu de l'annonce */}
       <article className="max-w-3xl mx-auto px-6 py-8">
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 md:p-10">
+        <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 tablet:p-10">
           <AnnonceContent content={annonce.content} />
         </div>
       </article>
@@ -244,9 +244,9 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-[#1B2A4A] font-bold text-lg hover:text-[#F27A1A] transition-colors"
+            className="inline-flex items-center gap-2 text-primary font-bold text-lg hover:text-secondary transition-colors"
           >
-            <span className="text-[#F27A1A]">Immo</span>Crew
+            <span className="text-secondary">Immo</span>Crew
           </Link>
           <p className="text-neutral-400 text-xs mt-3">
             Ton équipe marketing immobilier, clé en main.
@@ -266,13 +266,13 @@ function AnnonceContent({ content }: { content: string }) {
   return (
     <div
       className="prose prose-lg max-w-none text-neutral-800
-        prose-headings:text-[#1B2A4A] prose-headings:font-bold
+        prose-headings:text-primary prose-headings:font-bold
         prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-3
         prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-2
         prose-p:leading-relaxed prose-p:mb-4
-        prose-strong:text-[#1B2A4A]
+        prose-strong:text-primary
         prose-li:leading-relaxed
-        prose-a:text-[#F27A1A] prose-a:no-underline hover:prose-a:underline"
+        prose-a:text-secondary prose-a:no-underline hover:prose-a:underline"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   )
@@ -343,7 +343,7 @@ function serverMarkdownToHtml(md: string): string {
     // Blockquote
     if (trimmed.startsWith("> ")) {
       if (inList) { html.push(listType === "ul" ? "</ul>" : "</ol>"); inList = false }
-      html.push(`<blockquote class="border-l-4 border-[#F27A1A]/30 pl-4 my-4 text-neutral-600 italic"><p>${formatInline(trimmed.slice(2))}</p></blockquote>`)
+      html.push(`<blockquote class="border-l-4 border-secondary/30 pl-4 my-4 text-neutral-600 italic"><p>${formatInline(trimmed.slice(2))}</p></blockquote>`)
       continue
     }
 

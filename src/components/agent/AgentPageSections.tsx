@@ -176,7 +176,7 @@ export function QuiSuisJeSection({ profile, bioGeneree }: QuiSuisJeProps) {
                 <p className="text-display-lg font-display text-secondary font-bold">
                   {profile.experience_annees}
                 </p>
-                <p className="text-caption text-muted-foreground">ans d'expérience</p>
+                <p className="text-caption text-neutral-500">ans d'expérience</p>
               </div>
             )}
             {profile.nb_transactions_an && (
@@ -184,7 +184,7 @@ export function QuiSuisJeSection({ profile, bioGeneree }: QuiSuisJeProps) {
                 <p className="text-display-lg font-display text-secondary font-bold">
                   {profile.nb_transactions_an}
                 </p>
-                <p className="text-caption text-muted-foreground">transactions / an</p>
+                <p className="text-caption text-neutral-500">transactions / an</p>
               </div>
             )}
           </div>
@@ -272,13 +272,13 @@ export function MaZoneSection({ profile }: MaZoneProps) {
             <div>
               <h3 className="text-h4 font-display text-foreground mb-3">Zone géographique</h3>
               {profile.departement && (
-                <p className="text-body text-muted-foreground mb-2">
+                <p className="text-body text-neutral-500 mb-2">
                   Département : <span className="text-foreground font-medium">{profile.departement}</span>
                 </p>
               )}
               {quartiers.length > 0 && (
                 <div>
-                  <p className="text-body text-muted-foreground mb-2">Quartiers :</p>
+                  <p className="text-body text-neutral-500 mb-2">Quartiers :</p>
                   <div className="flex flex-wrap gap-2">
                     {quartiers.map((q) => (
                       <span
@@ -313,12 +313,12 @@ export function MaZoneSection({ profile }: MaZoneProps) {
                 </div>
               )}
               {typeBiens.length > 0 && (
-                <p className="text-body text-muted-foreground mb-2">
+                <p className="text-body text-neutral-500 mb-2">
                   Types de biens : <span className="text-foreground font-medium">{typeBiens.join(", ")}</span>
                 </p>
               )}
               {profile.gamme_prix && (
-                <p className="text-body text-muted-foreground">
+                <p className="text-body text-neutral-500">
                   Gamme de prix : <span className="text-foreground font-medium">{profile.gamme_prix}</span>
                 </p>
               )}
@@ -347,7 +347,7 @@ export function MesBiensSection({ biens }: MesBiensProps) {
             <svg className="w-10 h-10 text-neutral-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819" />
             </svg>
-            <p className="text-body text-muted-foreground mb-3">
+            <p className="text-body text-neutral-500 mb-3">
               Pas de bien en vente actuellement — contacte-moi pour discuter de ton projet.
             </p>
             <a
@@ -399,7 +399,7 @@ export function MesBiensSection({ biens }: MesBiensProps) {
                   <h3 className="text-body font-semibold text-foreground mb-1 line-clamp-1">
                     {bien.titre_annonce || bien.titre}
                   </h3>
-                  <p className="text-body-sm text-muted-foreground mb-2">
+                  <p className="text-body-sm text-neutral-500 mb-2">
                     {bien.type_bien} &middot; {bien.pieces} pièces &middot; {bien.surface} m²
                     {bien.city ? ` · ${bien.city}` : ""}
                   </p>
@@ -447,7 +447,7 @@ export function TemoignagesSection({ profile }: TemoignagesProps) {
               <div>
                 <p className="text-body-sm font-semibold text-primary">{t.nom}</p>
                 {(t.contexte || t.date) && (
-                  <p className="text-caption text-muted-foreground">
+                  <p className="text-caption text-neutral-500">
                     {t.contexte}{t.contexte && t.date ? " · " : ""}{t.date}
                   </p>
                 )}
@@ -542,7 +542,7 @@ export function ReseauxSection({ profile }: ReseauxProps) {
               <span className="w-12 h-12 rounded-full bg-primary-50 text-primary-700 flex items-center justify-center group-hover:bg-primary-100 transition-colors duration-normal">
                 <link.icon />
               </span>
-              <span className="text-caption text-muted-foreground group-hover:text-primary-700 transition-colors">
+              <span className="text-caption text-neutral-500 group-hover:text-primary-700 transition-colors">
                 {link.label}
               </span>
             </a>
