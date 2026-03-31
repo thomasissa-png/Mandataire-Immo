@@ -158,7 +158,7 @@ const SECTIONS: SectionConfig[] = [
     icon: "🔗",
     fields: [
       { key: "linkedin_url", label: "LinkedIn", type: "url", placeholder: "https://linkedin.com/in/sophie-martin" },
-      { key: "instagram", label: "Instagram", type: "text", placeholder: "@sophie.immo" },
+      { key: "instagram", label: "Instagram", type: "text", placeholder: "@tonpseudo", helper: "Ton @ Instagram (ex : @sophie.immo)" },
       { key: "facebook", label: "Page Facebook", type: "text", placeholder: "facebook.com/sophie.immo" },
       { key: "site_web", label: "Site web", type: "url", placeholder: "https://www.sophie-immo.fr" },
     ],
@@ -357,8 +357,26 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
     ? `/api/images/${encodeURIComponent(data.photo_profil_key)}`
     : null
 
+  // Calcul de la complétude du profil
+  const totalFields = Object.keys(initialData).length
+  const filledFields = Object.values(data).filter(v => typeof v === "string" && v.trim() !== "").length
+  const completionPercent = Math.round((filledFields / totalFields) * 100)
+
   return (
     <div className="space-y-6">
+      {/* Indicateur de complétude */}
+      <div className="rounded-lg bg-card border border-border p-4 mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-body-sm font-semibold text-primary">Complétude du profil</span>
+          <span className="text-caption font-bold text-secondary-700">{completionPercent}%</span>
+        </div>
+        <div className="w-full h-2 bg-neutral-100 rounded-full overflow-hidden">
+          <div className="h-full bg-secondary rounded-full transition-all duration-300" style={{ width: `${completionPercent}%` }} />
+        </div>
+        {completionPercent < 100 && (
+          <p className="text-caption text-neutral-500 mt-2">Plus ton profil est complet, plus tes contenus sont pertinents.</p>
+        )}
+      </div>
       {/* Photo section — part of identite but visually separate */}
       <div className="rounded-lg bg-card border border-border p-5">
         <div className="flex items-center gap-4 mb-4">

@@ -632,6 +632,26 @@ export default function MonthlyUpdatePage() {
             <p className="font-display text-body font-semibold text-primary">
               {existingBiens.length + newBiens.filter((b) => b.titre.trim()).length} bien(s)
             </p>
+            {(() => {
+              const allRecapBiens = [
+                ...existingBiens,
+                ...newBiens.filter((b) => b.titre.trim()),
+              ]
+              if (allRecapBiens.length > 0) {
+                return (
+                  <ul className="mt-2 space-y-1">
+                    {allRecapBiens.map((b, i) => (
+                      <li key={i} className="text-body-sm text-neutral-600 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-secondary flex-shrink-0" />
+                        {b.titre || "Bien sans titre"}
+                        {b.type ? <span className="text-caption text-neutral-400">({b.type})</span> : null}
+                      </li>
+                    ))}
+                  </ul>
+                )
+              }
+              return null
+            })()}
           </div>
 
           {/* Anecdote recap */}

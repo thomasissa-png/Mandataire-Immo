@@ -21,7 +21,7 @@ interface RouteContext {
 
 // ─── Champs éditables (whitelist stricte) ───────────────────────────
 
-const EDITABLE_AGENT_FIELDS = ["bio_generee"] as const
+const EDITABLE_AGENT_FIELDS = ["bio_generee", "indexation"] as const
 const EDITABLE_CONTEXT_FIELDS = ["bio_personnelle"] as const
 
 // ─── Handler ────────────────────────────────────────────────────────
@@ -76,10 +76,14 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     let paramIndex = 1
 
     for (const field of EDITABLE_AGENT_FIELDS) {
-      if (field in body && typeof body[field] === "string") {
-        agentUpdates.push(`${field} = $${paramIndex}`)
-        agentValues.push(body[field])
-        paramIndex++
+      if (field in body) {
+        const value = body[field]
+        // indexation est un booléen, les autres champs sont des strings
+        if (field === "indexation" ? typeof value === "boolean" : typeof value === "string") {
+          agentUpdates.push(`${field} = $${paramIndex}`)
+          agentValues.push(value)
+          paramIndex++
+        }
       }
     }
 

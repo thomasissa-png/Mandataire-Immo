@@ -199,6 +199,17 @@ export function DashboardContent({
     ? `${(profile.prenom[0] || "").toUpperCase()}${(profile.nom[0] || "").toUpperCase()}`
     : "?"
   const packLabel = pack === "mensuel" ? "Pack Mensuel" : pack === "lancement" ? "Pack Lancement" : null
+
+  const missingFields: string[] = []
+  if (profile) {
+    if (!profile.telephone) missingFields.push("téléphone")
+    if (!profile.quartiers) missingFields.push("quartiers")
+    if (!profile.type_biens) missingFields.push("types de biens")
+    if (!profile.experience_annees) missingFields.push("expérience")
+    if (!profile.nb_transactions_an) missingFields.push("transactions/an")
+    if (!profile.gamme_prix) missingFields.push("gamme de prix")
+  }
+
   const currentMonth = new Date().toISOString().slice(0, 7)
 
   // Group deliverables
@@ -248,6 +259,12 @@ export function DashboardContent({
         <p className="text-caption text-neutral-400">
           On t{"'"}envoie un email dès que c{"'"}est prêt.
         </p>
+        <a
+          href="/dashboard/biens/nouveau"
+          className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 rounded-full bg-primary text-white font-display font-bold text-body-sm hover:bg-primary-700 transition-colors shadow-sm"
+        >
+          Ajoute ton premier bien →
+        </a>
       </div>
     )
   }
@@ -343,7 +360,11 @@ export function DashboardContent({
             <span className="text-xl" aria-hidden="true">📝</span>
             <div>
               <p className="text-body-sm font-semibold text-warning-800">Ton profil est incomplet</p>
-              <p className="text-caption text-warning-700">Reprends l{"'"}onboarding pour recevoir tes contenus personnalisés — 5 min max.</p>
+              <p className="text-caption text-warning-700">
+                {missingFields.length > 0
+                  ? `Il manque : ${missingFields.join(", ")}. Complète ton profil pour des contenus plus précis.`
+                  : "Reprends l'onboarding pour recevoir tes contenus personnalisés — 5 min max."}
+              </p>
             </div>
           </div>
         </a>
@@ -395,6 +416,29 @@ export function DashboardContent({
             <a href="/dashboard/profile" className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700 hover:bg-secondary-100 transition-colors">Modifier mon profil</a>
           </div>
         )}
+      </div>
+
+      {/* CARTE PAGE MANDATAIRE */}
+      <div className="rounded-lg bg-card border border-border p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-body-sm font-semibold text-primary">Ta page mandataire</p>
+              <p className="text-caption text-neutral-500">Ton profil public visible par tes prospects</p>
+            </div>
+          </div>
+          <a
+            href="/dashboard/ma-page"
+            className="px-4 py-2 rounded-full bg-secondary text-primary font-display font-bold text-caption hover:bg-secondary-600 hover:text-white transition-all shadow-sm"
+          >
+            Gérer ma page →
+          </a>
+        </div>
       </div>
 
       {/* PLAN STRATEGIQUE — résumé + recommandations */}
