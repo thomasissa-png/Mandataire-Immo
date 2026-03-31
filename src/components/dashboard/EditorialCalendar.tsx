@@ -15,19 +15,15 @@ import { CalendarDayPopover } from "./CalendarDayPopover"
 const TYPE_DOT_COLORS: Record<string, string> = {
   post: "bg-secondary",
   article_seo: "bg-primary",
-  annonce: "bg-warning",
   script_video: "bg-success",
   newsletter: "bg-info",
-  email_prospection: "bg-error",
 }
 
 const TYPE_LABELS: Record<string, string> = {
   post: "Post",
   article_seo: "Article SEO",
-  annonce: "Annonce",
   script_video: "Script vidéo",
   newsletter: "Newsletter",
-  email_prospection: "Email",
 }
 
 const WEEKDAYS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"] as const
@@ -57,49 +53,93 @@ function getDeliverableDay(d: Deliverable): number | null {
 }
 
 /**
- * Jours de publication recommandés par type de contenu.
- * Objectif : répartir les contenus sur le mois pour un vrai calendrier éditorial
- * au lieu de tout empiler le jour de création du pack.
+ * Ordre de priorité pour le placement dans le calendrier.
+ * Les types en premier sont placés en priorité sur les meilleurs jours.
  */
-const PUBLICATION_SCHEDULE: Record<string, number[]> = {
-  post: [2, 5, 9, 12, 16, 19, 23, 26, 30],        // Mar, Ven → ~2/sem
-  article_seo: [8, 22],                              // 2x/mois, milieu de semaine
-  script_video: [4, 11, 18, 25],                     // Chaque jeudi
-  annonce: [3, 10, 17, 24],                           // Chaque mercredi
-  newsletter: [15],                                    // Milieu de mois
-  email_prospection: [1, 15],                          // Début + milieu
+const TYPE_PRIORITY: string[] = [
+  "post",          // Coeur du calendrier — mardi, jeudi, samedi
+  "script_video",  // Reels/TikTok — samedi matin
+  "article_seo",   // SEO — mercredi (milieu de semaine)
+  "newsletter",    // 1x/mois — milieu de mois
+]
+
+/**
+ * Jours préférés par type de contenu (jour de semaine : 0=dim, 1=lun ... 6=sam).
+ * Basé sur les best practices par réseau social.
+ */
+const PREFERRED_WEEKDAYS: Record<string, number[]> = {
+  post: [2, 4, 6],         // Mardi, Jeudi, Samedi (LinkedIn mardi/jeudi, Instagram samedi)
+  script_video: [6, 5],    // Samedi (Reels), Vendredi
+  article_seo: [3, 2],     // Mercredi, Mardi
+  newsletter: [4, 3],      // Jeudi, Mercredi
 }
 
 /**
- * Distribue les livrables du mois sur des jours de publication optimaux
- * au lieu de les empiler sur leur date de création.
+ * Distribue les livrables sur le mois : 1 contenu par jour max,
+ * types alternés, pas de dimanche, jours préférés par type.
  */
 function distributeDeliverables(
   deliverables: Deliverable[],
-  daysInMonth: number
+  daysInMonth: number,
+  year: number,
+  month: number,
 ): Map<number, Deliverable[]> {
   const map = new Map<number, Deliverable[]>()
+  const usedDays = new Set<number>()
 
-  // Grouper par type
+  // Calculer les jours disponibles (pas dimanche)
+  const availableDays: number[] = []
+  for (let d = 1; d <= daysInMonth; d++) {
+    const weekday = new Date(year, month, d).getDay()
+    if (weekday !== 0) availableDays.push(d) // Exclure dimanche
+  }
+
+  // Grouper par type et trier par priorité
   const byType: Record<string, Deliverable[]> = {}
   for (const d of deliverables) {
     if (!byType[d.type]) byType[d.type] = []
     byType[d.type].push(d)
   }
 
-  // Distribuer chaque type sur ses jours prévus
-  const types = Object.keys(byType)
-  for (const type of types) {
-    const items = byType[type]
-    const schedule = PUBLICATION_SCHEDULE[type] || [1, 8, 15, 22]
-    // Filtrer les jours valides pour ce mois
-    const validDays = schedule.filter((d) => d <= daysInMonth)
+  // Trouver le meilleur jour libre pour un contenu
+  function findBestDay(type: string): number | null {
+    const preferred = PREFERRED_WEEKDAYS[type] || [2, 4]
+    // D'abord : jours préférés non utilisés
+    for (const prefWeekday of preferred) {
+      for (const day of availableDays) {
+        if (usedDays.has(day)) continue
+        const weekday = new Date(year, month, day).getDay()
+        if (weekday === prefWeekday) return day
+      }
+    }
+    // Fallback : n'importe quel jour libre
+    for (const day of availableDays) {
+      if (!usedDays.has(day)) return day
+    }
+    return null
+  }
 
-    for (let idx = 0; idx < items.length; idx++) {
-      const day = validDays[idx % validDays.length]
-      const existing = map.get(day) || []
-      existing.push(items[idx])
-      map.set(day, existing)
+  // Placer les contenus type par type, en alternant
+  for (const type of TYPE_PRIORITY) {
+    const items = byType[type]
+    if (!items) continue
+
+    for (const item of items) {
+      const day = findBestDay(type)
+      if (day === null) break // Plus de jours disponibles
+      usedDays.add(day)
+      map.set(day, [item]) // 1 seul contenu par jour
+    }
+  }
+
+  // Contenus de types non listés dans TYPE_PRIORITY (sécurité)
+  for (const type of Object.keys(byType)) {
+    if (TYPE_PRIORITY.includes(type)) continue
+    for (const item of byType[type]) {
+      const day = findBestDay(type)
+      if (day === null) break
+      usedDays.add(day)
+      map.set(day, [item])
     }
   }
 
@@ -151,10 +191,9 @@ export function EditorialCalendar({
     [deliverables, monthKey],
   )
 
-  // Distribuer les livrables sur des jours de publication optimaux
-  // au lieu de les empiler sur leur date de création
+  // Distribuer les livrables : 1 contenu/jour, types alternés, pas de dimanche
   const deliverablesByDay = useMemo(
-    () => distributeDeliverables(monthDeliverables, getDaysInMonth(year, month)),
+    () => distributeDeliverables(monthDeliverables, getDaysInMonth(year, month), year, month),
     [monthDeliverables, year, month],
   )
 

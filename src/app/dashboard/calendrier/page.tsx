@@ -16,7 +16,6 @@ const QUICK_LINKS = [
   { href: "/dashboard/articles", icon: "📝", label: "Articles SEO" },
   { href: "/dashboard/scripts", icon: "🎬", label: "Scripts vidéo" },
   { href: "/dashboard/emails", icon: "📧", label: "Emails" },
-  { href: "/dashboard/annonces", icon: "🏠", label: "Annonces" },
 ] as const
 
 export default async function CalendrierPage() {
@@ -26,14 +25,13 @@ export default async function CalendrierPage() {
   const now = new Date()
   const monthLabel = now.toLocaleDateString("fr-FR", { month: "long", year: "numeric" })
 
-  // Récupérer tous les contenus (toutes les dates, tous les types)
+  // Calendrier éditorial = uniquement les contenus publiables
+  // Exclure : annonces (contenu immobilier, pas éditorial) et emails de prospection (CRM)
   const allDeliverables = await getDeliverables(user.email, [
     "post",
     "article_seo",
-    "annonce",
     "script_video",
     "newsletter",
-    "email_prospection",
   ])
 
   return (
