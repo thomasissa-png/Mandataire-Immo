@@ -58,15 +58,15 @@ export function buildPositioningStatementPrompt(input: PositioningStatementInput
 - L'année courante est 2026. Ne jamais mentionner 2024 ou 2025 comme année courante.
 - Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le réseau du client utilise un autre terme.
 
-REGLES EDITORIALES :
-- Le positionnement doit etre UNIQUE a ce mandataire — pas un template avec des variables changees
-- Chaque phrase doit pouvoir etre dite a voix haute par ${input.prenom} sans que ca sonne faux
-- Le ton est determine par le profil du mandataire (pas par toi)
-- L'IA est INVISIBLE : le document est écrit comme si un stratégiste humain l'avait rédigé apres un entretien approfondi
-- Zero jargon marketing : pas de "proposition de valeur", "positionnement", "personal branding" DANS le contenu produit (ces mots sont dans la structure, pas dans les textes a reutiliser)
-- Les differenciateurs doivent etre REELS et VERIFIABLES, pas des platitudes ("a l'ecoute", "professionnel")
-- Ancrer le positionnement dans la zone geographique — ${input.prenom} n'est pas "un bon mandataire", c'est "LA reference immobiliere de [quartier]"
-- Le document doit etre directement reutilisable par les autres prompts (posts, bio, articles)
+RÈGLES ÉDITORIALES :
+- Le positionnement doit être UNIQUE à ce mandataire — pas un template avec des variables changées
+- Chaque phrase doit pouvoir être dite à voix haute par ${input.prenom} sans que ça sonne faux
+- Le ton est déterminé par le profil du mandataire (pas par toi)
+- L'IA est INVISIBLE : le document est écrit comme si un stratégiste humain l'avait rédigé après un entretien approfondi
+- Zéro jargon marketing : pas de "proposition de valeur", "positionnement", "personal branding" DANS le contenu produit (ces mots sont dans la structure, pas dans les textes à réutiliser)
+- Les différenciateurs doivent être RÉELS et VÉRIFIABLES, pas des platitudes ("à l'écoute", "professionnel")
+- Ancrer le positionnement dans la zone géographique — ${input.prenom} n'est pas "un bon mandataire", c'est "LA référence immobilière de [quartier]"
+- Le document doit être directement réutilisable par les autres prompts (posts, bio, articles)
 
 STRUCTURE DU DOCUMENT :
 

@@ -64,13 +64,13 @@ export function buildAnnonceStorytellingPrompt(input: AnnonceStorytellingInput):
   const donneesLocalesDisponibles = input.donnees_locales &&
     (input.donnees_locales.prix_m2_moyen || input.donnees_locales.dernieres_transactions?.length)
 
-  const system = `Tu es un redacteur immobilier specialise dans les annonces storytelling haut de gamme pour le marche francais. Tu transformes des descriptions techniques de biens en recits immersifs qui projettent l'acheteur dans sa future vie.
+  const system = `Tu es un rédacteur immobilier spécialisé dans les annonces storytelling haut de gamme pour le marché français. Tu transformes des descriptions techniques de biens en récits immersifs qui projettent l'acheteur dans sa future vie.
 
 ## Regles anti-erreur absolues
 - NE JAMAIS inventer de noms de commerces, ecoles, restaurants, marches ou lieux qui ne sont pas dans les donnees fournies. Si les donnees locales detaillees ne sont pas disponibles, utiliser UNIQUEMENT les informations du champ zone_geo (ville, quartiers) sans inventer de details specifiques.
 - NE JAMAIS inventer de chiffres d'experience, de nombre de transactions, de prix au m2 ou de statistiques. Utiliser UNIQUEMENT les chiffres fournis dans le profil client.
 - L'annee courante est 2026. Ne jamais mentionner 2024 ou 2025 comme annee courante.
-- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le reseau du client utilise un autre terme.
+- Le mandataire est un MANDATAIRE immobilier (pas un "agent immobilier"). Toujours utiliser le terme "mandataire" sauf si le réseau du client utilise un autre terme.
 - VARIATION PRIX : ne pas systematiquement citer le prix au m2. Varier entre "quartier prisé", fourchette de prix, ou simplement le prix du bien sans reference au m2.
 - OBLIGATOIRE DPE : chaque annonce DOIT contenir une mention DPE. Si le DPE est fourni dans les donnees du bien, l'afficher clairement (ex: "DPE : C"). Si le DPE n'est pas fourni, ecrire en fin d'annonce : "[DPE : information en cours — sera communique avant publication]". Ne JAMAIS ecrire "DPE : non communique" (formulation illegale depuis 2021).
 

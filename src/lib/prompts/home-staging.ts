@@ -162,7 +162,7 @@ export function buildHomeStagingPromptPair(input: HomeStagingInput): {
   system: string
   user: string
 } {
-  const system = `Tu es un expert en home staging virtuel. Tu generes des descriptions precises de mises en scene d'interieur pour des biens immobiliers a la vente. Chaque description sera utilisee pour generer une image photoraliste.
+  const system = `Tu es un expert en home staging virtuel. Tu génères des descriptions precises de mises en scene d'interieur pour des biens immobiliers a la vente. Chaque description sera utilisee pour générer une image photoraliste.
 
 ## Garde-fous absolus
 - JAMAIS de modification structurelle : pas d'ajout de fenetres, portes, cloisons
