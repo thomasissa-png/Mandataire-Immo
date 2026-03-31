@@ -14,7 +14,7 @@ export async function GET(
   const key = decodeURIComponent(params.key)
 
   // Securite : valider que le key cible un prefixe autorise
-  const ALLOWED_PREFIXES = ["properties/"]
+  const ALLOWED_PREFIXES = ["properties/", "clients/"]
   const isAllowed = ALLOWED_PREFIXES.some((prefix) => key.startsWith(prefix))
   if (!isAllowed || key.includes("..") || key.includes("//")) {
     return NextResponse.json({ error: "Invalid key" }, { status: 400 })
