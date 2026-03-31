@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react"
 import Link from "next/link"
-import { ArticleCover } from "./ArticleCover"
+import { CategoryIcon, getCategoryStyle } from "./ArticleCover"
 import { CategoryFilter } from "./CategoryFilter"
 
 interface BlogArticle {
@@ -41,6 +41,13 @@ export function BlogGrid({ articles }: BlogGridProps) {
     return diff < 14 * 24 * 60 * 60 * 1000
   }
 
+  const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
+
   return (
     <>
       {/* Category filter pills */}
@@ -57,94 +64,76 @@ export function BlogGrid({ articles }: BlogGridProps) {
         </div>
       )}
 
-      {/* Featured article — full width */}
+      {/* Featured article — compact horizontal card with left accent */}
       {featured && (
-      <Link
-        href={`/blog/${featured.slug}`}
-        className="group flex flex-col tablet:flex-row bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal overflow-hidden mb-6"
-      >
-        <div className="tablet:w-1/2">
-          <ArticleCover
-            category={featured.category}
-            size="featured"
-          />
-        </div>
-        <div className="flex flex-col justify-center p-5 tablet:p-6 tablet:w-1/2">
-          <div className="flex items-center gap-3 text-caption text-neutral-500 mb-2">
-            {isNew(featured.date) && (
-              <span className="px-2 py-0.5 rounded bg-success-50 text-success-800 text-caption font-semibold">
-                Nouveau
+        <Link
+          href={`/blog/${featured.slug}`}
+          className={`group flex bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal overflow-hidden mb-6 border-l-4 ${getCategoryStyle(featured.category).border}`}
+        >
+          <div className="flex flex-col justify-center p-5 tablet:p-6 flex-1">
+            <div className="flex items-center gap-3 text-caption text-neutral-500 mb-2">
+              {isNew(featured.date) && (
+                <span className="px-2 py-0.5 rounded bg-success-50 text-success-800 text-caption font-semibold">
+                  Nouveau
+                </span>
+              )}
+              <span className="px-2 py-0.5 rounded bg-neutral-100 text-neutral-600 text-caption font-medium">
+                {featured.category}
               </span>
-            )}
-            <span className="px-2 py-0.5 rounded bg-neutral-100 text-neutral-600 text-caption font-medium">
-              {featured.category}
+              <time dateTime={featured.date}>{formatDate(featured.date)}</time>
+              <span aria-hidden="true">&middot;</span>
+              <span>{featured.readingTime} de lecture</span>
+            </div>
+            <h2 className="font-display text-h3 font-semibold text-foreground group-hover:text-secondary transition-colors duration-normal mb-2">
+              {featured.title}
+            </h2>
+            <p className="text-body-sm text-neutral-500 line-clamp-2 mb-3">
+              {featured.description}
+            </p>
+            <span className="text-body-sm font-semibold text-secondary group-hover:underline">
+              Lire l&apos;article &rarr;
             </span>
-            <time dateTime={featured.date}>
-              {new Date(featured.date).toLocaleDateString("fr-FR", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
-            </time>
-            <span aria-hidden="true">&middot;</span>
-            <span>{featured.readingTime} de lecture</span>
           </div>
-          <h2 className="font-display text-h2 font-semibold text-foreground group-hover:text-secondary transition-colors duration-normal mb-2">
-            {featured.title}
-          </h2>
-          <p className="text-body-sm text-neutral-500 line-clamp-2">
-            {featured.description}
-          </p>
-          <span className="mt-3 text-body-sm font-semibold text-secondary group-hover:underline">
-            Lire l&apos;article &rarr;
-          </span>
-        </div>
-      </Link>
+          <div className="hidden tablet:flex items-center pr-6">
+            <CategoryIcon category={featured.category} size="md" />
+          </div>
+        </Link>
       )}
 
-      {/* Grid — 2 columns */}
+      {/* Grid — 2 columns, compact cards without large covers */}
       {rest.length > 0 && (
-        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-6">
-          {rest.map((article) => (
-            <Link
-              key={article.slug}
-              href={`/blog/${article.slug}`}
-              className="group flex flex-col bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal overflow-hidden"
-            >
-              <ArticleCover
-                category={article.category}
-              />
+        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
+          {rest.map((article) => {
+            const catStyle = getCategoryStyle(article.category)
+            return (
+              <Link
+                key={article.slug}
+                href={`/blog/${article.slug}`}
+                className={`group flex gap-4 bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal p-4 border-l-4 ${catStyle.border}`}
+              >
+                <CategoryIcon category={article.category} size="sm" />
 
-              <div className="flex flex-col flex-1 p-4">
-                <div className="flex items-center gap-3 text-caption text-neutral-500 mb-2">
-                  <span className="px-2 py-0.5 rounded bg-neutral-100 text-neutral-600 text-caption font-medium">
-                    {article.category}
-                  </span>
-                  <time dateTime={article.date}>
-                    {new Date(article.date).toLocaleDateString("fr-FR", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </time>
-                  <span aria-hidden="true">&middot;</span>
-                  <span>{article.readingTime} de lecture</span>
+                <div className="flex flex-col flex-1 min-w-0">
+                  <div className="flex items-center gap-2 text-caption text-neutral-500 mb-1">
+                    <span className="px-2 py-0.5 rounded bg-neutral-100 text-neutral-600 text-caption font-medium">
+                      {article.category}
+                    </span>
+                    <time dateTime={article.date}>{formatDate(article.date)}</time>
+                    <span aria-hidden="true">&middot;</span>
+                    <span>{article.readingTime}</span>
+                  </div>
+
+                  <h2 className="font-display text-body font-semibold text-foreground group-hover:text-secondary transition-colors duration-normal mb-1 line-clamp-2">
+                    {article.title}
+                  </h2>
+
+                  <p className="text-body-sm text-neutral-500 line-clamp-2 flex-1">
+                    {article.description}
+                  </p>
                 </div>
-
-                <h2 className="font-display text-h4 font-semibold text-foreground group-hover:text-secondary transition-colors duration-normal mb-1">
-                  {article.title}
-                </h2>
-
-                <p className="text-body-sm text-neutral-500 line-clamp-2 flex-1">
-                  {article.description}
-                </p>
-
-                <span className="mt-3 text-body-sm font-semibold text-secondary group-hover:underline">
-                  Lire l&apos;article &rarr;
-                </span>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            )
+          })}
         </div>
       )}
     </>

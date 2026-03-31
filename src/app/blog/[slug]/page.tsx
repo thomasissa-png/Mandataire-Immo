@@ -10,7 +10,7 @@ import {
   getArticleBySlug,
   getRelatedArticles,
 } from "@/lib/blog"
-import { ArticleCover } from "@/components/blog/ArticleCover"
+import { CategoryIcon, getCategoryStyle } from "@/components/blog/ArticleCover"
 import { PACK_MENSUEL, formatPrice } from "@/lib/pricing"
 
 interface BlogArticlePageProps {
@@ -255,15 +255,11 @@ export default async function BlogArticlePage({
                   <Link
                     key={related.slug}
                     href={`/blog/${related.slug}`}
-                    className="group flex flex-col bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal overflow-hidden"
+                    className={`group flex gap-3 bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow duration-normal p-4 border-l-4 ${getCategoryStyle(related.category).border}`}
                   >
-                    <ArticleCover
-                      category={related.category}
-                      title={related.title}
-                      size="sm"
-                    />
-                    <div className="p-4">
-                      <p className="text-caption text-neutral-500 mb-2">
+                    <CategoryIcon category={related.category} size="sm" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-caption text-neutral-500 mb-1">
                         {related.readingTime} de lecture
                       </p>
                       <h3 className="font-display text-body font-semibold text-foreground group-hover:text-secondary transition-colors duration-normal line-clamp-2">
