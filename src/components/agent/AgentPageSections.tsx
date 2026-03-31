@@ -31,11 +31,14 @@ interface HeroProps {
 }
 
 export function HeroSection({ profile }: HeroProps) {
-  const accroche = profile.bio_generee
+  const rawAccroche = profile.bio_generee
     ? profile.bio_generee.split(".")[0] + "."
     : profile.bio_personnelle
       ? profile.bio_personnelle.split(".")[0] + "."
       : ""
+  const accroche = rawAccroche.length > 120
+    ? rawAccroche.slice(0, 117).replace(/\s+\S*$/, "") + "…"
+    : rawAccroche
 
   return (
     <section className="bg-primary text-white section-padding">
@@ -43,7 +46,7 @@ export function HeroSection({ profile }: HeroProps) {
         {/* Photo ou initiale */}
         {profile.photo_profil_key ? (
           <img
-            src={profile.photo_profil_key}
+            src={`/api/images/${encodeURIComponent(profile.photo_profil_key)}`}
             alt={`Photo de ${profile.prenom} ${profile.nom}`}
             className="w-28 h-28 rounded-full object-cover border-4 border-secondary shadow-lg"
           />
@@ -301,7 +304,7 @@ export function MesBiensSection({ biens }: MesBiensProps) {
                   </h3>
                   <p className="text-body-sm text-muted-foreground mb-2">
                     {bien.type_bien} &middot; {bien.pieces} pièces &middot; {bien.surface} m²
-                    {bien.city ? ` &middot; ${bien.city}` : ""}
+                    {bien.city ? ` · ${bien.city}` : ""}
                   </p>
                   <p className="text-h4 font-display text-secondary font-bold">
                     {formatPrice(bien.prix)}

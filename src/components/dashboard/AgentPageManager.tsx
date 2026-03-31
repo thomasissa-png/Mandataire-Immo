@@ -11,10 +11,20 @@ interface ActivatePageButtonProps {
 
 export function ActivatePageButton({ pack }: ActivatePageButtonProps) {
   const router = useRouter()
-  const [state, setState] = useState<"idle" | "loading" | "error">("idle")
+  const [state, setState] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
 
-  const activePack = pack || "lancement"
+  if (!pack) {
+    return (
+      <div className="rounded-lg bg-warning-50 border border-warning-200 p-4 text-left">
+        <p className="text-body-sm font-semibold text-warning-800">Choisis un pack pour activer ta page</p>
+        <p className="text-caption text-warning-700 mt-1">Ta page mandataire est incluse dans tous les packs.</p>
+        <a href="/#pricing" className="inline-flex items-center gap-1 mt-2 text-caption font-semibold text-warning-800 hover:underline">
+          Voir les offres →
+        </a>
+      </div>
+    )
+  }
 
   async function handleActivate() {
     setState("loading")
@@ -24,7 +34,7 @@ export function ActivatePageButton({ pack }: ActivatePageButtonProps) {
       const res = await fetch("/api/agent/activate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pack: activePack }),
+        body: JSON.stringify({ pack }),
       })
 
       const data = await res.json() as { slug?: string; error?: string }
@@ -35,8 +45,9 @@ export function ActivatePageButton({ pack }: ActivatePageButtonProps) {
         return
       }
 
-      // Succès — recharger la page pour afficher l'état "page existante"
-      router.refresh()
+      // Succès — afficher confirmation puis recharger
+      setState("success")
+      setTimeout(() => router.refresh(), 1500)
     } catch {
       setState("error")
       setErrorMessage("Erreur de connexion. Réessaie dans quelques instants.")
@@ -59,6 +70,13 @@ export function ActivatePageButton({ pack }: ActivatePageButtonProps) {
             </svg>
             Activation en cours…
           </>
+        ) : state === "success" ? (
+          <>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+            Ta page est active !
+          </>
         ) : (
           "Activer ma page →"
         )}
@@ -80,11 +98,13 @@ interface IndexationToggleProps {
 export function IndexationToggle({ slug, initialValue }: IndexationToggleProps) {
   const [enabled, setEnabled] = useState(initialValue)
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState("")
 
   async function handleToggle() {
     const newValue = !enabled
     setEnabled(newValue)
     setSaving(true)
+    setError("")
 
     try {
       const res = await fetch(`/api/agent/${encodeURIComponent(slug)}`, {
@@ -94,12 +114,12 @@ export function IndexationToggle({ slug, initialValue }: IndexationToggleProps) 
       })
 
       if (!res.ok) {
-        // Rollback en cas d'erreur
         setEnabled(!newValue)
+        setError("La sauvegarde a échoué, réessaie.")
       }
     } catch {
-      // Rollback en cas d'erreur réseau
       setEnabled(!newValue)
+      setError("Erreur de connexion, réessaie.")
     } finally {
       setSaving(false)
     }
@@ -132,6 +152,7 @@ export function IndexationToggle({ slug, initialValue }: IndexationToggleProps) 
           }`}
         />
       </button>
+      {error && <p className="text-caption text-error-600 mt-2">{error}</p>}
     </div>
   )
 }

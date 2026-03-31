@@ -115,9 +115,9 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 4. Bio : utiliser bio_personnelle comme fallback (pas de génération IA pour l'instant)
-    const bioPersonnelle = typeof ctx.bio_personnelle === "string" ? ctx.bio_personnelle : null
-    const bioGeneree = bioPersonnelle
+    // 4. Bio : laisser null (la page publique utilise bio_personnelle en fallback)
+    // La génération IA sera activée quand ANTHROPIC_API_KEY sera configurée
+    const bioGeneree = null
 
     // 5. INSERT
     await query(

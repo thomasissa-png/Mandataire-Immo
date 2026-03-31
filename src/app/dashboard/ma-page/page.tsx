@@ -71,9 +71,13 @@ export default async function MaPageMandatairePage() {
           <h1 className="font-display text-h2 text-primary font-bold mb-3">
             Active ta page mandataire
           </h1>
-          <p className="text-body text-neutral-600 mb-6">
+          <p className="text-body text-neutral-600 mb-3">
             Crée ta vitrine publique en un clic. Ton profil sera accessible à{" "}
             <span className="font-semibold text-primary">/agent/ton-nom</span> et partageable partout.
+          </p>
+          <p className="text-body-sm text-neutral-500 mb-6">
+            Ta page sera construite automatiquement à partir de ton profil (photo, bio, zone, biens).
+            Tu pourras la modifier à tout moment.
           </p>
           <ActivatePageButton pack={client.pack} />
         </div>

@@ -166,7 +166,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const { profile, page } = data
-  const title = `${profile.prenom} ${profile.nom} — Mandataire ${profile.reseau} à ${profile.ville}`
+  const title = `Mandataire ${profile.reseau} à ${profile.ville} — ${profile.prenom} ${profile.nom}`
   const description = (page.bio_generee || profile.bio_personnelle || "").slice(0, 150)
 
   const robots = page.indexation
