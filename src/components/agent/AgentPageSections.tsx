@@ -175,6 +175,43 @@ export function QuiSuisJeSection({ profile, bioGeneree }: QuiSuisJeProps) {
   )
 }
 
+// ─── 2b. MaMethodeSection ─────────────────────────────────────────
+
+interface MaMethodeProps {
+  profile: AgentProfile
+}
+
+const DEFAULT_METHODE = [
+  "Estimation gratuite et personnalisée de votre bien",
+  "Mise en valeur professionnelle (photos, annonce, diffusion)",
+  "Accompagnement de A à Z jusqu'à la signature",
+]
+
+export function MaMethodeSection({ profile }: MaMethodeProps) {
+  const etapes = profile.methode_etapes.length > 0
+    ? profile.methode_etapes.slice(0, 4)
+    : DEFAULT_METHODE
+
+  return (
+    <section className="section-padding">
+      <div className="container-immocrew max-w-3xl">
+        <h2 className="text-h2 font-display text-primary mb-8">Ma méthode</h2>
+
+        <div className="space-y-4">
+          {etapes.map((etape, i) => (
+            <div key={i} className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
+                <span className="font-display font-bold text-primary text-body-sm">{i + 1}</span>
+              </div>
+              <p className="text-body-lg text-foreground pt-1.5">{etape}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ─── 3. MaZoneSection ─────────────────────────────────────────────
 
 interface MaZoneProps {
@@ -343,6 +380,46 @@ export function MesBiensSection({ biens }: MesBiensProps) {
         </div>
 
         )}
+      </div>
+    </section>
+  )
+}
+
+// ─── 4b. TemoignagesSection ──────────────────────────────────────
+
+interface TemoignagesProps {
+  profile: AgentProfile
+}
+
+export function TemoignagesSection({ profile }: TemoignagesProps) {
+  if (profile.temoignages.length === 0) return null
+
+  return (
+    <section className="section-padding">
+      <div className="container-immocrew max-w-3xl">
+        <h2 className="text-h2 font-display text-primary mb-8">Ils m'ont fait confiance</h2>
+
+        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-6">
+          {profile.temoignages.slice(0, 4).map((t, i) => (
+            <div
+              key={i}
+              className="rounded-xl bg-card border border-border p-6 shadow-sm"
+            >
+              <svg className="w-8 h-8 text-secondary/30 mb-3" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.731-9.57 8.983-10.609L9.978 5.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H0z" />
+              </svg>
+              <p className="text-body text-foreground mb-4 italic leading-relaxed">
+                {t.texte}
+              </p>
+              <div>
+                <p className="text-body-sm font-semibold text-primary">{t.nom}</p>
+                {t.contexte && (
+                  <p className="text-caption text-muted-foreground">{t.contexte}</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )

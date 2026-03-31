@@ -35,6 +35,14 @@ export interface AgentProfile {
   instagram: string
   facebook: string
   site_web: string
+  temoignages: AgentTemoignage[]
+  methode_etapes: string[]
+}
+
+export interface AgentTemoignage {
+  nom: string
+  texte: string
+  contexte: string
 }
 
 export interface AgentBienSummary {

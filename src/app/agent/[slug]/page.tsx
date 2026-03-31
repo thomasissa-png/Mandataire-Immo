@@ -11,8 +11,10 @@ import { Footer } from "@/components/landing/Footer"
 import {
   HeroSection,
   QuiSuisJeSection,
+  MaMethodeSection,
   MaZoneSection,
   MesBiensSection,
+  TemoignagesSection,
   ContactSection,
   ReseauxSection,
 } from "@/components/agent/AgentPageSections"
@@ -112,6 +114,10 @@ async function getAgentData(slug: string): Promise<{
     instagram: getString("instagram"),
     facebook: getString("facebook"),
     site_web: getString("site_web"),
+    temoignages: Array.isArray(ctx.temoignages) ? (ctx.temoignages as AgentProfile["temoignages"]) : [],
+    methode_etapes: Array.isArray(ctx.methode_etapes)
+      ? (ctx.methode_etapes as string[]).filter(Boolean)
+      : [],
   }
 
   return { page, profile, email: row.email }
@@ -202,8 +208,10 @@ export default async function AgentPageRoute({ params }: PageProps) {
       <main className="min-h-screen bg-background">
         <HeroSection profile={profile} />
         <QuiSuisJeSection profile={profile} bioGeneree={page.bio_generee} />
+        <MaMethodeSection profile={profile} />
         <MaZoneSection profile={profile} />
         <MesBiensSection biens={biens} />
+        <TemoignagesSection profile={profile} />
         <ContactSection profile={profile} email={email} />
         <ReseauxSection profile={profile} />
       </main>
