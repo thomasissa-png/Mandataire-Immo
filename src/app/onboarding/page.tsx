@@ -112,7 +112,6 @@ const FIELD_LABELS: Record<string, FieldConfig> = {
       { value: "BSK Immobilier", label: "BSK Immobilier" },
       { value: "Expertimo", label: "Expertimo" },
       { value: "MegAgence", label: "MegAgence" },
-      { value: "iad", label: "iad (autre franchise)" },
       { value: "Indépendant", label: "Indépendant (sans réseau)" },
       { value: "Autre", label: "Autre" },
     ],
