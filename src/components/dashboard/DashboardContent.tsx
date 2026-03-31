@@ -215,7 +215,7 @@ export function DashboardContent({
               </a>
             </div>
             {profile?.reseau ? (
-              <p className="text-body-sm text-neutral-500">Mandataire {profile.reseau}{profile.ville ? ` · ${profile.ville}` : ""}</p>
+              <p className="text-body-sm text-neutral-500">Mandataire{profile.reseau ? ` ${profile.reseau}` : ""}{profile.ville ? ` · ${profile.ville}` : ""}</p>
             ) : null}
           </div>
         </div>
@@ -259,16 +259,21 @@ export function DashboardContent({
         <div className="rounded-lg bg-card border border-border p-5">
           <h2 className="font-display text-h3 text-primary mb-3">👋 Salut {firstName} — ton plan du mois</h2>
 
-          {/* Section "On te connaît" — données profil */}
+          {/* Section résumé profil */}
           <div className="text-body-sm text-neutral-600 mb-4 space-y-1">
             <p>
-              On connaît bien ton marché : tu es mandataire {profile.reseau || ""} à {profile.ville || "ta zone"}{profile.quartiers ? `, quartiers ${profile.quartiers}` : ""}.
+              Tes contenus sont calibrés pour ton marché{profile.ville ? ` à ${profile.ville}` : ""}{profile.quartiers ? ` (${profile.quartiers})` : ""}{profile.reseau ? `, réseau ${profile.reseau}` : ""}.
             </p>
-            <p>
-              Tu travailles surtout {profile.type_biens || "l'immobilier"}{profile.gamme_prix ? ` dans la gamme ${profile.gamme_prix}` : ""}{profile.cible_clients ? ` pour ${profile.cible_clients}` : ""}.
-              {profile.ton_communication ? ` Ton style : ${profile.ton_communication}.` : ""}
-            </p>
-            <p className="font-medium text-primary-700">Voici ton plan d{"'"}action personnalisé.</p>
+            {(profile.type_biens || profile.cible_clients) && (
+              <p>
+                {profile.type_biens && profile.cible_clients
+                  ? `Spécialité : ${profile.type_biens.toLowerCase()}${profile.gamme_prix ? ` (${profile.gamme_prix})` : ""}, ciblant ${profile.cible_clients.toLowerCase()}.`
+                  : profile.type_biens
+                    ? `Spécialité : ${profile.type_biens.toLowerCase()}${profile.gamme_prix ? ` (${profile.gamme_prix})` : ""}.`
+                    : `Cible : ${profile.cible_clients!.toLowerCase()}.`}
+              </p>
+            )}
+            <p className="font-medium text-primary-700">Voici ton plan d{"'"}action du mois.</p>
           </div>
 
           <p className="text-body-sm text-neutral-500 mb-4 italic">
@@ -313,7 +318,7 @@ export function DashboardContent({
                 <div>
                   <p className="text-body-sm font-semibold text-primary">{counts.scripts} script{counts.scripts > 1 ? "s" : ""} vidéo prêt{counts.scripts > 1 ? "s" : ""} à tourner</p>
                   <p className="text-caption text-neutral-500">
-                    Format Reel (30-60 sec) vertical. Filme-toi face caméra en lumière naturelle. Pas besoin d{"'"}être parfaite — l{"'"}authenticité marche mieux que la production.
+                    Format Reel (30-60 sec) vertical. Filme-toi face caméra en lumière naturelle. Pas besoin que ce soit parfait — l{"'"}authenticité marche mieux que la production.
                   </p>
                   <p className="text-caption mt-1.5">
                     <a href="/dashboard/scripts" className="text-secondary-700 font-semibold hover:underline">Voir mes scripts →</a>
