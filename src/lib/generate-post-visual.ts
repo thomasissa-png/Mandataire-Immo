@@ -1,27 +1,34 @@
 /**
- * Génération de visuels branded pour les posts sociaux.
+ * Génération de visuels pour les posts sociaux via OpenAI gpt-image-1.
  *
- * LOGIQUE : un visuel est auto-genérable UNIQUEMENT si le brief
- * recommande explicitement un visuel texte/graphique (pas une photo).
- * Approche whitelist (pas blacklist) pour éviter les faux positifs.
+ * Deux modes :
+ * 1. Auto-générable (texte/stat/citation) → prompt IA pour un visuel branded
+ * 2. Photo recommandée → Sophie prend la photo, pas de génération
+ *
+ * Coût estimé : ~0.04 USD/image en medium 1024x1024
  */
+
+import { generateImage } from "@/lib/openai"
+import { uploadFile } from "@/lib/storage"
 
 interface GenerateVisualParams {
   briefVisuel: string
-  postContent: string  // Le texte du post (pour extraire la phrase clé)
+  postContent: string
   titre: string
   plateforme?: string
+  mandatairePrenom?: string
+  ville?: string
 }
 
 interface VisualResult {
-  url: string
-  type: "citation" | "stat" | "tip" | "quote"
-  format: "square" | "portrait" | "landscape"
+  key: string       // Clé dans Object Storage
+  url: string       // URL publique /api/images/[key]
+  prompt: string    // Prompt utilisé
 }
 
 /**
- * Détermine si un brief visuel peut être auto-généré.
- * Whitelist : SEULS les briefs qui décrivent un visuel texte/graphique sont acceptés.
+ * Détermine si un brief visuel peut être auto-généré via IA.
+ * Whitelist : SEULS les briefs qui décrivent un visuel texte/graphique.
  */
 export function canAutoGenerate(briefVisuel: string): boolean {
   const brief = briefVisuel.toLowerCase()
@@ -45,76 +52,103 @@ export function canAutoGenerate(briefVisuel: string): boolean {
 }
 
 /**
- * Génère l'URL du visuel branded.
- * Le texte principal est extrait du CONTENU DU POST (pas du brief).
+ * Génère un visuel via OpenAI gpt-image-1 et le stocke dans Object Storage.
+ * Retourne null si OPENAI_API_KEY n'est pas configurée (mode dégradé).
  */
-export function generatePostVisualUrl(
+export async function generatePostVisual(
   params: GenerateVisualParams,
-  baseUrl: string = ""
-): VisualResult | null {
-  const { briefVisuel, postContent, titre, plateforme } = params
-  const brief = briefVisuel.toLowerCase()
+  deliverableId: string,
+): Promise<VisualResult | null> {
+  if (!process.env.OPENAI_API_KEY) return null
+  if (!canAutoGenerate(params.briefVisuel)) return null
 
-  if (!canAutoGenerate(briefVisuel)) return null
+  const { briefVisuel, postContent, titre, plateforme, mandatairePrenom, ville } = params
 
-  // Déterminer le type
-  let type: VisualResult["type"] = "citation"
-  if (brief.includes("stat") || brief.includes("chiffre") || brief.includes("%")) {
-    type = "stat"
-  } else if (brief.includes("conseil") || brief.includes("tip") || brief.includes("astuce")) {
-    type = "tip"
-  } else if (brief.includes("témoignage") || brief.includes("avis") || brief.includes("citation client")) {
-    type = "quote"
-  }
+  // Extraire la phrase clé du post
+  const lines = postContent.split("\n").filter((l) => l.trim() && !l.startsWith("#"))
+  const keyPhrase = lines[0]
+    ?.replace(/\*\*(.+?)\*\*/g, "$1")
+    ?.replace(/\*(.+?)\*/g, "$1")
+    ?.replace(/^[🏠📱💡🎯📊🔑✅❌→•\-]\s*/g, "")
+    ?.trim() || titre
 
-  // Format selon la plateforme
-  let format: VisualResult["format"] = "square"
-  if (plateforme?.toLowerCase() === "linkedin") format = "landscape"
-  if (plateforme?.toLowerCase() === "instagram") format = "portrait"
-
-  // Thème alterné
-  const themes = ["orange", "navy", "white"]
-  const themeIndex = titre.length % themes.length
-  const theme = themes[themeIndex]
-
-  // Extraire le texte principal du CONTENU du post (première phrase percutante)
-  // PAS du brief visuel !
-  let text = ""
-  let subtitle = ""
-
-  // Chercher dans le brief s'il y a du texte entre guillemets (c'est le texte voulu)
-  const quotedMatch = briefVisuel.match(/[«"'"]([^»"'"]{10,})[»"'"]/)
-  if (quotedMatch) {
-    text = quotedMatch[1]
-    subtitle = titre
-  } else {
-    // Extraire la première phrase du post (le hook)
-    const lines = postContent.split("\n").filter((l) => l.trim() && !l.startsWith("#"))
-    const firstLine = lines[0] || titre
-    // Nettoyer le markdown
-    text = firstLine
-      .replace(/\*\*(.+?)\*\*/g, "$1")
-      .replace(/\*(.+?)\*/g, "$1")
-      .replace(/^[🏠📱💡🎯📊🔑✅❌→•\-]\s*/g, "")
-      .trim()
-    if (!text || text.length < 10) text = titre
-  }
-
-  // Tronquer
-  if (text.length > 100) text = text.slice(0, 97) + "..."
-  if (subtitle && subtitle.length > 80) subtitle = subtitle.slice(0, 77) + "..."
-
-  const searchParams = new URLSearchParams({
-    type,
-    text,
-    format,
-    theme,
-    ...(subtitle ? { subtitle } : {}),
+  // Construire le prompt pour gpt-image-1
+  const prompt = buildVisualPrompt({
+    briefVisuel,
+    keyPhrase,
+    titre,
+    plateforme: plateforme || "instagram",
+    mandatairePrenom: mandatairePrenom || "",
+    ville: ville || "",
   })
 
-  return {
-    url: `${baseUrl}/api/visuals/post-card?${searchParams.toString()}`,
-    type,
-    format,
+  try {
+    // Format selon la plateforme
+    const size = plateforme?.toLowerCase() === "linkedin"
+      ? "1536x1024" as const  // Paysage
+      : "1024x1024" as const  // Carré (Instagram par défaut)
+
+    const result = await generateImage({
+      prompt,
+      size,
+      quality: "medium",
+    })
+
+    // Stocker dans Object Storage
+    const buffer = Buffer.from(result.b64_json, "base64")
+    const key = `visuals/posts/${deliverableId}.png`
+    await uploadFile(key, buffer)
+
+    return {
+      key,
+      url: `/api/images/${encodeURIComponent(key)}`,
+      prompt,
+    }
+  } catch (err) {
+    console.error("[generate-post-visual] Error:", err)
+    return null
   }
+}
+
+/**
+ * Construit le prompt pour gpt-image-1.
+ * Style : minimaliste, professionnel, couleurs ImmoCrew.
+ */
+function buildVisualPrompt(params: {
+  briefVisuel: string
+  keyPhrase: string
+  titre: string
+  plateforme: string
+  mandatairePrenom: string
+  ville: string
+}): string {
+  const { briefVisuel, keyPhrase, plateforme, mandatairePrenom, ville } = params
+
+  // Déterminer le style selon le brief
+  const brief = briefVisuel.toLowerCase()
+  let styleInstructions = ""
+
+  if (brief.includes("stat") || brief.includes("chiffre") || brief.includes("%")) {
+    styleInstructions = `Crée une infographie minimaliste et professionnelle avec un gros chiffre ou pourcentage au centre. Style : fond sombre avec accents orange (#F27A1A). Typographie moderne et bold.`
+  } else if (brief.includes("conseil") || brief.includes("tip") || brief.includes("astuce")) {
+    styleInstructions = `Crée un visuel pour un conseil immobilier. Style : fond élégant avec une icône symbolique (ampoule, clé, maison). Couleurs : bleu marine (#1B2A4A) et orange (#F27A1A). Pas de texte — juste le visuel.`
+  } else if (brief.includes("témoignage") || brief.includes("citation")) {
+    styleInstructions = `Crée un visuel pour un témoignage client. Style : fond sobre et chaleureux, guillemets graphiques élégants. Couleurs : tons chauds avec accent orange (#F27A1A).`
+  } else {
+    styleInstructions = `Crée un visuel élégant et professionnel pour un post de mandataire immobilier. Style : minimaliste, moderne, couleurs bleu marine (#1B2A4A) et orange (#F27A1A).`
+  }
+
+  return `${styleInstructions}
+
+Contexte : post ${plateforme} pour ${mandatairePrenom || "un mandataire immobilier"}${ville ? ` à ${ville}` : ""}.
+Sujet du post : "${keyPhrase}"
+
+RÈGLES STRICTES :
+- Format carré (1:1) pour Instagram, paysage (3:2) pour LinkedIn
+- PAS de texte écrit dans l'image (le texte sera dans le post)
+- Style premium, professionnel — pas de clipart, pas de stock photo générique
+- Ambiance : confiance, proximité, expertise locale
+- Couleurs dominantes : bleu marine #1B2A4A, orange #F27A1A, blanc
+- Minimaliste : peu d'éléments, beaucoup d'espace
+- Le logo ImmoCrew NE DOIT PAS apparaître dans l'image`
 }
