@@ -42,7 +42,7 @@ interface DeliverableCardProps {
   typeColor: string
   title: string
   content?: string
-  status?: "draft" | "delivered" | "archived"
+  status?: "draft" | "delivered" | "archived" | "pending_review"
   createdAt?: string
 }
 

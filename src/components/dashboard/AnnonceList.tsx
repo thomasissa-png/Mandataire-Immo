@@ -7,7 +7,7 @@ import { markdownToHtml, stripMarkdown } from "@/lib/markdownRenderer"
 interface Annonce {
   id: string
   title: string
-  status: "draft" | "delivered" | "archived"
+  status: "draft" | "delivered" | "archived" | "pending_review"
   createdAt?: string
   shareToken?: string | null
 }
