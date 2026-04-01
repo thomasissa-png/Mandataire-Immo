@@ -478,7 +478,7 @@ export function ContactSection({ profile, email }: ContactProps) {
         {tagline ? (
           <p className="text-body-lg text-white/80 mb-8">{tagline}</p>
         ) : (
-          <p className="text-body-lg text-white/80 mb-8">Parlons de votre projet immobilier</p>
+          <p className="text-body-lg text-white/80 mb-8">Parlons de ton projet immobilier</p>
         )}
 
         <div className="flex flex-col tablet:flex-row items-center justify-center gap-4">
