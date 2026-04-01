@@ -84,7 +84,7 @@ export function DashboardContent({
       if (d.type === "annonce") r.annonces.push(d)
       else if (d.type === "post") {
         r.posts++
-        if (d.month === currentMonth || d.created_at.startsWith(currentMonth)) r.postsThisMonth++
+        if (d.month === currentMonth || String(d.created_at).startsWith(currentMonth)) r.postsThisMonth++
       }
       else if (d.type === "script_video") r.scripts++
       else if (d.type === "article_seo") r.articles++
