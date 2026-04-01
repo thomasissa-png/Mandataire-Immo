@@ -146,6 +146,9 @@ export async function POST(request: NextRequest) {
     const scriptPrompt = buildScriptVideoPrompt({
       ...ctx,
       nombre_scripts: 1,
+      format: "mix",
+      confort_camera: ctx.confort_camera || "debutant",
+      type_video: "mix",
     })
     const result = await generateJSON<{ scripts: Array<{ titre: string; script_complet: string; format: string; duree_estimee: string; brief_visuel: string }> }>(
       { ...scriptPrompt, maxTokens: 4096 }
@@ -167,16 +170,16 @@ export async function POST(request: NextRequest) {
   // 4. Newsletter (semaine 1 uniquement)
   if (week_number === 1) {
     try {
-      const nlPrompt = buildNewsletterPrompt({ ...ctx, mois_cible: moisLabel })
-      const result = await generateJSON<{ newsletter: { objet: string; contenu_html: string; contenu_texte: string } }>(
+      const nlPrompt = buildNewsletterPrompt({ ...ctx, mois_cible: moisLabel, bien_du_mois: ctx.biens?.[0] || undefined })
+      const result = await generateJSON<{ objet_email: string; html: string; texte_brut: string; sections: Array<{ titre: string; contenu: string }> }>(
         { ...nlPrompt, maxTokens: 4096 }
       )
-      const nl = result.data.newsletter
+      const nlData = result.data
       const id = await insertDeliverable({
         clientEmail, clientId: client_id, type: "newsletter",
-        title: nl.objet,
-        content: nl.contenu_texte,
-        metadata: { objet: nl.objet, html: nl.contenu_html },
+        title: nlData.objet_email,
+        content: nlData.html || nlData.texte_brut,
+        metadata: { objet_email: nlData.objet_email, sections: nlData.sections },
         month: mois, weekKey: week_key,
       })
       deliverableIds.push(id)
@@ -188,16 +191,16 @@ export async function POST(request: NextRequest) {
   // 5. Email prospection (semaine 2 uniquement)
   if (week_number === 2) {
     try {
-      const emailPrompt = buildEmailProspectionPrompt({ ...ctx })
-      const result = await generateJSON<{ email: { objet: string; corps_texte: string; corps_html: string } }>(
-        { ...emailPrompt, maxTokens: 4096 }
+      const emailPrompt = buildEmailProspectionPrompt({ ...ctx, type_email: "prospection_vendeurs", email_contact: clientEmail, telephone_contact: ctx.telephone })
+      const result = await generateJSON<{ objet_email: string; html: string; texte_brut: string; cta_principal: string }>(
+        { ...emailPrompt, maxTokens: 2048 }
       )
-      const email = result.data.email
+      const emailData = result.data
       const id = await insertDeliverable({
         clientEmail, clientId: client_id, type: "email_prospection",
-        title: email.objet,
-        content: email.corps_texte,
-        metadata: { objet: email.objet, html: email.corps_html },
+        title: emailData.objet_email,
+        content: emailData.texte_brut,
+        metadata: { objet: emailData.objet_email, html: emailData.html, cta: emailData.cta_principal },
         month: mois, weekKey: week_key,
       })
       deliverableIds.push(id)
