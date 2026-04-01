@@ -1,5 +1,19 @@
 # Lessons Learned — ImmoCrew
 
+## Session 10 — 2026-04-01
+
+### Learnings
+
+| Session | Date | Catégorie | Sévérité | Description | Correction appliquée | Recommandation framework | Cible propagation | Fichiers impactés | Statut correction | Statut propagation |
+|---------|------|-----------|----------|-------------|---------------------|-------------------------|-------------------|-------------------|-------------------|-------------------|
+| S10 | 2026-04-01 | préférence fondateur | P0 | [PRÉFÉRENCE FONDATEUR] : Ne JAMAIS afficher de livrables internes à Sophie. Le brief graphique est un outil pour nous, pas pour elle. L'afficher contredit la promesse "on fait tout à ta place". Règle : si Sophie ne peut pas AGIR directement avec un contenu (copier-coller, publier, partager), il n'a rien à faire dans son dashboard. | brief_graphique retiré de la page Stratégie (fetch + affichage). Reste en DB pour usage interne. | Avant d'afficher un deliverable à Sophie, se demander : "Est-ce qu'elle peut copier-coller ça quelque part ou le partager ?". Si non → ne pas afficher. | règle-globale | CLAUDE.md, .claude/agents/fullstack.md | fait | propagé |
+| S10 | 2026-04-01 | insistance | P0 | Le filtre par mois était masqué quand il n'y avait qu'un seul mois de données (condition `> 1` au lieu de `> 0`). Demandé 6 fois par le fondateur. | Condition changée de `availableMonths.length > 1` à `> 0`. | Quand un filtre est spécifié dans les specs, il doit TOUJOURS être visible — même si un seul choix. Le "Tous" permet de comprendre le contexte. | aucune | — | fait | n/a |
+| S10 | 2026-04-01 | insistance | P1 | La sidebar "Mes biens" pointait vers /dashboard/biens/nouveau (création) au lieu d'une page liste. Sophie ne trouvait pas ses biens existants. | Créé /dashboard/biens/page.tsx (liste). Sidebar corrigée. | Toute section "Mes X" dans une sidebar DOIT pointer vers une page LISTE, jamais vers un formulaire de création. | aucune | — | fait | n/a |
+| S10 | 2026-04-01 | préférence fondateur | P0 | [PRÉFÉRENCE FONDATEUR] : Sophie doit pouvoir uploader ses photos EN MÊME TEMPS que remplir les infos du bien. Pas de step séparé. Le formulaire doit être un seul écran. | Photos intégrées dans BienForm avec previews, suppression, upload auto après création. | Les formulaires multi-step sont une friction. Si les données du step 2 dépendent du step 1 (ID nécessaire), stocker localement et uploader en séquence à la soumission. | aucune | — | fait | n/a |
+| S10 | 2026-04-01 | problème | P1 | `created_at.startsWith is not a function` — PostgreSQL renvoie des objets Date, pas des strings. Le code DashboardContent appelait `.startsWith()` directement. | Wrappé avec `String()`. | Toujours wrapper les champs date de la DB avec `String()` ou `new Date()` avant d'appeler des méthodes string. Ne jamais assumer le type retourné par PostgreSQL. | aucune | — | fait | n/a |
+| S10 | 2026-04-01 | préférence fondateur | P1 | [PRÉFÉRENCE FONDATEUR] : Pack mensuel articles SEO passé de 2 à 4 par mois (1/semaine). Fondateur veut une fréquence cohérente : 3 posts/sem, 1 article/sem, 1 vidéo/sem, 1 newsletter/mois. | 15 fichiers mis à jour (code, CGV, FAQ, metadata, emails, pricing). Calendrier avec caps hebdomadaires. | Les quantités du pack doivent refléter des fréquences hebdomadaires naturelles, pas des totaux mensuels arbitraires. | aucune | — | fait | n/a |
+| S10 | 2026-04-01 | préférence fondateur | P0 | [PRÉFÉRENCE FONDATEUR] : Génération automatique de visuels souhaitée. Sophie ne devrait pas toucher Canva. La promesse est "on fait tout". | Backlog : pipeline génération images IA (DALL-E/Ideogram API). | À implémenter dans une prochaine session. Le brief graphique reste en DB comme input pour le pipeline futur. | aucune | — | à-faire | n/a |
+
 ## Session 9 — 2026-03-31
 
 ### Learnings
