@@ -363,7 +363,7 @@ export function DashboardContent({
                 <div>
                   <p className="text-body-sm font-semibold text-primary">{counts.articles} article{counts.articles > 1 ? "s" : ""} SEO pour ta visibilité locale</p>
                   <p className="text-caption text-neutral-500">
-                    Publie-les sur ton blog ou ta page Facebook. Le SEO local met 2-3 mois à porter ses fruits — la régularité est la clé.
+                    Tes articles sont publiés automatiquement sur ta page mandataire. Partage le lien sur LinkedIn pour plus de visibilité. Le SEO local met 2-3 mois à porter ses fruits — la régularité est la clé.
                   </p>
                   <p className="text-caption mt-1.5">
                     <a href="/dashboard/articles" className="text-secondary-700 font-semibold hover:underline">Voir mes articles →</a>
