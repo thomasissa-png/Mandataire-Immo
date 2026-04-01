@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { getDeliverables } from "@/lib/getDeliverables"
@@ -16,7 +17,7 @@ export default async function DashboardPage() {
   const user = await getSessionUser()
 
   if (!user) {
-    return null
+    redirect("/sign-in")
   }
 
   const primaryEmail = user.email
