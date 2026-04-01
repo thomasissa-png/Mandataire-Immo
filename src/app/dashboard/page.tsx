@@ -3,6 +3,7 @@ import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { getDeliverables } from "@/lib/getDeliverables"
 import { DashboardContent } from "@/components/dashboard/DashboardContent"
+import { getAllArticles } from "@/lib/blog"
 
 interface ClientRow {
   id: string
@@ -115,6 +116,16 @@ export default async function DashboardPage() {
 
   const profileIncomplete = !ctx || !ctx.ville
 
+  // Sélectionner 2 articles blog recommandés (varier par mois)
+  const allBlogArticles = getAllArticles()
+  const monthIndex = new Date().getMonth()
+  const recommended = allBlogArticles.length > 0
+    ? [
+        allBlogArticles[monthIndex % allBlogArticles.length],
+        allBlogArticles[(monthIndex + 1) % allBlogArticles.length],
+      ].filter((a, i, arr) => arr.indexOf(a) === i) // déduplique si 1 seul article
+    : []
+
   return (
     <DashboardContent
       userName={user.firstName || user.name || ""}
@@ -124,6 +135,7 @@ export default async function DashboardPage() {
       deliverables={monthDeliverables}
       profile={profile}
       profileIncomplete={profileIncomplete}
+      recommendedArticles={recommended.map((a) => ({ slug: a.slug, title: a.title, description: a.description }))}
     />
   )
 }
