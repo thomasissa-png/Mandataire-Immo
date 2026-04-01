@@ -197,11 +197,11 @@ function detectVisualType(briefVisuel: string, keyPhrase: string): VisualType {
  * TEMOIGNAGE (remise de clés) :
  *   "A heartfelt moment of achievement and new beginnings. Close-up of two
  *    hands — one giving, one receiving a set of house keys with a small
- *    house-shaped keychain. Warm indoor lighting, slightly blurred living room
- *    background with moving boxes and natural light from a window. Shallow
- *    depth of field, f/1.8, focus on the keys. Color temperature: warm golden.
- *    Accent color: the keychain has an orange (#F27A1A) detail. Documentary
- *    photography style, natural, unposed."
+ *    house-shaped keychain. Warm indoor lighting, slightly blurred French
+ *    apartment background with moving boxes, Haussmann moldings, and natural
+ *    light from tall French windows. Shallow depth of field, f/1.8, focus on
+ *    the keys. Color temperature: warm golden. Accent color: the keychain has
+ *    an orange (#F27A1A) detail. Documentary photography style, natural, unposed."
  *
  * CITATION (fond texturé minimaliste) :
  *   "A serene, textured background that evokes calm determination. An abstract
@@ -244,17 +244,17 @@ function buildVisualPrompt(params: {
   const sceneDescriptions: Record<VisualType, string> = {
     conseil: [
       "A modern, minimalist home office desk photographed from a 45-degree overhead angle.",
-      "On the desk: a single elegant brass house-shaped paperweight, a warm ceramic coffee cup with latte art, and a small potted succulent in a terracotta pot.",
+      "On the desk: a single elegant brass house-shaped paperweight, a warm ceramic coffee cup with latte art, a small potted succulent in a terracotta pot, and a partially visible French property floor plan (plan de masse) with clean architectural lines.",
       "Soft morning light streaming through sheer linen curtains, casting gentle diagonal shadows across a light oak wood surface.",
-      "Shallow depth of field, f/2.8, the background softly blurred.",
+      "Shallow depth of field, f/2.8, the background softly blurred showing a hint of French rooftops through the window.",
       "One single subject focal point — the house-shaped paperweight — everything else supports it.",
     ].join(" "),
 
     quartier: [
       `A quiet cobblestone street in a charming French town${ville ? ` reminiscent of ${ville}` : ""}, captured during early morning golden hour.`,
       "Pastel-colored building facades — cream, soft yellow, pale blue — with traditional wooden shutters, half open.",
-      "A small café terrace with two bistro chairs and a round table, flower boxes overflowing with geraniums on second-floor windowsills.",
-      "One warm amber light glowing softly from a ground-floor bakery window.",
+      "A small café terrace with two classic Parisian bistro chairs and a round marble-top table, a chalkboard menu propped by the door, flower boxes overflowing with red geraniums on second-floor windowsills.",
+      "One warm amber light glowing softly from a ground-floor boulangerie window, a wicker bread basket barely visible inside.",
       "No people visible. Atmospheric perspective with soft bokeh in the far background, leading the eye down the street.",
       "Shot on a 35mm prime lens, f/4, cinematic documentary style.",
     ].join(" "),
