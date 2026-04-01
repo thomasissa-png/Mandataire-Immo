@@ -25,7 +25,7 @@ export function Footer() {
                 <li>
                   <a
                     href="/#comment-ca-marche"
-                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
+                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 rounded"
                   >
                     Comment ça marche
                   </a>
@@ -33,7 +33,7 @@ export function Footer() {
                 <li>
                   <a
                     href="/#pricing"
-                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
+                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 rounded"
                   >
                     Tarifs
                   </a>
@@ -41,7 +41,7 @@ export function Footer() {
                 <li>
                   <a
                     href="/blog"
-                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
+                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 rounded"
                   >
                     Blog
                   </a>
@@ -49,7 +49,7 @@ export function Footer() {
                 <li>
                   <a
                     href="/a-propos"
-                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
+                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 rounded"
                   >
                     À propos
                   </a>
@@ -57,7 +57,7 @@ export function Footer() {
                 <li>
                   <a
                     href="/faq"
-                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
+                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 rounded"
                   >
                     FAQ
                   </a>
@@ -73,7 +73,7 @@ export function Footer() {
                 <li>
                   <a
                     href="/cgv"
-                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
+                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 rounded"
                   >
                     CGV
                   </a>
@@ -81,7 +81,7 @@ export function Footer() {
                 <li>
                   <a
                     href="/confidentialite"
-                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
+                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 rounded"
                   >
                     Politique de confidentialité
                   </a>
@@ -89,7 +89,7 @@ export function Footer() {
                 <li>
                   <a
                     href="/mentions-legales"
-                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
+                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 rounded"
                   >
                     Mentions légales
                   </a>
@@ -105,7 +105,7 @@ export function Footer() {
                 <li>
                   <a
                     href="mailto:contact@immocrew.fr"
-                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal"
+                    className="text-body-sm text-background hover:text-secondary transition-colors duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-800 rounded"
                   >
                     contact@immocrew.fr
                   </a>
