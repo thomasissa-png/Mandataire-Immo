@@ -423,18 +423,42 @@ export function EditorialCalendar({
         </div>
       )}
 
-      {/* État vide */}
-      {monthDeliverables.length === 0 && (
-        <div className="rounded-xl bg-card border border-border p-6 tablet:p-8 text-center">
-          <span className="text-3xl mb-3 block" aria-hidden="true">📭</span>
-          <h3 className="font-display text-h4 text-primary mb-2">
-            Rien de prévu en {new Date(year, month).toLocaleDateString("fr-FR", { month: "long" })}
-          </h3>
-          <p className="text-body-sm text-neutral-500 max-w-md mx-auto">
-            Ton prochain pack de contenus sera bientôt livré. Reviens sur le mois en cours pour voir ton calendrier.
-          </p>
-        </div>
-      )}
+      {/* État vide — avec bouton pour revenir au dernier mois avec du contenu */}
+      {monthDeliverables.length === 0 && (() => {
+        // Trouver le dernier mois qui a du contenu
+        const lastMonthWithContent = deliverables.length > 0
+          ? [...new Set(deliverables.map((d) => getDeliverableYearMonth(d)))].sort().pop()
+          : null
+        const canGoBack = lastMonthWithContent && lastMonthWithContent !== monthKey
+
+        return (
+          <div className="rounded-xl bg-card border border-border p-6 tablet:p-8 text-center">
+            <span className="text-3xl mb-3 block" aria-hidden="true">📭</span>
+            <h3 className="font-display text-h4 text-primary mb-2">
+              Pas encore de contenus en {new Date(year, month).toLocaleDateString("fr-FR", { month: "long" })}
+            </h3>
+            <p className="text-body-sm text-neutral-500 max-w-md mx-auto mb-4">
+              Tes nouveaux contenus sont générés automatiquement chaque lundi. Ils apparaîtront ici dès qu{"'"}ils seront prêts.
+            </p>
+            {canGoBack && (() => {
+              const [prevY, prevM] = lastMonthWithContent.split("-").map(Number)
+              const prevLabel = new Date(prevY, prevM - 1).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })
+              return (
+                <button
+                  type="button"
+                  onClick={() => { setYear(prevY); setMonth(prevM - 1) }}
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-secondary text-white font-display font-bold text-body-sm hover:bg-secondary-600 transition-all shadow-sm"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                  </svg>
+                  Voir {prevLabel}
+                </button>
+              )
+            })()}
+          </div>
+        )
+      })()}
 
       {/* Popover */}
       {selectedDay !== null && (

@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react"
 import { MesBiensSection } from "./MesBiensSection"
 import { ReferralSection } from "./ReferralSection"
+import { SupportSection } from "./SupportSection"
 import type { Deliverable } from "@/types/deliverable"
 
 interface DashboardContentProps {
@@ -458,6 +459,9 @@ export function DashboardContent({
           </a>
         </div>
       ) : null}
+
+      {/* SUPPORT / FEEDBACK */}
+      <SupportSection />
 
       {/* FOOTER */}
       <div className="pt-6 border-t border-border flex flex-wrap items-center gap-4">
