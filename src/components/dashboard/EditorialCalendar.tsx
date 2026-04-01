@@ -86,62 +86,11 @@ export function EditorialCalendar({
     year: "numeric",
   })
 
-  // Distribuer TOUS les deliverables sur les mois par tranche.
-  // Sophie paie → reçoit N contenus → on les étale sur les semaines suivantes.
-  // Chaque contenu est assigné à un mois via son rang dans la liste totale
-  // et les caps hebdomadaires. Le calendrier affiche une "tranche" par mois.
-  const { monthDeliverables, totalDistributed } = useMemo(() => {
-    // Trier tous les deliverables par date de création (plus ancien d'abord)
-    const sorted = [...deliverables].sort(
-      (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-    )
-
-    if (sorted.length === 0) return { monthDeliverables: [], totalDistributed: 0 }
-
-    // Trouver la date de début (premier contenu)
-    const firstDate = new Date(sorted[0].created_at)
-    const startYear = firstDate.getFullYear()
-    const startMonth = firstDate.getMonth()
-    const startDay = firstDate.getDate()
-
-    // Calculer combien de jours disponibles par mois à partir de la date de début
-    // et distribuer les contenus mois par mois en respectant les caps
-    const monthBuckets: Map<string, Deliverable[]> = new Map()
-    let currentIdx = 0
-
-    // Itérer mois par mois depuis le début jusqu'au mois affiché + 1
-    let iterYear = startYear
-    let iterMonth = startMonth
-    const endKey = `${year}-${String(month + 1).padStart(2, "0")}`
-
-    for (let safety = 0; safety < 24 && currentIdx < sorted.length; safety++) {
-      const iterKey = `${iterYear}-${String(iterMonth + 1).padStart(2, "0")}`
-      const daysInMonth = getDaysInMonth(iterYear, iterMonth)
-      const dayStart = (iterYear === startYear && iterMonth === startMonth) ? startDay : 1
-
-      // Compter les jours disponibles (pas dimanche)
-      let availableDays = 0
-      for (let d = dayStart; d <= daysInMonth; d++) {
-        if (new Date(iterYear, iterMonth, d).getDay() !== 0) availableDays++
-      }
-
-      // Prendre un maximum de contenus pour ce mois (1 par jour dispo)
-      const bucketSize = Math.min(availableDays, sorted.length - currentIdx)
-      const bucket = sorted.slice(currentIdx, currentIdx + bucketSize)
-      monthBuckets.set(iterKey, bucket)
-      currentIdx += bucketSize
-
-      // Stop si on a dépassé le mois affiché
-      if (iterKey > endKey) break
-
-      // Mois suivant
-      iterMonth++
-      if (iterMonth > 11) { iterMonth = 0; iterYear++ }
-    }
-
-    const result = monthBuckets.get(monthKey) || []
-    return { monthDeliverables: result, totalDistributed: currentIdx }
-  }, [deliverables, monthKey, year, month])
+  // Filtrer les deliverables du mois affiché par le champ "month" (YYYY-MM)
+  // Simple et fiable : chaque deliverable a un mois assigné à la génération.
+  const monthDeliverables = useMemo(() => {
+    return deliverables.filter((d) => getDeliverableYearMonth(d) === monthKey)
+  }, [deliverables, monthKey])
 
   // Détecter le jour de début pour la distribution.
   // Pour le premier mois (même mois que la création), on commence au jour de création.
