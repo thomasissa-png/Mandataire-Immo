@@ -25,14 +25,16 @@ export default async function CalendrierPage() {
   const now = new Date()
   const monthLabel = now.toLocaleDateString("fr-FR", { month: "long", year: "numeric" })
 
-  // Calendrier éditorial = uniquement les contenus publiables
-  // Exclure : annonces (contenu immobilier, pas éditorial) et emails de prospection (CRM)
+  // Calendrier éditorial = tous les contenus publiables par Sophie
+  // Inclut emails (newsletter + prospection) car Sophie doit les envoyer
+  // Exclut : annonces (portails immo, pas du contenu éditorial), bios, positionnement
   const allDeliverables = await getDeliverables(user.email, [
     "post",
     "article_seo",
     "script_video",
     "newsletter",
-  ])
+    "email_prospection",
+  ], { includeArchived: true })
 
   return (
     <DashboardPageLayout

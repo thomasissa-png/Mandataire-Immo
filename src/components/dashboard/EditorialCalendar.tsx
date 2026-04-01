@@ -17,6 +17,7 @@ const TYPE_DOT_COLORS: Record<string, string> = {
   article_seo: "bg-primary",
   script_video: "bg-success",
   newsletter: "bg-info",
+  email_prospection: "bg-error",
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -24,6 +25,7 @@ const TYPE_LABELS: Record<string, string> = {
   article_seo: "Article SEO",
   script_video: "Script vidéo",
   newsletter: "Newsletter",
+  email_prospection: "Email prospection",
 }
 
 const WEEKDAYS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"] as const
@@ -57,10 +59,11 @@ function getDeliverableDay(d: Deliverable): number | null {
  * Les types en premier sont placés en priorité sur les meilleurs jours.
  */
 const TYPE_PRIORITY: string[] = [
-  "post",          // Coeur du calendrier — mardi, jeudi, samedi
-  "script_video",  // Reels/TikTok — samedi matin
-  "article_seo",   // SEO — mercredi (milieu de semaine)
-  "newsletter",    // 1x/mois — milieu de mois
+  "post",              // Coeur du calendrier — mardi, jeudi, samedi
+  "script_video",      // Reels/TikTok — samedi matin
+  "article_seo",       // SEO — lundi/mercredi (1/semaine)
+  "newsletter",        // 1x/mois — milieu de mois
+  "email_prospection", // 1x/mois — début de mois
 ]
 
 /**
@@ -68,10 +71,11 @@ const TYPE_PRIORITY: string[] = [
  * Basé sur les best practices par réseau social.
  */
 const PREFERRED_WEEKDAYS: Record<string, number[]> = {
-  post: [2, 4, 6],         // Mardi, Jeudi, Samedi (LinkedIn mardi/jeudi, Instagram samedi)
-  script_video: [6, 5],    // Samedi (Reels), Vendredi
-  article_seo: [1, 3],     // Lundi, Mercredi (1/semaine, pas le même jour que les posts)
-  newsletter: [4, 3],      // Jeudi, Mercredi
+  post: [2, 4, 6],            // Mardi, Jeudi, Samedi (LinkedIn mardi/jeudi, Instagram samedi)
+  script_video: [6, 5],       // Samedi (Reels), Vendredi
+  article_seo: [1, 3],        // Lundi, Mercredi (1/semaine, pas le même jour que les posts)
+  newsletter: [4, 3],         // Jeudi, Mercredi
+  email_prospection: [1, 2],  // Lundi, Mardi (début de semaine pour prospection)
 }
 
 /**
@@ -79,10 +83,11 @@ const PREFERRED_WEEKDAYS: Record<string, number[]> = {
  * Empêche de concentrer 5 posts sur 5 jours consécutifs.
  */
 const WEEKLY_CAPS: Record<string, number> = {
-  post: 3,            // Max 3 posts/semaine
-  script_video: 1,    // Max 1 vidéo/semaine
-  article_seo: 1,     // Max 1 article/semaine
-  newsletter: 1,      // Max 1/mois mais cap à 1/semaine par sécurité
+  post: 3,               // Max 3 posts/semaine
+  script_video: 1,       // Max 1 vidéo/semaine
+  article_seo: 1,        // Max 1 article/semaine
+  newsletter: 1,         // Max 1/mois
+  email_prospection: 1,  // Max 1/mois
 }
 
 /**
@@ -257,54 +262,78 @@ export function EditorialCalendar({
     year: "numeric",
   })
 
-  // Filtrer les deliverables du mois affiché
-  // Inclut aussi les contenus du mois précédent qui n'ont pas pu être placés
-  // (ex: Sophie active le 28, ses 19 contenus débordent sur le mois suivant)
-  const monthDeliverables = useMemo(() => {
-    const currentMonthItems = deliverables.filter((d) => getDeliverableYearMonth(d) === monthKey)
+  // Distribuer TOUS les deliverables sur les mois par tranche.
+  // Sophie paie → reçoit N contenus → on les étale sur les semaines suivantes.
+  // Chaque contenu est assigné à un mois via son rang dans la liste totale
+  // et les caps hebdomadaires. Le calendrier affiche une "tranche" par mois.
+  const { monthDeliverables, totalDistributed } = useMemo(() => {
+    // Trier tous les deliverables par date de création (plus ancien d'abord)
+    const sorted = [...deliverables].sort(
+      (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    )
 
-    // Vérifier si des contenus du mois précédent débordent
-    const prevMonth = month === 0 ? 11 : month - 1
-    const prevYear = month === 0 ? year - 1 : year
-    const prevMonthKey = `${prevYear}-${String(prevMonth + 1).padStart(2, "0")}`
-    const prevMonthItems = deliverables.filter((d) => getDeliverableYearMonth(d) === prevMonthKey)
+    if (sorted.length === 0) return { monthDeliverables: [], totalDistributed: 0 }
 
-    if (prevMonthItems.length > 0) {
-      // Calculer combien de jours étaient disponibles le mois précédent
-      const prevDaysInMonth = getDaysInMonth(prevYear, prevMonth)
-      let prevStartDay = 1
-      for (const d of prevMonthItems) {
-        const date = new Date(d.created_at)
-        if (!isNaN(date.getTime()) && date.getFullYear() === prevYear && date.getMonth() === prevMonth) {
-          prevStartDay = Math.min(prevStartDay === 1 ? 31 : prevStartDay, date.getDate())
-        }
+    // Trouver la date de début (premier contenu)
+    const firstDate = new Date(sorted[0].created_at)
+    const startYear = firstDate.getFullYear()
+    const startMonth = firstDate.getMonth()
+    const startDay = firstDate.getDate()
+
+    // Calculer combien de jours disponibles par mois à partir de la date de début
+    // et distribuer les contenus mois par mois en respectant les caps
+    const monthBuckets: Map<string, Deliverable[]> = new Map()
+    let currentIdx = 0
+
+    // Itérer mois par mois depuis le début jusqu'au mois affiché + 1
+    let iterYear = startYear
+    let iterMonth = startMonth
+    const endKey = `${year}-${String(month + 1).padStart(2, "0")}`
+
+    for (let safety = 0; safety < 24 && currentIdx < sorted.length; safety++) {
+      const iterKey = `${iterYear}-${String(iterMonth + 1).padStart(2, "0")}`
+      const daysInMonth = getDaysInMonth(iterYear, iterMonth)
+      const dayStart = (iterYear === startYear && iterMonth === startMonth) ? startDay : 1
+
+      // Compter les jours disponibles (pas dimanche)
+      let availableDays = 0
+      for (let d = dayStart; d <= daysInMonth; d++) {
+        if (new Date(iterYear, iterMonth, d).getDay() !== 0) availableDays++
       }
-      let prevAvailableDays = 0
-      for (let d = prevStartDay; d <= prevDaysInMonth; d++) {
-        if (new Date(prevYear, prevMonth, d).getDay() !== 0) prevAvailableDays++
-      }
-      // Les contenus en excès débordent sur ce mois
-      if (prevMonthItems.length > prevAvailableDays) {
-        const overflow = prevMonthItems.slice(prevAvailableDays)
-        return [...currentMonthItems, ...overflow]
-      }
+
+      // Prendre un maximum de contenus pour ce mois (1 par jour dispo)
+      const bucketSize = Math.min(availableDays, sorted.length - currentIdx)
+      const bucket = sorted.slice(currentIdx, currentIdx + bucketSize)
+      monthBuckets.set(iterKey, bucket)
+      currentIdx += bucketSize
+
+      // Stop si on a dépassé le mois affiché
+      if (iterKey > endKey) break
+
+      // Mois suivant
+      iterMonth++
+      if (iterMonth > 11) { iterMonth = 0; iterYear++ }
     }
 
-    return currentMonthItems
+    const result = monthBuckets.get(monthKey) || []
+    return { monthDeliverables: result, totalDistributed: currentIdx }
   }, [deliverables, monthKey, year, month])
 
-  // Détecter le jour de début : premier deliverable du mois (date de création)
-  // Si Sophie a activé le 25, on ne distribue qu'à partir du 25
+  // Détecter le jour de début pour la distribution.
+  // Pour le premier mois (même mois que la création), on commence au jour de création.
+  // Pour les mois suivants (contenus débordés), on commence au 1er.
   const startDay = useMemo(() => {
     if (monthDeliverables.length === 0) return 1
-    let earliest = 31
+    // Vérifier si c'est le premier mois (date de création est dans ce mois)
+    let earliest = 0
     for (const d of monthDeliverables) {
       const date = new Date(d.created_at)
       if (!isNaN(date.getTime()) && date.getFullYear() === year && date.getMonth() === month) {
-        earliest = Math.min(earliest, date.getDate())
+        earliest = earliest === 0 ? date.getDate() : Math.min(earliest, date.getDate())
       }
     }
-    return earliest
+    // Si aucun deliverable n'a été créé dans ce mois (contenus débordés), commencer au 1er
+    return earliest === 0 ? 1 : earliest
   }, [monthDeliverables, year, month])
 
   // Distribuer les livrables : 1 contenu/jour, types alternés, pas de dimanche
