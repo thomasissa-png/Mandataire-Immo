@@ -425,9 +425,9 @@ export function DashboardContent({
       ) : null}
 
       {/* ============================================================ */}
-      {/* PARRAINAGE — abonnés Pack Mensuel uniquement                    */}
+      {/* PARRAINAGE — visible pour tous les clients avec un pack        */}
       {/* ============================================================ */}
-      {pack === "mensuel" && <ReferralSection />}
+      {pack && <ReferralSection />}
 
       {/* ============================================================ */}
       {/* MES BIENS (self-service — property_pages)                       */}
