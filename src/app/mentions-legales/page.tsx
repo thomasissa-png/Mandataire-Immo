@@ -17,25 +17,25 @@ export default function MentionsLegalesPage() {
         <div className="container-immocrew py-12 desktop:py-20">
           <article className="max-w-3xl mx-auto">
             <h1 className="font-display text-h1 font-bold text-primary mb-2">
-              Mentions l&eacute;gales
+              Mentions légales
             </h1>
             <p className="text-caption text-neutral-500 mb-10">
-              Derni&egrave;re mise &agrave; jour : 25 mars 2026
+              Dernière mise à jour : 25 mars 2026
             </p>
 
             {/* Editeur */}
-            <Section title="1. &Eacute;diteur du site">
+            <Section title="1. Éditeur du site">
               <p>
-                Le site <strong>immocrew.fr</strong> est &eacute;dit&eacute; par :
+                Le site <strong>immocrew.fr</strong> est édité par :
               </p>
               <dl className="mt-4 space-y-2">
                 <InfoRow label="Raison sociale" value="VERSI" />
                 <InfoRow label="Forme juridique" value="SAS" />
-                <InfoRow label="Capital social" value="1 000 &euro;" />
-                <InfoRow label="Si&egrave;ge social" value="54 rue Henri Barbusse, 92000 Nanterre" />
+                <InfoRow label="Capital social" value="1 000 €" />
+                <InfoRow label="Siège social" value="54 rue Henri Barbusse, 92000 Nanterre" />
                 <InfoRow label="SIRET" value="91286261200013" />
                 <InfoRow label="RCS" value="Nanterre B 912862612" />
-                <InfoRow label="Num&eacute;ro de TVA intracommunautaire" value="FR91912862612" />
+                <InfoRow label="Numéro de TVA intracommunautaire" value="FR91912862612" />
                 <InfoRow label="Email" value="contact@immocrew.fr" />
               </dl>
             </Section>
@@ -43,7 +43,7 @@ export default function MentionsLegalesPage() {
             {/* Directeur publication */}
             <Section title="2. Directeur de la publication">
               <p>
-                <strong>Thomas Issa</strong>, en qualit&eacute; de Pr&eacute;sident.
+                <strong>Thomas Issa</strong>, en qualité de Président.
               </p>
               <p className="mt-2">
                 Contact : <a href="mailto:contact@immocrew.fr" className="text-secondary underline underline-offset-2 hover:text-secondary-700 transition-colors">contact@immocrew.fr</a>
@@ -51,7 +51,7 @@ export default function MentionsLegalesPage() {
             </Section>
 
             {/* Hebergeur */}
-            <Section title="3. H&eacute;bergeur">
+            <Section title="3. Hébergeur">
               <dl className="space-y-2">
                 <InfoRow label="Raison sociale" value="Replit, Inc." />
                 <InfoRow label="Adresse" value="350 Mission Street, San Francisco, CA 94105, USA" />
@@ -60,62 +60,62 @@ export default function MentionsLegalesPage() {
             </Section>
 
             {/* Propriete intellectuelle */}
-            <Section title="4. Propri&eacute;t&eacute; intellectuelle">
+            <Section title="4. Propriété intellectuelle">
               <p>
                 L&rsquo;ensemble du contenu du site immocrew.fr (textes, images, graphismes, logo,
-                ic&ocirc;nes, mise en page, logiciels) est la propri&eacute;t&eacute; exclusive de
-                VERSI ou de ses partenaires, et est prot&eacute;g&eacute;
-                par les lois fran&ccedil;aises et internationales relatives &agrave; la propri&eacute;t&eacute;
+                icônes, mise en page, logiciels) est la propriété exclusive de
+                VERSI ou de ses partenaires, et est protégé
+                par les lois françaises et internationales relatives à la propriété
                 intellectuelle.
               </p>
               <p className="mt-3">
-                Toute reproduction, repr&eacute;sentation, modification, publication, transmission ou
-                d&eacute;naturation, totale ou partielle, du site ou de son contenu, par quelque
-                proc&eacute;d&eacute; que ce soit, et sur quelque support que ce soit, est interdite
-                sans l&rsquo;autorisation &eacute;crite pr&eacute;alable de VERSI.
+                Toute reproduction, représentation, modification, publication, transmission ou
+                dénaturation, totale ou partielle, du site ou de son contenu, par quelque
+                procédé que ce soit, et sur quelque support que ce soit, est interdite
+                sans l&rsquo;autorisation écrite préalable de VERSI.
               </p>
             </Section>
 
             {/* Credits */}
-            <Section title="5. Cr&eacute;dits et transparence IA">
+            <Section title="5. Crédits et transparence IA">
               <p>
-                Certains contenus pr&eacute;sent&eacute;s sur ce site (textes de d&eacute;monstration,
+                Certains contenus présentés sur ce site (textes de démonstration,
                 exemples de livrables) sont produits avec l&rsquo;assistance de technologies
-                d&rsquo;intelligence artificielle g&eacute;n&eacute;rative (Claude, Anthropic).
+                d&rsquo;intelligence artificielle générative (Claude, Anthropic).
               </p>
               <p className="mt-3">
                 Les livrables fournis aux clients dans le cadre des prestations ImmoCrew
-                sont &eacute;galement produits avec assistance IA et font l&rsquo;objet d&rsquo;une relecture
+                sont également produits avec assistance IA et font l&rsquo;objet d&rsquo;une relecture
                 et validation humaine avant livraison.
               </p>
               <p className="mt-3">
-                Cette mention est faite conform&eacute;ment aux obligations de transparence
-                du R&egrave;glement europ&eacute;en sur l&rsquo;Intelligence Artificielle (AI Act,
-                R&egrave;glement UE 2024/1689).
+                Cette mention est faite conformément aux obligations de transparence
+                du Règlement européen sur l&rsquo;Intelligence Artificielle (AI Act,
+                Règlement UE 2024/1689).
               </p>
             </Section>
 
             {/* Donnees personnelles */}
-            <Section title="6. Donn&eacute;es personnelles">
+            <Section title="6. Données personnelles">
               <p>
-                Le traitement des donn&eacute;es personnelles collect&eacute;es sur ce site est
-                d&eacute;taill&eacute; dans notre{" "}
+                Le traitement des données personnelles collectées sur ce site est
+                détaillé dans notre{" "}
                 <Link
                   href="/confidentialite"
                   className="text-secondary font-semibold underline underline-offset-2 hover:text-secondary-700 transition-colors"
                 >
-                  Politique de Confidentialit&eacute;
+                  Politique de Confidentialité
                 </Link>
                 .
               </p>
               <p className="mt-3">
-                Conform&eacute;ment au R&egrave;glement G&eacute;n&eacute;ral sur la Protection des Donn&eacute;es
-                (RGPD), vous disposez d&rsquo;un droit d&rsquo;acc&egrave;s, de rectification, de suppression
-                et de portabilit&eacute; de vos donn&eacute;es. Pour exercer ces droits, contactez :
+                Conformément au Règlement Général sur la Protection des Données
+                (RGPD), vous disposez d&rsquo;un droit d&rsquo;accès, de rectification, de suppression
+                et de portabilité de vos données. Pour exercer ces droits, contactez :
                 {" "}<a href="mailto:contact@immocrew.fr" className="text-secondary underline underline-offset-2 hover:text-secondary-700 transition-colors">contact@immocrew.fr</a>.
               </p>
               <p className="mt-3">
-                Vous pouvez &eacute;galement adresser une r&eacute;clamation &agrave; la CNIL :{" "}
+                Vous pouvez également adresser une réclamation à la CNIL :{" "}
                 <a
                   href="https://www.cnil.fr"
                   target="_blank"
@@ -129,14 +129,14 @@ export default function MentionsLegalesPage() {
             </Section>
 
             {/* Conditions generales */}
-            <Section title="7. Conditions g&eacute;n&eacute;rales">
+            <Section title="7. Conditions générales">
               <p>
-                L&rsquo;utilisation du service ImmoCrew est soumise &agrave; nos{" "}
+                L&rsquo;utilisation du service ImmoCrew est soumise à nos{" "}
                 <Link
                   href="/cgv"
                   className="text-secondary font-semibold underline underline-offset-2 hover:text-secondary-700 transition-colors"
                 >
-                  Conditions G&eacute;n&eacute;rales de Vente
+                  Conditions Générales de Vente
                 </Link>
                 .
               </p>
@@ -148,7 +148,7 @@ export default function MentionsLegalesPage() {
                 href="/"
                 className="text-secondary font-semibold hover:text-secondary-700 transition-colors"
               >
-                &larr; Retour &agrave; l&rsquo;accueil
+                &larr; Retour à l&rsquo;accueil
               </Link>
             </div>
           </article>

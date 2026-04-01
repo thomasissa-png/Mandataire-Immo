@@ -31,7 +31,7 @@ export default function CGVPage() {
                 régissent les relations contractuelles entre :
               </p>
               <p className="mt-3">
-                <strong>VERSI</strong>, SAS, au capital social de 1 000 &euro;,
+                <strong>VERSI</strong>, SAS, au capital social de 1 000 €,
                 immatriculée au RCS de Nanterre sous le numéro SIRET 91286261200013,
                 dont le siège social est situé au 54 rue Henri Barbusse, 92000 Nanterre,
                 numéro de TVA intracommunautaire : FR91912862612,
@@ -88,7 +88,7 @@ export default function CGVPage() {
               <div className="space-y-6">
                 <OfferCard
                   name={PACK_LANCEMENT.name}
-                  price={`${PACK_LANCEMENT.price} &euro; TTC`}
+                  price={`${PACK_LANCEMENT.price} € TTC`}
                   type="Paiement unique"
                   items={[
                     "Positionnement et stratégie de personal branding",
@@ -104,7 +104,7 @@ export default function CGVPage() {
 
                 <OfferCard
                   name={PACK_MENSUEL.name}
-                  price={`${PACK_MENSUEL.price} &euro; TTC / mois`}
+                  price={`${PACK_MENSUEL.price} € TTC / mois`}
                   type="Abonnement mensuel sans engagement"
                   items={[
                     "12 posts réseaux sociaux par mois",
@@ -118,7 +118,7 @@ export default function CGVPage() {
 
                 <OfferCard
                   name={PACK_BOOST.name}
-                  price={`${PACK_BOOST.price} &euro; TTC`}
+                  price={`${PACK_BOOST.price} € TTC`}
                   type="Paiement unique, par mandat"
                   items={[
                     "Annonce storytelling dédiée au bien",

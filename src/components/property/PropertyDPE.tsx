@@ -64,7 +64,7 @@ export function PropertyDPE({
                   {c}
                   {isActive && valeur_energie !== null && (
                     <span className="ml-auto text-caption">
-                      {Math.round(valeur_energie)} kWh/m&sup2;/an
+                      {Math.round(valeur_energie)} kWh/m²/an
                     </span>
                   )}
                 </div>
@@ -100,7 +100,7 @@ export function PropertyDPE({
               </p>
               {valeur_ges !== null && (
                 <p className="text-caption text-neutral-400">
-                  {Math.round(valeur_ges)} kgCO&sub2;/m&sup2;/an
+                  {Math.round(valeur_ges)} kgCO&sub2;/m²/an
                 </p>
               )}
             </div>

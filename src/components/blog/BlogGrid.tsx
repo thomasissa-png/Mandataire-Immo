@@ -136,7 +136,7 @@ export function BlogGrid({ articles }: BlogGridProps) {
                   </p>
 
                   <span className="text-body-sm font-semibold text-secondary mt-3 group-hover:underline">
-                    Lire l&apos;article &rarr;
+                    Lire l&apos;article →
                   </span>
                 </div>
               </Link>

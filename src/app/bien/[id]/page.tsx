@@ -8,6 +8,8 @@ import { PropertyDVF } from "@/components/property/PropertyDVF"
 import { PropertyDPE } from "@/components/property/PropertyDPE"
 import { PropertyContact } from "@/components/property/PropertyContact"
 import { PrintButton } from "@/components/property/PrintButton"
+import { Header } from "@/components/landing/Header"
+import { Footer } from "@/components/landing/Footer"
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -25,13 +27,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { id } = await params
   const property = await getProperty(id)
   if (!property) {
-    return { title: "Bien non trouve" }
+    return { title: "Bien non trouvé" }
   }
 
   const title = property.titre_annonce || property.titre
   const description =
     property.accroche_courte ||
-    `${property.type_bien} ${property.pieces} pieces - ${property.surface}m2 a ${property.city || property.adresse} - ${property.prix.toLocaleString("fr-FR")} EUR`
+    `${property.type_bien} ${property.pièces} pièces - ${property.surface}m2 a ${property.city || property.adresse} - ${property.prix.toLocaleString("fr-FR")} EUR`
 
   return {
     title,
@@ -63,12 +65,14 @@ export default async function PropertyPageRoute({ params }: PageProps) {
   const hasMap = property.lat !== null && property.lon !== null
 
   return (
+    <>
+    <Header />
     <main className="min-h-screen bg-background">
       {/* Header du bien */}
       <section className="bg-primary text-white section-padding">
         <div className="container-immocrew">
           <p className="text-caption uppercase tracking-wider text-secondary-300 mb-2">
-            {property.type_bien} &middot; {property.pieces} pieces &middot; {property.surface}m&sup2;
+            {property.type_bien} · {property.pièces} pièces · {property.surface}m²
           </p>
           <h1 className="text-display-lg tablet:text-display-xl text-white mb-4">
             {property.titre_annonce || property.titre}
@@ -78,7 +82,7 @@ export default async function PropertyPageRoute({ params }: PageProps) {
           </p>
           <div className="flex items-center gap-4 mt-4">
             <p className="text-h2 text-secondary">
-              {property.prix.toLocaleString("fr-FR")} &euro;
+              {property.prix.toLocaleString("fr-FR")} €
             </p>
             <PrintButton />
           </div>
@@ -104,7 +108,7 @@ export default async function PropertyPageRoute({ params }: PageProps) {
       {property.annonce_longue && (
         <section className="section-padding bg-card">
           <div className="container-immocrew max-w-3xl">
-            <h2 className="text-h2 mb-8">Decouvrir ce bien</h2>
+            <h2 className="text-h2 mb-8">Découvrir ce bien</h2>
             <div
               className="prose prose-lg max-w-none text-foreground"
               dangerouslySetInnerHTML={{
@@ -160,14 +164,14 @@ export default async function PropertyPageRoute({ params }: PageProps) {
       {/* Mentions legales */}
       <footer className="py-6 bg-neutral-100">
         <div className="container-immocrew text-center">
-          <p className="text-small text-neutral-500">
+          <p className="text-caption text-neutral-500">
             Les prix s&apos;entendent frais d&apos;agence inclus.
             {hasDPE && property.dpe_classe && (
               <> DPE : {property.dpe_classe}.</>
             )}
           </p>
           {hasStaging && (
-            <p className="text-small text-neutral-500 mt-1">
+            <p className="text-caption text-neutral-500 mt-1">
               Home staging virtuel — les visuels meublés sont des projections non contractuelles.
               Le bien est livré dans son état actuel (photos originales disponibles ci-dessus).
             </p>
@@ -175,6 +179,8 @@ export default async function PropertyPageRoute({ params }: PageProps) {
         </div>
       </footer>
     </main>
+    <Footer />
+    </>
   )
 }
 

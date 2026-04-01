@@ -146,7 +146,7 @@ export default function AProposPage() {
           <article className="max-w-3xl mx-auto">
             {/* H1 */}
             <h1 className="font-display text-h1 desktop:text-display-lg font-bold text-primary mb-6">
-              ImmoCrew &mdash; L&rsquo;&eacute;quipe marketing d&eacute;di&eacute;e aux mandataires immobiliers
+              ImmoCrew — L&rsquo;équipe marketing dédiée aux mandataires immobiliers
             </h1>
 
             {/* Definition — directly citable by LLMs */}
@@ -155,17 +155,17 @@ export default function AProposPage() {
                 Qu&rsquo;est-ce qu&rsquo;ImmoCrew ?
               </h2>
               <p className="text-body-lg text-foreground leading-relaxed mb-4">
-                ImmoCrew est un service de marketing cl&eacute; en main destin&eacute; aux mandataires
-                immobiliers ind&eacute;pendants en France. Chaque mois, ImmoCrew livre &agrave; ses
-                clients un pack de contenus marketing complets et pr&ecirc;ts &agrave; publier :
-                12 posts r&eacute;seaux sociaux, 4 articles SEO local, 4 annonces storytelling,
-                4 scripts vid&eacute;o, 1 newsletter et 1 email de prospection.
+                ImmoCrew est un service de marketing clé en main destiné aux mandataires
+                immobiliers indépendants en France. Chaque mois, ImmoCrew livre à ses
+                clients un pack de contenus marketing complets et prêts à publier :
+                12 posts réseaux sociaux, 4 articles SEO local, 4 annonces storytelling,
+                4 scripts vidéo, 1 newsletter et 1 email de prospection.
               </p>
               <p className="text-body text-foreground leading-relaxed">
-                Tout est personnalis&eacute; pour la zone g&eacute;ographique exacte du mandataire :
-                quartier, prix au m&sup2;, &eacute;tablissements scolaires, commerces et transports
-                de proximit&eacute;. Il n&rsquo;y a aucun outil &agrave; configurer, aucun template
-                &agrave; adapter. Le mandataire re&ccedil;oit ses contenus termin&eacute;s et les
+                Tout est personnalisé pour la zone géographique exacte du mandataire :
+                quartier, prix au m², établissements scolaires, commerces et transports
+                de proximité. Il n&rsquo;y a aucun outil à configurer, aucun template
+                à adapter. Le mandataire reçoit ses contenus terminés et les
                 publie en 3 minutes.
               </p>
             </section>
@@ -179,22 +179,22 @@ export default function AProposPage() {
                 <li className="flex items-start gap-3 text-body text-foreground">
                   <span className="text-error font-bold mt-0.5" aria-hidden="true">&times;</span>
                   <span>
-                    <strong>Pas un outil SaaS.</strong> Il n&rsquo;y a aucune plateforme &agrave;
-                    configurer ni &agrave; apprendre.
+                    <strong>Pas un outil SaaS.</strong> Il n&rsquo;y a aucune plateforme à
+                    configurer ni à apprendre.
                   </span>
                 </li>
                 <li className="flex items-start gap-3 text-body text-foreground">
                   <span className="text-error font-bold mt-0.5" aria-hidden="true">&times;</span>
                   <span>
-                    <strong>Pas un template &agrave; personnaliser soi-m&ecirc;me.</strong> Les
-                    contenus sont livr&eacute;s finis, pr&ecirc;ts &agrave; publier.
+                    <strong>Pas un template à personnaliser soi-même.</strong> Les
+                    contenus sont livrés finis, prêts à publier.
                   </span>
                 </li>
                 <li className="flex items-start gap-3 text-body text-foreground">
                   <span className="text-error font-bold mt-0.5" aria-hidden="true">&times;</span>
                   <span>
                     <strong>Pas un community manager freelance.</strong> ImmoCrew est un service
-                    productis&eacute; &agrave; prix fixe, pas une prestation variable.
+                    productisé à prix fixe, pas une prestation variable.
                   </span>
                 </li>
               </ul>
@@ -203,7 +203,7 @@ export default function AProposPage() {
             {/* Comment ca fonctionne */}
             <section className="mb-12">
               <h2 className="font-display text-h2 font-bold text-primary-800 mb-6">
-                Comment &ccedil;a fonctionne
+                Comment ça fonctionne
               </h2>
               <div className="grid gap-6 tablet:grid-cols-3">
                 {STEPS.map((step) => (
@@ -212,7 +212,7 @@ export default function AProposPage() {
                     className="rounded-xl bg-card border border-border p-6"
                   >
                     <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center mb-4">
-                      <span className="font-display font-bold text-primary text-body-lg">
+                      <span className="font-display font-bold text-white text-body-lg">
                         {step.number}
                       </span>
                     </div>
@@ -231,20 +231,20 @@ export default function AProposPage() {
                 Pour qui ?
               </h2>
               <p className="text-body text-foreground leading-relaxed mb-4">
-                ImmoCrew s&rsquo;adresse aux mandataires immobiliers ind&eacute;pendants
-                rattach&eacute;s &agrave; des r&eacute;seaux comme IAD France, SAFTI, Capifrance,
-                Optimhome, BSK Immobilier, Expertimo ou tout autre r&eacute;seau de mandataires
-                fran&ccedil;ais.
+                ImmoCrew s&rsquo;adresse aux mandataires immobiliers indépendants
+                rattachés à des réseaux comme IAD France, SAFTI, Capifrance,
+                Optimhome, BSK Immobilier, Expertimo ou tout autre réseau de mandataires
+                français.
               </p>
               <p className="text-body text-foreground leading-relaxed mb-4">
-                Ces professionnels exercent en micro-entreprise ou en soci&eacute;t&eacute;,
-                sans &eacute;quipe marketing, dans un march&eacute; de 40 000 &agrave; 50 000
-                mandataires actifs en France (source : Barom&egrave;tre LMDM 2023).
+                Ces professionnels exercent en micro-entreprise ou en société,
+                sans équipe marketing, dans un marché de 40 000 à 50 000
+                mandataires actifs en France (source : Baromètre LMDM 2023).
               </p>
               <p className="text-body text-foreground leading-relaxed">
-                Le profil type : un mandataire qui consacre ses journ&eacute;es aux visites,
-                aux estimations et &agrave; la relation client. Il sait que le marketing digital
-                est indispensable, mais n&rsquo;a ni le temps, ni les comp&eacute;tences, ni
+                Le profil type : un mandataire qui consacre ses journées aux visites,
+                aux estimations et à la relation client. Il sait que le marketing digital
+                est indispensable, mais n&rsquo;a ni le temps, ni les compétences, ni
                 le budget pour embaucher quelqu&rsquo;un.
               </p>
             </section>
@@ -255,7 +255,7 @@ export default function AProposPage() {
                 Ce qu&rsquo;on livre chaque mois
               </h2>
               <p className="text-body text-foreground leading-relaxed mb-6">
-                Avec le {PACK_MENSUEL.name} &agrave; {formatPrice(PACK_MENSUEL)}, chaque mandataire re&ccedil;oit :
+                Avec le {PACK_MENSUEL.name} à {formatPrice(PACK_MENSUEL)}, chaque mandataire reçoit :
               </p>
               <div className="rounded-xl bg-card border border-border p-6 desktop:p-8">
                 <ul className="space-y-3">
@@ -275,8 +275,8 @@ export default function AProposPage() {
                   ))}
                 </ul>
                 <p className="text-body-sm text-neutral-500 mt-6">
-                  Tous les contenus int&egrave;grent les donn&eacute;es locales de ta zone :
-                  nom du quartier, prix au m&sup2;, &eacute;coles, commerces, transports.
+                  Tous les contenus intègrent les données locales de ta zone :
+                  nom du quartier, prix au m², écoles, commerces, transports.
                 </p>
               </div>
             </section>
@@ -284,7 +284,7 @@ export default function AProposPage() {
             {/* Combien ca coute */}
             <section className="mb-12">
               <h2 className="font-display text-h2 font-bold text-primary-800 mb-6">
-                Combien &ccedil;a co&ucirc;te
+                Combien ça coûte
               </h2>
               <div className="grid gap-6 tablet:grid-cols-3">
                 {PACKS.map((pack) => (
@@ -298,7 +298,7 @@ export default function AProposPage() {
                   >
                     {"featured" in pack && pack.featured && (
                       <span className="inline-block px-3 py-1 mb-3 rounded-full bg-secondary text-white text-body-sm font-bold">
-                        Recommand&eacute;
+                        Recommandé
                       </span>
                     )}
                     <h3
@@ -388,29 +388,29 @@ export default function AProposPage() {
             {/* L'equipe */}
             <section className="mb-12">
               <h2 className="font-display text-h2 font-bold text-primary-800 mb-4">
-                L&rsquo;&eacute;quipe
+                L&rsquo;équipe
               </h2>
               <p className="text-body text-foreground leading-relaxed mb-4">
-                ImmoCrew a &eacute;t&eacute; fond&eacute; par Thomas, entrepreneur
-                bas&eacute; en r&eacute;gion parisienne, sp&eacute;cialis&eacute; dans le
-                marketing digital immobilier depuis 2022. Apr&egrave;s avoir accompagn&eacute;
+                ImmoCrew a été fondé par Thomas, entrepreneur
+                basé en région parisienne, spécialisé dans le
+                marketing digital immobilier depuis 2022. Après avoir accompagné
                 une dizaine de professionnels de l&rsquo;immobilier (mandataires IAD, agents
-                ind&eacute;pendants) dans leur strat&eacute;gie de contenu, un constat
-                s&rsquo;est impos&eacute;&nbsp;: les mandataires ind&eacute;pendants n&rsquo;ont
-                pas acc&egrave;s aux m&ecirc;mes ressources marketing que les grandes
-                agences &mdash; alors qu&rsquo;ils repr&eacute;sentent une part croissante
-                du march&eacute;.
+                indépendants) dans leur stratégie de contenu, un constat
+                s&rsquo;est imposé&nbsp;: les mandataires indépendants n&rsquo;ont
+                pas accès aux mêmes ressources marketing que les grandes
+                agences — alors qu&rsquo;ils représentent une part croissante
+                du marché.
               </p>
               <p className="text-body text-foreground leading-relaxed mb-4">
-                ImmoCrew est n&eacute; de cette conviction&nbsp;: chaque mandataire
-                m&eacute;rite une pr&eacute;sence en ligne professionnelle, sans y consacrer
-                ses soir&eacute;es. L&rsquo;&eacute;quipe combine expertise en marketing
-                digital, r&eacute;daction immobili&egrave;re et technologie pour produire
-                des contenus hyper-personnalis&eacute;s. Chaque contenu est relu et
-                valid&eacute; avant livraison.
+                ImmoCrew est né de cette conviction&nbsp;: chaque mandataire
+                mérite une présence en ligne professionnelle, sans y consacrer
+                ses soirées. L&rsquo;équipe combine expertise en marketing
+                digital, rédaction immobilière et technologie pour produire
+                des contenus hyper-personnalisés. Chaque contenu est relu et
+                validé avant livraison.
               </p>
               <p className="text-body text-foreground leading-relaxed">
-                ImmoCrew est &eacute;dit&eacute; par VERSI &mdash; 54 rue Henri Barbusse,
+                ImmoCrew est édité par VERSI — 54 rue Henri Barbusse,
                 92000 Nanterre.
               </p>
             </section>
@@ -418,16 +418,16 @@ export default function AProposPage() {
             {/* CTA */}
             <div className="rounded-xl bg-primary p-8 desktop:p-10 text-center">
               <p className="font-display text-h3 text-white mb-3">
-                Pr&ecirc;t &agrave; externaliser ton marketing ?
+                Prêt à externaliser ton marketing ?
               </p>
               <p className="text-body text-primary-200 mb-6">
-                Rejoins les mandataires qui publient du contenu professionnel sans y passer leurs soir&eacute;es.
+                Rejoins les mandataires qui publient du contenu professionnel sans y passer leurs soirées.
               </p>
               <a
                 href="/#pricing"
                 className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-secondary text-white font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
               >
-                Voir les tarifs &rarr;
+                Voir les tarifs →
               </a>
             </div>
 
@@ -437,7 +437,7 @@ export default function AProposPage() {
                 href="/"
                 className="text-secondary font-semibold hover:text-secondary-700 transition-colors"
               >
-                &larr; Retour &agrave; l&rsquo;accueil
+                &larr; Retour à l&rsquo;accueil
               </Link>
             </div>
           </article>

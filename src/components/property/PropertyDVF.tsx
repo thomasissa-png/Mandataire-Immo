@@ -15,9 +15,9 @@ export function PropertyDVF({ prix_m2_moyen, transactions }: PropertyDVFProps) {
       <h3 className="text-h3 mb-4">Prix du quartier</h3>
 
       <div className="mb-6">
-        <p className="text-caption text-neutral-500 uppercase">Prix moyen au m&sup2;</p>
+        <p className="text-caption text-neutral-500 uppercase">Prix moyen au m²</p>
         <p className="text-h1 text-primary">
-          {prix_m2_moyen.toLocaleString("fr-FR")} &euro;/m&sup2;
+          {prix_m2_moyen.toLocaleString("fr-FR")} €/m²
         </p>
         <p className="text-small text-neutral-400">
           Source : Demandes de Valeurs Foncieres (DVF) — donnees publiques
@@ -38,15 +38,15 @@ export function PropertyDVF({ prix_m2_moyen, transactions }: PropertyDVFProps) {
                 <div>
                   <p className="text-body-sm font-medium">{t.type || "Bien"}</p>
                   <p className="text-caption text-neutral-400">
-                    {t.surface}m&sup2; &middot; {formatDate(t.date)}
+                    {t.surface}m² &middot; {formatDate(t.date)}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-body-sm font-medium">
-                    {t.prix.toLocaleString("fr-FR")} &euro;
+                    {t.prix.toLocaleString("fr-FR")} €
                   </p>
                   <p className="text-caption text-neutral-400">
-                    {t.prix_m2.toLocaleString("fr-FR")} &euro;/m&sup2;
+                    {t.prix_m2.toLocaleString("fr-FR")} €/m²
                   </p>
                 </div>
               </div>

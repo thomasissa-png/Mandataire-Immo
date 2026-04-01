@@ -137,11 +137,11 @@ export default function FAQPage() {
           <article className="max-w-3xl mx-auto">
             {/* H1 */}
             <h1 className="font-display text-h1 desktop:text-display-lg font-bold text-primary mb-3">
-              FAQ ImmoCrew &mdash; Toutes les r&eacute;ponses pour les mandataires immobiliers
+              FAQ ImmoCrew — Toutes les réponses pour les mandataires immobiliers
             </h1>
             <p className="text-body-lg text-neutral-500 mb-10 desktop:mb-14">
-              Tu te poses des questions sur ImmoCrew ? Tu trouveras ici les r&eacute;ponses
-              les plus fr&eacute;quentes sur le fonctionnement, les prix, la personnalisation
+              Tu te poses des questions sur ImmoCrew ? Tu trouveras ici les réponses
+              les plus fréquentes sur le fonctionnement, les prix, la personnalisation
               et les garanties du service.
             </p>
 
@@ -151,23 +151,23 @@ export default function FAQPage() {
             {/* CTA */}
             <div className="mt-14 rounded-xl bg-primary p-8 desktop:p-10 text-center">
               <p className="font-display text-h3 text-white mb-3">
-                Tu n&rsquo;as pas trouv&eacute; ta r&eacute;ponse ?
+                Tu n&rsquo;as pas trouvé ta réponse ?
               </p>
               <p className="text-body text-primary-200 mb-6">
-                &Eacute;cris-nous &agrave;{" "}
+                Écris-nous à{" "}
                 <a
                   href="mailto:contact@immocrew.fr"
                   className="text-secondary underline underline-offset-2 hover:text-secondary-300 transition-colors"
                 >
                   contact@immocrew.fr
                 </a>
-                {" "}&mdash; on r&eacute;pond en moins de 24h.
+                {" "}— on répond en moins de 24h.
               </p>
               <a
                 href="/#pricing"
                 className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-secondary text-white font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
               >
-                D&eacute;couvrir les offres &rarr;
+                Découvrir les offres →
               </a>
             </div>
 
@@ -177,7 +177,7 @@ export default function FAQPage() {
                 href="/"
                 className="text-secondary font-semibold hover:text-secondary-700 transition-colors"
               >
-                &larr; Retour &agrave; l&rsquo;accueil
+                &larr; Retour à l&rsquo;accueil
               </Link>
             </div>
           </article>
