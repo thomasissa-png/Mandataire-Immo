@@ -17,6 +17,7 @@ import {
   TemoignagesSection,
   ContactSection,
   ReseauxSection,
+  BlogSection,
 } from "@/components/agent/AgentPageSections"
 
 interface PageProps {
@@ -123,6 +124,31 @@ async function getAgentData(slug: string): Promise<{
   return { page, profile, email: row.email }
 }
 
+export interface AgentArticle {
+  id: string
+  title: string
+  slug: string | null
+  meta_description: string
+  created_at: string
+}
+
+async function getAgentArticles(clientId: string): Promise<AgentArticle[]> {
+  const { rows } = await query<{ id: string; title: string; metadata: Record<string, unknown>; created_at: string }>(
+    `SELECT id, title, metadata, created_at FROM deliverables
+     WHERE client_id = $1 AND type = 'article_seo' AND status = 'delivered'
+     ORDER BY created_at DESC
+     LIMIT 6`,
+    [clientId]
+  )
+  return rows.map((r) => ({
+    id: r.id,
+    title: r.title,
+    slug: typeof r.metadata?.slug === "string" ? r.metadata.slug : null,
+    meta_description: typeof r.metadata?.meta_description === "string" ? r.metadata.meta_description : "",
+    created_at: r.created_at,
+  }))
+}
+
 async function getAgentBiens(clientId: string): Promise<AgentBienSummary[]> {
   const { rows } = await query<PropertyRow>(
     `SELECT id, slug, titre, titre_annonce, city, prix, type_bien, surface, pieces,
@@ -207,6 +233,7 @@ export default async function AgentPageRoute({ params }: PageProps) {
 
   const { page, profile, email } = data
   const biens = await getAgentBiens(page.client_id)
+  const articles = await getAgentArticles(page.client_id)
 
   return (
     <>
@@ -217,6 +244,7 @@ export default async function AgentPageRoute({ params }: PageProps) {
         <MaMethodeSection profile={profile} />
         <MaZoneSection profile={profile} />
         <MesBiensSection biens={biens} />
+        <BlogSection articles={articles} prenom={profile.prenom} slug={slug} />
         <TemoignagesSection profile={profile} />
         <ContactSection profile={profile} email={email} />
         <ReseauxSection profile={profile} />

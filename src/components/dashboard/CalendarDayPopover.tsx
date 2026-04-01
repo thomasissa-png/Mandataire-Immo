@@ -37,9 +37,9 @@ const TYPE_TIPS: Record<string, { network: string; time: string; tip: string }> 
     tip: "Adapte le ton selon la plateforme. LinkedIn = pro, Instagram = visuel, Facebook = convivial.",
   },
   article_seo: {
-    network: "Ton blog ou ta page Facebook",
+    network: "Ta page mandataire (section blog) ou LinkedIn",
     time: "Publie en début de semaine (lundi-mardi)",
-    tip: "Le SEO met 2-3 mois à porter ses fruits — la régularité est la clé.",
+    tip: "L'article est publié automatiquement sur ta page mandataire. Partage le lien sur LinkedIn pour plus de visibilité.",
   },
   script_video: {
     network: "Instagram Reels / TikTok / YouTube Shorts",
