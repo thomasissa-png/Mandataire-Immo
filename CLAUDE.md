@@ -248,6 +248,8 @@ Si un agent a été interrompu par un timeout :
 16. **Boutons CTA orange : TOUJOURS text-white.** Sur les boutons `bg-secondary` (#F27A1A), utiliser `text-white` exclusivement. Ne JAMAIS utiliser `text-primary` (#1B2A4A) sur fond orange — le contraste est insuffisant et la lisibilité mauvaise. Le ratio blanc sur orange passe WCAG AA en bold >= 16px.
 17. **Zéro livrable interne dans le dashboard client.** Ne JAMAIS afficher un deliverable que Sophie ne peut pas utiliser directement (copier-coller, publier, partager). Les outils internes (brief graphique, prompts, configs) restent en DB mais sont exclus de l'affichage client. Test : "Est-ce que Sophie peut copier ça quelque part ou le partager ?" Si non → ne pas afficher.
 
+18. **Audit consolidé @moi + @mandataire obligatoire.** Avant de valider une section (dashboard, onboarding, landing, etc.), lancer @moi (proxy fondateur) + @mandataire (Sophie) en parallèle. @moi vérifie les standards techniques et les préférences fondateur. @mandataire simule les parcours UX terrain. Consolider les P0/P1 des deux audits, corriger en un batch. Ne JAMAIS valider sans ce double audit.
+
 ## Protocole de test du framework
 
 Pour valider que les agents fonctionnent correctement ensemble, utiliser ce protocole sur un projet fictif ou réel :

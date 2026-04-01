@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { track } from "@/lib/tracking"
+import { useCityAutocomplete } from "@/hooks/useCityAutocomplete"
 
 const STEPS = [
   {
@@ -273,6 +274,10 @@ export default function OnboardingPage() {
   const debounceTimerRef = useRef<Record<number, NodeJS.Timeout>>({})
   const addressDropdownRef = useRef<HTMLDivElement>(null)
 
+  // City autocomplete pour le champ "ville" (step 3)
+  const cityAC = useCityAutocomplete()
+  const cityDropdownRef = useRef<HTMLDivElement>(null)
+
   const [draftLoaded, setDraftLoaded] = useState(false)
 
   const step = STEPS[currentStep]
@@ -364,11 +369,18 @@ export default function OnboardingPage() {
         setActiveAddressIndex(null)
         setAddressSuggestions({})
       }
+      if (
+        cityDropdownRef.current &&
+        !cityDropdownRef.current.contains(e.target as Node)
+      ) {
+        cityAC.close()
+      }
     }
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setActiveAddressIndex(null)
         setAddressSuggestions({})
+        cityAC.close()
       }
     }
     document.addEventListener("mousedown", handleClickOutside)
@@ -1054,6 +1066,43 @@ export default function OnboardingPage() {
                         </option>
                       ))}
                     </select>
+                  ) : field === "ville" ? (
+                    /* Autocomplete ville via API Adresse */
+                    <div className="relative" ref={cityDropdownRef}>
+                      <input
+                        id={field}
+                        type="text"
+                        value={data[field] || ""}
+                        onChange={(e) => {
+                          updateField(field, e.target.value)
+                          cityAC.search(e.target.value)
+                        }}
+                        onFocus={() => { if (data[field]?.length >= 2) cityAC.search(data[field]) }}
+                        placeholder={config.placeholder}
+                        autoComplete="off"
+                        className="w-full h-12 px-4 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
+                      />
+                      {cityAC.isOpen && cityAC.suggestions.length > 0 && (
+                        <div className="absolute z-20 left-0 right-0 mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                          {cityAC.suggestions.map((s) => (
+                            <button
+                              key={s.label}
+                              type="button"
+                              onClick={() => {
+                                updateField("ville", s.city)
+                                updateField("departement", s.departement)
+                                cityAC.close()
+                              }}
+                              className="w-full text-left px-4 py-3 text-body-sm hover:bg-secondary-50 transition-colors border-b border-neutral-100 last:border-0"
+                            >
+                              <span className="font-medium text-primary">{s.city}</span>
+                              <span className="text-neutral-400 ml-2">{s.postcode}</span>
+                              <span className="block text-caption text-neutral-400">{s.context}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <input
                       id={field}
