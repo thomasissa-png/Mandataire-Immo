@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import type { Deliverable } from "@/types/deliverable"
 
 const TYPE_LABELS: Record<string, string> = {
@@ -130,51 +130,138 @@ export function CalendarDayPopover({
           </button>
         </div>
 
-        {/* Deliverables list */}
-        <div className="p-4 space-y-3">
-          {deliverables.length === 0 ? (
-            <p className="text-body-sm text-neutral-400 text-center py-4">
-              Rien de prévu ce jour-là
-            </p>
-          ) : (
-            deliverables.map((d) => (
-              <a
-                key={d.id}
-                href={`/dashboard/${getRouteForType(d.type)}`}
-                className="block rounded-lg bg-background p-3 hover:bg-neutral-100 transition-colors group"
-              >
-                <div className="flex items-start gap-2.5">
-                  <span className="text-base flex-shrink-0 mt-0.5" aria-hidden="true">
-                    {TYPE_ICONS[d.type] || "📄"}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <span
-                      className={`inline-block px-2 py-0.5 rounded-full text-caption font-semibold mb-1 ${TYPE_BADGE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"}`}
-                    >
-                      {TYPE_LABELS[d.type] || d.type}
-                    </span>
-                    <p className="text-body-sm text-primary font-medium truncate group-hover:text-secondary-700 transition-colors">
-                      {d.title}
-                    </p>
-                  </div>
-                </div>
-              </a>
-            ))
-          )}
-        </div>
+        {/* Deliverables list with inline content expand */}
+        <DeliverablesList deliverables={deliverables} />
       </div>
     </>
   )
 }
 
-function getRouteForType(type: string): string {
-  switch (type) {
-    case "post": return "posts"
-    case "article_seo": return "articles"
-    case "annonce": return "annonces"
-    case "script_video": return "scripts"
-    case "newsletter": return "emails"
-    case "email_prospection": return "emails"
-    default: return "calendrier"
+function DeliverablesList({ deliverables }: { deliverables: Deliverable[] }) {
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [content, setContent] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  const loadContent = useCallback(async (id: string) => {
+    if (expandedId === id) {
+      setExpandedId(null)
+      return
+    }
+    setExpandedId(id)
+    setContent(null)
+    setLoading(true)
+    try {
+      const res = await fetch(`/api/deliverables/${id}`)
+      if (res.ok) {
+        const data = await res.json()
+        setContent(data.content || "")
+      }
+    } catch {
+      setContent("Impossible de charger le contenu.")
+    } finally {
+      setLoading(false)
+    }
+  }, [expandedId])
+
+  const handleCopy = useCallback(async () => {
+    if (!content) return
+    // Strip markdown basique pour le copier-coller
+    const plain = content
+      .replace(/\*\*(.+?)\*\*/g, "$1")
+      .replace(/\*(.+?)\*/g, "$1")
+      .replace(/^#{1,3}\s+/gm, "")
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    try {
+      await navigator.clipboard.writeText(plain)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Clipboard API unavailable
+    }
+  }, [content])
+
+  if (deliverables.length === 0) {
+    return (
+      <div className="p-4">
+        <p className="text-body-sm text-neutral-400 text-center py-4">
+          Rien de prévu ce jour-là
+        </p>
+      </div>
+    )
   }
+
+  return (
+    <div className="p-4 space-y-3">
+      {deliverables.map((d) => (
+        <div key={d.id} className="rounded-lg bg-background overflow-hidden">
+          <button
+            type="button"
+            onClick={() => loadContent(d.id)}
+            className="w-full text-left p-3 hover:bg-neutral-100 transition-colors group"
+          >
+            <div className="flex items-start gap-2.5">
+              <span className="text-base flex-shrink-0 mt-0.5" aria-hidden="true">
+                {TYPE_ICONS[d.type] || "📄"}
+              </span>
+              <div className="flex-1 min-w-0">
+                <span
+                  className={`inline-block px-2 py-0.5 rounded-full text-caption font-semibold mb-1 ${TYPE_BADGE_COLORS[d.type] || "bg-neutral-100 text-neutral-600"}`}
+                >
+                  {TYPE_LABELS[d.type] || d.type}
+                </span>
+                <p className="text-body-sm text-primary font-medium truncate group-hover:text-secondary-700 transition-colors">
+                  {d.title}
+                </p>
+              </div>
+              <svg
+                className={`w-4 h-4 text-neutral-400 flex-shrink-0 mt-1 transition-transform ${expandedId === d.id ? "rotate-180" : ""}`}
+                fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </button>
+
+          {/* Expanded content */}
+          {expandedId === d.id && (
+            <div className="px-3 pb-3 border-t border-border">
+              {loading ? (
+                <div className="flex items-center justify-center py-4">
+                  <div className="w-5 h-5 border-2 border-secondary/30 border-t-secondary rounded-full animate-spin" />
+                </div>
+              ) : content ? (
+                <>
+                  <div className="mt-3 text-body-sm text-neutral-700 whitespace-pre-wrap max-h-[200px] overflow-y-auto">
+                    {content}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className={`mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-display font-bold text-body-sm transition-all ${
+                      copied
+                        ? "bg-success-50 text-success-700"
+                        : "bg-secondary text-white hover:bg-secondary-600"
+                    }`}
+                  >
+                    {copied ? (
+                      <>
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                        Copié !
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.75a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" /></svg>
+                        Copier le texte
+                      </>
+                    )}
+                  </button>
+                </>
+              ) : null}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  )
 }
