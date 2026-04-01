@@ -148,6 +148,7 @@ export function PostsFiltered({ posts }: PostsFilteredProps) {
                   const platform = getPlatform(post)
                   const meta = post.metadata as Record<string, unknown> | undefined
                   const hashtags = Array.isArray(meta?.hashtags) ? (meta.hashtags as string[]) : []
+                  const briefVisuel = typeof meta?.brief_visuel === "string" ? meta.brief_visuel : null
 
                   return (
                     <div key={post.id}>
@@ -160,20 +161,27 @@ export function PostsFiltered({ posts }: PostsFilteredProps) {
                         status={post.status}
                         createdAt={post.created_at}
                       />
-                      {/* Conseil de publication sous chaque post */}
-                      <div className="flex items-center gap-2 mt-1 ml-1">
-                        <span className="text-caption text-neutral-400">{platform.tip}</span>
+                      {/* Infos sous chaque post : heure + brief visuel + hashtags */}
+                      <div className="mt-1.5 ml-1 space-y-1">
+                        <p className="text-caption text-neutral-400">{platform.tip}</p>
+                        {briefVisuel && (
+                          <div className="flex items-start gap-1.5">
+                            <span className="text-caption" aria-hidden="true">📷</span>
+                            <p className="text-caption text-neutral-500">
+                              <span className="font-semibold text-neutral-600">Visuel :</span> {briefVisuel}
+                            </p>
+                          </div>
+                        )}
+                        {hashtags.length > 0 && (
+                          <div className="flex flex-wrap gap-1">
+                            {hashtags.slice(0, 8).map((tag) => (
+                              <span key={tag} className="text-caption text-secondary-500">
+                                #{tag.replace(/^#/, "")}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                      {/* Hashtags */}
-                      {hashtags.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-1 ml-1">
-                          {hashtags.slice(0, 5).map((tag) => (
-                            <span key={tag} className="text-caption text-secondary-500">
-                              #{tag.replace(/^#/, "")}
-                            </span>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   )
                 })}

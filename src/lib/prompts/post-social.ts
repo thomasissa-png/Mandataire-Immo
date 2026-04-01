@@ -83,6 +83,15 @@ FORMATS PAR PLATEFORME :
 - Facebook : 8-20 lignes MINIMUM, ton conversationnel, question en fin de post, 3-5 hashtags max. Un post de moins de 8 lignes est INSUFFISANT.
 - LinkedIn : 10-20 lignes MINIMUM, ton expert, chiffres marché local, 3-5 hashtags pro. Un post LinkedIn court ne génère pas d'engagement.
 
+BRIEF VISUEL OBLIGATOIRE — pour chaque post, le brief_visuel doit être ACTIONNABLE :
+- Posts "bien" : "Photo du bien (façade ou pièce principale)" ou "Avant/après si home staging disponible"
+- Posts "conseil" : "Selfie face caméra avec un conseil écrit en overlay" ou "Texte sur fond orange avec la stat clé"
+- Posts "coulisse" : "Photo de toi en visite (demande à un collègue ou selfie)" ou "Photo de la signature chez le notaire"
+- Posts "local" : "Photo du quartier/rue/commerce mentionné" ou "Carte Google Maps annotée"
+- Posts "temoignage" : "Photo avec le client devant le bien (si accord)" ou "Citation client en texte sur fond sobre"
+- Posts "marche" : "Capture d'écran de la stat DVF/notaires" ou "Graphique simple évolution prix"
+Si le mandataire n'est pas à l'aise avec la photo → proposer des alternatives texte/graphique (pas de photo de soi requise).
+
 TYPES DE POSTS À ALTERNER :
 1. Mise en avant d'un bien (storytelling quartier + projection de vie)
 2. Conseil acheteur/vendeur (tip concret et actionnable)
@@ -100,7 +109,7 @@ Réponds UNIQUEMENT avec un JSON valide, sans texte avant ni après. Format :
       "type": "bien" | "conseil" | "coulisse" | "local" | "temoignage" | "marche",
       "texte": "Le texte complet du post, pret a copier-coller",
       "hashtags": ["#hashtag1", "#hashtag2"],
-      "brief_visuel": "Description de la photo/visuel ideal pour accompagner le post",
+      "brief_visuel": "Instruction CONCRÈTE pour le visuel : 'selfie devant le bien' ou 'photo du quartier X' ou 'capture écran de [stat]' ou 'texte sur fond coloré avec la citation [...]'. Pas de description vague.",
       "date_suggeree": "YYYY-MM-DD ou null",
       "hook": "La premiere phrase du post (pour validation rapide)"
     }
@@ -118,9 +127,19 @@ Réponds UNIQUEMENT avec un JSON valide, sans texte avant ni après. Format :
     ? input.zone_geo.quartiers.join(', ')
     : input.zone_geo.ville
 
+  // Déterminer les plateformes actives de Sophie (pas de Facebook par défaut — reach organique ~0%)
+  const activePlatforms: string[] = []
+  if (input.reseaux_sociaux.instagram) activePlatforms.push('instagram')
+  if (input.reseaux_sociaux.linkedin) activePlatforms.push('linkedin')
+  if (input.reseaux_sociaux.facebook) activePlatforms.push('facebook')
+  // Fallback : si aucun réseau renseigné, LinkedIn + Instagram (recommandation @social)
+  if (activePlatforms.length === 0) {
+    activePlatforms.push('instagram', 'linkedin')
+  }
+
   const plateformeInstr =
     input.plateforme === 'mix'
-      ? `Répartis les posts entre Instagram, Facebook et LinkedIn de manière équilibrée.`
+      ? `Répartis les posts UNIQUEMENT entre les plateformes suivantes (ce sont les réseaux actifs du mandataire) : ${activePlatforms.join(', ')}. Ne génère AUCUN post pour une plateforme où le mandataire n'est pas présent.${!input.reseaux_sociaux.facebook ? ' Le mandataire n\'est PAS sur Facebook — pas de post Facebook.' : ''}`
       : `Tous les posts sont pour ${input.plateforme}.`
 
   const sujetsInstr = input.sujets_prioritaires?.length
