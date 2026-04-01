@@ -57,7 +57,7 @@ export function StrategieContent({ strategie }: StrategieContentProps) {
       <div className="rounded-lg bg-info-50 border border-info-200 p-4">
         <p className="text-body-sm text-info-800">
           Ces contenus sont ta <strong>fondation marketing</strong> — ils ne changent pas chaque mois.
-          Tu peux les éditer ou demander une réécriture à tout moment.
+          Clique sur un contenu pour le voir, le <strong>copier</strong>, ou demander une <strong>réécriture</strong> si ça ne te convient pas.
         </p>
       </div>
 

@@ -22,7 +22,7 @@ interface DeliverableRow {
 
 /**
  * POST /api/generate/pack-lancement
- * Genere le pack lancement complet pour un client :
+ * Génère le pack lancement complet pour un client :
  * L1: positionnement, L2: bio multiformat, L3: 5 annonces,
  * L4: 5 articles SEO, L6: 20 posts, L7: 10 scripts, design brief.
  * Admin-only.
@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
     })
     deliverableIds.push(posId)
 
-    // L2 : Bio optimisee multiformat
+    // L2 : Bio optimisée multiformat
     currentStep = "L2-bio"
     const bioPrompt = buildBioMultiformatPrompt({
       ...ctx,
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
       clientEmail,
       clientId: client_id,
       type: "bio",
-      title: `Bio optimisee — ${ctx.prenom} ${ctx.nom}`,
+      title: `Bio optimisée — ${ctx.prenom} ${ctx.nom}`,
       content: bioContent,
       metadata: { sub_type: "bio_multiformat", instagram: bioData.instagram.texte, linkedin: bioData.linkedin.texte, google: bioData.google_business.texte },
       month,
@@ -241,7 +241,7 @@ export async function POST(request: NextRequest) {
       deliverableIds.push(id)
     }
 
-    // L5 : Calendrier editorial 30 jours
+    // L5 : Calendrier éditorial 30 jours
     currentStep = "L5-calendrier"
     const calendarPrompt = buildEditorialCalendarPrompt({
       ...ctx,
@@ -257,7 +257,7 @@ export async function POST(request: NextRequest) {
       clientEmail,
       clientId: client_id,
       type: "calendrier",
-      title: `Calendrier editorial 30 jours — ${ctx.prenom} ${ctx.nom}`,
+      title: `Calendrier éditorial 30 jours — ${ctx.prenom} ${ctx.nom}`,
       content: calendarContent,
       metadata: { sub_type: "editorial_calendar", entries_count: calendarResult.data.calendrier.length },
       month,
@@ -271,7 +271,7 @@ export async function POST(request: NextRequest) {
       clientId: client_id,
       type: "brief_graphique",
       title: `Brief graphique — ${ctx.prenom} ${ctx.nom}`,
-      content: `Brief pour kit graphique personalise.\nPositionnement: ${posData.accroche_identitaire}\nProposition de valeur: ${posData.proposition_valeur}\nReseau: ${ctx.reseau}\nZone: ${ctx.zone_geo.ville}\nTon: ${ctx.ton}\nValeurs: ${ctx.valeurs}`,
+      content: `Brief pour kit graphique personnalisé.\nPositionnement: ${posData.accroche_identitaire}\nProposition de valeur: ${posData.proposition_valeur}\nRéseau : ${ctx.reseau}\nZone: ${ctx.zone_geo.ville}\nTon: ${ctx.ton}\nValeurs: ${ctx.valeurs}`,
       metadata: { sub_type: "design_brief" },
       month,
     })

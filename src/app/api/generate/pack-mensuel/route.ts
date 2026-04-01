@@ -23,7 +23,7 @@ interface DeliverableRow {
 
 /**
  * POST /api/generate/pack-mensuel
- * Genere le pack mensuel complet pour un client :
+ * Génère le pack mensuel complet pour un client :
  * M1: 12 posts, M2: 4 scripts video, M3: 4 articles SEO,
  * M4: 1 newsletter, M5: 4 annonces, M6: 1 email prospection.
  * Admin-only.
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
   const moisLabel = formatMoisLabel(mois)
 
   try {
-    // M1 : 12 posts reseaux sociaux
+    // M1 : 12 posts réseaux sociaux
     const postsPrompt = buildPostSocialPrompt({
       ...ctx,
       plateforme: "mix",

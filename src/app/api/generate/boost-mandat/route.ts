@@ -33,7 +33,7 @@ interface DeliverableRow {
 
 /**
  * POST /api/generate/boost-mandat
- * Genere le pack Boost Mandat pour un bien specifique :
+ * Génère le pack Boost Mandat pour un bien specifique :
  * B1: 1 annonce storytelling, B2: 3 posts + 1 Reel, B4: 1 email blast.
  * Admin-only.
  */
