@@ -273,7 +273,7 @@ function buildVisualPrompt(params: {
       "Close-up shot of two hands in the act of passing a set of house keys.",
       "The giving hand extends confidently; the receiving hand opens with visible emotion — fingertips just touching the keys.",
       "The keychain has a small house-shaped pendant with a warm orange (#F27A1A) enamel detail.",
-      "Background: a softly blurred sunlit living room with a few moving boxes, a vase of fresh flowers on a windowsill, natural light pouring in.",
+      `Background: a softly blurred sunlit living room${ville ? ` in a typical ${ville} apartment` : " in a French apartment"} with a few moving boxes, a vase of fresh peonies on a marble windowsill, Haussmann-style moldings visible in the blur, natural light pouring in through tall French windows.`,
       "Shallow depth of field, f/1.8, focus precisely on the keys and fingertips.",
       "Warm golden color temperature, documentary photography style — natural, unposed, authentic.",
     ].join(" "),
@@ -297,12 +297,12 @@ function buildVisualPrompt(params: {
     ].join(" "),
 
     generic: [
-      "A minimalist, modern still-life composition on a clean surface.",
-      "A small architectural model of a house in matte white sits on a light oak desk, next to a navy (#1B2A4A) leather notebook and an orange (#F27A1A) pen.",
-      "Soft diffused studio lighting from a large window to the left.",
-      "Shallow depth of field, f/2.8, the architectural model in sharp focus.",
-      "Clean background with generous negative space.",
-      "Editorial product photography, warm color temperature, Kinfolk magazine aesthetic.",
+      "A refined still-life composition evoking the craft of French real estate.",
+      "On a weathered marble mantelpiece: a vintage brass skeleton key standing upright against a small stack of navy (#1B2A4A) leather-bound notebooks, a rolled-up architectural blueprint tied with an orange (#F27A1A) linen ribbon, and a sprig of dried lavender in a tiny ceramic vase.",
+      "Behind them, a softly blurred antique gilded mirror reflects warm afternoon light.",
+      "Shallow depth of field, f/2.8, focus on the brass key and ribbon.",
+      "Soft natural light from a tall window to the right, subtle dust motes visible in the light beam.",
+      "Editorial still-life photography, warm color temperature, Cereal Magazine aesthetic, unmistakably French.",
     ].join(" "),
   }
 
@@ -335,13 +335,14 @@ function buildVisualPrompt(params: {
   const negatives = [
     "STRICT NEGATIVE CONSTRAINTS (do NOT include any of these):",
     "- No text, no letters, no words, no numbers, no typography of any kind anywhere in the image",
-    "- No watermarks, no logos, no brand marks, no stamps",
-    "- No clipart, no cartoons, no illustrations, no icons, no emojis",
-    "- No stock photo clichés (no handshakes, no pointing at screens, no thumbs up, no people in suits posing)",
-    "- No computer screens, no phones, no UI mockups",
+    "- No watermarks, no logos, no brand marks, no stamps, no signatures",
+    "- No clipart, no cartoons, no illustrations, no icons, no emojis, no infographic elements",
+    "- No stock photo clichés (no handshakes, no pointing at screens, no thumbs up, no people in suits posing, no happy business people, no group meetings around a table)",
+    "- No computer screens, no phones, no tablets, no UI mockups, no dashboards",
     "- No busy or cluttered compositions — if in doubt, remove elements",
     "- No cold blue-white lighting — always warm",
-    "- No AI artifacts (no deformed hands, no melted objects, no uncanny valley faces)",
+    "- No AI artifacts: no deformed hands, no extra fingers, no melted objects, no unrealistic eyes, no uncanny valley faces, no distorted architecture, no impossible reflections",
+    "- No American-style elements: no yard signs, no white picket fences, no mailboxes, no brownstones — all visual cues must read as French/European",
   ].join("\n")
 
   // --- Format selon plateforme ---

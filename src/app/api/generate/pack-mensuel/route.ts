@@ -6,6 +6,7 @@ import { getClientContext } from "@/lib/client-context"
 import { trackServer } from "@/lib/tracking"
 import { buildPostSocialPrompt } from "@/lib/prompts/post-social"
 import { buildAnnonceStorytellingPrompt } from "@/lib/prompts/annonce-storytelling"
+import { generatePostVisual, canAutoGenerate } from "@/lib/generate-post-visual"
 import { buildArticleSeoPrompt } from "@/lib/prompts/article-seo"
 import { buildScriptVideoPrompt } from "@/lib/prompts/script-video"
 import { buildNewsletterPrompt } from "@/lib/prompts/newsletter"
@@ -100,6 +101,28 @@ export async function POST(request: NextRequest) {
         month: mois,
       })
       deliverableIds.push(id)
+
+      // Générer un visuel IA si le brief le permet (non-bloquant)
+      if (post.brief_visuel && canAutoGenerate(post.brief_visuel)) {
+        try {
+          const visual = await generatePostVisual({
+            briefVisuel: post.brief_visuel,
+            postContent: post.texte,
+            titre: post.hook || `Post ${post.plateforme}`,
+            plateforme: post.plateforme,
+            mandatairePrenom: ctx.prenom,
+            ville: ctx.zone_geo.ville,
+          }, id)
+          if (visual) {
+            await query(
+              `UPDATE deliverables SET metadata = jsonb_set(metadata, '{visual_key}', $1::jsonb) WHERE id = $2`,
+              [JSON.stringify(visual.key), id]
+            )
+          }
+        } catch {
+          // Pas bloquant — le post est livré sans visuel
+        }
+      }
     }
 
     // M5 : annonces — uniquement si le client a des biens réels
