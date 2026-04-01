@@ -45,9 +45,9 @@ const NAV_SECTIONS: SidebarSection[] = [
 // Mobile bottom nav : subset des liens les plus importants
 const MOBILE_NAV: SidebarLink[] = [
   { href: "/dashboard", label: "Accueil", icon: "🏠" },
-  { href: "/dashboard/posts", label: "Posts", icon: "📅" },
-  { href: "/dashboard/annonces", label: "Annonces", icon: "🏡" },
-  { href: "/dashboard/biens", label: "Biens", icon: "🏡" },
+  { href: "/dashboard/posts", label: "Posts", icon: "📱" },
+  { href: "/dashboard/annonces", label: "Annonces", icon: "📝" },
+  { href: "/dashboard/calendrier", label: "Calendrier", icon: "📆" },
 ]
 
 export function DashboardSidebar() {

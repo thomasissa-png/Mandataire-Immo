@@ -86,15 +86,20 @@ export function StrategieContent({ strategie }: StrategieContentProps) {
             <p className="text-caption text-neutral-400 mb-3">{section.hint}</p>
 
             {item ? (
-              <DeliverableCard
-                id={item.id}
-                type={item.type}
-                typeLabel={TYPE_LABELS[item.type] || item.type}
-                typeColor={TYPE_COLORS[item.type] || "bg-neutral-100 text-neutral-600"}
-                title={item.title}
-                status={item.status}
-                createdAt={item.created_at}
-              />
+              <>
+                <DeliverableCard
+                  id={item.id}
+                  type={item.type}
+                  typeLabel={TYPE_LABELS[item.type] || item.type}
+                  typeColor={TYPE_COLORS[item.type] || "bg-neutral-100 text-neutral-600"}
+                  title={item.title}
+                  status={item.status}
+                  createdAt={item.created_at}
+                />
+                <p className="text-caption text-neutral-400 mt-1 ml-1">
+                  Clique pour voir le contenu · <span className="text-secondary-600 font-medium">Copier</span> en haut à droite · <span className="text-secondary-600 font-medium">Regénérer</span> en bas
+                </p>
+              </>
             ) : (
               <div className="rounded-lg bg-neutral-50 border border-border border-dashed p-6 text-center">
                 <p className="text-body-sm text-neutral-400">

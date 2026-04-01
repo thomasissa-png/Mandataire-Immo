@@ -12,9 +12,11 @@ const CONFORT_TIPS: Record<string, string> = {
 
 interface ScriptsFilteredProps {
   scripts: Deliverable[]
+  confortCamera?: string
 }
 
-export function ScriptsFiltered({ scripts }: ScriptsFilteredProps) {
+export function ScriptsFiltered({ scripts, confortCamera = "debutant" }: ScriptsFilteredProps) {
+  const confortTip = CONFORT_TIPS[confortCamera] || CONFORT_TIPS.debutant
   return (
     <FilteredPageWrapper deliverables={scripts} showArchiveToggle>
       {(filtered) =>
@@ -32,7 +34,10 @@ export function ScriptsFiltered({ scripts }: ScriptsFilteredProps) {
                 <span className="text-lg flex-shrink-0" aria-hidden="true">🎬</span>
                 <div>
                   <p className="text-body-sm font-semibold text-warning-800">Comment filmer tes vidéos</p>
-                  <ul className="text-caption text-warning-700 mt-1 space-y-0.5">
+                  <p className="text-body-sm text-warning-700 mt-1 mb-2 font-medium">
+                    {confortTip}
+                  </p>
+                  <ul className="text-caption text-warning-700 space-y-0.5">
                     <li>• Smartphone en <strong>mode portrait</strong> (vertical 9:16)</li>
                     <li>• Lumière naturelle face à toi (pas de contre-jour)</li>
                     <li>• Pas de montage nécessaire — filme et publie directement</li>
