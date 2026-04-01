@@ -326,8 +326,8 @@ function formatScriptContent(script: {
   for (const scene of script.scenes || []) {
     lines.push(`### Scène ${scene.numero} — ${scene.duree_secondes || 5}s`)
     if (scene.indication_tournage) lines.push(`📱 **Comment filmer :** ${scene.indication_tournage}`)
-    if (scene.texte_ecran) lines.push(`📝 **Texte à l'écran :** ${scene.texte_ecran}`)
-    if (scene.voix_off) lines.push(`🗣️ **Ce que tu dis :** « ${scene.voix_off} »`)
+    if (scene.texte_ecran && scene.texte_ecran !== "null" && scene.texte_ecran !== "undefined") lines.push(`📝 **Texte à l'écran :** ${scene.texte_ecran}`)
+    if (scene.voix_off && scene.voix_off !== "null" && scene.voix_off !== "undefined") lines.push(`🗣️ **Ce que tu dis :** « ${scene.voix_off} »`)
     if (scene.visuel && !scene.indication_tournage) lines.push(`👁️ **Ce qu'on voit :** ${scene.visuel}`)
     lines.push("")
   }

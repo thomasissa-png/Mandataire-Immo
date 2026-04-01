@@ -5,9 +5,9 @@ import { DeliverableCard } from "@/components/dashboard/DeliverableCard"
 import type { Deliverable } from "@/types/deliverable"
 
 const CONFORT_TIPS: Record<string, string> = {
-  debutant: "Tu n'as pas besoin de te filmer ! Les diaporamas (photos + texte animé) marchent très bien sur Instagram.",
-  a_laise: "Face caméra + plans du bien/quartier. 30-60 secondes, ton naturel.",
-  expert: "Tu peux te lancer sur du storytelling complet. POV, time-lapse, avant/après.",
+  debutant: "Tes scripts sont adaptés pour les débutants : diaporamas (photos + texte animé) ou face caméra simple — à toi de choisir ce qui te convient le mieux.",
+  a_laise: "Face caméra + plans du bien/quartier. 30-60 secondes, ton naturel. Tu peux aussi mixer avec des diaporamas.",
+  expert: "Tu peux te lancer sur du storytelling complet : POV, time-lapse, avant/après. Les scripts sont détaillés scène par scène.",
 }
 
 interface ScriptsFilteredProps {

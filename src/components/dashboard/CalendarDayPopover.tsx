@@ -32,14 +32,14 @@ const TYPE_BADGE_COLORS: Record<string, string> = {
 /** Conseil de publication par type — réseau + heure */
 const TYPE_TIPS: Record<string, { network: string; time: string; tip: string }> = {
   post: {
-    network: "Instagram / LinkedIn / Facebook",
-    time: "LinkedIn 7h-9h · Instagram 18h-20h · Facebook 12h-13h",
-    tip: "Adapte le ton selon la plateforme. LinkedIn = pro, Instagram = visuel, Facebook = convivial.",
+    network: "Voir plateforme du post",
+    time: "Voir plateforme du post",
+    tip: "",
   },
   article_seo: {
-    network: "Ta page mandataire (section blog) ou LinkedIn",
+    network: "Ta page mandataire (section blog)",
     time: "Publie en début de semaine (lundi-mardi)",
-    tip: "L'article est publié automatiquement sur ta page mandataire. Partage le lien sur LinkedIn pour plus de visibilité.",
+    tip: "Publié automatiquement sur ta page. Partage le lien sur LinkedIn.",
   },
   script_video: {
     network: "Instagram Reels / TikTok / YouTube Shorts",
@@ -178,9 +178,18 @@ function DeliverableItem({ deliverable }: { deliverable: Deliverable }) {
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  const tip = TYPE_TIPS[deliverable.type]
   const meta = deliverable.metadata as Record<string, unknown> | undefined
   const platform = typeof meta?.plateforme === "string" ? meta.plateforme : null
+
+  // Tip dynamique par plateforme pour les posts
+  const PLATFORM_TIPS: Record<string, { network: string; time: string; tip: string }> = {
+    instagram: { network: "Instagram", time: "18h-20h", tip: "Format carré ou 4:5, 3-5 hashtags max" },
+    linkedin: { network: "LinkedIn", time: "7h-9h", tip: "Accroche percutante en 1re ligne, 3 hashtags max" },
+    facebook: { network: "Facebook", time: "12h-13h", tip: "Photo + question pour l'engagement" },
+  }
+  const tip = deliverable.type === "post" && platform
+    ? PLATFORM_TIPS[platform.toLowerCase()] || TYPE_TIPS.post
+    : TYPE_TIPS[deliverable.type]
 
   const loadContent = useCallback(async () => {
     if (content !== null) { setExpanded(!expanded); return }

@@ -15,7 +15,7 @@ export default async function ArticlesPage() {
     <DashboardPageLayout
       icon="📝"
       title="Mes articles SEO"
-      description="Publie-les sur ton blog ou ta page Facebook. Le SEO local met 2-3 mois à porter ses fruits — la régularité est la clé."
+      description="Publiés automatiquement sur ta page mandataire. Partage le lien sur LinkedIn pour plus de visibilité."
       count={active.length}
     >
       <ArticlesFiltered articles={articles} />

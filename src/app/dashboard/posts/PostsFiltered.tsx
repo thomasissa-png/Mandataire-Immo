@@ -202,7 +202,7 @@ export function PostsFiltered({ posts, activePlatforms }: PostsFilteredProps) {
                         })()}
                         {hashtags.length > 0 && (
                           <div className="flex flex-wrap gap-1">
-                            {hashtags.slice(0, 8).map((tag) => (
+                            {hashtags.slice(0, 3).map((tag) => (
                               <span key={tag} className="text-caption text-secondary-500">
                                 #{tag.replace(/^#/, "")}
                               </span>
