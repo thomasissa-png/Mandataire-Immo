@@ -26,11 +26,11 @@ export async function getDeliverables(
     const params: unknown[] = [email]
     let paramIndex = 2
 
-    // Filtre statut
+    // Filtre statut — pending_review toujours inclus (Sophie voit le badge)
     if (includeArchived) {
-      conditions.push(`status IN ('draft', 'delivered', 'archived')`)
+      conditions.push(`status IN ('draft', 'delivered', 'archived', 'pending_review')`)
     } else {
-      conditions.push(`status IN ('draft', 'delivered')`)
+      conditions.push(`status IN ('draft', 'delivered', 'pending_review')`)
     }
 
     // Filtre type(s)

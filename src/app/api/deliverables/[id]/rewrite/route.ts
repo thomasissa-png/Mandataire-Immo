@@ -106,19 +106,29 @@ IMPORTANT : retourne UNIQUEMENT le nouveau contenu, sans explication ni commenta
 
     const newContent = result.data.contenu
 
-    // Mettre à jour en base
+    // Sauvegarder le nouveau contenu en attente de validation admin.
+    // Le contenu original est conservé dans metadata.previous_content
+    // pour que Sophie voie toujours l'ancienne version en attendant.
     await query(
       `UPDATE deliverables
-       SET content = $1,
+       SET status = 'pending_review',
            rewrite_count = COALESCE(rewrite_count, 0) + 1,
-           metadata = jsonb_set(COALESCE(metadata, '{}'::jsonb), '{last_rewrite_comment}', $2::jsonb)
+           metadata = jsonb_set(
+             jsonb_set(
+               jsonb_set(COALESCE(metadata, '{}'::jsonb), '{pending_content}', $1::jsonb),
+               '{last_rewrite_comment}', $2::jsonb
+             ),
+             '{previous_content}', to_jsonb(content)
+           )
        WHERE id = $3`,
-      [newContent, JSON.stringify(comment || null), id]
+      [JSON.stringify(newContent), JSON.stringify(comment || null), id]
     )
 
     return NextResponse.json({
-      content: newContent,
+      content: deliverable.content, // Sophie garde l'ancien contenu en attendant
       rewriteCount: deliverable.rewrite_count + 1,
+      pendingReview: true,
+      message: "Nouvelle version générée ! Elle sera disponible après validation par notre équipe.",
     })
   } catch (err) {
     console.error("[rewrite] AI generation error:", err)
