@@ -169,28 +169,35 @@ export function PostsFiltered({ posts, activePlatforms }: PostsFilteredProps) {
                       <div className="mt-1.5 ml-1 space-y-1">
                         <p className="text-caption text-neutral-400">{platform.tip}</p>
                         {briefVisuel && (() => {
-                          const autoVisual = canAutoGenerate(briefVisuel)
-                            ? generatePostVisualUrl({ briefVisuel, titre: post.title, plateforme: platform.name.toLowerCase() })
+                          const isAutoGenerable = canAutoGenerate(briefVisuel)
+                          const autoVisual = isAutoGenerable
+                            ? generatePostVisualUrl({ briefVisuel, postContent: post.title, titre: post.title, plateforme: platform.name.toLowerCase() })
                             : null
                           return (
                             <div className="flex items-start gap-1.5">
                               <span className="text-caption" aria-hidden="true">📷</span>
                               <div>
-                                <p className="text-caption text-neutral-500">
-                                  <span className="font-semibold text-neutral-600">Visuel :</span> {briefVisuel}
-                                </p>
-                                {autoVisual && (
-                                  <a
-                                    href={autoVisual.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 mt-1 text-caption font-semibold text-secondary-700 hover:underline"
-                                  >
-                                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                                    </svg>
-                                    Télécharger le visuel prêt à publier
-                                  </a>
+                                {isAutoGenerable && autoVisual ? (
+                                  <>
+                                    <p className="text-caption text-neutral-500">
+                                      <span className="font-semibold text-neutral-600">Visuel généré pour toi :</span>
+                                    </p>
+                                    <a
+                                      href={autoVisual.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center gap-1.5 mt-1 px-3 py-1.5 rounded-lg bg-secondary-50 text-caption font-semibold text-secondary-700 hover:bg-secondary-100 transition-colors"
+                                    >
+                                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                      </svg>
+                                      Télécharger le visuel
+                                    </a>
+                                  </>
+                                ) : (
+                                  <p className="text-caption text-neutral-500">
+                                    <span className="font-semibold text-neutral-600">Photo recommandée :</span> {briefVisuel}
+                                  </p>
                                 )}
                               </div>
                             </div>
