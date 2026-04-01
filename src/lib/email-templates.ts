@@ -178,7 +178,7 @@ export function nurturingJ7(params: EmailTemplateParams): EmailTemplate {
 
 <p style="margin:0 0 16px;">Une question ? Un truc qui bloque ? Réponds à cet email, on est là.</p>
 
-${ctaButton("Besoin d'aide ? Écris-nous", "mailto:support@immocrew.fr")}
+${ctaButton("Besoin d'aide ? Écris-nous", "mailto:contact@immocrew.fr")}
 
 <p style="margin:0 0 8px;">À bientôt,</p>
 <p style="margin:0;font-weight:600;">L'équipe ImmoCrew</p>

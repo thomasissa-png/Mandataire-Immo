@@ -112,7 +112,7 @@ export default function MentionsLegalesPage() {
                 Conform&eacute;ment au R&egrave;glement G&eacute;n&eacute;ral sur la Protection des Donn&eacute;es
                 (RGPD), vous disposez d&rsquo;un droit d&rsquo;acc&egrave;s, de rectification, de suppression
                 et de portabilit&eacute; de vos donn&eacute;es. Pour exercer ces droits, contactez :
-                {" "}<a href="mailto:dpo@immocrew.fr" className="text-secondary underline underline-offset-2 hover:text-secondary-700 transition-colors">dpo@immocrew.fr</a>.
+                {" "}<a href="mailto:contact@immocrew.fr" className="text-secondary underline underline-offset-2 hover:text-secondary-700 transition-colors">contact@immocrew.fr</a>.
               </p>
               <p className="mt-3">
                 Vous pouvez &eacute;galement adresser une r&eacute;clamation &agrave; la CNIL :{" "}

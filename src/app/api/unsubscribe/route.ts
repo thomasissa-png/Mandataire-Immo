@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
     return new NextResponse(
       buildHtmlPage(
         "Désinscription confirmée",
-        "Tu ne recevras plus nos emails. Si c'est une erreur, contacte-nous à support@immocrew.fr"
+        "Tu ne recevras plus nos emails. Si c'est une erreur, contacte-nous à contact@immocrew.fr"
       ),
       { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } }
     )
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
   return new NextResponse(
     buildHtmlPage(
       "Désinscription confirmée",
-      "Tu ne recevras plus nos emails. Si c'est une erreur, contacte-nous à support@immocrew.fr"
+      "Tu ne recevras plus nos emails. Si c'est une erreur, contacte-nous à contact@immocrew.fr"
     ),
     { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } }
   )
@@ -113,7 +113,7 @@ function buildHtmlPage(title: string, message: string): string {
 <body>
 <div class="card">
   <h1>${title}</h1>
-  <p>${message.replace("support@immocrew.fr", '<a href="mailto:support@immocrew.fr">support@immocrew.fr</a>')}</p>
+  <p>${message.replace("contact@immocrew.fr", '<a href="mailto:contact@immocrew.fr">contact@immocrew.fr</a>')}</p>
 </div>
 </body>
 </html>`

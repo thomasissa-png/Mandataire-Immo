@@ -414,7 +414,7 @@ export function DashboardContent({
           <div className="mt-3 pt-3 border-t border-border">
             <p className="text-body-sm text-neutral-500">
               Une question ? Un souci avec un contenu ?{" "}
-              <a href="mailto:support@immocrew.fr?subject=Retour%20sur%20mes%20contenus" className="text-secondary-700 font-semibold hover:underline">
+              <a href="mailto:contact@immocrew.fr?subject=Retour%20sur%20mes%20contenus" className="text-secondary-700 font-semibold hover:underline">
                 Écris-nous, on te répond au plus vite
               </a>
             </p>
@@ -450,7 +450,7 @@ export function DashboardContent({
         {stripeCustomerId ? (
           <a href="/api/portal" className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors">Gérer mon abonnement (modifier, résilier)</a>
         ) : null}
-        <a href="mailto:support@immocrew.fr" className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors">Une question sur tes contenus ?</a>
+        <a href="mailto:contact@immocrew.fr" className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors">Une question sur tes contenus ?</a>
       </div>
 
     </div>

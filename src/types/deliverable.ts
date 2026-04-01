@@ -18,4 +18,5 @@ export interface Deliverable {
   month: string
   status: "draft" | "delivered" | "archived"
   created_at: string
+  metadata?: Record<string, unknown>
 }

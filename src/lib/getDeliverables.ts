@@ -50,7 +50,7 @@ export async function getDeliverables(
 
     const whereClause = conditions.join(" AND ")
     const { rows } = await query<Deliverable>(
-      `SELECT id, type, title, status, month, created_at FROM deliverables
+      `SELECT id, type, title, status, month, created_at, metadata FROM deliverables
        WHERE ${whereClause}
        ORDER BY created_at DESC`,
       params

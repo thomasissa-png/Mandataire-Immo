@@ -435,7 +435,7 @@ export function DeliverableCard({
             )}
             {rewriteCount >= MAX_REWRITES && feedback === "dislike" && (
               <a
-                href={`mailto:support@immocrew.fr?subject=Contenu%20%C3%A0%20revoir&body=ID%20:%20${id}`}
+                href={`mailto:contact@immocrew.fr?subject=Contenu%20%C3%A0%20revoir&body=ID%20:%20${id}`}
                 className="ml-auto text-body-sm font-semibold text-secondary hover:underline"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -452,7 +452,7 @@ export function DeliverableCard({
               Après avoir copié → ouvre ton appli et colle le texte
             </p>
             <a
-              href={`mailto:support@immocrew.fr?subject=Contenu%20%C3%A0%20revoir&body=ID%20du%20contenu%20:%20${id}%0AProbl%C3%A8me%20:%20`}
+              href={`mailto:contact@immocrew.fr?subject=Contenu%20%C3%A0%20revoir&body=ID%20du%20contenu%20:%20${id}%0AProbl%C3%A8me%20:%20`}
               className="text-caption text-neutral-400 hover:text-error-600 transition-colors"
               onClick={(e) => e.stopPropagation()}
             >

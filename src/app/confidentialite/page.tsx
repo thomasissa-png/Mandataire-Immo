@@ -29,7 +29,7 @@ export default function ConfidentialitePage() {
                 <InfoRow label="Raison sociale" value="VERSI" />
                 <InfoRow label="Siège social" value="54 rue Henri Barbusse, 92000 Nanterre" />
                 <InfoRow label="SIRET" value="91286261200013" />
-                <InfoRow label="Contact DPO" value="dpo@immocrew.fr" />
+                <InfoRow label="Contact DPO" value="contact@immocrew.fr" />
               </dl>
             </Section>
 
@@ -235,10 +235,10 @@ export default function ConfidentialitePage() {
               <p className="mt-4">
                 Pour exercer vos droits, adressez votre demande à :{" "}
                 <a
-                  href="mailto:dpo@immocrew.fr"
+                  href="mailto:contact@immocrew.fr"
                   className="text-secondary font-semibold underline underline-offset-2 hover:text-secondary-700 transition-colors"
                 >
-                  dpo@immocrew.fr
+                  contact@immocrew.fr
                 </a>
               </p>
               <p className="mt-2">
@@ -305,7 +305,7 @@ export default function ConfidentialitePage() {
                 vous pouvez nous contacter :
               </p>
               <dl className="mt-4 space-y-2">
-                <InfoRow label="Email DPO" value="dpo@immocrew.fr" />
+                <InfoRow label="Email DPO" value="contact@immocrew.fr" />
                 <InfoRow label="Email général" value="contact@immocrew.fr" />
                 <InfoRow label="Adresse postale" value="54 rue Henri Barbusse, 92000 Nanterre" />
               </dl>

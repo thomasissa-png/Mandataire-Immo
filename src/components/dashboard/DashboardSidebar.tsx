@@ -91,7 +91,7 @@ export function DashboardSidebar() {
 
           <hr className="border-border" />
           <a
-            href="mailto:support@immocrew.fr"
+            href="mailto:contact@immocrew.fr"
             className="w-full text-left px-3 py-2 rounded-lg text-body-sm flex items-center gap-2 text-neutral-600 hover:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
           >
             <span className="text-sm" aria-hidden="true">💬</span>
