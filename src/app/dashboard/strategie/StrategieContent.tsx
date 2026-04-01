@@ -26,13 +26,6 @@ const SECTIONS: {
     color: "border-l-primary-300",
   },
   {
-    type: "brief_graphique",
-    title: "Ton kit graphique",
-    icon: "🎨",
-    hint: "Pour tes visuels Canva ou ton graphiste — couleurs, polices, ton visuel.",
-    color: "border-l-neutral-400",
-  },
-  {
     type: "landing_page",
     title: "Ta landing page",
     icon: "🌐",
@@ -43,14 +36,12 @@ const SECTIONS: {
 
 const TYPE_LABELS: Record<string, string> = {
   bio: "Bio",
-  brief_graphique: "Kit graphique",
   positionnement: "Positionnement",
   landing_page: "Landing page",
 }
 
 const TYPE_COLORS: Record<string, string> = {
   bio: "bg-secondary-50 text-secondary-600",
-  brief_graphique: "bg-neutral-100 text-neutral-600",
   positionnement: "bg-primary-50 text-primary-700",
   landing_page: "bg-success-50 text-success-700",
 }

@@ -8,9 +8,10 @@ export default async function StrategiePage() {
   const user = await getSessionUser()
   if (!user) redirect("/login")
 
-  // Contenus permanents uniquement — pas de calendrier (il a sa propre page)
+  // Contenus permanents uniquement — pas de calendrier (sa propre page)
+  // brief_graphique exclu : outil interne, pas de valeur pour Sophie
   const strategie = await getDeliverables(user.email, [
-    "bio", "positionnement", "brief_graphique", "landing_page",
+    "bio", "positionnement", "landing_page",
   ])
 
   // Dédupliquer par type (garde le plus récent)
