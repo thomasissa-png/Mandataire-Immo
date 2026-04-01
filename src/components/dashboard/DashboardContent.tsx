@@ -23,6 +23,10 @@ interface DashboardContentProps {
     nb_transactions_an: string
     type_biens: string
     linkedin_url: string
+    instagram: string
+    facebook: string
+    site_web: string
+    confort_camera: string
     quartiers: string
     gamme_prix: string
     ton_communication: string
@@ -89,7 +93,7 @@ export function DashboardContent({
       else if (d.type === "script_video") r.scripts++
       else if (d.type === "article_seo") r.articles++
       else if (d.type === "newsletter" || d.type === "email_prospection") r.emails++
-      else if (["bio", "brief_graphique", "calendrier", "positionnement", "landing_page"].includes(d.type)) r.strategie++
+      else if (["bio", "positionnement", "landing_page"].includes(d.type)) r.strategie++
     }
     return r
   }, [deliverables, currentMonth])
@@ -243,6 +247,9 @@ export function DashboardContent({
             {profile.nb_transactions_an ? <span className="px-2.5 py-1 rounded-lg bg-success-50 text-caption font-medium text-success-700">{profile.nb_transactions_an} transactions/an</span> : null}
             {profile.type_biens ? <span className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700">{profile.type_biens}</span> : null}
             {profile.linkedin_url ? <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-info-50 text-caption font-medium text-info-700 hover:bg-info-100 transition-colors">LinkedIn</a> : null}
+            {profile.instagram ? <a href={`https://instagram.com/${profile.instagram.replace("@", "")}`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700 hover:bg-secondary-100 transition-colors">Instagram</a> : null}
+            {profile.facebook ? <a href={profile.facebook} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-info-50 text-caption font-medium text-info-700 hover:bg-info-100 transition-colors">Facebook</a> : null}
+            {profile.site_web ? <a href={profile.site_web.startsWith("http") ? profile.site_web : `https://${profile.site_web}`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600 hover:bg-neutral-200 transition-colors">Site web</a> : null}
           </div>
         ) : null}
       </div>
@@ -303,7 +310,7 @@ export function DashboardContent({
                 <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">👤</span>
                 <div>
                   <p className="text-body-sm font-semibold text-primary">Mets à jour tes bios et ton positionnement</p>
-                  <p className="text-caption text-neutral-500">Copie-les sur Instagram, Facebook et LinkedIn.</p>
+                  <p className="text-caption text-neutral-500">Copie-les sur {[profile.instagram && "Instagram", profile.linkedin_url && "LinkedIn", profile.facebook && "Facebook"].filter(Boolean).join(", ") || "tes réseaux sociaux"}.</p>
                   <p className="text-caption mt-1.5">
                     <a href="/dashboard/strategie" className="text-secondary-700 font-semibold hover:underline">Voir mes bios →</a>
                   </p>
@@ -318,7 +325,11 @@ export function DashboardContent({
                 <div>
                   <p className="text-body-sm font-semibold text-primary">Tes {counts.postsThisMonth > 0 ? counts.postsThisMonth : counts.posts} posts sont prêts</p>
                   <p className="text-caption text-neutral-500">
-                    Publie sur Instagram et LinkedIn — tes deux meilleurs canaux pour toucher des vendeurs locaux. Le matin (7h-9h) sur LinkedIn pour les pros, le soir (18h-20h) sur Instagram pour les particuliers.
+                    {[
+                      profile.linkedin_url && "LinkedIn (7h-9h, pour les pros)",
+                      profile.instagram && "Instagram (18h-20h, pour les particuliers)",
+                      profile.facebook && "Facebook (12h-13h)",
+                    ].filter(Boolean).join(" · ") || "Publie sur tes réseaux aux heures de forte activité."}
                   </p>
                   <p className="text-caption mt-1.5">
                     <a href="/dashboard/posts" className="text-secondary-700 font-semibold hover:underline">Voir mes posts →</a>
@@ -334,7 +345,9 @@ export function DashboardContent({
                 <div>
                   <p className="text-body-sm font-semibold text-primary">{counts.scripts} script{counts.scripts > 1 ? "s" : ""} vidéo prêt{counts.scripts > 1 ? "s" : ""} à tourner</p>
                   <p className="text-caption text-neutral-500">
-                    Format Reel (30-60 sec) vertical. Filme-toi face caméra en lumière naturelle. Pas besoin que ce soit parfait — l{"'"}authenticité marche mieux que la production.
+                    {profile.confort_camera === "debutant" || !profile.confort_camera
+                      ? "Pas besoin de te filmer ! Prends des photos et crée un diaporama avec texte animé sur Instagram Reels. Smartphone en mode portrait, lumière naturelle."
+                      : "Format Reel (30-60 sec) vertical. Filme-toi face caméra en lumière naturelle. L'authenticité marche mieux que la production."}
                   </p>
                   <p className="text-caption mt-1.5">
                     <a href="/dashboard/scripts" className="text-secondary-700 font-semibold hover:underline">Voir mes scripts →</a>

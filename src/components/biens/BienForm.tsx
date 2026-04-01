@@ -659,7 +659,7 @@ export function BienForm() {
       >
         {submitting ? (
           <>
-            <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" aria-hidden="true" />
+            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
             {submitProgress || "Création en cours..."}
           </>
         ) : (
