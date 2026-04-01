@@ -240,6 +240,11 @@ export function DeliverableCard({
                   Archivé
                 </span>
               )}
+              {createdAt && (
+                <time dateTime={createdAt} className="text-caption text-neutral-400">
+                  {new Date(createdAt).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}
+                </time>
+              )}
             </div>
             <h3 className="font-display text-h4 text-primary leading-snug">
               {title}
