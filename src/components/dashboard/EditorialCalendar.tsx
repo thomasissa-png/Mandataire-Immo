@@ -93,19 +93,23 @@ function stableHash(str: string): number {
  * Le placement est DÉTERMINISTE : basé sur un hash de l'id du deliverable
  * + le mois affiché, pour que la position reste stable entre les renders
  * et la navigation mois précédent/suivant.
+ *
+ * startDay : jour à partir duquel distribuer (1 = tout le mois,
+ * 25 = seulement à partir du 25). Permet de respecter la date d'activation.
  */
 function distributeDeliverables(
   deliverables: Deliverable[],
   daysInMonth: number,
   year: number,
   month: number,
+  startDay: number = 1,
 ): Map<number, Deliverable[]> {
   const map = new Map<number, Deliverable[]>()
   const usedDays = new Set<number>()
 
-  // Calculer les jours disponibles (pas dimanche)
+  // Calculer les jours disponibles (pas dimanche, à partir de startDay)
   const availableDays: number[] = []
-  for (let d = 1; d <= daysInMonth; d++) {
+  for (let d = startDay; d <= daysInMonth; d++) {
     const weekday = new Date(year, month, d).getDay()
     if (weekday !== 0) availableDays.push(d) // Exclure dimanche
   }
@@ -218,15 +222,59 @@ export function EditorialCalendar({
   })
 
   // Filtrer les deliverables du mois affiché
-  const monthDeliverables = useMemo(
-    () => deliverables.filter((d) => getDeliverableYearMonth(d) === monthKey),
-    [deliverables, monthKey],
-  )
+  // Inclut aussi les contenus du mois précédent qui n'ont pas pu être placés
+  // (ex: Sophie active le 28, ses 19 contenus débordent sur le mois suivant)
+  const monthDeliverables = useMemo(() => {
+    const currentMonthItems = deliverables.filter((d) => getDeliverableYearMonth(d) === monthKey)
+
+    // Vérifier si des contenus du mois précédent débordent
+    const prevMonth = month === 0 ? 11 : month - 1
+    const prevYear = month === 0 ? year - 1 : year
+    const prevMonthKey = `${prevYear}-${String(prevMonth + 1).padStart(2, "0")}`
+    const prevMonthItems = deliverables.filter((d) => getDeliverableYearMonth(d) === prevMonthKey)
+
+    if (prevMonthItems.length > 0) {
+      // Calculer combien de jours étaient disponibles le mois précédent
+      const prevDaysInMonth = getDaysInMonth(prevYear, prevMonth)
+      let prevStartDay = 1
+      for (const d of prevMonthItems) {
+        const date = new Date(d.created_at)
+        if (!isNaN(date.getTime()) && date.getFullYear() === prevYear && date.getMonth() === prevMonth) {
+          prevStartDay = Math.min(prevStartDay === 1 ? 31 : prevStartDay, date.getDate())
+        }
+      }
+      let prevAvailableDays = 0
+      for (let d = prevStartDay; d <= prevDaysInMonth; d++) {
+        if (new Date(prevYear, prevMonth, d).getDay() !== 0) prevAvailableDays++
+      }
+      // Les contenus en excès débordent sur ce mois
+      if (prevMonthItems.length > prevAvailableDays) {
+        const overflow = prevMonthItems.slice(prevAvailableDays)
+        return [...currentMonthItems, ...overflow]
+      }
+    }
+
+    return currentMonthItems
+  }, [deliverables, monthKey, year, month])
+
+  // Détecter le jour de début : premier deliverable du mois (date de création)
+  // Si Sophie a activé le 25, on ne distribue qu'à partir du 25
+  const startDay = useMemo(() => {
+    if (monthDeliverables.length === 0) return 1
+    let earliest = 31
+    for (const d of monthDeliverables) {
+      const date = new Date(d.created_at)
+      if (!isNaN(date.getTime()) && date.getFullYear() === year && date.getMonth() === month) {
+        earliest = Math.min(earliest, date.getDate())
+      }
+    }
+    return earliest
+  }, [monthDeliverables, year, month])
 
   // Distribuer les livrables : 1 contenu/jour, types alternés, pas de dimanche
   const deliverablesByDay = useMemo(
-    () => distributeDeliverables(monthDeliverables, getDaysInMonth(year, month), year, month),
-    [monthDeliverables, year, month],
+    () => distributeDeliverables(monthDeliverables, getDaysInMonth(year, month), year, month, startDay),
+    [monthDeliverables, year, month, startDay],
   )
 
   const daysInMonth = getDaysInMonth(year, month)
