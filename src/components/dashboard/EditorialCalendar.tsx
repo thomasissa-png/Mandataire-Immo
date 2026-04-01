@@ -95,10 +95,60 @@ export function EditorialCalendar({
     year: "numeric",
   })
 
-  // Filtrer les deliverables du mois affiché par le champ "month" (YYYY-MM)
-  // Simple et fiable : chaque deliverable a un mois assigné à la génération.
+  // Distribuer les deliverables par mois : le template hebdomadaire place ~5-6
+  // contenus/semaine (~22/mois). Si un mois a plus de contenus que de slots,
+  // l'excédent déborde sur le mois suivant.
   const monthDeliverables = useMemo(() => {
-    return deliverables.filter((d) => getDeliverableYearMonth(d) === monthKey)
+    // Regrouper tous les deliverables par mois d'origine
+    const byMonth: Record<string, Deliverable[]> = {}
+    for (const d of deliverables) {
+      const m = getDeliverableYearMonth(d)
+      if (!byMonth[m]) byMonth[m] = []
+      byMonth[m].push(d)
+    }
+
+    // Trier les mois chronologiquement
+    const sortedMonths = Object.keys(byMonth).sort()
+    if (sortedMonths.length === 0) return []
+
+    // Calculer la capacité de chaque mois (jours ouvrés avec le template = ~5/semaine)
+    // et distribuer les excédents sur les mois suivants
+    const distributed: Record<string, Deliverable[]> = {}
+    let overflow: Deliverable[] = []
+
+    for (const m of sortedMonths) {
+      const items = [...overflow, ...(byMonth[m] || [])]
+      overflow = []
+
+      // Parser le mois
+      const [y, mo] = m.split("-").map(Number)
+      const daysInMonth = getDaysInMonth(y, mo - 1)
+
+      // Compter les slots disponibles (jours du template qui ont un contenu assigné)
+      // Template : lun=article, mar/jeu/sam=post, mer=cond, ven=vidéo = 5-6/semaine
+      let slots = 0
+      for (let d = 1; d <= daysInMonth; d++) {
+        const wd = new Date(y, mo - 1, d).getDay()
+        if (wd >= 1 && wd <= 6) slots++ // Lundi à samedi
+      }
+
+      if (items.length > slots) {
+        distributed[m] = items.slice(0, slots)
+        overflow = items.slice(slots)
+      } else {
+        distributed[m] = items
+      }
+    }
+
+    // Si overflow reste, l'ajouter au mois suivant
+    if (overflow.length > 0) {
+      const lastMonth = sortedMonths[sortedMonths.length - 1]
+      const [y, mo] = lastMonth.split("-").map(Number)
+      const nextMonth = mo === 12 ? `${y + 1}-01` : `${y}-${String(mo + 1).padStart(2, "0")}`
+      distributed[nextMonth] = [...(distributed[nextMonth] || []), ...overflow]
+    }
+
+    return distributed[monthKey] || []
   }, [deliverables, monthKey])
 
   // Détecter le jour de début pour la distribution.

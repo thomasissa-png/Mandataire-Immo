@@ -108,34 +108,26 @@ export function CalendarDayPopover({
     popoverRef.current?.focus()
   }, [])
 
-  // Position desktop
-  const positionStyle: React.CSSProperties = {}
-  if (anchorRect) {
-    const viewportWidth = typeof window !== "undefined" ? window.innerWidth : 1280
-    if (viewportWidth >= 768) {
-      positionStyle.position = "fixed"
-      positionStyle.top = anchorRect.bottom + 8
-      positionStyle.left = Math.max(16, Math.min(anchorRect.left - 80, viewportWidth - 400))
-      positionStyle.zIndex = 50
-    }
-  }
-
   return (
     <>
-      {/* Overlay */}
+      {/* Overlay — toujours visible avec blur */}
       <div
-        className="fixed inset-0 bg-primary/20 backdrop-blur-sm z-40 tablet:bg-transparent tablet:backdrop-blur-none"
+        className="fixed inset-0 bg-primary/20 backdrop-blur-sm z-40"
         aria-hidden="true"
         onClick={onClose}
       />
 
+      {/* Modal — centré sur desktop, bottom sheet sur mobile */}
       <div
         ref={popoverRef}
         role="dialog"
         aria-label={`Contenus du ${dateLabel}`}
         tabIndex={-1}
-        className="fixed bottom-0 left-0 right-0 tablet:bottom-auto tablet:left-auto tablet:right-auto tablet:w-[380px] bg-card rounded-t-xl tablet:rounded-xl border border-border shadow-xl z-50 max-h-[80vh] tablet:max-h-[500px] overflow-y-auto focus-visible:outline-none"
-        style={positionStyle}
+        className="fixed z-50 focus-visible:outline-none
+          bottom-0 left-0 right-0 max-h-[80vh]
+          tablet:bottom-auto tablet:left-1/2 tablet:top-1/2 tablet:-translate-x-1/2 tablet:-translate-y-1/2
+          tablet:w-[520px] tablet:max-h-[70vh]
+          bg-card rounded-t-2xl tablet:rounded-2xl border border-border shadow-2xl overflow-y-auto"
       >
         {/* Handle mobile */}
         <div className="flex justify-center pt-3 pb-1 tablet:hidden">
