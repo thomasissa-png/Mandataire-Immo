@@ -183,3 +183,64 @@
     }
   }
 }
+
+/* ─── Print styles — fidèle à l'écran pour export PDF ─── */
+@media print {
+  /* Masquer les éléments non pertinents */
+  .print\:hidden,
+  nav,
+  button,
+  [aria-label="Navigation"],
+  footer {
+    display: none !important;
+  }
+
+  /* Forcer les couleurs (pas de mode économie d'encre) */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Fond header bien */
+  .bg-primary {
+    background-color: #1B2A4A !important;
+    color: white !important;
+  }
+
+  .text-secondary {
+    color: #F27A1A !important;
+  }
+
+  /* Images : pas de débordement, taille contenue */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Éviter les coupures dans les sections */
+  section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Galerie photos : grille simple sans overlap */
+  .grid {
+    display: grid !important;
+    gap: 8px !important;
+  }
+
+  /* Corps de page */
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  /* Marges page */
+  @page {
+    margin: 1.5cm;
+    size: A4;
+  }
+}

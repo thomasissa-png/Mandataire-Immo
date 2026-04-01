@@ -214,6 +214,20 @@ function AnnonceRow({ annonce, onArchiveToggle }: { annonce: Annonce; onArchiveT
               )}
             </button>
 
+            {/* Ouvrir le lien partageable dans un nouvel onglet */}
+            {shareUrl && (
+              <a
+                href={shareUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-caption font-semibold bg-neutral-100 text-neutral-700 hover:bg-neutral-200 transition-all"
+                aria-label="Ouvrir l'annonce dans un nouvel onglet"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                Ouvrir
+              </a>
+            )}
+
             {/* Copier tout */}
             <button
               type="button"

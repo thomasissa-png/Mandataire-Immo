@@ -7,6 +7,7 @@ import { PropertyMap } from "@/components/property/PropertyMap"
 import { PropertyDVF } from "@/components/property/PropertyDVF"
 import { PropertyDPE } from "@/components/property/PropertyDPE"
 import { PropertyContact } from "@/components/property/PropertyContact"
+import { PrintButton } from "@/components/property/PrintButton"
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -75,9 +76,12 @@ export default async function PropertyPageRoute({ params }: PageProps) {
           <p className="text-body-lg text-neutral-300">
             {property.city ? `${property.city} (${property.postcode})` : property.adresse}
           </p>
-          <p className="text-h2 text-secondary mt-4">
-            {property.prix.toLocaleString("fr-FR")} &euro;
-          </p>
+          <div className="flex items-center gap-4 mt-4">
+            <p className="text-h2 text-secondary">
+              {property.prix.toLocaleString("fr-FR")} &euro;
+            </p>
+            <PrintButton />
+          </div>
         </div>
       </section>
 
