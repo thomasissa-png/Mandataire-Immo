@@ -25,7 +25,7 @@ const NAV_SECTIONS: SidebarSection[] = [
     links: [
       { href: "/dashboard/profile", label: "Mon profil", icon: "👤" },
       { href: "/dashboard/ma-page", label: "Ma page mandataire", icon: "🌐" },
-      { href: "/dashboard/biens/nouveau", label: "Mes biens", icon: "🏡" },
+      { href: "/dashboard/biens", label: "Mes biens", icon: "🏡" },
     ],
   },
   {
@@ -47,7 +47,7 @@ const MOBILE_NAV: SidebarLink[] = [
   { href: "/dashboard", label: "Accueil", icon: "🏠" },
   { href: "/dashboard/posts", label: "Posts", icon: "📅" },
   { href: "/dashboard/annonces", label: "Annonces", icon: "🏡" },
-  { href: "/dashboard/biens/nouveau", label: "Ajouter", icon: "➕" },
+  { href: "/dashboard/biens", label: "Biens", icon: "🏡" },
 ]
 
 export function DashboardSidebar() {
