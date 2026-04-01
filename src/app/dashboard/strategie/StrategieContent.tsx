@@ -57,8 +57,19 @@ export function StrategieContent({ strategie }: StrategieContentProps) {
       <div className="rounded-lg bg-info-50 border border-info-200 p-4">
         <p className="text-body-sm text-info-800">
           Ces contenus sont ta <strong>fondation marketing</strong> — ils ne changent pas chaque mois.
-          Clique sur un contenu pour le voir, le <strong>copier</strong>, ou demander une <strong>réécriture</strong> si ça ne te convient pas.
         </p>
+        <div className="flex items-start gap-2 mt-2">
+          <span className="text-info-600 mt-0.5">→</span>
+          <p className="text-body-sm text-info-700">
+            <strong>Copier</strong> : clique sur un contenu, puis sur le bouton Copier en haut à droite.
+          </p>
+        </div>
+        <div className="flex items-start gap-2 mt-1">
+          <span className="text-info-600 mt-0.5">→</span>
+          <p className="text-body-sm text-info-700">
+            <strong>Regénérer</strong> : clique sur un contenu, puis sur "Regénérer" en bas. Tu peux ajouter un commentaire ("rends-le plus punchy"). La nouvelle version sera validée par notre équipe sous 24h.
+          </p>
+        </div>
       </div>
 
       {/* Sections fixes par type */}

@@ -78,20 +78,23 @@ function getPlatform(d: Deliverable): PlatformInfo {
 
 interface PostsFilteredProps {
   posts: Deliverable[]
+  activePlatforms?: string[]
 }
 
-export function PostsFiltered({ posts }: PostsFilteredProps) {
+export function PostsFiltered({ posts, activePlatforms }: PostsFilteredProps) {
   const [platformFilter, setPlatformFilter] = useState<string | null>(null)
 
-  // Compter les posts par plateforme
+  // Compter les posts par plateforme — uniquement les plateformes actives de Sophie
   const platformCounts = useMemo(() => {
     const counts: Record<string, number> = {}
     for (const p of posts.filter((d) => d.status !== "archived")) {
       const platform = getPlatform(p)
+      // N'afficher que les plateformes où Sophie est active
+      if (activePlatforms && !activePlatforms.includes(platform.name)) continue
       counts[platform.name] = (counts[platform.name] || 0) + 1
     }
     return counts
-  }, [posts])
+  }, [posts, activePlatforms])
 
   return (
     <FilteredPageWrapper deliverables={posts} showArchiveToggle>

@@ -21,6 +21,15 @@ const TYPE_DOT_COLORS: Record<string, string> = {
   email_prospection: "bg-error",
 }
 
+/** Lettre affichée dans le point coloré sur mobile */
+const TYPE_DOT_LETTERS: Record<string, string> = {
+  post: "P",
+  article_seo: "A",
+  script_video: "V",
+  newsletter: "N",
+  email_prospection: "E",
+}
+
 const TYPE_LABELS: Record<string, string> = {
   post: "Post",
   article_seo: "Article SEO",
@@ -285,9 +294,11 @@ export function EditorialCalendar({
                     {dayItems.slice(0, 4).map((d, idx) => (
                       <span
                         key={idx}
-                        className={`w-2 h-2 rounded-full ${TYPE_DOT_COLORS[d.type] || "bg-neutral-400"}`}
+                        className={`w-4 h-4 rounded-full ${TYPE_DOT_COLORS[d.type] || "bg-neutral-400"} text-white text-[8px] font-bold flex items-center justify-center leading-none`}
                         title={TYPE_LABELS[d.type] || d.type}
-                      />
+                      >
+                        {TYPE_DOT_LETTERS[d.type] || ""}
+                      </span>
                     ))}
                     {dayItems.length > 4 && (
                       <span className="text-caption text-neutral-400 leading-none">
