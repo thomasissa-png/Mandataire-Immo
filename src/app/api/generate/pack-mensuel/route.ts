@@ -153,7 +153,8 @@ export async function POST(request: NextRequest) {
       nombre_scripts: 4,
       format: "mix",
       confort_camera: ctx.confort_camera || "debutant",
-      type_video: "face_camera",
+      // Adapter le type vidéo au confort caméra — débutant = diaporama, pas face caméra
+      type_video: (ctx.confort_camera === "a_laise" || ctx.confort_camera === "expert") ? "face_camera" : "diaporama",
     })
     const scriptsResult = await generateJSON<{ scripts: Array<{
       titre: string

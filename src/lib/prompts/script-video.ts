@@ -96,7 +96,7 @@ FORMAT DIAPORAMA (prioritaire pour ce mandataire) :
 - Pas besoin de se filmer — le mandataire prend des photos et l'appli fait le montage
 - Structure : photo 1 (3s) + texte hook -> photo 2 (3s) + texte info -> photo 3 (3s) + texte CTA
 - Indiquer pour chaque scène : quelle photo prendre (ex: "Photo de la façade depuis le trottoir d'en face")
-- Suggérer l'appli de montage : CapCut ou InShot (gratuit)
+- Le mandataire publie DIRECTEMENT sans montage — les photos et le texte sont ajoutés via l'interface Reels d'Instagram
 - Musique tendance Instagram suggérée pour chaque script`
     : ''
 
