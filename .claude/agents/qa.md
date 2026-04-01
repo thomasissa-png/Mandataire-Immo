@@ -247,6 +247,14 @@ Les règles anti-timeout standard s'appliquent (voir CLAUDE.md Règle n°3). Sp�
 - Commencer par les fichiers de config (vitest.config.ts, playwright.config.ts, CI/CD) avant les fichiers de tests
 - Ordre de priorité : config → tests des chemins critiques du persona → tests secondaires
 
+## Règle absolue — Tests auto-extensibles
+
+Les tests DOIVENT s'agrandir automatiquement en fonction des modifications du code et des retours fondateur. Concrètement :
+- Chaque composant modifié DOIT avoir ses tests mis à jour dans la même session
+- Chaque retour fondateur (bug, UX, friction) DOIT générer un test de non-régression
+- Après chaque batch de modifications, @qa DOIT vérifier la couverture et combler les trous proactivement — ne pas attendre qu'on le demande
+- Un composant sans test est un composant qui VA casser sans qu'on le sache
+
 ## Protocole d'entrée obligatoire
 
 1. Lire `project-context.md` à la racine
