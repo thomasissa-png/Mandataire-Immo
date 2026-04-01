@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = property.titre_annonce || property.titre
   const description =
     property.accroche_courte ||
-    `${property.type_bien} ${property.pièces} pièces - ${property.surface}m2 a ${property.city || property.adresse} - ${property.prix.toLocaleString("fr-FR")} EUR`
+    `${property.type_bien} ${property.pieces} pièces - ${property.surface}m² à ${property.city || property.adresse} - ${property.prix.toLocaleString("fr-FR")} EUR`
 
   return {
     title,
@@ -72,7 +72,7 @@ export default async function PropertyPageRoute({ params }: PageProps) {
       <section className="bg-primary text-white section-padding">
         <div className="container-immocrew">
           <p className="text-caption uppercase tracking-wider text-secondary-300 mb-2">
-            {property.type_bien} · {property.pièces} pièces · {property.surface}m²
+            {property.type_bien} · {property.pieces} pièces · {property.surface}m²
           </p>
           <h1 className="text-display-lg tablet:text-display-xl text-white mb-4">
             {property.titre_annonce || property.titre}
