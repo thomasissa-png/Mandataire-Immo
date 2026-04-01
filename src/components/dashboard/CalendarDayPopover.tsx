@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import type { Deliverable } from "@/types/deliverable"
 
 // ─── Constantes ──────────────────────────────────────────────────
@@ -161,7 +161,7 @@ export function CalendarDayPopover({
         ) : (
           <div className="p-4 space-y-3">
             {deliverables.map((d) => (
-              <DeliverableItem key={d.id} deliverable={d} />
+              <DeliverableItem key={d.id} deliverable={d} autoExpand={deliverables.length === 1} />
             ))}
           </div>
         )}
@@ -172,11 +172,12 @@ export function CalendarDayPopover({
 
 // ─── Item avec contenu expandable ────────────────────────────────
 
-function DeliverableItem({ deliverable }: { deliverable: Deliverable }) {
+function DeliverableItem({ deliverable, autoExpand = false }: { deliverable: Deliverable; autoExpand?: boolean }) {
   const [expanded, setExpanded] = useState(false)
   const [content, setContent] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
+  const hasAutoExpanded = useRef(false)
 
   const meta = deliverable.metadata as Record<string, unknown> | undefined
   const platform = typeof meta?.plateforme === "string" ? meta.plateforme : null
@@ -190,6 +191,15 @@ function DeliverableItem({ deliverable }: { deliverable: Deliverable }) {
   const tip = deliverable.type === "post" && platform
     ? PLATFORM_TIPS[platform.toLowerCase()] || TYPE_TIPS.post
     : TYPE_TIPS[deliverable.type]
+
+  // Auto-expand si un seul item dans la journée
+  useEffect(() => {
+    if (autoExpand && !hasAutoExpanded.current) {
+      hasAutoExpanded.current = true
+      loadContent()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoExpand])
 
   const loadContent = useCallback(async () => {
     if (content !== null) { setExpanded(!expanded); return }
