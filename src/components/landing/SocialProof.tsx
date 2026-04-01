@@ -1,109 +1,82 @@
-{/*
-  ============================================================================
-  NOTE — TÉMOIGNAGES PRÉ-LANCEMENT
-  ============================================================================
-  Ces témoignages sont des projections pré-lancement basées sur les
-  résultats attendus du service. Ils seront remplacés par de vrais
-  témoignages clients dès que le site sera lancé.
+import { PACK_MENSUEL, formatPrice } from "@/lib/pricing"
 
-  TODO (post-lancement) : remplacer par de vrais témoignages clients
-  avec prénom complet, photo, et autorisation écrite.
-  ============================================================================
-*/}
+/**
+ * Social proof section — pré-lancement.
+ * Pas de faux témoignages. Métriques vérifiables du service
+ * + promesse concrète de ce que Sophie reçoit chaque semaine.
+ */
 
-const TESTIMONIALS = [
-  {
-    quote: "J'ai reçu mes 12 posts le 3 du mois. Le 15, j'avais déjà un vendeur qui m'a contactée via Instagram. En 2 ans chez IAD, c'était une première.",
-    name: "Audrey M.",
-    detail: "Mandataire IAD — Angers",
-    metric: "1er contact entrant en 12 jours",
-  },
-  {
-    quote: "Je passais 1h par soir sur Canva pour un truc bof. Maintenant je copie-colle en 3 minutes et les gens me disent que mes posts sont super pros.",
-    name: "Karim B.",
-    detail: "Mandataire SAFTI — Lyon",
-    metric: "1h/soir → 3 min/jour",
-  },
-  {
-    quote: "Mon annonce réécrite par ImmoCrew a ramené 6 appels en une semaine. Mon annonce classique en avait ramené 1 en un mois.",
-    name: "Stéphanie L.",
-    detail: "Mandataire Capifrance — Bordeaux",
-    metric: "6 appels vs 1 en un mois",
-  },
+const WEEKLY_DELIVERABLES = [
+  { icon: "📱", count: "3", label: "posts personnalisés", detail: "Instagram + LinkedIn, prêts à copier" },
+  { icon: "📝", count: "1", label: "article SEO local", detail: "Publié sur ta page mandataire" },
+  { icon: "🎬", count: "1", label: "script vidéo", detail: "Adapté à ton niveau de confort caméra" },
+] as const
+
+const MONTHLY_EXTRAS = [
+  { icon: "📧", label: "1 newsletter pour tes contacts" },
+  { icon: "✉️", label: "1 email de prospection vendeurs" },
+  { icon: "🏡", label: "Annonces personnalisées pour tes biens" },
+  { icon: "📆", label: "Calendrier éditorial avec les horaires" },
 ] as const
 
 const METRICS = [
-  {
-    value: "48h",
-    label: "Délai de livraison de tes premiers posts",
-  },
-  {
-    value: "12",
-    label: "Posts prêts à publier chaque mois",
-  },
-  {
-    value: "~30 min",
-    label: "Temps que tu y passes par mois",
-  },
-  {
-    value: "100%",
-    label: "Personnalisé pour ta zone et ton style",
-  },
+  { value: "~5 min", label: "Temps passé par semaine à publier" },
+  { value: "100%", label: "Personnalisé pour ta zone et ton style" },
+  { value: `${formatPrice(PACK_MENSUEL)}/mois`, label: "Sans engagement, résiliation en 1 clic" },
+  { value: "24h", label: "Nouveaux contenus chaque lundi" },
 ] as const
 
 export function SocialProof() {
   return (
-    <section className="section-padding bg-background" id="temoignages">
+    <section className="section-padding bg-background" id="ce-que-tu-recois">
       <div className="container-immocrew">
-        <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-4">
-          Ce que nos premiers utilisateurs en pensent.
+        <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-3">
+          Ce que tu reçois chaque semaine
         </h2>
-        <p className="text-center text-body-lg text-neutral-500 mb-6 desktop:mb-10 max-w-xl mx-auto">
-          Des mandataires comme toi qui ont retrouvé du temps — et des mandats.
+        <p className="text-center text-body-lg text-neutral-500 mb-8 max-w-xl mx-auto">
+          Tu ouvres ton espace, tout est prêt. Tu copies, tu colles, tu publies. Retourne faire ton métier.
         </p>
 
-        {/* Temoignages */}
-        <div className="grid gap-6 tablet:grid-cols-3 max-w-5xl mx-auto mb-12">
-          {TESTIMONIALS.map((t, index) => (
+        {/* Livrables hebdomadaires */}
+        <div className="grid gap-4 tablet:grid-cols-3 max-w-4xl mx-auto mb-8">
+          {WEEKLY_DELIVERABLES.map((d, i) => (
             <div
-              key={index}
-              className="rounded-xl bg-card border border-border p-6 shadow-sm"
+              key={i}
+              className="rounded-xl bg-card border border-border p-5 shadow-sm hover:shadow-md transition-shadow"
             >
-              <p className="text-body text-neutral-600 leading-relaxed mb-4 italic">
-                «&nbsp;{t.quote}&nbsp;»
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center flex-shrink-0">
-                  <span className="font-display font-bold text-body-sm text-primary">
-                    {t.name.charAt(0)}
-                  </span>
-                </div>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-2xl" aria-hidden="true">{d.icon}</span>
                 <div>
-                  <p className="font-display font-semibold text-body-sm text-primary">
-                    {t.name}
-                  </p>
-                  <p className="text-caption text-neutral-500">
-                    {t.detail}
-                  </p>
+                  <span className="font-display text-display-lg font-extrabold text-secondary">{d.count}</span>
+                  <span className="font-display text-h4 font-bold text-primary ml-1">{d.label}</span>
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-border">
-                <p className="text-caption font-semibold text-success">
-                  {t.metric}
-                </p>
-              </div>
+              <p className="text-body-sm text-neutral-500">{d.detail}</p>
             </div>
           ))}
         </div>
 
-        {/* Metriques */}
-        <div className="grid grid-cols-2 gap-6 tablet:grid-cols-4 max-w-4xl mx-auto mb-12">
-          {METRICS.map((metric, index) => (
-            <div
-              key={index}
-              className="rounded-xl bg-card border border-border p-6 text-center shadow-sm hover:shadow-md transition-shadow duration-normal"
+        {/* Extras mensuels */}
+        <div className="flex flex-wrap justify-center gap-3 mb-10 max-w-3xl mx-auto">
+          {MONTHLY_EXTRAS.map((d, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-50 text-body-sm text-primary-700 font-medium"
             >
-              <p className="font-display text-display-lg font-extrabold text-secondary mb-2">
+              <span aria-hidden="true">{d.icon}</span>
+              {d.label}
+            </span>
+          ))}
+        </div>
+
+        {/* Métriques */}
+        <div className="grid grid-cols-2 gap-4 tablet:grid-cols-4 max-w-4xl mx-auto mb-10">
+          {METRICS.map((metric, i) => (
+            <div
+              key={i}
+              className="rounded-xl bg-card border border-border p-5 text-center shadow-sm"
+            >
+              <p className="font-display text-h2 font-extrabold text-secondary mb-1">
                 {metric.value}
               </p>
               <p className="text-body-sm text-neutral-600">
@@ -113,7 +86,7 @@ export function SocialProof() {
           ))}
         </div>
 
-        {/* Logos reseaux */}
+        {/* Réseaux */}
         <div className="text-center">
           <p className="text-body-sm text-neutral-500 mb-4">
             Conçu pour les mandataires de :

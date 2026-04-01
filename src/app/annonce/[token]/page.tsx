@@ -250,6 +250,31 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
         </div>
       </article>
 
+      {/* CTA Contact mandataire — en bas après le contenu */}
+      {(annonce.client_phone || annonce.client_email) && (
+        <div className="max-w-3xl mx-auto px-6 py-6 border-t border-neutral-200">
+          <p className="text-body-sm text-neutral-600 text-center mb-3">
+            Intéressé par ce bien ? Contacte {agentName || "le mandataire"} directement.
+          </p>
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            {annonce.client_phone && (
+              <a
+                href={`tel:${annonce.client_phone}`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-secondary text-white font-bold text-sm hover:bg-secondary-600 transition-all shadow-sm"
+              >
+                Appeler {agentName || "le mandataire"}
+              </a>
+            )}
+            <a
+              href={`mailto:${annonce.client_email}`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-primary text-primary font-bold text-sm hover:bg-primary hover:text-white transition-all"
+            >
+              Envoyer un email
+            </a>
+          </div>
+        </div>
+      )}
+
       {/* Footer CTA */}
       <footer className="border-t border-neutral-200 bg-white">
         <div className="max-w-3xl mx-auto px-6 py-8 text-center">
