@@ -222,20 +222,22 @@ export async function POST(request: NextRequest) {
       confort_camera: ctx.confort_camera || "debutant",
       type_video: "face_camera",
     })
-    const scriptsResult = await generateJSON<{ scripts: Array<{ titre: string; format: string; duree_cible: string; scenes: Array<{ numero: number; duree: string; voix_off: string; indication_visuelle: string }>; musique_suggeree: string; hook: string }> }>(
+    const scriptsResult = await generateJSON<{ scripts: Array<{
+      titre: string; type: string; duree_totale_secondes: number; hook: string;
+      scenes: Array<{ numero: number; duree_secondes: number; visuel: string; texte_ecran: string | null; voix_off: string | null; indication_tournage: string }>;
+      musique_suggeree: string; cta_final: string; brief_tournage: string
+    }> }>(
       { ...scriptsPrompt, maxTokens: 16384 }
     )
     for (const script of scriptsResult.data.scripts) {
-      const scenesText = script.scenes
-        .map((s) => `Scene ${s.numero} (${s.duree}):\nVoix off: ${s.voix_off}\nVisuel: ${s.indication_visuelle}`)
-        .join("\n\n")
+      const content = formatScriptContent(script)
       const id = await insertDeliverable({
         clientEmail,
         clientId: client_id,
         type: "script_video",
-        title: script.titre || script.hook,
-        content: `${script.titre}\nFormat: ${script.format} | Duree: ${script.duree_cible}\nMusique: ${script.musique_suggeree}\n\n${scenesText}`,
-        metadata: { format: script.format, duree_cible: script.duree_cible, hook: script.hook },
+        title: script.titre || script.hook || "Script vidéo",
+        content,
+        metadata: { format: "reel", duree_secondes: script.duree_totale_secondes, hook: script.hook, type_video: script.type, brief_tournage: script.brief_tournage },
         month,
       })
       deliverableIds.push(id)
@@ -304,6 +306,37 @@ export async function POST(request: NextRequest) {
 }
 
 // --- Helpers ---
+
+function formatScriptContent(script: {
+  titre: string; type?: string; duree_totale_secondes?: number;
+  brief_tournage?: string; scenes?: Array<{ numero: number; duree_secondes?: number; visuel?: string; texte_ecran?: string | null; voix_off?: string | null; indication_tournage?: string }>;
+  cta_final?: string; musique_suggeree?: string;
+}): string {
+  const lines: string[] = []
+  lines.push(`# ${script.titre}`)
+  lines.push("")
+  lines.push(`**Durée :** ~${script.duree_totale_secondes || 30} secondes`)
+  if (script.type) lines.push(`**Type :** ${script.type}`)
+  lines.push("")
+  if (script.brief_tournage) {
+    lines.push("## 📍 Où et quand filmer")
+    lines.push(script.brief_tournage)
+    lines.push("")
+  }
+  lines.push("## 🎬 Le script (scène par scène)")
+  lines.push("")
+  for (const scene of script.scenes || []) {
+    lines.push(`### Scène ${scene.numero} — ${scene.duree_secondes || 5}s`)
+    if (scene.indication_tournage) lines.push(`📱 **Comment filmer :** ${scene.indication_tournage}`)
+    if (scene.texte_ecran) lines.push(`📝 **Texte à l'écran :** ${scene.texte_ecran}`)
+    if (scene.voix_off) lines.push(`🗣️ **Ce que tu dis :** « ${scene.voix_off} »`)
+    if (scene.visuel && !scene.indication_tournage) lines.push(`👁️ **Ce qu'on voit :** ${scene.visuel}`)
+    lines.push("")
+  }
+  if (script.cta_final) { lines.push("## ✅ Fin de la vidéo"); lines.push(script.cta_final); lines.push("") }
+  if (script.musique_suggeree) lines.push(`🎵 **Musique suggérée :** ${script.musique_suggeree}`)
+  return lines.join("\n")
+}
 
 interface InsertDeliverableParams {
   clientEmail: string
