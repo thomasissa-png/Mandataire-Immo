@@ -50,7 +50,7 @@
 - **Hébergement** : Replit (Deployments)
 - **Outils IA utilisés** : Claude API (génération de contenu personnalisé via le framework Gradient Agents — 19 agents coordonnés : @copywriter, @seo, @geo, @social, @design, @creative-strategy)
 - **Budget IA mensuel (tokens)** : À définir (estimation : 50-100€/mois pour 30 clients)
-- **Volume d'usage IA prévu** : ~30 sessions d'agents/mois (1 par client), chaque session génère 12 posts + 2 articles + 4 annonces + 4 scripts vidéo
+- **Volume d'usage IA prévu** : ~30 sessions d'agents/mois (1 par client), chaque session génère 12 posts + 4 articles + 4 annonces + 4 scripts vidéo
 - **Latence IA cible** : Pas de contrainte temps réel — production batch, livrables livrés sous 24-48h
 - **Outils d'analytics** : Umami Cloud (remplace PostHog — décision fondateur 2026-03-28). Website ID : 533b1471-2f40-41dd-8754-02fa0f0615f8. Région : EU. URL : https://cloud.umami.is
 
@@ -67,7 +67,7 @@
 | Offre | Prix | Contenu | Cible |
 |-------|------|---------|-------|
 | Pack Lancement (one-shot) | 400€ | Ce qui te rend unique, bio optimisée, 5 annonces, 5 articles SEO local, plan de publication 30j, 20 posts, 10 scripts Reels, charte visuelle | Nouveaux clients — onboarding |
-| Pack Mensuel | 150€/mois | 12 posts/mois, 4 scripts vidéo, 2 articles SEO, 1 newsletter, 4 annonces, 1 email prospection, calendrier mensuel | Récurrent — cœur du business |
+| Pack Mensuel | 150€/mois | 12 posts/mois (3/sem), 4 scripts vidéo (1/sem), 4 articles SEO (1/sem), 1 newsletter, 4 annonces, 1 email prospection, calendrier mensuel | Récurrent — cœur du business |
 | Boost Mandat (upsell) | 100€/bien | Annonce rédigée, 3 posts + 1 Reel, page web du bien, email acheteurs | Réservé abonnés Pack Mensuel |
 
 ### Scénario de revenus (objectif 5K/mois)

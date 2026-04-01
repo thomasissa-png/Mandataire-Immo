@@ -10,7 +10,7 @@ const STEPS = [
   {
     number: "2",
     title: "On prépare tout. Tu reçois dans 48h.",
-    text: "Ton premier pack arrive dans ton espace client : 12 posts, 4 scripts vidéo, 2 articles SEO, 4 annonces, 1 newsletter. Et ton plan du mois — ce qu'on te recommande de publier, quand, sur quel réseau.",
+    text: "Ton premier pack arrive dans ton espace client : 12 posts, 4 scripts vidéo, 4 articles SEO, 4 annonces, 1 newsletter. Et ton plan du mois — ce qu'on te recommande de publier, quand, sur quel réseau.",
     detail: "Livraison sous 48h, chaque mois",
   },
   {

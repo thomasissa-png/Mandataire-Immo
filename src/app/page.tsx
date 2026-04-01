@@ -16,14 +16,14 @@ import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice } from "@/lib/pri
 export const metadata: Metadata = {
   title: `ImmoCrew — Marketing pour mandataires immobiliers | ${formatPrice(PACK_MENSUEL)}`,
   description:
-    `Externalise ton marketing immobilier. Chaque mois : 12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo — 100% personnalisés pour ta zone. À partir de ${formatPrice(PACK_MENSUEL)}.`,
+    `Externalise ton marketing immobilier. Chaque mois : 12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo — 100% personnalisés pour ta zone. À partir de ${formatPrice(PACK_MENSUEL)}.`,
   alternates: {
     canonical: "https://immocrew.fr",
   },
   openGraph: {
     title: `ImmoCrew — Marketing pour mandataires immobiliers | ${formatPrice(PACK_MENSUEL)}`,
     description:
-      "12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo par mois. 100% personnalisés pour ta zone. Tu publies, on fait le reste.",
+      "12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo par mois. 100% personnalisés pour ta zone. Tu publies, on fait le reste.",
     url: "https://immocrew.fr",
   },
 }
@@ -33,7 +33,7 @@ const serviceJsonLd = {
   "@type": "Service",
   name: "Pack Mensuel ImmoCrew",
   description:
-    "Service de marketing externalisé pour mandataires immobiliers indépendants. Chaque mois : 12 posts personnalisés, 2 articles SEO local, 4 annonces storytelling, 4 scripts vidéo, 1 newsletter, 1 email prospection.",
+    "Service de marketing externalisé pour mandataires immobiliers indépendants. Chaque mois : 12 posts personnalisés, 4 articles SEO local, 4 annonces storytelling, 4 scripts vidéo, 1 newsletter, 1 email prospection.",
   provider: {
     "@type": "Organization",
     name: "ImmoCrew",
@@ -48,7 +48,7 @@ const serviceJsonLd = {
         "@type": "Offer",
         name: PACK_MENSUEL.name,
         description:
-          "12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo, 1 newsletter, 1 email prospection — par mois",
+          "12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo, 1 newsletter, 1 email prospection — par mois",
         price: String(PACK_MENSUEL.price),
         priceCurrency: "EUR",
       },

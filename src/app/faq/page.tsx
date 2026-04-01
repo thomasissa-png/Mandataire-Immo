@@ -25,7 +25,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Qu'est-ce qu'ImmoCrew ?",
     answer:
-      "ImmoCrew est un service de marketing clé en main destiné aux mandataires immobiliers indépendants en France. Chaque mois, le mandataire reçoit ses contenus marketing complets (12 posts réseaux sociaux, 2 articles SEO local, 4 annonces personnalisées, 4 scripts vidéo, 1 newsletter, 1 email de prospection), personnalisés pour sa zone géographique et prêts à publier. Il n'y a aucun outil à configurer, aucun template à adapter.",
+      "ImmoCrew est un service de marketing clé en main destiné aux mandataires immobiliers indépendants en France. Chaque mois, le mandataire reçoit ses contenus marketing complets (12 posts réseaux sociaux, 4 articles SEO local, 4 annonces personnalisées, 4 scripts vidéo, 1 newsletter, 1 email de prospection), personnalisés pour sa zone géographique et prêts à publier. Il n'y a aucun outil à configurer, aucun template à adapter.",
   },
   {
     question: "Comment fonctionne ImmoCrew ?",
@@ -35,7 +35,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Combien coûte ImmoCrew ?",
     answer:
-      `ImmoCrew propose trois formules. Le ${PACK_MENSUEL.name} à ${formatPriceTTC(PACK_MENSUEL)} par mois (sans engagement) inclut le contenu mensuel complet : 12 posts, 4 scripts vidéo, 2 articles SEO, 4 annonces, 1 newsletter, 1 email de prospection. Le ${PACK_LANCEMENT.name} à ${formatPriceTTC(PACK_LANCEMENT)} (one-shot) fournit un kit de démarrage complet avec 20 posts, 5 articles SEO, 10 scripts Reels et un calendrier éditorial sur 30 jours. Le ${PACK_BOOST.name} à ${formatPriceTTC(PACK_BOOST)} par bien met un bien spécifique en avant avec une annonce storytelling, 3 posts dédiés, 1 Reel, 1 mini landing page et 1 email blast.`,
+      `ImmoCrew propose trois formules. Le ${PACK_MENSUEL.name} à ${formatPriceTTC(PACK_MENSUEL)} par mois (sans engagement) inclut le contenu mensuel complet : 12 posts, 4 scripts vidéo, 4 articles SEO, 4 annonces, 1 newsletter, 1 email de prospection. Le ${PACK_LANCEMENT.name} à ${formatPriceTTC(PACK_LANCEMENT)} (one-shot) fournit un kit de démarrage complet avec 20 posts, 5 articles SEO, 10 scripts Reels et un calendrier éditorial sur 30 jours. Le ${PACK_BOOST.name} à ${formatPriceTTC(PACK_BOOST)} par bien met un bien spécifique en avant avec une annonce storytelling, 3 posts dédiés, 1 Reel, 1 mini landing page et 1 email blast.`,
   },
   {
     question: "Qui utilise ImmoCrew ?",
@@ -100,7 +100,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "ImmoCrew inclut-il des articles pour le référencement local (SEO) ?",
     answer:
-      "Oui. Chaque Pack Mensuel inclut 2 articles SEO local par mois. Ces articles ciblent des requêtes comme « mandataire immobilier [ville] », « vendre appartement [quartier] » ou « estimation bien immobilier [zone] ». Ils sont structurés pour améliorer la visibilité organique du mandataire dans les résultats Google locaux.",
+      "Oui. Chaque Pack Mensuel inclut 4 articles SEO local par mois. Ces articles ciblent des requêtes comme « mandataire immobilier [ville] », « vendre appartement [quartier] » ou « estimation bien immobilier [zone] ». Ils sont structurés pour améliorer la visibilité organique du mandataire dans les résultats Google locaux.",
   },
   {
     question: "Le contenu généré par IA sera-t-il détecté par Google ou mes clients ?",

@@ -2,7 +2,7 @@ const PILLARS = [
   {
     label: "C'est fait",
     title: "Tu reçois, tu publies. C'est tout.",
-    text: "On ne te donne pas un outil de plus à apprendre. On ne te file pas des templates à personnaliser. Chaque mois, tu reçois tes 12 posts, tes 4 scripts vidéo, tes 2 articles SEO, tes 4 annonces et ton email de prospection. Tout est rédigé, tout est formaté. Tu copies, tu colles, tu retournes faire ton métier.",
+    text: "On ne te donne pas un outil de plus à apprendre. On ne te file pas des templates à personnaliser. Chaque mois, tu reçois tes 12 posts, tes 4 scripts vidéo, tes 4 articles SEO, tes 4 annonces et ton email de prospection. Tout est rédigé, tout est formaté. Tu copies, tu colles, tu retournes faire ton métier.",
     verbatim:
       "Je reçois, je publie, c'est tout. Je n'ai même pas ouvert Canva depuis 2 mois.",
     icon: (

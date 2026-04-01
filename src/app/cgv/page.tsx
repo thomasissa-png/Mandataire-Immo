@@ -109,7 +109,7 @@ export default function CGVPage() {
                   items={[
                     "12 posts réseaux sociaux par mois",
                     "4 scripts vidéo",
-                    "2 articles SEO local",
+                    "4 articles SEO local",
                     "1 newsletter",
                     "4 annonces immobilières personnalisées",
                     "1 email de prospection",

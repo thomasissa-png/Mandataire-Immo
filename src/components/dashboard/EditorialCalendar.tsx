@@ -70,8 +70,19 @@ const TYPE_PRIORITY: string[] = [
 const PREFERRED_WEEKDAYS: Record<string, number[]> = {
   post: [2, 4, 6],         // Mardi, Jeudi, Samedi (LinkedIn mardi/jeudi, Instagram samedi)
   script_video: [6, 5],    // Samedi (Reels), Vendredi
-  article_seo: [3, 2],     // Mercredi, Mardi
+  article_seo: [1, 3],     // Lundi, Mercredi (1/semaine, pas le même jour que les posts)
   newsletter: [4, 3],      // Jeudi, Mercredi
+}
+
+/**
+ * Caps hebdomadaires par type de contenu.
+ * Empêche de concentrer 5 posts sur 5 jours consécutifs.
+ */
+const WEEKLY_CAPS: Record<string, number> = {
+  post: 3,            // Max 3 posts/semaine
+  script_video: 1,    // Max 1 vidéo/semaine
+  article_seo: 1,     // Max 1 article/semaine
+  newsletter: 1,      // Max 1/mois mais cap à 1/semaine par sécurité
 }
 
 /**
@@ -122,6 +133,24 @@ function distributeDeliverables(
     daysByWeekday[wd].push(day)
   }
 
+  // Compteur de contenus par semaine et par type (pour les caps)
+  // Semaine = numéro ISO (lundi à dimanche)
+  const weekTypeCount: Record<string, number> = {} // "week-type" → count
+  function getWeekKey(day: number, type: string): string {
+    const weekNum = Math.ceil((day - startDay + 1) / 7)
+    return `${weekNum}-${type}`
+  }
+  function canPlaceInWeek(day: number, type: string): boolean {
+    const cap = WEEKLY_CAPS[type]
+    if (!cap) return true
+    const key = getWeekKey(day, type)
+    return (weekTypeCount[key] || 0) < cap
+  }
+  function markPlaced(day: number, type: string) {
+    const key = getWeekKey(day, type)
+    weekTypeCount[key] = (weekTypeCount[key] || 0) + 1
+  }
+
   // Grouper par type et trier par priorité
   const byType: Record<string, Deliverable[]> = {}
   for (const d of deliverables) {
@@ -135,22 +164,27 @@ function distributeDeliverables(
     byType[type].sort((a, b) => stableHash(a.id + monthSeed) - stableHash(b.id + monthSeed))
   }
 
-  // Trouver le meilleur jour libre pour un contenu, avec seed déterministe
+  // Trouver le meilleur jour libre pour un contenu, avec seed déterministe + cap hebdo
   function findBestDay(type: string, deliverableId: string): number | null {
     const preferred = PREFERRED_WEEKDAYS[type] || [2, 4]
     const hash = stableHash(deliverableId + monthSeed)
 
-    // D'abord : jours préférés non utilisés, choix stable via hash
+    // D'abord : jours préférés non utilisés + cap hebdo respecté
     for (const prefWeekday of preferred) {
-      const candidates = (daysByWeekday[prefWeekday] || []).filter((d) => !usedDays.has(d))
+      const candidates = (daysByWeekday[prefWeekday] || []).filter((d) => !usedDays.has(d) && canPlaceInWeek(d, type))
       if (candidates.length > 0) {
         return candidates[hash % candidates.length]
       }
     }
-    // Fallback : n'importe quel jour libre, choix stable via hash
-    const remaining = availableDays.filter((d) => !usedDays.has(d))
+    // Fallback : n'importe quel jour libre respectant le cap hebdo
+    const remaining = availableDays.filter((d) => !usedDays.has(d) && canPlaceInWeek(d, type))
     if (remaining.length > 0) {
       return remaining[hash % remaining.length]
+    }
+    // Dernier recours : ignorer le cap (tous les jours de la semaine sont pleins)
+    const anyRemaining = availableDays.filter((d) => !usedDays.has(d))
+    if (anyRemaining.length > 0) {
+      return anyRemaining[hash % anyRemaining.length]
     }
     return null
   }
@@ -164,6 +198,7 @@ function distributeDeliverables(
       const day = findBestDay(type, item.id)
       if (day === null) break // Plus de jours disponibles
       usedDays.add(day)
+      markPlaced(day, type)
       map.set(day, [item]) // 1 seul contenu par jour
     }
   }
@@ -175,6 +210,7 @@ function distributeDeliverables(
       const day = findBestDay(type, item.id)
       if (day === null) break
       usedDays.add(day)
+      markPlaced(day, type)
       map.set(day, [item])
     }
   }

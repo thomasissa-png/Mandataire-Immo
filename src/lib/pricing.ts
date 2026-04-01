@@ -80,7 +80,7 @@ export const PACK_MENSUEL: Pack = {
   price: 150,
   stripeCents: 15_000,
   unit: "/mois",
-  subtitle: "12 posts, 4 scripts, 2 articles, 4 annonces — prêts à publier le 1er du mois.",
+  subtitle: "12 posts, 4 scripts, 4 articles, 4 annonces — prêts à publier le 1er du mois.",
   mention: "Sans engagement. Résiliation libre en 1 clic.",
   cta: "Commencer ce mois-ci",
   ctaHref: "/api/checkout?pack=mensuel",
@@ -90,7 +90,7 @@ export const PACK_MENSUEL: Pack = {
   features: [
     "12 posts personnalisés pour tes réseaux",
     "4 scripts vidéo pour tes Reels",
-    "2 articles SEO local",
+    "4 articles SEO local",
     "1 newsletter pour tes contacts",
     "4 annonces qui donnent envie de visiter",
     "1 email de prospection vendeurs",

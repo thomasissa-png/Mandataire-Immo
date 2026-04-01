@@ -116,7 +116,7 @@ describe("Pricing", () => {
       screen.getByText("4 scripts vidéo pour tes Reels")
     ).toBeInTheDocument()
     expect(
-      screen.getByText("2 articles SEO local")
+      screen.getByText("4 articles SEO local")
     ).toBeInTheDocument()
     expect(
       screen.getByText("4 annonces qui donnent envie de visiter")

@@ -8,14 +8,14 @@ import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice } from "@/lib/pri
 export const metadata: Metadata = {
   title: "Qu'est-ce qu'ImmoCrew ? Service marketing pour mandataires immobiliers",
   description:
-    `ImmoCrew est un service de marketing clé en main pour mandataires immobiliers indépendants. Chaque mois : 12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo. ${formatPrice(PACK_MENSUEL)}, sans engagement.`,
+    `ImmoCrew est un service de marketing clé en main pour mandataires immobiliers indépendants. Chaque mois : 12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo. ${formatPrice(PACK_MENSUEL)}, sans engagement.`,
   alternates: {
     canonical: "https://immocrew.fr/a-propos",
   },
   openGraph: {
     title: "Qu'est-ce qu'ImmoCrew ? Service marketing pour mandataires immobiliers",
     description:
-      `Service de marketing clé en main pour mandataires immobiliers indépendants. 12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo par mois. ${formatPrice(PACK_MENSUEL)}.`,
+      `Service de marketing clé en main pour mandataires immobiliers indépendants. 12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo par mois. ${formatPrice(PACK_MENSUEL)}.`,
     url: "https://immocrew.fr/a-propos",
   },
 }
@@ -27,7 +27,7 @@ const organizationJsonLd = {
   url: "https://immocrew.fr",
   logo: "https://immocrew.fr/logo.png",
   description:
-    "Service de marketing clé en main pour mandataires immobiliers indépendants en France. Chaque mois : 12 posts, 2 articles SEO, 4 annonces, 4 scripts vidéo, livrés prêts à publier.",
+    "Service de marketing clé en main pour mandataires immobiliers indépendants en France. Chaque mois : 12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo, livrés prêts à publier.",
   foundingDate: "2026",
   areaServed: "FR",
   knowsAbout: [
@@ -114,7 +114,7 @@ const PACKS = [
     items: [
       "12 posts personnalisés pour tes réseaux",
       "4 scripts vidéo pour tes Reels",
-      "2 articles SEO local",
+      "4 articles SEO local",
       "4 annonces immobilières storytelling",
       "1 newsletter pour tes contacts",
       "1 email de prospection vendeurs",
@@ -158,7 +158,7 @@ export default function AProposPage() {
                 ImmoCrew est un service de marketing cl&eacute; en main destin&eacute; aux mandataires
                 immobiliers ind&eacute;pendants en France. Chaque mois, ImmoCrew livre &agrave; ses
                 clients un pack de contenus marketing complets et pr&ecirc;ts &agrave; publier :
-                12 posts r&eacute;seaux sociaux, 2 articles SEO local, 4 annonces storytelling,
+                12 posts r&eacute;seaux sociaux, 4 articles SEO local, 4 annonces storytelling,
                 4 scripts vid&eacute;o, 1 newsletter et 1 email de prospection.
               </p>
               <p className="text-body text-foreground leading-relaxed">
@@ -262,7 +262,7 @@ export default function AProposPage() {
                   {[
                     "12 posts réseaux sociaux personnalisés (LinkedIn, Instagram, Facebook)",
                     "4 scripts vidéo pour Reels et Stories",
-                    "2 articles SEO local ciblant ta ville et ton quartier",
+                    "4 articles SEO local ciblant ta ville et ton quartier",
                     "4 annonces immobilières storytelling",
                     "1 newsletter pour ta base de contacts",
                     "1 email de prospection vendeurs",

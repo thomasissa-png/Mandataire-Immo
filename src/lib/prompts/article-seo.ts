@@ -1,6 +1,6 @@
 /**
  * Prompt — Articles SEO local (900-1200 mots)
- * Utilise pour : L4 (5 articles Pack Lancement), M3 (2 articles/mois Pack Mensuel)
+ * Utilise pour : L4 (5 articles Pack Lancement), M3 (4 articles/mois Pack Mensuel — 1/semaine)
  * Output : JSON avec Markdown + frontmatter SEO
  */
 

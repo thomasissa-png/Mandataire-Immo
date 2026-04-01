@@ -24,7 +24,7 @@ interface DeliverableRow {
 /**
  * POST /api/generate/pack-mensuel
  * Genere le pack mensuel complet pour un client :
- * M1: 12 posts, M2: 4 scripts video, M3: 2 articles SEO,
+ * M1: 12 posts, M2: 4 scripts video, M3: 4 articles SEO,
  * M4: 1 newsletter, M5: 4 annonces, M6: 1 email prospection.
  * Admin-only.
  */
@@ -125,10 +125,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // M3 : 2 articles SEO
+    // M3 : 4 articles SEO (1/semaine)
     const articlesPrompt = buildArticleSeoPrompt({
       ...ctx,
-      nombre_articles: 2,
+      nombre_articles: 4,
       mois_cible: moisLabel,
     })
     const articlesResult = await generateJSON<{ articles: Array<{ frontmatter: { title: string; meta_description: string; slug: string }; contenu_markdown: string; liens_internes_suggeres: string[] }> }>(
