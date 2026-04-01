@@ -394,14 +394,16 @@ export function DashboardContent({
                 <p className="text-body-sm font-semibold text-primary mb-1">Nos recommandations de lecture du mois</p>
                 <ul className="space-y-1.5">
                   <li>
-                    <a href="/blog/se-differencier-mandataire-immobilier" className="text-caption text-secondary-700 font-medium hover:underline">
-                      Se différencier comme mandataire immobilier →
+                    <a href="/blog/se-differencier-mandataire-immobilier" target="_blank" rel="noopener noreferrer" className="text-caption text-secondary-700 font-medium hover:underline inline-flex items-center gap-1">
+                      Se différencier comme mandataire immobilier
+                      <svg className="w-3 h-3 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
                     </a>
                     <p className="text-caption text-neutral-400">Les clés pour te démarquer dans ton secteur</p>
                   </li>
                   <li>
-                    <a href="/blog/google-business-profile-mandataire" className="text-caption text-secondary-700 font-medium hover:underline">
-                      Google Business Profile pour mandataire →
+                    <a href="/blog/google-business-profile-mandataire" target="_blank" rel="noopener noreferrer" className="text-caption text-secondary-700 font-medium hover:underline inline-flex items-center gap-1">
+                      Google Business Profile pour mandataire
+                      <svg className="w-3 h-3 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
                     </a>
                     <p className="text-caption text-neutral-400">Optimise ta visibilité locale en 30 minutes</p>
                   </li>
