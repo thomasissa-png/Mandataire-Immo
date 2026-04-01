@@ -12,18 +12,22 @@ const STEPS = [
   },
   {
     title: "Ton réseau",
+    subtitle: "On adapte le vocabulaire et les arguments à ton réseau",
     fields: ["reseau", "experience_annees", "nb_transactions_an"],
   },
   {
     title: "Ta zone",
-    fields: ["ville", "quartiers", "departement"],
+    subtitle: "Tes contenus seront hyper-locaux — quartier, rue, commerce",
+    fields: ["ville", "quartiers"],
   },
   {
     title: "Ta spécialité",
+    subtitle: "On cible les bons acheteurs et vendeurs pour toi",
     fields: ["type_biens", "gamme_prix", "cible_clients"],
   },
   {
     title: "Ton style",
+    subtitle: "Tes posts auront TON ton — pas un ton générique",
     fields: ["ton_communication", "valeurs", "ce_qui_te_differencie"],
   },
   {
@@ -31,7 +35,6 @@ const STEPS = [
     subtitle:
       "Facultatif — mais ça rend tes contenus beaucoup plus personnels",
     fields: [
-      "linkedin_url",
       "bio_personnelle",
     ],
     optional: true,
@@ -43,16 +46,16 @@ const STEPS = [
     optional: true,
   },
   {
-    title: "La vidéo",
-    subtitle: "Facultatif — permet d'adapter les scripts vidéo à ton niveau",
-    fields: ["confort_camera"],
-    optional: true,
-  },
-  {
     title: "Tes réseaux sociaux",
     subtitle: "Optionnel — on peut travailler sans",
     description: "On utilise tes liens pour personnaliser tes posts avec les bons @mentions et liens de redirection. Si tu n'as pas encore de compte, pas de souci — on t'aide à tout mettre en place.",
-    fields: ["instagram", "facebook", "site_web"],
+    fields: ["linkedin_url", "instagram", "facebook", "site_web"],
+    optional: true,
+  },
+  {
+    title: "La vidéo",
+    subtitle: "Facultatif — permet d'adapter les scripts vidéo à ton niveau",
+    fields: ["confort_camera"],
     optional: true,
   },
 ] as const
@@ -730,7 +733,7 @@ export default function OnboardingPage() {
               )}
             </div>
             <span className="text-caption text-neutral-500">
-              Étape {currentStep + 1} sur {STEPS.length}{"optional" in step && step.optional ? " (optionnel)" : ""} · ~8 min
+              Étape {currentStep + 1} sur {STEPS.length}{"optional" in step && step.optional ? " (optionnel)" : ""}{currentStep === 0 ? " · ~5 min" : ""}
             </span>
           </div>
           {/* Step dots — obligatoire = plein, optionnel = outline dashed */}
@@ -798,7 +801,7 @@ export default function OnboardingPage() {
                       className="w-full h-12 px-4 rounded-md border border-secondary-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                     />
                     <p className="text-caption text-secondary-600 mt-1">
-                      Colle le lien de ton annonce LeBonCoin, Bien{"'"}ici ou ton site — on s{"'"}en inspire pour rédiger une version qui claque.
+                      Colle le lien de ton annonce existante — on le garde en référence pour personnaliser tes contenus.
                     </p>
                   </div>
 

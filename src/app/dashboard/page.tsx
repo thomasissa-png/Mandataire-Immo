@@ -116,6 +116,12 @@ export default async function DashboardPage() {
 
   const profileIncomplete = !ctx || !ctx.ville
 
+  // Rediriger vers l'onboarding si client_context est totalement vide
+  // (Google sign-up saute l'onboarding — on le rattrape ici)
+  if (!ctx || Object.keys(ctx).length === 0) {
+    redirect("/onboarding")
+  }
+
   // Sélectionner 2 articles blog recommandés (varier par mois)
   const allBlogArticles = getAllArticles()
   const monthIndex = new Date().getMonth()
