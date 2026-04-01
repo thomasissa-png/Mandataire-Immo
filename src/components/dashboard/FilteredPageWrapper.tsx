@@ -97,7 +97,7 @@ export function FilteredPageWrapper({
     <div className="space-y-4">
       {/* Barre de filtres */}
       <div className="flex flex-col gap-3 tablet:flex-row tablet:items-center tablet:justify-between">
-        {availableMonths.length > 1 && (
+        {availableMonths.length > 0 && (
           <MonthFilter
             selectedMonth={selectedMonth}
             onChange={setSelectedMonth}
