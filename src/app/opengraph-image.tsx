@@ -91,7 +91,7 @@ export default async function Image() {
             fontWeight: 600,
           }}
         >
-          À partir de 150€/mois · Sans engagement
+          À partir de 100€/mois · Sans engagement
         </div>
       </div>
     ),

@@ -256,7 +256,7 @@ export function Pricing() {
         {/* Ancrage comparatif */}
         <div className="mt-10 max-w-2xl mx-auto rounded-xl bg-background border border-border p-6 desktop:p-8">
           <p className="font-display text-h3 text-primary text-center mb-4">
-            {formatPrice(PACK_MENSUEL)}. La décision la plus simple de ta semaine.
+            {formatStartingPrice()}. La décision la plus simple de ta semaine.
           </p>
           <div className="grid grid-cols-1 tablet:grid-cols-3 gap-4 text-center">
             <div className="p-4 rounded-lg bg-error-50">

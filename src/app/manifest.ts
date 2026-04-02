@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "ImmoCrew — L'équipe marketing des mandataires immobiliers",
     short_name: "ImmoCrew",
     description:
-      "Posts, articles SEO, annonces storytelling, scripts vidéo. 100% personnalisés pour ta zone. À partir de 150€/mois.",
+      "Posts, articles SEO, annonces storytelling, scripts vidéo. 100% personnalisés pour ta zone. À partir de 100€/mois.",
     start_url: "/",
     display: "standalone",
     background_color: "#F8F6F2",
