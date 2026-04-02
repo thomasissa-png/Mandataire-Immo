@@ -105,7 +105,7 @@ export const PACK_TRIMESTRIEL: Pack = {
   engagementMonths: 3,
   totalPrice: 360,
   totalStripeCents: 36_000,
-  savings: "20%",
+  savings: "90€ sur 3 mois",
   pricePerMonth: 120,
   features: ABONNEMENT_FEATURES,
 } as const
@@ -125,7 +125,7 @@ export const PACK_ANNUEL: Pack = {
   engagementMonths: 12,
   totalPrice: 1_200,
   totalStripeCents: 120_000,
-  savings: "33%",
+  savings: "600€/an — 4 mois offerts",
   pricePerMonth: 100,
   highlight: "4 mois offerts",
   features: ABONNEMENT_FEATURES,

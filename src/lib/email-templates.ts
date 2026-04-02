@@ -100,7 +100,7 @@ ${text}
 }
 
 // ---------------------------------------------------------------------------
-// J+2 — "Tes premiers contenus sont prêts" (Pack Lancement)
+// J+2 — "Tes premiers contenus sont prêts" (premiers contenus)
 // ---------------------------------------------------------------------------
 
 export function nurturingJ2(params: EmailTemplateParams): EmailTemplate {
@@ -112,7 +112,7 @@ export function nurturingJ2(params: EmailTemplateParams): EmailTemplate {
   const html = wrapInLayout(`
 <p style="margin:0 0 16px;font-size:18px;font-weight:600;">Salut ${prenom},</p>
 
-<p style="margin:0 0 16px;">Ton Pack Lancement est prêt. Voici ce qu'on a préparé pour toi :</p>
+<p style="margin:0 0 16px;">Tes premiers contenus sont prêts. Voici ce qu'on a préparé pour toi :</p>
 
 <ul style="margin:0 0 16px;padding-left:20px;">
 <li style="margin-bottom:8px;">Tes <strong>20 posts</strong> personnalisés pour tes réseaux</li>
@@ -134,7 +134,7 @@ ${ctaButton("Voir mes contenus", dashboardUrl)}
 
   const text = `Salut ${prenom},
 
-Ton Pack Lancement est prêt. Voici ce qu'on a préparé pour toi :
+Tes premiers contenus sont prêts. Voici ce qu'on a préparé pour toi :
 
 - 20 posts personnalisés pour tes réseaux
 - 5 articles SEO sur ta zone
@@ -205,7 +205,7 @@ L'équipe ImmoCrew`
 }
 
 // ---------------------------------------------------------------------------
-// J+14 — "Ton bilan 2 semaines" (Pack Lancement sans mensuel)
+// J+14 — "Ton bilan 2 semaines" (premiers contenus sans mensuel)
 // ---------------------------------------------------------------------------
 
 export function nurturingJ14(params: EmailTemplateParams): EmailTemplate {
@@ -217,7 +217,7 @@ export function nurturingJ14(params: EmailTemplateParams): EmailTemplate {
   const html = wrapInLayout(`
 <p style="margin:0 0 16px;font-size:18px;font-weight:600;">Salut ${prenom},</p>
 
-<p style="margin:0 0 16px;">Ça fait 2 semaines que tu as reçu ton Pack Lancement. Si tu as commencé à publier, tu as dû voir les premiers retours : des likes, des commentaires, peut-être un contact entrant.</p>
+<p style="margin:0 0 16px;">Ça fait 2 semaines que tu as reçu tes premiers contenus. Si tu as commencé à publier, tu as dû voir les premiers retours : des likes, des commentaires, peut-être un contact entrant.</p>
 
 <p style="margin:0 0 8px;font-weight:600;">Ce qu'on t'a livré :</p>
 <ul style="margin:0 0 16px;padding-left:20px;">
@@ -243,7 +243,7 @@ ${ctaButton("Voir le Pack Mensuel", pricingUrl)}
 
   const text = `Salut ${prenom},
 
-Ça fait 2 semaines que tu as reçu ton Pack Lancement. Si tu as commencé à publier, tu as dû voir les premiers retours.
+Ça fait 2 semaines que tu as reçu tes premiers contenus. Si tu as commencé à publier, tu as dû voir les premiers retours.
 
 Ce qu'on t'a livré :
 - 20 posts prêts à publier
