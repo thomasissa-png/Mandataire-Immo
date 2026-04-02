@@ -86,9 +86,15 @@ export default async function AdminPage() {
           </div>
           <div className="rounded-xl bg-card border border-border p-4 text-center">
             <p className="font-display text-display-lg text-primary">
-              {clientList.filter((c) => c.pack === "lancement").length}
+              {clientList.filter((c) => c.pack === "trimestriel").length}
             </p>
-            <p className="text-caption text-neutral-500">Lancements</p>
+            <p className="text-caption text-neutral-500">Trimestriels</p>
+          </div>
+          <div className="rounded-xl bg-card border border-border p-4 text-center">
+            <p className="font-display text-display-lg text-primary">
+              {clientList.filter((c) => c.pack === "annuel").length}
+            </p>
+            <p className="text-caption text-neutral-500">Annuels</p>
           </div>
         </div>
 

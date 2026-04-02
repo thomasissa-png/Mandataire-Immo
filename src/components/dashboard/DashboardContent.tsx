@@ -4,7 +4,6 @@ import { useState, useMemo } from "react"
 import { MesBiensSection } from "./MesBiensSection"
 import { ReferralSection } from "./ReferralSection"
 import { SupportSection } from "./SupportSection"
-import { PACK_MENSUEL, formatPrice } from "@/lib/pricing"
 import type { Deliverable } from "@/types/deliverable"
 
 interface DashboardContentProps {
@@ -448,18 +447,7 @@ export function DashboardContent({
       {/* ============================================================ */}
       <MesBiensSection annonces={counts.annonces} />
 
-      {/* CTA Passer au mensuel — APRÈS le plan, pas avant */}
-      {pack === "lancement" ? (
-        <div className="rounded-lg bg-gradient-to-r from-primary to-primary-700 p-4 flex flex-col tablet:flex-row items-start tablet:items-center justify-between gap-4 text-white">
-          <div>
-            <p className="font-display text-h4 text-white">Continue sur ta lancée — passe au mensuel</p>
-            <p className="text-body-sm text-primary-200 mt-1">12 posts, 4 articles, 4 scripts, 4 annonces — livrés chaque mois. {formatPrice(PACK_MENSUEL)}, sans engagement.</p>
-          </div>
-          <a href={PACK_MENSUEL.ctaHref} className="flex-shrink-0 px-6 py-2.5 rounded-full bg-secondary text-white font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm">
-            Commencer le mensuel →
-          </a>
-        </div>
-      ) : null}
+      {/* CTA Support — APRÈS le plan, pas avant */}
 
       {/* SUPPORT / FEEDBACK */}
       <SupportSection />

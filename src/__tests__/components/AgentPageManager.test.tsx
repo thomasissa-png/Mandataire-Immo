@@ -52,7 +52,7 @@ describe("ActivatePageButton", () => {
   })
 
   it("affiche le bouton d'activation si pack est renseigné", () => {
-    render(<ActivatePageButton pack="lancement" />)
+    render(<ActivatePageButton pack="mensuel" />)
     expect(screen.getByText("Activer ma page →")).toBeInTheDocument()
     expect(screen.queryByText(/Choisis un pack/)).not.toBeInTheDocument()
   })
@@ -60,7 +60,7 @@ describe("ActivatePageButton", () => {
   it("affiche l'état loading pendant l'activation", async () => {
     mockFetch.mockImplementation(() => new Promise(() => {})) // never resolves
 
-    render(<ActivatePageButton pack="lancement" />)
+    render(<ActivatePageButton pack="mensuel" />)
     fireEvent.click(screen.getByText("Activer ma page →"))
 
     await waitFor(() => {
@@ -88,7 +88,7 @@ describe("ActivatePageButton", () => {
       json: () => Promise.resolve({ error: "Prénom et nom requis dans ton profil pour activer ta page." }),
     })
 
-    render(<ActivatePageButton pack="lancement" />)
+    render(<ActivatePageButton pack="mensuel" />)
     fireEvent.click(screen.getByText("Activer ma page →"))
 
     await waitFor(() => {
@@ -99,7 +99,7 @@ describe("ActivatePageButton", () => {
   it("affiche une erreur réseau si fetch échoue", async () => {
     mockFetch.mockRejectedValueOnce(new Error("Network error"))
 
-    render(<ActivatePageButton pack="lancement" />)
+    render(<ActivatePageButton pack="mensuel" />)
     fireEvent.click(screen.getByText("Activer ma page →"))
 
     await waitFor(() => {
@@ -110,7 +110,7 @@ describe("ActivatePageButton", () => {
   it("le bouton est désactivé pendant le loading", async () => {
     mockFetch.mockImplementation(() => new Promise(() => {}))
 
-    render(<ActivatePageButton pack="lancement" />)
+    render(<ActivatePageButton pack="mensuel" />)
     const button = screen.getByText("Activer ma page →")
     fireEvent.click(button)
 

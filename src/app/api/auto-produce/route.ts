@@ -33,7 +33,7 @@ export async function POST() {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 
     // Déclencher la production via fetch interne (non-bloquant)
-    // Le mois 1 de tout abonnement inclut le setup (pack-lancement),
+    // Le mois 1 de tout abonnement inclut le setup (via /api/generate/pack-lancement),
     // les mois suivants utilisent le pack-mensuel standard.
     const routeMap: Record<string, string> = {
       mensuel: "/api/generate/pack-mensuel",

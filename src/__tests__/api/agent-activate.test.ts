@@ -64,7 +64,7 @@ describe("POST /api/agent/activate", () => {
   it("retourne 401 si pas authentifié", async () => {
     mockGetSessionUser.mockResolvedValueOnce(null)
 
-    const response = await POST(makePostRequest({ pack: "lancement" }))
+    const response = await POST(makePostRequest({ pack: "mensuel" }))
     expect(response.status).toBe(401)
 
     const data = await response.json()
@@ -102,7 +102,7 @@ describe("POST /api/agent/activate", () => {
     // SELECT clients retourne vide
     mockQuery.mockResolvedValueOnce({ rows: [] })
 
-    const response = await POST(makePostRequest({ pack: "lancement" }))
+    const response = await POST(makePostRequest({ pack: "mensuel" }))
     expect(response.status).toBe(404)
 
     const data = await response.json()
@@ -117,7 +117,7 @@ describe("POST /api/agent/activate", () => {
     // SELECT agent_pages existantes
     mockQuery.mockResolvedValueOnce({ rows: [] })
 
-    const response = await POST(makePostRequest({ pack: "lancement" }))
+    const response = await POST(makePostRequest({ pack: "mensuel" }))
     expect(response.status).toBe(400)
 
     const data = await response.json()
@@ -141,7 +141,7 @@ describe("POST /api/agent/activate", () => {
     // INSERT RETURNING slug
     mockQuery.mockResolvedValueOnce({ rows: [{ slug: "sophie-martin" }] })
 
-    const response = await POST(makePostRequest({ pack: "lancement" }))
+    const response = await POST(makePostRequest({ pack: "mensuel" }))
     expect(response.status).toBe(201)
 
     const data = await response.json()
@@ -183,7 +183,7 @@ describe("POST /api/agent/activate", () => {
     mockQuery.mockResolvedValueOnce({ rows: [{ slug: "sophie-martin" }] })
     mockQuery.mockResolvedValueOnce({ rows: [{ slug: "sophie-martin-2" }] })
 
-    const response = await POST(makePostRequest({ pack: "lancement" }))
+    const response = await POST(makePostRequest({ pack: "mensuel" }))
     expect(response.status).toBe(201)
 
     const data = await response.json()
@@ -206,7 +206,7 @@ describe("POST /api/agent/activate", () => {
     })
     mockQuery.mockResolvedValueOnce({ rows: [{ slug: "sophie-martin-3" }] })
 
-    const response = await POST(makePostRequest({ pack: "lancement" }))
+    const response = await POST(makePostRequest({ pack: "mensuel" }))
     expect(response.status).toBe(201)
 
     const data = await response.json()
@@ -227,7 +227,7 @@ describe("POST /api/agent/activate", () => {
       rows: [{ slug: "sophie-martin", status: "active" }],
     })
 
-    const response = await POST(makePostRequest({ pack: "lancement" }))
+    const response = await POST(makePostRequest({ pack: "mensuel" }))
     expect(response.status).toBe(200)
 
     const data = await response.json()
@@ -270,7 +270,7 @@ describe("POST /api/agent/activate", () => {
     mockQuery.mockResolvedValueOnce({ rows: [] })
     mockQuery.mockResolvedValueOnce({ rows: [{ slug: "jean-valjean" }] })
 
-    const response = await POST(makePostRequest({ pack: "lancement" }))
+    const response = await POST(makePostRequest({ pack: "mensuel" }))
     expect(response.status).toBe(201)
 
     const data = await response.json()

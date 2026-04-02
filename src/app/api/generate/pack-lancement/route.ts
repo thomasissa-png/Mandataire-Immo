@@ -21,7 +21,7 @@ interface DeliverableRow {
 }
 
 /**
- * POST /api/generate/pack-lancement
+ * POST /api/generate/pack-lancement (legacy URL — génère le setup mois 1)
  * Génère le setup mois 1 complet pour un nouveau client :
  * L1: positionnement, L2: bio multiformat, L3: 5 annonces,
  * L4: 5 articles SEO, L6: 20 posts, L7: 10 scripts, design brief.
@@ -281,7 +281,7 @@ export async function POST(request: NextRequest) {
     deliverableIds.push(designBriefId)
 
   } catch (err) {
-    console.error(`Error generating pack lancement at step ${currentStep}:`, err)
+    console.error(`Error generating setup mois 1 at step ${currentStep}:`, err)
     return NextResponse.json(
       {
         error: `Erreur lors de la generation (etape: ${currentStep})`,
@@ -295,7 +295,7 @@ export async function POST(request: NextRequest) {
 
   await trackServer("production_completed", "admin", {
     client_id,
-    pack_type: "lancement",
+    pack_type: "setup",
     deliverables_count: deliverableIds.length,
   })
 
