@@ -5,11 +5,11 @@ import { useSession } from "next-auth/react"
 import { AuthModal } from "@/components/AuthModal"
 
 const NAV_LINKS = [
-  { label: "Comment ça marche", href: "#comment-ca-marche" },
-  { label: "Avant / Après", href: "#avant-apres" },
-  { label: "Tarifs", href: "#pricing" },
+  { label: "Comment ça marche", href: "/#comment-ca-marche" },
+  { label: "Avant / Après", href: "/#avant-apres" },
+  { label: "Tarifs", href: "/#pricing" },
   { label: "Blog", href: "/blog" },
-  { label: "FAQ", href: "#faq" },
+  { label: "FAQ", href: "/#faq" },
 ] as const
 
 function HeaderInner() {
