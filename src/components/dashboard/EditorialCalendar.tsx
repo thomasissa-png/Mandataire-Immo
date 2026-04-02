@@ -427,7 +427,7 @@ export function EditorialCalendar({
       {monthDeliverables.length === 0 && (() => {
         // Trouver le dernier mois qui a du contenu
         const lastMonthWithContent = deliverables.length > 0
-          ? [...new Set(deliverables.map((d) => getDeliverableYearMonth(d)))].sort().pop()
+          ? Array.from(new Set(deliverables.map((d) => getDeliverableYearMonth(d)))).sort().pop()
           : null
         const canGoBack = lastMonthWithContent && lastMonthWithContent !== monthKey
 
