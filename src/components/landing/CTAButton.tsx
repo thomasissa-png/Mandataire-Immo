@@ -10,6 +10,21 @@ interface CTAButtonProps {
   className?: string
 }
 
+/**
+ * Sépare le texte et la flèche → du label.
+ * La flèche reste collée au dernier mot via whitespace-nowrap
+ * pour éviter qu'elle se retrouve seule sur une nouvelle ligne.
+ */
+function splitArrow(label: string): { text: string; arrow: string | null } {
+  if (label.endsWith(" →")) {
+    return { text: label.slice(0, -2), arrow: "→" }
+  }
+  if (label.endsWith("→")) {
+    return { text: label.slice(0, -1), arrow: "→" }
+  }
+  return { text: label, arrow: null }
+}
+
 export function CTAButton({
   href,
   label,
@@ -29,6 +44,8 @@ export function CTAButton({
       "bg-transparent text-primary border-2 border-primary hover:bg-primary-50 shadow-none",
   }
 
+  const { text, arrow } = splitArrow(label)
+
   return (
     <a
       href={href}
@@ -41,7 +58,10 @@ export function CTAButton({
         })
       }}
     >
-      {label}
+      <span className="text-center">
+        {text}
+        {arrow && <span className="whitespace-nowrap">&thinsp;{arrow}</span>}
+      </span>
     </a>
   )
 }
