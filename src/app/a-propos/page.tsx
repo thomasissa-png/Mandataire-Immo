@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
 import { JsonLd } from "@/components/JsonLd"
-import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice } from "@/lib/pricing"
+import { PACK_MENSUEL, PACK_TRIMESTRIEL, PACK_ANNUEL, PACK_BOOST, formatPrice, formatStartingPrice } from "@/lib/pricing"
 
 export const metadata: Metadata = {
   title: "Qu'est-ce qu'ImmoCrew ? Service marketing pour mandataires immobiliers",
@@ -89,29 +89,12 @@ const STEPS = [
 
 const PACKS = [
   {
-    name: PACK_LANCEMENT.name,
-    price: formatPrice(PACK_LANCEMENT),
-    type: "One-shot",
-    description: "Le kit de démarrage complet pour lancer ta présence en ligne.",
-    items: [
-      "Positionnement et mise en avant de ton expertise",
-      "Bio optimisée pour tous tes profils",
-      "20 posts prêts à publier",
-      "10 scripts Reels",
-      "5 articles SEO local",
-      "5 templates d'annonces storytelling",
-      "Calendrier éditorial sur 30 jours",
-      "Brief d'identité visuelle personnalisé",
-    ],
-  },
-  {
     name: PACK_MENSUEL.name,
     price: formatPrice(PACK_MENSUEL),
-    type: "Abonnement sans engagement",
-    description:
-      "Tout ton marketing mensuel, livré prêt à publier le 1er du mois.",
-    featured: true,
+    type: "Sans engagement",
+    description: "Tout ton marketing mensuel, livré prêt à publier. Setup mois 1 inclus.",
     items: [
+      "Setup mois 1 : positionnement, bio, charte visuelle",
       "12 posts personnalisés pour tes réseaux",
       "4 scripts vidéo pour tes Reels",
       "4 articles SEO local",
@@ -122,9 +105,36 @@ const PACKS = [
     ],
   },
   {
+    name: PACK_TRIMESTRIEL.name,
+    price: `${PACK_TRIMESTRIEL.price}€/mois`,
+    type: "Engagement 3 mois — -20%",
+    description:
+      `Même contenu, facturé ${PACK_TRIMESTRIEL.totalPrice}€ tous les 3 mois. Le choix recommandé.`,
+    featured: true,
+    items: [
+      "Contenu identique à la formule Mensuel",
+      "Setup mois 1 inclus",
+      "120€/mois au lieu de 150€",
+      "Résiliation à chaque échéance",
+    ],
+  },
+  {
+    name: PACK_ANNUEL.name,
+    price: `${PACK_ANNUEL.price}€/mois`,
+    type: "Engagement 12 mois — -33%",
+    description:
+      `Le meilleur tarif : ${PACK_ANNUEL.totalPrice}€/an, soit 4 mois offerts.`,
+    items: [
+      "Contenu identique à la formule Mensuel",
+      "Setup mois 1 inclus",
+      "100€/mois au lieu de 150€",
+      "4 mois offerts par rapport au mensuel",
+    ],
+  },
+  {
     name: PACK_BOOST.name,
     price: formatPrice(PACK_BOOST),
-    type: "Ponctuel",
+    type: "Ponctuel — réservé aux abonnés",
     description:
       "Un pack dédié pour mettre en avant un bien spécifique.",
     items: [

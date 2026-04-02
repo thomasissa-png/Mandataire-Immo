@@ -1,4 +1,4 @@
-import { PACK_MENSUEL, formatPrice } from "@/lib/pricing"
+import { PACK_MENSUEL, formatPrice, formatStartingPrice } from "@/lib/pricing"
 import { CTAButton } from "./CTAButton"
 
 export function CTAFinal() {
@@ -9,7 +9,7 @@ export function CTAFinal() {
           Tu n&apos;as pas choisi l&apos;immobilier pour faire du marketing.
         </h2>
         <p className="text-body-lg text-primary-200 mb-8 max-w-lg mx-auto">
-          On s&apos;en occupe. {formatPrice(PACK_MENSUEL)}, sans engagement.
+          On s&apos;en occupe. {formatStartingPrice()}, sans engagement.
         </p>
 
         <div className="flex flex-col items-center gap-4">

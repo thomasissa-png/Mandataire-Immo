@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
-import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice } from "@/lib/pricing"
+import { PACK_MENSUEL, PACK_TRIMESTRIEL, PACK_ANNUEL, PACK_BOOST, formatPrice } from "@/lib/pricing"
 
 export const metadata: Metadata = {
   title: "Conditions Générales de Vente — ImmoCrew",
@@ -81,45 +81,53 @@ export default function CGVPage() {
             {/* Article 4 */}
             <Section title="Article 4 — Description des offres et tarifs">
               <p className="mb-4">
-                ImmoCrew propose trois offres, dont les prix sont indiqués toutes taxes comprises (TTC),
-                TVA de 20 % incluse :
+                ImmoCrew propose trois formules d&apos;abonnement et une prestation ponctuelle,
+                dont les prix sont indiqués toutes taxes comprises (TTC), TVA de 20 % incluse :
               </p>
 
               <div className="space-y-6">
-                <OfferCard
-                  name={PACK_LANCEMENT.name}
-                  price={`${PACK_LANCEMENT.price} € TTC`}
-                  type="Paiement unique"
-                  items={[
-                    "Positionnement et stratégie de personal branding",
-                    "Bio optimisée pour les réseaux sociaux",
-                    "5 templates d'annonces immobilières personnalisées",
-                    "5 articles SEO local",
-                    "Calendrier éditorial sur 30 jours",
-                    "20 posts réseaux sociaux",
-                    "10 scripts Reels / vidéos courtes",
-                    "Brief d'identité visuelle personnalisé (positionnement, palette couleurs, style recommandé)",
-                  ]}
-                />
-
                 <OfferCard
                   name={PACK_MENSUEL.name}
                   price={`${PACK_MENSUEL.price} € TTC / mois`}
                   type="Abonnement mensuel sans engagement"
                   items={[
+                    "Setup mois 1 inclus : positionnement, bio, charte visuelle",
                     "12 posts réseaux sociaux par mois",
                     "4 scripts vidéo",
                     "4 articles SEO local",
                     "1 newsletter",
                     "4 annonces immobilières personnalisées",
                     "1 email de prospection",
+                    "Calendrier de publication mensuel",
+                  ]}
+                />
+
+                <OfferCard
+                  name={PACK_TRIMESTRIEL.name}
+                  price={`${PACK_TRIMESTRIEL.totalPrice} € TTC / 3 mois (${PACK_TRIMESTRIEL.price} €/mois)`}
+                  type="Abonnement trimestriel — engagement 3 mois, résiliation à chaque échéance"
+                  items={[
+                    "Contenu identique à la formule Mensuel",
+                    "Setup mois 1 inclus",
+                    "Économie de 20 % par rapport au mensuel",
+                  ]}
+                />
+
+                <OfferCard
+                  name={PACK_ANNUEL.name}
+                  price={`${PACK_ANNUEL.totalPrice} € TTC / an (${PACK_ANNUEL.price} €/mois)`}
+                  type="Abonnement annuel — engagement 12 mois, 4 mois offerts"
+                  items={[
+                    "Contenu identique à la formule Mensuel",
+                    "Setup mois 1 inclus",
+                    "Économie de 33 % par rapport au mensuel",
                   ]}
                 />
 
                 <OfferCard
                   name={PACK_BOOST.name}
                   price={`${PACK_BOOST.price} € TTC`}
-                  type="Paiement unique, par mandat"
+                  type="Paiement unique, par mandat — réservé aux abonnés"
                   items={[
                     "Annonce storytelling dédiée au bien",
                     "3 posts réseaux sociaux + 1 script Reel",
@@ -144,10 +152,16 @@ export default function CGVPage() {
               </p>
               <ul className="list-disc pl-6 mt-3 space-y-1">
                 <li>
-                  <strong>Pack Lancement et Boost Mandat :</strong> paiement intégral à la commande.
+                  <strong>Formule Mensuel :</strong> prélèvement automatique mensuel le jour anniversaire de la souscription.
                 </li>
                 <li>
-                  <strong>Pack Mensuel :</strong> prélèvement automatique le jour anniversaire de la souscription.
+                  <strong>Formule Trimestriel :</strong> prélèvement automatique de 360 € TTC tous les 3 mois.
+                </li>
+                <li>
+                  <strong>Formule Annuel :</strong> prélèvement automatique de 1 200 € TTC tous les 12 mois.
+                </li>
+                <li>
+                  <strong>Boost Mandat :</strong> paiement intégral à la commande.
                 </li>
               </ul>
               <p className="mt-3">
@@ -162,11 +176,11 @@ export default function CGVPage() {
             <Section title="Article 6 — Délais de livraison">
               <ul className="list-disc pl-6 space-y-1">
                 <li>
-                  <strong>Pack Lancement :</strong> livrables livrés sous 7 jours ouvrés après
-                  réception du questionnaire d'onboarding complété.
+                  <strong>Mois 1 (setup) :</strong> livrables de positionnement et premiers contenus livrés sous 7 jours ouvrés
+                  après réception du questionnaire d&apos;onboarding complété.
                 </li>
                 <li>
-                  <strong>Pack Mensuel :</strong> livrables livrés dans les 5 premiers jours ouvrés du mois.
+                  <strong>Mois suivants :</strong> livrables livrés dans les 5 premiers jours ouvrés du mois.
                 </li>
                 <li>
                   <strong>Boost Mandat :</strong> livrables livrés sous 48 heures ouvrées après
@@ -197,17 +211,17 @@ export default function CGVPage() {
             <Section title="Article 8 — Garantie commerciale « Satisfait ou remboursé »">
               <p>
                 Le Prestataire accorde une garantie commerciale de <strong>14 jours</strong> sur le
-                Pack Lancement uniquement. Si le Client n'est pas satisfait des livrables reçus,
+                premier mois d&apos;abonnement (toutes formules). Si le Client n&apos;est pas satisfait des livrables reçus,
                 il peut demander un remboursement intégral par email à{" "}
                 <a href="mailto:contact@immocrew.fr" className="text-secondary-700 font-semibold hover:underline">contact@immocrew.fr</a> dans
-                un délai de 14 jours suivant la livraison.
+                un délai de 14 jours suivant la première livraison.
               </p>
               <p className="mt-3">
-                Cette garantie ne s'applique pas si les livrables ont déjà été
+                Cette garantie ne s&apos;applique pas si les livrables ont déjà été
                 publiés ou utilisés publiquement par le Client.
               </p>
               <p className="mt-3">
-                Le Pack Mensuel et le Boost Mandat ne bénéficient pas de cette garantie de
+                Le Boost Mandat ne bénéficie pas de cette garantie de
                 remboursement. Le Client peut toutefois demander des modifications dans les limites
                 raisonnables (voir article 9).
               </p>
@@ -229,7 +243,7 @@ export default function CGVPage() {
 
             {/* Article 10 */}
             <Section title="Article 10 — Résiliation">
-              <p className="font-semibold">Pack Mensuel :</p>
+              <p className="font-semibold">Formule Mensuel :</p>
               <p>
                 Le Client peut résilier son abonnement à tout moment, sans motif ni pénalité.
                 La résiliation prend effet à la fin de la période mensuelle en cours.
@@ -237,11 +251,17 @@ export default function CGVPage() {
                 son espace client ou par email à{" "}
                 <a href="mailto:contact@immocrew.fr" className="text-secondary-700 font-semibold hover:underline">contact@immocrew.fr</a>.
               </p>
-              <p className="font-semibold mt-4">Pack Lancement et Boost Mandat :</p>
+              <p className="font-semibold mt-4">Formules Trimestriel et Annuel :</p>
               <p>
-                S'agissant de prestations ponctuelles, aucune résiliation n'est possible
-                après validation de la commande, sauf dans le cadre de la garantie commerciale
-                prévue à l'article 8.
+                Le Client s&apos;engage pour la durée de la période choisie (3 ou 12 mois).
+                La résiliation prend effet à la fin de la période d&apos;engagement en cours.
+                Sans résiliation avant l&apos;échéance, l&apos;abonnement est reconduit tacitement pour
+                une période identique. Les livrables déjà livrés restent accessibles.
+              </p>
+              <p className="font-semibold mt-4">Boost Mandat :</p>
+              <p>
+                S&apos;agissant d&apos;une prestation ponctuelle, aucune résiliation n&apos;est possible
+                après validation de la commande.
               </p>
               <p className="font-semibold mt-4">Résiliation par le Prestataire :</p>
               <p>

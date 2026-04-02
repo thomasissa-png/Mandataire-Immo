@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
 import { JsonLd } from "@/components/JsonLd"
-import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice, formatPriceTTC } from "@/lib/pricing"
+import { PACK_MENSUEL, PACK_TRIMESTRIEL, PACK_ANNUEL, PACK_BOOST, PRIX_MIN_MENSUEL, formatPrice, formatPriceTTC, formatStartingPrice } from "@/lib/pricing"
 import { FAQAccordion } from "@/components/faq/FAQAccordion"
 
 export const metadata: Metadata = {
@@ -35,7 +35,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Combien coûte ImmoCrew ?",
     answer:
-      `ImmoCrew propose trois formules. Le ${PACK_MENSUEL.name} à ${formatPriceTTC(PACK_MENSUEL)} par mois (sans engagement) inclut le contenu mensuel complet : 12 posts, 4 scripts vidéo, 4 articles SEO, 4 annonces, 1 newsletter, 1 email de prospection. Le ${PACK_LANCEMENT.name} à ${formatPriceTTC(PACK_LANCEMENT)} (one-shot) fournit un kit de démarrage complet avec 20 posts, 5 articles SEO, 10 scripts Reels et un calendrier éditorial sur 30 jours. Le ${PACK_BOOST.name} à ${formatPriceTTC(PACK_BOOST)} par bien met un bien spécifique en avant avec une annonce storytelling, 3 posts dédiés, 1 Reel, 1 mini landing page et 1 email blast.`,
+      `ImmoCrew propose trois formules d'abonnement. Le ${PACK_MENSUEL.name} à ${formatPriceTTC(PACK_MENSUEL)} (sans engagement). Le ${PACK_TRIMESTRIEL.name} à ${PACK_TRIMESTRIEL.price}€/mois, facturé ${PACK_TRIMESTRIEL.totalPrice}€ tous les 3 mois (-${PACK_TRIMESTRIEL.savings}). Le ${PACK_ANNUEL.name} à ${PACK_ANNUEL.price}€/mois, facturé ${PACK_ANNUEL.totalPrice}€/an (-${PACK_ANNUEL.savings}, 4 mois offerts). Chaque formule inclut le même contenu mensuel : 12 posts, 4 scripts vidéo, 4 articles SEO, 4 annonces, 1 newsletter, 1 email de prospection, et le setup du mois 1. En complément, le ${PACK_BOOST.name} à ${formatPriceTTC(PACK_BOOST)} par bien (réservé aux abonnés) met un bien spécifique en avant.`,
   },
   {
     question: "Qui utilise ImmoCrew ?",
@@ -45,7 +45,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Quelle est la différence entre ImmoCrew et un community manager freelance ?",
     answer:
-      `Un community manager freelance facture généralement entre 500€ et 800€ par mois pour du contenu souvent générique, avec des délais variables et un résultat dépendant de la personne. ImmoCrew est un service productisé à prix fixe (${formatPrice(PACK_MENSUEL)}) avec un volume de contenus garanti chaque mois, personnalisés pour la zone géographique exacte du mandataire. Le mandataire sait exactement ce qu'il reçoit, quand il le reçoit, et combien ça coûte.`,
+      `Un community manager freelance facture généralement entre 500€ et 800€ par mois pour du contenu souvent générique, avec des délais variables et un résultat dépendant de la personne. ImmoCrew est un service productisé à partir de ${PRIX_MIN_MENSUEL}€/mois avec un volume de contenus garanti chaque mois, personnalisés pour la zone géographique exacte du mandataire. Le mandataire sait exactement ce qu'il reçoit, quand il le reçoit, et combien ça coûte.`,
   },
   {
     question: "Quelle est la différence entre ImmoCrew et une plateforme SaaS de marketing ?",
@@ -65,7 +65,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Peut-on résilier à tout moment ?",
     answer:
-      "Oui. Le Pack Mensuel est sans engagement. La résiliation est libre, sans frais, depuis l'espace client ou par email à contact@immocrew.fr. Elle prend effet à la fin de la période mensuelle en cours. Les contenus déjà livrés restent accessibles. Le Pack Lancement bénéficie d'une garantie satisfait ou remboursé de 14 jours.",
+      "Oui. La formule Mensuel est sans engagement. La résiliation est libre, sans frais, depuis l'espace client ou par email à contact@immocrew.fr. Les formules Trimestriel et Annuel s'engagent sur leur période, avec résiliation à chaque échéance. Dans tous les cas, les contenus déjà livrés restent accessibles. Le premier mois bénéficie d'une garantie satisfait ou remboursé de 14 jours.",
   },
   {
     question: "Combien de temps faut-il pour publier les contenus ?",
@@ -90,12 +90,12 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "ImmoCrew crée-t-il mes visuels et mes photos ?",
     answer:
-      "Non. ImmoCrew produit les contenus rédactionnels : textes de posts, articles, annonces, scripts vidéo, newsletters. Les visuels (photos de biens, portraits, créations graphiques) ne sont pas inclus dans le service. Le brief d'identité visuelle fourni dans le Pack Lancement donne des recommandations pour créer une identité cohérente, mais la production graphique reste à la charge du mandataire.",
+      "Non. ImmoCrew produit les contenus rédactionnels : textes de posts, articles, annonces, scripts vidéo, newsletters. Les visuels (photos de biens, portraits, créations graphiques) ne sont pas inclus dans le service. Le brief d'identité visuelle fourni lors du setup du mois 1 donne des recommandations pour créer une identité cohérente, mais la production graphique reste à la charge du mandataire.",
   },
   {
     question: "Puis-je voir un exemple de contenu avant de m'abonner ?",
     answer:
-      "Oui. La page d'accueil d'immocrew.fr présente des exemples avant/après d'annonces immobilières produites par ImmoCrew. Ces exemples montrent la différence entre une annonce standard et une annonce storytelling personnalisée pour une zone précise. Le Pack Lancement bénéficie également d'une garantie satisfait ou remboursé de 14 jours.",
+      "Oui. La page d'accueil d'immocrew.fr présente des exemples avant/après d'annonces immobilières produites par ImmoCrew. Ces exemples montrent la différence entre une annonce standard et une annonce storytelling personnalisée pour une zone précise. Le premier mois bénéficie d'une garantie satisfait ou remboursé de 14 jours.",
   },
   {
     question: "ImmoCrew inclut-il des articles pour le référencement local (SEO) ?",

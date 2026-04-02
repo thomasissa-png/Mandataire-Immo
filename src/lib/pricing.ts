@@ -3,20 +3,25 @@
  *
  * Chaque composant, page et route API doit importer depuis ce fichier.
  * Ne JAMAIS hardcoder un prix ailleurs dans src/.
+ *
+ * Restructuration pricing validée le 2026-04-02 :
+ * - Pack Lancement SUPPRIMÉ (remplacé par setup mois 1 inclus)
+ * - 3 formules d'abonnement : Mensuel, Trimestriel (featured), Annuel
+ * - Boost Mandat inchangé (100€/bien, réservé abonnés)
  */
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type PackId = "lancement" | "mensuel" | "mensuel-trimestriel" | "boost"
+export type PackId = "mensuel" | "trimestriel" | "annuel" | "boost"
 
 export interface Pack {
   id: PackId
   name: string
-  /** Prix affiché (en euros TTC) */
+  /** Prix affiché (en euros TTC) — prix par mois pour les abonnements */
   price: number
-  /** Montant en centimes pour Stripe */
+  /** Montant en centimes pour Stripe (par période de facturation) */
   stripeCents: number
   /** Suffixe affiché après le prix (ex: "/mois", "/bien") */
   unit: string
@@ -32,70 +37,98 @@ export interface Pack {
   paymentType: "one_time" | "recurring"
   /** Carte mise en avant visuellement */
   featured: boolean
-  /** Badge optionnel (ex: "Le choix de la plupart des mandataires") */
+  /** Badge optionnel (ex: "Recommandé") */
   badge?: string
   /** Liste des features incluses */
   features: readonly string[]
-  /** Engagement en mois (ex: 3 pour trimestriel) */
+  /** Engagement en mois */
   engagementMonths?: number
   /** Prix total pour la période d'engagement (en euros TTC) */
   totalPrice?: number
   /** Montant total en centimes pour Stripe */
   totalStripeCents?: number
-  /** Pourcentage d'économie par rapport au mensuel sans engagement */
+  /** Pourcentage d'économie par rapport au mensuel */
   savings?: string
+  /** Équivalent mensuel (pour trimestriel/annuel) */
+  pricePerMonth?: number
+  /** Accroche complémentaire (ex: "4 mois offerts") */
+  highlight?: string
 }
+
+// ---------------------------------------------------------------------------
+// Features communes à toutes les formules d'abonnement
+// ---------------------------------------------------------------------------
+
+const ABONNEMENT_FEATURES = [
+  "Setup mois 1 inclus : positionnement, bio, charte visuelle",
+  "12 posts personnalisés pour tes réseaux",
+  "4 scripts vidéo pour tes Reels",
+  "4 articles SEO local",
+  "1 newsletter pour tes contacts",
+  "4 annonces qui donnent envie de visiter",
+  "1 email de prospection vendeurs",
+  "Calendrier de publication mensuel",
+] as const
 
 // ---------------------------------------------------------------------------
 // Données
 // ---------------------------------------------------------------------------
 
-export const PACK_LANCEMENT: Pack = {
-  id: "lancement",
-  name: "Pack Lancement",
-  price: 400,
-  stripeCents: 40_000,
-  unit: "",
-  subtitle: "Ce qu'un freelance te facturerait 2 000€ — livré en une semaine.",
-  mention: "Satisfait ou remboursé 14 jours. Zéro risque.",
-  cta: "Démarrer mon lancement",
-  ctaHref: "/api/checkout?pack=lancement",
-  paymentType: "one_time",
-  featured: false,
-  features: [
-    "Ce qui te rend unique sur ta zone — formulé clairement",
-    "Bio optimisée pour tous tes profils",
-    "5 annonces rédigées pour mettre en valeur chaque bien",
-    "5 articles SEO local (quartier + ville)",
-    "Plan de publication sur 30 jours",
-    "20 posts prêts à publier",
-    "10 scripts Reels",
-    "Charte visuelle : couleurs, police, mise en page",
-  ],
-} as const
-
 export const PACK_MENSUEL: Pack = {
   id: "mensuel",
-  name: "Pack Mensuel",
+  name: "Mensuel",
   price: 150,
   stripeCents: 15_000,
   unit: "/mois",
-  subtitle: "12 posts, 4 scripts, 4 articles, 4 annonces — prêts à publier le 1er du mois.",
+  subtitle: "Idéal pour tester. Sans engagement, résiliation libre.",
   mention: "Sans engagement. Résiliation libre en 1 clic.",
   cta: "Commencer ce mois-ci",
   ctaHref: "/api/checkout?pack=mensuel",
   paymentType: "recurring",
+  featured: false,
+  features: ABONNEMENT_FEATURES,
+} as const
+
+export const PACK_TRIMESTRIEL: Pack = {
+  id: "trimestriel",
+  name: "Trimestriel",
+  price: 120,
+  stripeCents: 36_000,
+  unit: "/mois",
+  subtitle: "Le choix malin. 120€/mois, facturé 360€ tous les 3 mois.",
+  mention: "Engagement 3 mois. Résiliation à chaque échéance.",
+  cta: "Économiser 20%",
+  ctaHref: "/api/checkout?pack=trimestriel",
+  paymentType: "recurring",
   featured: true,
-  badge: "Le pack qui fait la différence",
-  features: [
-    "12 posts personnalisés pour tes réseaux",
-    "4 scripts vidéo pour tes Reels",
-    "4 articles SEO local",
-    "1 newsletter pour tes contacts",
-    "4 annonces qui donnent envie de visiter",
-    "1 email de prospection vendeurs",
-    "Calendrier de publication mensuel",
-  ],
+  badge: "Recommandé",
+  engagementMonths: 3,
+  totalPrice: 360,
+  totalStripeCents: 36_000,
+  savings: "20%",
+  pricePerMonth: 120,
+  features: ABONNEMENT_FEATURES,
+} as const
+
+export const PACK_ANNUEL: Pack = {
+  id: "annuel",
+  name: "Annuel",
+  price: 100,
+  stripeCents: 120_000,
+  unit: "/mois",
+  subtitle: "Le meilleur tarif. 100€/mois, facturé 1 200€/an.",
+  mention: "Engagement 12 mois. 4 mois offerts vs le mensuel.",
+  cta: "Économiser 33%",
+  ctaHref: "/api/checkout?pack=annuel",
+  paymentType: "recurring",
+  featured: false,
+  engagementMonths: 12,
+  totalPrice: 1_200,
+  totalStripeCents: 120_000,
+  savings: "33%",
+  pricePerMonth: 100,
+  highlight: "4 mois offerts",
+  features: ABONNEMENT_FEATURES,
 } as const
 
 export const PACK_BOOST: Pack = {
@@ -105,7 +138,7 @@ export const PACK_BOOST: Pack = {
   stripeCents: 10_000,
   unit: "/bien",
   subtitle: "Déjà abonné ? Ton nouveau bien mérite ses propres posts.",
-  mention: "Réservé aux abonnés Pack Mensuel",
+  mention: "Réservé aux abonnés",
   cta: "Booster mon prochain bien",
   ctaHref: "/api/checkout?pack=boost",
   paymentType: "one_time",
@@ -116,36 +149,19 @@ export const PACK_BOOST: Pack = {
   ],
 } as const
 
-// ---------------------------------------------------------------------------
-// Option trimestrielle — même pack mensuel, engagement 3 mois, -10%
-// ---------------------------------------------------------------------------
+/** Les 3 formules d'abonnement affichées dans la grille Pricing */
+export const ABONNEMENT_PACKS = [PACK_MENSUEL, PACK_TRIMESTRIEL, PACK_ANNUEL] as const
 
-export const PACK_MENSUEL_TRIMESTRIEL: Pack = {
-  ...PACK_MENSUEL,
-  id: "mensuel-trimestriel",
-  price: 135,
-  stripeCents: 13_500,
-  unit: "/mois",
-  subtitle: "135€/mois — engagement 3 mois, économise 45€.",
-  mention: "Engagement 3 mois. Résiliation à chaque échéance.",
-  cta: "Commencer ce trimestre",
-  ctaHref: "/api/checkout?pack=mensuel-trimestriel",
-  engagementMonths: 3,
-  totalPrice: 405,
-  totalStripeCents: 40_500,
-  savings: "10%",
-} as const
-
-/** Les 4 packs indexés par id */
+/** Tous les packs indexés par id */
 export const PACKS: Record<PackId, Pack> = {
-  lancement: PACK_LANCEMENT,
   mensuel: PACK_MENSUEL,
-  "mensuel-trimestriel": PACK_MENSUEL_TRIMESTRIEL,
+  trimestriel: PACK_TRIMESTRIEL,
+  annuel: PACK_ANNUEL,
   boost: PACK_BOOST,
 } as const
 
-/** Les 2 packs principaux affichés côte à côte dans la grille Pricing */
-export const MAIN_PACKS = [PACK_LANCEMENT, PACK_MENSUEL] as const
+/** Prix minimum affiché (formule annuelle) */
+export const PRIX_MIN_MENSUEL = PACK_ANNUEL.price
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -153,7 +169,7 @@ export const MAIN_PACKS = [PACK_LANCEMENT, PACK_MENSUEL] as const
 
 /**
  * Formate le prix d'un pack pour affichage.
- * Ex: "150€/mois", "400€", "100€/bien"
+ * Ex: "150€/mois", "100€/bien"
  */
 export function formatPrice(pack: Pick<Pack, "price" | "unit">): string {
   return `${pack.price}€${pack.unit}`
@@ -173,4 +189,11 @@ export function formatPriceTTC(pack: Pick<Pack, "price" | "unit">): string {
  */
 export function getPackPrice(id: PackId): number {
   return PACKS[id].price
+}
+
+/**
+ * Formate "À partir de X€/mois" avec le prix le plus bas.
+ */
+export function formatStartingPrice(): string {
+  return `À partir de ${PRIX_MIN_MENSUEL}€/mois`
 }

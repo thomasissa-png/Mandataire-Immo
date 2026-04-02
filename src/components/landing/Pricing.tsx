@@ -1,7 +1,14 @@
-import { PACK_LANCEMENT, PACK_BOOST, PACK_MENSUEL, formatPrice } from "@/lib/pricing"
+import {
+  ABONNEMENT_PACKS,
+  PACK_BOOST,
+  PACK_MENSUEL,
+  PRIX_MIN_MENSUEL,
+  formatPrice,
+  formatStartingPrice,
+} from "@/lib/pricing"
+import type { Pack } from "@/lib/pricing"
 import { PricingTracker } from "./PricingTracker"
 import { CTAButton } from "./CTAButton"
-import { MensuelPricingCard } from "./MensuelPricingCard"
 
 const CHECK_ICON = (
   <svg
@@ -20,94 +27,201 @@ const CHECK_ICON = (
   </svg>
 )
 
+function PricingCard({ pack }: { pack: Pack }) {
+  const isFeatured = pack.featured
+
+  return (
+    <div
+      className={`rounded-xl p-8 flex flex-col relative transition-[box-shadow,transform] duration-normal ${
+        isFeatured
+          ? "bg-primary text-white shadow-xl tablet:scale-[1.03] pt-10"
+          : "bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5"
+      }`}
+    >
+      {/* Badge */}
+      {pack.badge && (
+        <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-1.5 rounded-full bg-secondary text-white text-body-sm font-bold text-center shadow-md z-10">
+          {pack.badge}
+        </span>
+      )}
+
+      {/* Highlight (ex: "4 mois offerts") */}
+      {pack.highlight && !isFeatured && (
+        <span className="inline-block mb-3 px-3 py-1 rounded-full bg-success-50 text-success-800 text-caption font-bold w-fit">
+          {pack.highlight}
+        </span>
+      )}
+      {pack.highlight && isFeatured && (
+        <span className="inline-block mb-3 px-3 py-1 rounded-full bg-success text-white text-caption font-bold w-fit">
+          {pack.highlight}
+        </span>
+      )}
+
+      {/* Name */}
+      <h3
+        className={`font-display text-h3 mb-1 ${
+          isFeatured ? "text-white" : "text-primary"
+        }`}
+      >
+        {pack.name}
+      </h3>
+
+      {/* Subtitle */}
+      <p
+        className={`text-body-sm mb-4 min-h-[3rem] ${
+          isFeatured ? "text-primary-200" : "text-neutral-500"
+        }`}
+      >
+        {pack.subtitle}
+      </p>
+
+      {/* Price */}
+      <div className="mb-2">
+        <div className="flex items-baseline gap-2">
+          <span
+            className={`font-display text-display-lg font-extrabold ${
+              isFeatured ? "text-secondary" : "text-primary"
+            }`}
+          >
+            {pack.price}€
+          </span>
+          <span
+            className={`text-body-sm ml-1 ${
+              isFeatured ? "text-primary-100" : "text-neutral-400"
+            }`}
+          >
+            {pack.unit}
+          </span>
+        </div>
+        <p
+          className={`text-caption font-medium mt-1 ${
+            isFeatured ? "text-primary-100" : "text-neutral-400"
+          }`}
+        >
+          TTC
+        </p>
+        {/* Total price for multi-month plans */}
+        {pack.totalPrice && (
+          <p
+            className={`text-body-sm mt-1 ${
+              isFeatured ? "text-primary-200" : "text-neutral-500"
+            }`}
+          >
+            Facturé {pack.totalPrice}€ / {pack.engagementMonths} mois
+          </p>
+        )}
+        {/* Savings badge */}
+        {pack.savings && (
+          <span
+            className={`inline-block mt-2 px-2 py-0.5 rounded-full text-caption font-bold ${
+              isFeatured
+                ? "bg-success text-white"
+                : "bg-success-50 text-success-800"
+            }`}
+          >
+            Économise {pack.savings}
+          </span>
+        )}
+      </div>
+
+      {/* Separator */}
+      <div
+        className={`h-px mb-4 ${
+          isFeatured ? "bg-primary-300" : "bg-neutral-200"
+        }`}
+      />
+
+      {/* Reassurance */}
+      <p
+        className={`text-body-sm font-medium mb-4 ${
+          isFeatured ? "text-primary-200" : "text-neutral-500"
+        }`}
+      >
+        {pack.mention}
+      </p>
+
+      {/* Features */}
+      <ul className="space-y-3 mb-8 flex-grow">
+        {pack.features.map((feature, fIndex) => (
+          <li key={fIndex} className="flex items-start gap-2">
+            {isFeatured ? (
+              <svg
+                className="w-4 h-4 text-success-300 flex-shrink-0 mt-0.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            ) : (
+              CHECK_ICON
+            )}
+            <span
+              className={`text-body-sm ${
+                isFeatured ? "text-primary-100" : "text-neutral-600"
+              }`}
+            >
+              {feature}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      {/* CTA */}
+      <div className="mt-auto">
+        <CTAButton
+          href={pack.ctaHref}
+          label={`${pack.cta} →`}
+          location={`pricing_pack_${pack.id}`}
+          variant={isFeatured ? "primary" : "secondary"}
+          className="w-full"
+        />
+        <p
+          className={`text-caption text-center mt-3 ${
+            isFeatured ? "text-primary-200" : "text-neutral-400"
+          }`}
+        >
+          Paiement sécurisé via Stripe
+        </p>
+      </div>
+    </div>
+  )
+}
+
 export function Pricing() {
   return (
     <section className="section-padding bg-white" id="pricing">
       <PricingTracker />
       <div className="container-immocrew">
         <h2 className="font-display text-h1 desktop:text-display-lg text-primary text-center mb-3">
-          Ton équipe marketing, à partir de {formatPrice(PACK_MENSUEL)}.
+          Ton équipe marketing, {formatStartingPrice()}.
         </h2>
         <p className="text-center text-body-lg text-neutral-500 mb-4 max-w-xl mx-auto">
           Un seul mandat supplémentaire dans l&apos;année rembourse
           ton abonnement entier. Et ta commission moyenne, c&apos;est 3&nbsp;000 à 5&nbsp;000&nbsp;€.
         </p>
 
-        {/* Guidage decisionnel */}
+        {/* Guidage décisionnel */}
         <p className="text-center text-body-sm text-neutral-400 mb-6 desktop:mb-10">
-          Nouvelle sur ImmoCrew ? → Pack Lancement.
-          Déjà prête à t&apos;abonner ? → Pack Mensuel.
+          Sans engagement ? → Mensuel.
+          Le meilleur rapport qualité-prix ? → Trimestriel.
+          Le tarif le plus bas ? → Annuel.
         </p>
 
-        {/* 2 packs principaux */}
-        <div className="grid gap-6 tablet:grid-cols-2 items-stretch max-w-4xl mx-auto">
-          {/* Pack Lancement */}
-          <div className="rounded-xl p-8 flex flex-col bg-card border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-[box-shadow,transform] duration-normal relative">
-            {/* Name */}
-            <h3 className="font-display text-h3 mb-1 text-primary">
-              {PACK_LANCEMENT.name}
-            </h3>
-
-            {/* Subtitle — hauteur fixe pour alignement */}
-            <p className="text-body-sm mb-4 text-neutral-500 min-h-[3rem]">
-              {PACK_LANCEMENT.subtitle}
-            </p>
-
-            {/* Price */}
-            <div className="mb-2">
-              <span className="font-display text-display-lg font-extrabold text-primary">
-                {PACK_LANCEMENT.price}€
-              </span>
-              {PACK_LANCEMENT.unit && (
-                <span className="text-body-sm ml-1 text-neutral-400">
-                  {PACK_LANCEMENT.unit}
-                </span>
-              )}
-              <p className="text-caption font-medium mt-1 text-neutral-400">
-                TTC
-              </p>
-            </div>
-
-            {/* Separator */}
-            <div className="h-px mb-4 bg-neutral-200" />
-
-            {/* Reassurance */}
-            <p className="text-body-sm font-medium mb-4 text-neutral-500">
-              {PACK_LANCEMENT.mention}
-            </p>
-
-            {/* Features */}
-            <ul className="space-y-3 mb-8 flex-grow">
-              {PACK_LANCEMENT.features.map((feature, fIndex) => (
-                <li key={fIndex} className="flex items-start gap-2">
-                  {CHECK_ICON}
-                  <span className="text-body-sm text-neutral-600">
-                    {feature}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            {/* CTA */}
-            <div className="mt-auto">
-              <CTAButton
-                href={PACK_LANCEMENT.ctaHref}
-                label={`${PACK_LANCEMENT.cta} →`}
-                location="pricing_pack_lancement"
-                variant="secondary"
-                className="w-full"
-              />
-              <p className="text-caption text-center mt-3 text-neutral-400">
-                Paiement sécurisé via Stripe
-              </p>
-            </div>
-          </div>
-
-          {/* Pack Mensuel avec toggle trimestriel */}
-          <MensuelPricingCard />
+        {/* 3 formules d'abonnement */}
+        <div className="grid gap-6 tablet:grid-cols-3 items-stretch max-w-5xl mx-auto">
+          {ABONNEMENT_PACKS.map((pack) => (
+            <PricingCard key={pack.id} pack={pack} />
+          ))}
         </div>
 
-        {/* Boost Mandat — upsell separe */}
+        {/* Boost Mandat — upsell séparé */}
         <div className="mt-10 max-w-4xl mx-auto rounded-xl bg-background border border-border p-6 desktop:p-8">
           <div className="tablet:flex tablet:items-center tablet:justify-between tablet:gap-8">
             <div className="mb-4 tablet:mb-0">
@@ -156,7 +270,7 @@ export function Pricing() {
               <p className="text-caption text-neutral-400">À adapter toi-même</p>
             </div>
             <div className="p-4 rounded-lg bg-success-50 ring-2 ring-success">
-              <p className="font-display text-h2 text-success-800">{PACK_MENSUEL.price}€</p>
+              <p className="font-display text-h2 text-success-800">{PRIX_MIN_MENSUEL}€</p>
               <p className="text-body-sm text-neutral-600 mt-1 font-semibold">ImmoCrew</p>
               <p className="text-caption text-neutral-400">Tes posts, articles et annonces — personnalisés</p>
             </div>

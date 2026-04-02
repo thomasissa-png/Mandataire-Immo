@@ -1,29 +1,35 @@
 /**
- * Tests pour le composant Pricing
+ * Tests pour le composant Pricing (3 formules d'abonnement + Boost Mandat)
  *
  * Les prix affichés sont un engagement contractuel.
  * Les CTA pointent vers /api/checkout — un lien cassé = 0 paiement.
- * Les mentions (garantie 14j, sans engagement) sont des obligations légales.
+ * Les mentions (engagement, résiliation) sont des obligations légales.
  */
 
 import { describe, it, expect } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { Pricing } from "@/components/landing/Pricing"
-import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice } from "@/lib/pricing"
+import {
+  PACK_MENSUEL,
+  PACK_TRIMESTRIEL,
+  PACK_ANNUEL,
+  PACK_BOOST,
+  PRIX_MIN_MENSUEL,
+  formatPrice,
+} from "@/lib/pricing"
 
 describe("Pricing", () => {
-  it(`renders the section heading with ${formatPrice(PACK_MENSUEL)}`, () => {
+  it("renders the section heading with starting price", () => {
     render(<Pricing />)
-    const pricePattern = new RegExp(`équipe marketing.*${PACK_MENSUEL.price}€${PACK_MENSUEL.unit.replace("/", "/")}`, "i")
-    expect(
-      screen.getByText(pricePattern)
-    ).toBeInTheDocument()
+    const heading = screen.getByText(/équipe marketing.*à partir de/i)
+    expect(heading).toBeInTheDocument()
   })
 
-  it("renders the 2 main pack names", () => {
+  it("renders the 3 subscription plan names", () => {
     render(<Pricing />)
-    expect(screen.getByText("Pack Lancement")).toBeInTheDocument()
-    expect(screen.getByText("Pack Mensuel")).toBeInTheDocument()
+    expect(screen.getByText("Mensuel")).toBeInTheDocument()
+    expect(screen.getByText("Trimestriel")).toBeInTheDocument()
+    expect(screen.getByText("Annuel")).toBeInTheDocument()
   })
 
   it("renders the Boost Mandat section", () => {
@@ -31,58 +37,76 @@ describe("Pricing", () => {
     expect(screen.getByText(/Boost Mandat/i)).toBeInTheDocument()
   })
 
-  it("displays correct prices", () => {
+  it("displays correct prices for all plans", () => {
     render(<Pricing />)
     const priceElements = screen.getAllByText(/\d+€/)
     const priceTexts = priceElements.map((el) => el.textContent)
-    expect(priceTexts).toContain(`${PACK_LANCEMENT.price}€`)
     expect(priceTexts).toContain(`${PACK_MENSUEL.price}€`)
-    // Boost price is in inline text "Boost Mandat · 100€/bien", not a separate price element
-    expect(screen.getByText(new RegExp(`${PACK_BOOST.price}€${PACK_BOOST.unit}`, "i"))).toBeInTheDocument()
-  })
-
-  it("shows the badge on Pack Mensuel", () => {
-    render(<Pricing />)
+    expect(priceTexts).toContain(`${PACK_TRIMESTRIEL.price}€`)
+    expect(priceTexts).toContain(`${PACK_ANNUEL.price}€`)
     expect(
-      screen.getByText(/le pack qui fait la différence/i)
+      screen.getByText(new RegExp(`${PACK_BOOST.price}€${PACK_BOOST.unit}`, "i"))
     ).toBeInTheDocument()
   })
 
-  it("displays TTC mentions", () => {
+  it("shows the 'Recommandé' badge on Trimestriel", () => {
+    render(<Pricing />)
+    expect(screen.getByText("Recommandé")).toBeInTheDocument()
+  })
+
+  it("shows savings badges", () => {
+    render(<Pricing />)
+    expect(screen.getByText(/Économise 20%/i)).toBeInTheDocument()
+    expect(screen.getByText(/Économise 33%/i)).toBeInTheDocument()
+  })
+
+  it("shows '4 mois offerts' highlight on Annuel", () => {
+    render(<Pricing />)
+    expect(screen.getByText("4 mois offerts")).toBeInTheDocument()
+  })
+
+  it("displays TTC mentions for each card", () => {
     render(<Pricing />)
     const ttcMentions = screen.getAllByText("TTC")
-    expect(ttcMentions.length).toBeGreaterThanOrEqual(2)
+    expect(ttcMentions.length).toBeGreaterThanOrEqual(3)
   })
 
-  it("shows the guarantee mention for Pack Lancement", () => {
+  it("shows correct engagement mentions", () => {
     render(<Pricing />)
+    // "Sans engagement" appears in multiple places (guidance text + card mention)
     expect(
-      screen.getByText(/Satisfait ou remboursé 14 jours/i)
+      screen.getAllByText(/Sans engagement/i).length
+    ).toBeGreaterThanOrEqual(1)
+    expect(
+      screen.getByText(/Engagement 3 mois/i)
     ).toBeInTheDocument()
-  })
-
-  it("shows the no-commitment mention for Pack Mensuel", () => {
-    render(<Pricing />)
     expect(
-      screen.getByText(/Sans engagement/i)
+      screen.getByText(/Engagement 12 mois/i)
     ).toBeInTheDocument()
   })
 
   it("renders CTA links pointing to /api/checkout", () => {
     render(<Pricing />)
 
-    const lancementLink = screen.getByText(/Démarrer mon lancement/i)
-      .closest("a")
-    expect(lancementLink).toHaveAttribute(
-      "href",
-      "/api/checkout?pack=lancement"
-    )
-
-    const mensuelLink = screen.getByText(/Commencer ce mois-ci/i)
+    const mensuelLink = screen.getByText(new RegExp(PACK_MENSUEL.cta, "i"))
       .closest("a")
     expect(mensuelLink).toHaveAttribute(
       "href",
       "/api/checkout?pack=mensuel"
+    )
+
+    const trimestrielLink = screen.getByText(new RegExp(PACK_TRIMESTRIEL.cta, "i"))
+      .closest("a")
+    expect(trimestrielLink).toHaveAttribute(
+      "href",
+      "/api/checkout?pack=trimestriel"
+    )
+
+    const annuelLink = screen.getByText(new RegExp(PACK_ANNUEL.cta, "i"))
+      .closest("a")
+    expect(annuelLink).toHaveAttribute(
+      "href",
+      "/api/checkout?pack=annuel"
     )
 
     const boostLink = screen.getByText(/Booster mon prochain bien/i)
@@ -107,28 +131,29 @@ describe("Pricing", () => {
     ).toBeInTheDocument()
   })
 
-  it("lists correct features for Pack Mensuel", () => {
+  it("lists correct features (setup + content)", () => {
     render(<Pricing />)
     expect(
-      screen.getByText("12 posts personnalisés pour tes réseaux")
-    ).toBeInTheDocument()
+      screen.getAllByText("Setup mois 1 inclus : positionnement, bio, charte visuelle").length
+    ).toBeGreaterThanOrEqual(1)
     expect(
-      screen.getByText("4 scripts vidéo pour tes Reels")
-    ).toBeInTheDocument()
+      screen.getAllByText("12 posts personnalisés pour tes réseaux").length
+    ).toBeGreaterThanOrEqual(1)
     expect(
-      screen.getByText("4 articles SEO local")
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText("4 annonces qui donnent envie de visiter")
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText("Calendrier de publication mensuel")
-    ).toBeInTheDocument()
+      screen.getAllByText("4 articles SEO local").length
+    ).toBeGreaterThanOrEqual(1)
   })
 
   it("renders the comparison table", () => {
     render(<Pricing />)
     expect(screen.getByText("Freelance marketing")).toBeInTheDocument()
     expect(screen.getByText("Outil avec templates")).toBeInTheDocument()
+  })
+
+  it("shows the lowest price in comparison table", () => {
+    render(<Pricing />)
+    const priceElements = screen.getAllByText(`${PRIX_MIN_MENSUEL}€`)
+    // Should appear at least twice: in the Annuel card AND in the comparison table
+    expect(priceElements.length).toBeGreaterThanOrEqual(2)
   })
 })

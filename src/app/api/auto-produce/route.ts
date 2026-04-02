@@ -28,17 +28,20 @@ export async function POST() {
       return NextResponse.json({ error: "Client introuvable" }, { status: 404 })
     }
 
-    const pack = client.pack || "lancement"
+    const pack = client.pack || "mensuel"
     const mois = new Date().toISOString().slice(0, 7) // ex: "2026-04"
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 
     // Déclencher la production via fetch interne (non-bloquant)
+    // Le mois 1 de tout abonnement inclut le setup (pack-lancement),
+    // les mois suivants utilisent le pack-mensuel standard.
     const routeMap: Record<string, string> = {
-      lancement: "/api/generate/pack-lancement",
       mensuel: "/api/generate/pack-mensuel",
+      trimestriel: "/api/generate/pack-mensuel",
+      annuel: "/api/generate/pack-mensuel",
     }
 
-    const route = routeMap[pack] || routeMap.lancement
+    const route = routeMap[pack] || routeMap.mensuel
 
     // Fire-and-forget : on ne bloque pas Sophie
     fetch(`${appUrl}${route}`, {

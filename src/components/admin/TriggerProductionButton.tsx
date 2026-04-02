@@ -50,7 +50,7 @@ export function TriggerProductionButton({
   }, [isGenerationLocked])
 
   const handleTrigger = async (
-    packType: "mensuel" | "lancement" | "boost"
+    packType: "mensuel" | "setup" | "boost"
   ) => {
     // Double-soumission : vérifier le lock avant de lancer
     if (isGenerationLocked()) {
@@ -134,11 +134,11 @@ export function TriggerProductionButton({
 
         <button
           type="button"
-          onClick={() => handleTrigger("lancement")}
+          onClick={() => handleTrigger("setup")}
           disabled={isLoading}
           className="h-10 px-5 rounded-full bg-primary text-white font-display font-semibold text-body-sm shadow-sm hover:bg-primary-600 active:scale-[0.97] transition-all duration-normal disabled:opacity-60 disabled:cursor-wait"
         >
-          {isLoading ? "Génération..." : "Lancer Pack Lancement"}
+          {isLoading ? "Génération..." : "Lancer Setup Mois 1"}
         </button>
 
         <button

@@ -25,7 +25,7 @@
 ---
 
 ## Positionnement
-- **Promesse unique** : Ton équipe marketing dédiée à 150€/mois — chaque mois, tu reçois tes posts, tes articles SEO, tes annonces, et tes scripts vidéo, 100% personnalisés pour ta zone, tes biens, et ton personal branding. Tu publies, on fait le reste.
+- **Promesse unique** : Ton équipe marketing dédiée à partir de 100€/mois — chaque mois, tu reçois tes posts, tes articles SEO, tes annonces, et tes scripts vidéo, 100% personnalisés pour ta zone, tes biens, et ton personal branding. Tu publies, on fait le reste.
 - **Ton de marque** : Direct et complice — comme un collègue marketing qui te tutoie, parle concret, et ne te fait jamais sentir idiot de ne pas maîtriser le digital. Zéro jargon inutile, 100% orienté résultats.
 - **3 mots qui DÉFINISSENT la marque** : Concret, Personnalisé, Efficace
 - **3 mots qui ne DÉFINISSENT PAS la marque** : Générique, Technique, Froid
@@ -62,22 +62,24 @@
 - **Données sensibles collectées** : [x] Non  [ ] Oui (on collecte uniquement : nom, zone géographique, spécialité immobilière, ton de communication — aucune donnée financière client)
 - **Utilisation d'IA générative** : [x] Oui — usage prévu : Production intégrale du contenu marketing (textes, scripts, stratégie) via agents IA coordonnés. Les livrables sont relus/validés avant livraison.
 
-### Détail du pricing
+### Détail du pricing (restructuré 2026-04-02)
 
-| Offre | Prix | Contenu | Cible |
-|-------|------|---------|-------|
-| Pack Lancement (one-shot) | 400€ | Ce qui te rend unique, bio optimisée, 5 annonces, 5 articles SEO local, plan de publication 30j, 20 posts, 10 scripts Reels, charte visuelle | Nouveaux clients — onboarding |
-| Pack Mensuel | 150€/mois | 12 posts/mois (3/sem), 4 scripts vidéo (1/sem), 4 articles SEO (1/sem), 1 newsletter, 4 annonces, 1 email prospection, calendrier mensuel | Récurrent — cœur du business |
-| Boost Mandat (upsell) | 100€/bien | Annonce rédigée, 3 posts + 1 Reel, page web du bien, email acheteurs | Réservé abonnés Pack Mensuel |
+| Formule | Prix | Équivalent/mois | Contenu |
+|---------|------|-----------------|---------|
+| Mensuel | 150€/mois | 150€ | Setup mois 1 inclus + 12 posts, 4 scripts vidéo, 4 articles SEO, 4 annonces, 1 newsletter, 1 email prospection, calendrier mensuel |
+| Trimestriel (recommandé) | 360€/3 mois | 120€/mois (-20%) | Identique au mensuel. Engagement 3 mois, résiliation à chaque échéance |
+| Annuel | 1 200€/an | 100€/mois (-33%) | Identique au mensuel. Engagement 12 mois, 4 mois offerts |
+| Boost Mandat (upsell) | 100€/bien | — | Annonce rédigée, 3 posts + 1 Reel, page web du bien, email acheteurs. Réservé abonnés |
+
+Notes : Pack Lancement supprimé (setup intégré au mois 1 de chaque formule). Mois gratuit (codes promo) : mensuel uniquement.
 
 ### Scénario de revenus (objectif 5K/mois)
 
 | Source | Volume | CA mensuel |
 |--------|--------|------------|
-| Packs mensuels | 15 clients | 2 955€ |
-| Packs lancement | 2/mois | 994€ |
-| Boosts mandat | 10/mois | 970€ |
-| **Total** | | **4 919€** |
+| Abonnements (mix formules) | 15 clients | 2 250€ |
+| Boosts mandat | 10/mois | 1 000€ |
+| **Total** | | **3 250€** |
 
 ---
 
@@ -85,7 +87,7 @@
 - **Budget mensuel infrastructure** : < 100€ (Replit + Supabase + domaine + email)
 - **Budget mensuel acquisition** : 0€ — acquisition 100% organique (SEO, LinkedIn, groupes Facebook, Product Hunt, partenariats)
 - **Budget analytics** : 0€ (PostHog gratuit tier)
-- **Timeline de lancement** : Site + Pack Lancement opérationnel en 2 semaines. Premiers clients beta en semaine 3. Facturation dès le mois 2.
+- **Timeline de lancement** : Site opérationnel en 2 semaines. Premiers clients beta en semaine 3. Facturation dès le mois 2.
 - **Contraintes légales ou sectorielles** : RGPD standard. Loi Hoguet (pas de contrainte directe — on ne fait pas de transaction immobilière). Mention obligatoire que le contenu est produit avec assistance IA si requis par évolution réglementaire.
 - **Ressources disponibles** : [x] Solo + framework Gradient Agents (19 agents IA)
 

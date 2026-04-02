@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { PACK_MENSUEL, formatPrice } from "@/lib/pricing"
+import { PACK_MENSUEL, PRIX_MIN_MENSUEL, formatPrice, formatStartingPrice } from "@/lib/pricing"
 
 const FAQ_ITEMS = [
   {
@@ -20,9 +20,14 @@ const FAQ_ITEMS = [
       "Quand tu commences, on te pose une vingtaine de questions : ta ville, ton quartier précis, ta spécialité (appartements, maisons, neuf, ancien), ton ton de communication, tes biens en cours. À partir de là, chaque texte intègre des données locales réelles — les écoles du quartier, les commerces, les prix au m², les transports, l'ambiance. Pas juste le nom de ta ville en gras.",
   },
   {
-    question: `${formatPrice(PACK_MENSUEL)}, c'est rentable ?`,
+    question: `${formatStartingPrice()}, c'est rentable ?`,
     answer:
-      `Fais le calcul autrement. Combien d'heures passes-tu sur ton marketing par mois — entre Canva, les idées de posts, les annonces à rédiger ? Si c'est 10 heures, c'est 10 heures que tu ne passes pas en prospection ou en visites. ${formatPrice(PACK_MENSUEL)}, c'est te racheter ces heures-là. Et si en plus ça t'amène un contact vendeur de plus dans l'année — et ça arrive, parce que tu es enfin visible sur Google — ta commission rembourse 12 mois d'abonnement. Mais même sans ça : ton temps vaut plus que 5€ par jour.`,
+      `Fais le calcul autrement. Combien d'heures passes-tu sur ton marketing par mois — entre Canva, les idées de posts, les annonces à rédiger ? Si c'est 10 heures, c'est 10 heures que tu ne passes pas en prospection ou en visites. ${PRIX_MIN_MENSUEL}€ à ${PACK_MENSUEL.price}€/mois, c'est te racheter ces heures-là. Et si en plus ça t'amène un contact vendeur de plus dans l'année — et ça arrive, parce que tu es enfin visible sur Google — ta commission rembourse 12 mois d'abonnement. Mais même sans ça : ton temps vaut plus que 5€ par jour.`,
+  },
+  {
+    question: "Quelle formule choisir ?",
+    answer:
+      `Tu veux tester sans engagement ? Prends le Mensuel à ${PACK_MENSUEL.price}€/mois — tu peux arrêter quand tu veux. Tu es déjà convaincue et tu veux économiser ? Le Trimestriel à 120€/mois (-20%) est le meilleur rapport qualité-prix. Tu veux le tarif le plus bas possible ? L'Annuel à ${PRIX_MIN_MENSUEL}€/mois te fait économiser 33%, soit 4 mois offerts. Les 3 formules incluent exactement le même contenu et le setup du mois 1.`,
   },
   {
     question: "Je n'ai vraiment pas le temps de publier, même du contenu tout fait.",
@@ -37,7 +42,7 @@ const FAQ_ITEMS = [
   {
     question: "J'ai déjà essayé un community manager freelance et c'était décevant.",
     answer:
-      `On comprend. Le problème des freelances, c'est qu'ils ne connaissent pas l'immobilier. Ils postent des trucs génériques avec des hashtags au hasard. ImmoCrew est fait uniquement pour les mandataires. Nos rédacteurs connaissent ton métier, tes frustrations, tes clients. Et à ${formatPrice(PACK_MENSUEL)} au lieu de 500-800€, le risque est nettement plus faible.`,
+      `On comprend. Le problème des freelances, c'est qu'ils ne connaissent pas l'immobilier. Ils postent des trucs génériques avec des hashtags au hasard. ImmoCrew est fait uniquement pour les mandataires. Nos rédacteurs connaissent ton métier, tes frustrations, tes clients. Et à partir de ${PRIX_MIN_MENSUEL}€/mois au lieu de 500-800€, le risque est nettement plus faible.`,
   },
   {
     question: "Comment je reçois mes posts et articles ?",
@@ -57,7 +62,7 @@ const FAQ_ITEMS = [
   {
     question: "Je peux arrêter quand je veux ?",
     answer:
-      "Oui. Le Pack Mensuel est sans engagement. Tu peux résilier à tout moment, en un clic depuis ton espace client. Pas de frais cachés, pas de préavis de 3 mois, pas de coup de fil pour te retenir. Et pour le Pack Lancement, tu as une garantie satisfait ou remboursé de 14 jours.",
+      "Oui. La formule Mensuel est sans engagement. Tu peux résilier à tout moment, en un clic depuis ton espace client. Pas de frais cachés, pas de préavis de 3 mois, pas de coup de fil pour te retenir. Les formules Trimestriel et Annuel s'engagent sur leur période, avec résiliation à chaque échéance.",
   },
   {
     question: "Qui est derrière ImmoCrew ?",

@@ -30,7 +30,8 @@ vi.mock("@/lib/stripe", () => ({
   },
   STRIPE_PRICES: {
     mensuel: "price_test_mensuel",
-    lancement: "price_test_lancement",
+    trimestriel: "price_test_trimestriel",
+    annuel: "price_test_annuel",
     boost: "price_test_boost",
   },
 }))
@@ -93,18 +94,34 @@ describe("GET /api/checkout", () => {
     )
   })
 
-  it("creates a payment session for pack lancement (one-shot)", async () => {
+  it("creates a subscription session for pack trimestriel", async () => {
     mockSessionCreate.mockResolvedValueOnce({
-      url: "https://checkout.stripe.com/session/test_pay",
+      url: "https://checkout.stripe.com/session/test_tri",
     })
 
-    await GET(makeRequest("lancement"))
+    await GET(makeRequest("trimestriel"))
 
     expect(mockSessionCreate).toHaveBeenCalledWith(
       expect.objectContaining({
-        mode: "payment",
-        line_items: [{ price: "price_test_lancement", quantity: 1 }],
-        metadata: { pack: "lancement" },
+        mode: "subscription",
+        line_items: [{ price: "price_test_trimestriel", quantity: 1 }],
+        metadata: { pack: "trimestriel" },
+      })
+    )
+  })
+
+  it("creates a subscription session for pack annuel", async () => {
+    mockSessionCreate.mockResolvedValueOnce({
+      url: "https://checkout.stripe.com/session/test_ann",
+    })
+
+    await GET(makeRequest("annuel"))
+
+    expect(mockSessionCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        mode: "subscription",
+        line_items: [{ price: "price_test_annuel", quantity: 1 }],
+        metadata: { pack: "annuel" },
       })
     )
   })

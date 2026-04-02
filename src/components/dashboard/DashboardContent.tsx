@@ -70,7 +70,7 @@ export function DashboardContent({
   const initials = profile
     ? `${(profile.prenom[0] || "").toUpperCase()}${(profile.nom[0] || "").toUpperCase()}`
     : "?"
-  const packLabel = pack === "mensuel" ? "Pack Mensuel" : pack === "lancement" ? "Pack Lancement" : null
+  const packLabel = pack === "mensuel" ? "Mensuel" : pack === "trimestriel" ? "Trimestriel" : pack === "annuel" ? "Annuel" : null
 
   const missingFields: string[] = []
   if (profile) {

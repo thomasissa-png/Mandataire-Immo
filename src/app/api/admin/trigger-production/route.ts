@@ -4,7 +4,7 @@ import { trackServer } from "@/lib/tracking"
 
 interface TriggerBody {
   client_id: string
-  pack_type: "mensuel" | "lancement" | "boost"
+  pack_type: "mensuel" | "setup" | "boost"
   mois?: string
   bien?: {
     titre: string
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
 
   // URL INTERNE localhost — bypass le proxy Replit qui coupe les requêtes longues
   // Le proxy externe (Replit/Cloudflare) a un timeout de ~30-60s.
-  // Un pack lancement = 7 appels Claude = 3-7 min → le proxy coupe et retourne "upstream request timeout".
+  // Un setup mois 1 = 7 appels Claude = 3-7 min → le proxy coupe et retourne "upstream request timeout".
   // En passant par localhost, on reste dans le process Node.js sans proxy.
   const port = process.env.PORT || "3000"
   const baseUrl = `http://127.0.0.1:${port}`
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
       targetUrl = `${baseUrl}/api/generate/pack-mensuel`
       targetBody = { client_id, mois }
       break
-    case "lancement":
+    case "setup":
       targetUrl = `${baseUrl}/api/generate/pack-lancement`
       targetBody = { client_id }
       break
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Forward la requete vers la route de generation
-  // Timeout 10 min : un pack lancement = 7 appels Claude = 3-7 minutes
+  // Timeout 10 min : setup mois 1 = 7 appels Claude = 3-7 minutes
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), 10 * 60 * 1000)
 

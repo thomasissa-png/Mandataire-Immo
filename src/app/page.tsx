@@ -11,17 +11,24 @@ import { HowItWorks } from "@/components/landing/HowItWorks"
 import { CTAFinal } from "@/components/landing/CTAFinal"
 import { Footer } from "@/components/landing/Footer"
 import { JsonLd } from "@/components/JsonLd"
-import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice } from "@/lib/pricing"
+import {
+  PACK_MENSUEL,
+  PACK_TRIMESTRIEL,
+  PACK_ANNUEL,
+  PACK_BOOST,
+  formatPrice,
+  formatStartingPrice,
+} from "@/lib/pricing"
 
 export const metadata: Metadata = {
-  title: `ImmoCrew — Marketing pour mandataires immobiliers | ${formatPrice(PACK_MENSUEL)}`,
+  title: `ImmoCrew — Marketing pour mandataires immobiliers | ${formatStartingPrice()}`,
   description:
-    `Externalise ton marketing immobilier. Chaque mois : 12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo — 100% personnalisés pour ta zone. À partir de ${formatPrice(PACK_MENSUEL)}.`,
+    `Externalise ton marketing immobilier. Chaque mois : 12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo — 100% personnalisés pour ta zone. ${formatStartingPrice()}.`,
   alternates: {
     canonical: "https://immocrew.fr",
   },
   openGraph: {
-    title: `ImmoCrew — Marketing pour mandataires immobiliers | ${formatPrice(PACK_MENSUEL)}`,
+    title: `ImmoCrew — Marketing pour mandataires immobiliers | ${formatStartingPrice()}`,
     description:
       "12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo par mois. 100% personnalisés pour ta zone. Tu publies, on fait le reste.",
     url: "https://immocrew.fr",
@@ -31,7 +38,7 @@ export const metadata: Metadata = {
 const serviceJsonLd = {
   "@context": "https://schema.org",
   "@type": "Service",
-  name: "Pack Mensuel ImmoCrew",
+  name: "ImmoCrew — Marketing pour mandataires immobiliers",
   description:
     "Service de marketing externalisé pour mandataires immobiliers indépendants. Chaque mois : 12 posts personnalisés, 4 articles SEO local, 4 annonces storytelling, 4 scripts vidéo, 1 newsletter, 1 email prospection.",
   provider: {
@@ -42,29 +49,37 @@ const serviceJsonLd = {
   areaServed: "FR",
   hasOfferCatalog: {
     "@type": "OfferCatalog",
-    name: "Packs ImmoCrew",
+    name: "Formules ImmoCrew",
     itemListElement: [
       {
         "@type": "Offer",
         name: PACK_MENSUEL.name,
         description:
-          "12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo, 1 newsletter, 1 email prospection — par mois",
+          "12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo, 1 newsletter, 1 email prospection — par mois, sans engagement",
         price: String(PACK_MENSUEL.price),
         priceCurrency: "EUR",
       },
       {
         "@type": "Offer",
-        name: PACK_LANCEMENT.name,
+        name: PACK_TRIMESTRIEL.name,
         description:
-          "Positionnement, bio optimisée, 5 templates annonces, 5 articles SEO local, calendrier éditorial 30j, 20 posts, 10 scripts Reels, kit graphique",
-        price: String(PACK_LANCEMENT.price),
+          "Formule trimestrielle : 12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo par mois — facturé 360€ tous les 3 mois (120€/mois, -20%)",
+        price: String(PACK_TRIMESTRIEL.totalPrice),
+        priceCurrency: "EUR",
+      },
+      {
+        "@type": "Offer",
+        name: PACK_ANNUEL.name,
+        description:
+          "Formule annuelle : 12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo par mois — facturé 1 200€/an (100€/mois, -33%, 4 mois offerts)",
+        price: String(PACK_ANNUEL.totalPrice),
         priceCurrency: "EUR",
       },
       {
         "@type": "Offer",
         name: PACK_BOOST.name,
         description:
-          "Annonce storytelling, 3 posts + 1 Reel dédiés, mini landing page, email blast acheteurs",
+          "Annonce storytelling, 3 posts + 1 Reel dédiés, mini landing page, email blast acheteurs — réservé aux abonnés",
         price: String(PACK_BOOST.price),
         priceCurrency: "EUR",
       },
