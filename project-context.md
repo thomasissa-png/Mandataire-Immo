@@ -313,44 +313,55 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 
 ## Memo de reprise — dernière session
 
-- **Date de clôture** : 2026-03-31, session 9
-- **Branche** : `claude/session-recovery-analysis-hGjj4`
-- **Résumé de la session** : Session riche en features dashboard : liens partageables pour les annonces, photos de ville sur le blog, layout compact single-column, filtre par mois + archivage sur les 6 pages de contenus, calendrier éditorial visuel (1 contenu/jour, jours préférés par type), système de parrainage complet (code, UI, Stripe, 57 tests), corrections blog (recommandations Sophie : content-first, hero réduit), fix photo profil, fix QA (annonce guard, breakpoints, tokens design system, grid calendrier). @social a produit la stratégie calendrier éditorial.
+- **Date de clôture** : 2026-04-02, session 10
+- **Branche** : `claude/extract-project-context-Pxon1`
+- **Résumé de la session** : Session massive — restructuration pricing (3 formules mensuel/trimestriel/annuel), refonte complète dashboard (13 composants, 50+ corrections), pipeline IA hebdomadaire, visuels gpt-image-1.5, blog mandataire, éditeur articles, section support, codes promo. Audits consolidés @moi + @mandataire sur dashboard, onboarding, site public. 357 tests passent.
 - **Travaux terminés cette session** :
-  - Liens publics partageables annonces (`/annonce/[token]`)
-  - Photos ville Unsplash sur blog articles + grille blog
-  - Layout compact single-column sur toutes les pages dashboard
-  - Filtre par mois + archive toggle sur 6 pages (annonces, scripts, emails, stratégie, posts, articles)
-  - Calendrier éditorial visuel (`EditorialCalendar.tsx`, page `/dashboard/calendrier`)
-  - Système parrainage complet (spec, 2 migrations SQL, 4 routes API, 3 composants UI, checkout intégré)
-  - Corrections blog Sophie (H1 avant hero, hero 80px mobile, CategoryIcon, max-w-4xl)
-  - Fix photo profil (préfixe `clients/` dans `/api/images/[key]`)
-  - Fix QA : guard annonces pack-lancement, breakpoint `tablet:`, tokens `info`, grid-cols-4
-  - Sécurité : XSS sanitizer renforcé, anti-auto-parrainage, rate limiting lazy, race condition archive
-  - Tests : 57 nouveaux (referral, MonthFilter, sanitizer), total 284 tests passent
-  - Stratégie calendrier éditorial (@social)
+  - Pricing restructuré : Pack Lancement supprimé, 3 formules (150€/120€/100€ par mois), Boost inchangé
+  - 10 codes promo pour essai gratuit (sql/019)
+  - Audit pricing complet : 39 corrections, 0 incohérence
+  - Calendrier éditorial : template hebdo (Lun=article, Mar/Jeu/Sam=posts, Ven=vidéo), overflow, modal centré, dots lettres
+  - Posts : plateforme intelligente, tips horaires, brief visuel, hashtags max 3
+  - Scripts vidéo : confort_camera branché, diaporama débutant, gardes null/undefined
+  - Articles SEO : éditeur inline (modifier avant publication), DeliverableCard
+  - Annonces : modal portail (titre+description séparés, compteur), photos, CTA contact
+  - Stratégie : sections fixes, regénérer visible, brief graphique retiré
+  - Blog mandataire : section articles sur /agent/[slug], page article publique
+  - Page Support : formulaire feedback (amélioration/bug/question)
+  - Visuels IA : gpt-image-1.5, 7 types de prompts, pipeline intégré
+  - Pipeline hebdomadaire : weekly-batch + cron + retry backoff
+  - Regénération avec approbation admin (pending_review)
+  - Onboarding : autocomplete ville, département auto, subtitles "pourquoi", LinkedIn fusionné
+  - Blog : cards verticales, hero 160px, CTA contextualisé
+  - Site public : faux témoignages supprimés, 181 entités HTML→UTF-8, Header/Footer page bien
+  - Hook pre-commit tsc --noEmit
+  - 28 suites, 357 tests, 0 échec
 - **Travaux en cours / non terminés** :
-  - Webhook Stripe `invoice.payment_succeeded` : logique crédit parrain pas encore implémentée
-  - Migrations SQL 015 + 016 (annonce share + referral) : à exécuter en production
-  - 3 learnings S9 P0/P1 propagés dans les fichiers cibles (CLAUDE.md, fullstack.md)
+  - Stripe intégration : 3 produits à créer (mensuel/trimestriel/annuel), checkout, webhooks
+  - Webhook `invoice.payment_succeeded` : logique crédit parrain
+  - Migrations SQL 015-019 à exécuter en production
+  - Emails nurturing : quelques références "Pack Lancement" résiduelles dans les templates
+  - Visuels IA : à tester avec OPENAI_API_KEY réelle
+  - Pipeline hebdomadaire : à tester avec ANTHROPIC_API_KEY
 - **Promesses restantes à tenir pour Sophie** :
-  - Landing page personnalisée `/agent/[slug]` (spec dans `docs/product/landing-mandataire-spec.md`, pas encore codée)
   - Scraping/enrichissement lien annonce (texte reformulé, feature dans le backlog)
+  - Génération automatique de visuels pour TOUS les posts (pipeline en place, clé API nécessaire)
 - **Prochaines actions recommandées** :
-  1. **@fullstack : Stripe intégration** — créer les produits Stripe, tester le checkout flow, implémenter le webhook `invoice.payment_succeeded` avec logique parrainage. Priorité car bloque la mise en production.
-  2. **@fullstack : Landing page perso `/agent/[slug]`** — spec prête, dernière promesse manquante pour Sophie. Différenciateur fort vs concurrence.
-  3. **@mandataire : Re-audit Sophie complet** — vérifier toutes les features sessions 8+9. Score cible : 9+/10.
-  4. **@qa : Tests nouveaux composants** — EditorialCalendar, ReferralSection, FilteredPageWrapper, AnnonceList share/archive.
-  5. **@seo : Audit SEO pages publiques** — sitemap à jour, meta OG sur /annonce/[token] et /bien/[slug].
+  1. **@fullstack : Stripe intégration** — créer 3 produits Stripe (mensuel 150€, trimestriel 360€, annuel 1200€), implémenter checkout + webhooks + logique parrainage. PRIORITÉ ABSOLUE — bloque la mise en production.
+  2. **@fullstack : Migrations SQL** — exécuter 015-019 en production
+  3. **@fullstack : Tester pipeline hebdomadaire** — configurer ANTHROPIC_API_KEY + CRON_SECRET, lancer un batch de test
+  4. **@fullstack : Tester visuels IA** — configurer OPENAI_API_KEY, vérifier la qualité sur 5 posts
+  5. **@seo : Audit SEO pages publiques** — sitemap à jour, meta OG, Schema.org
 - **Blockers** :
-  - STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET + produits Stripe à créer (bloque le lancement)
-  - ANTHROPIC_API_KEY nécessaire pour la génération IA
-  - Migrations SQL à exécuter : `for f in sql/015*.sql sql/016*.sql; do psql $DATABASE_URL -f $f; done`
-  - RESEND_API_KEY pour emails réels (Resend intégré, mode log-only actif)
-  - CRON_SECRET pour le cron nurturing
+  - STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET + 3 produits Stripe à créer
+  - ANTHROPIC_API_KEY pour la génération IA
+  - OPENAI_API_KEY pour les visuels auto
+  - RESEND_API_KEY pour emails réels
+  - CRON_SECRET pour le cron hebdomadaire
+  - Migrations SQL : `for f in sql/015*.sql sql/016*.sql sql/017*.sql sql/018*.sql sql/019*.sql; do psql $DATABASE_URL -f $f; done`
   - Marque INPI "ImmoCrew" à vérifier
 - **Commande de reprise suggérée** :
 
 ```
-@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 9). Branche claude/session-recovery-analysis-hGjj4. Session 9 terminée : features dashboard avancées (parrainage, calendrier éditorial, filtres mois, liens partageables). 284 tests passent. Prochaines priorités : Stripe intégration + webhook parrainage, landing perso /agent/[slug], re-audit Sophie, tests nouveaux composants.
+@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 10). Branche claude/extract-project-context-Pxon1. Session 10 terminée : pricing restructuré (3 formules), dashboard complet, pipeline IA hebdomadaire, 357 tests. Prochaine priorité : Stripe intégration (3 produits + checkout + webhooks).
 ```
