@@ -797,28 +797,7 @@ export default function OnboardingPage() {
                       </button>
                     )}
                   </div>
-                  {/* Lien d'annonce en premier — champ principal */}
-                  <div className="p-3 rounded-lg bg-secondary-50 border border-secondary-200">
-                    <label htmlFor={`bien-${index}-lien_annonce`} className="block text-body-sm font-semibold text-primary mb-1">
-                      Lien vers ton annonce
-                    </label>
-                    <input
-                      id={`bien-${index}-lien_annonce`}
-                      type="url"
-                      value={bien.lien_annonce}
-                      onChange={(e) =>
-                        updateBien(index, "lien_annonce", e.target.value)
-                      }
-                      placeholder="https://www.leboncoin.fr/annonces/..."
-                      className="w-full h-12 px-4 rounded-md border border-secondary-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
-                    />
-                    <p className="text-caption text-secondary-600 mt-1">
-                      Colle le lien de ton annonce existante — on le garde en référence pour personnaliser tes contenus.
-                    </p>
-                  </div>
-
-                  <p className="text-caption text-neutral-400 text-center">ou remplis manuellement</p>
-
+                  {/* Formulaire du bien — champs principaux */}
                   <div>
                     <label htmlFor={`bien-${index}-titre`} className="block text-caption font-medium text-neutral-600 mb-1">
                       Titre du bien
@@ -945,6 +924,22 @@ export default function OnboardingPage() {
                       placeholder="Vue Loire, parquet chêne, cave voûtée, 5 min tramway"
                       rows={2}
                       className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast resize-y"
+                    />
+                  </div>
+                  {/* Lien annonce — optionnel, en bas */}
+                  <div>
+                    <label htmlFor={`bien-${index}-lien_annonce`} className="block text-caption font-medium text-neutral-400 mb-1">
+                      Lien vers ton annonce existante (optionnel)
+                    </label>
+                    <input
+                      id={`bien-${index}-lien_annonce`}
+                      type="url"
+                      value={bien.lien_annonce}
+                      onChange={(e) =>
+                        updateBien(index, "lien_annonce", e.target.value)
+                      }
+                      placeholder="https://www.leboncoin.fr/..."
+                      className="w-full h-12 px-4 rounded-md border border-neutral-200 bg-white text-body text-foreground placeholder:text-neutral-300 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                     />
                   </div>
                 </div>
