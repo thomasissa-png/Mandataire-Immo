@@ -168,67 +168,80 @@ Les témoignages ci-dessus sont des templates basés sur les verbatims cibles du
 
 ## Section 6 — Pricing
 
+> ⚠️ Restructuration pricing 2026-04-02 — ancienne offre (Pack Lancement 497€ / Mensuel 197€ / Boost 97€) SUPPRIMÉE.
+> Source de vérité : `src/lib/pricing.ts` + `docs/strategy/pricing-restructure.md`
+
 ### Titre de section
 
-Choisis ton pack.
+Ton équipe marketing, à partir de 100€/mois.
 
-### Pack Lancement — 497€ (one-shot)
+### Formule Mensuel — 150€/mois (sans engagement)
 
-**Sous-titre :** Ton marketing clé en main en 7 jours.
+**Sous-titre :** Idéal pour tester. Sans engagement, résiliation libre.
 
-**Livrables inclus :**
-- Positionnement et personal branding
-- Bio optimisée pour tous tes profils
-- 5 templates d'annonces storytelling
-- 5 articles SEO local (quartier + ville)
-- Calendrier éditorial sur 30 jours
-- 20 posts prêts à publier
-- 10 scripts Reels
-- Kit graphique personnalisé
-
-**CTA :** Démarrer mon lancement →
-
-**Mention :** Satisfait ou remboursé 14 jours.
-
----
-
-### Pack Mensuel — 197€/mois ★ Populaire
-
-**Sous-titre :** Ton équipe marketing, chaque mois.
-
-**Livrables inclus :**
+**Livrables inclus (setup mois 1 inclus) :**
+- Setup mois 1 inclus : positionnement, bio, charte visuelle
 - 12 posts personnalisés pour tes réseaux
 - 4 scripts vidéo pour tes Reels
-- 2 articles SEO local
+- 4 articles SEO local
 - 1 newsletter pour tes contacts
-- 4 annonces immobilières storytelling
+- 4 annonces immobilières personnalisées
 - 1 email de prospection vendeurs
+- Calendrier de publication mensuel
 
-**CTA :** Commencer maintenant →
+**CTA :** Commencer ce mois-ci →
 
-**Mention :** Sans engagement. Résiliation libre.
+**Mention :** Sans engagement. Résiliation libre en 1 clic.
 
 ---
 
-### Boost Mandat — 97€/bien
+### Formule Trimestriel — 120€/mois · facturé 360€/3 mois ★ Recommandé
 
-**Sous-titre :** Fais briller ton nouveau bien.
+**Sous-titre :** Le choix malin. 120€/mois, facturé 360€ tous les 3 mois.
+
+**Livrables inclus :** Identique au Mensuel, setup mois 1 inclus.
+
+**Économie :** 90€ sur 3 mois (-20%)
+
+**CTA :** Économiser 20% →
+
+**Mention :** Engagement 3 mois. Résiliation à chaque échéance.
+
+---
+
+### Formule Annuel — 100€/mois · facturé 1 200€/an
+
+**Sous-titre :** Le meilleur tarif. 100€/mois, facturé 1 200€/an.
+
+**Livrables inclus :** Identique au Mensuel, setup mois 1 inclus.
+
+**Économie :** 600€/an — 4 mois offerts (-33%)
+
+**CTA :** Économiser 33% →
+
+**Mention :** Engagement 12 mois. 4 mois offerts vs le mensuel.
+
+---
+
+### Boost Mandat — 100€/bien (réservé abonnés)
+
+**Sous-titre :** Déjà abonné ? Ton nouveau bien mérite ses propres posts.
 
 **Livrables inclus :**
-- 1 annonce storytelling qui sort du lot
-- 3 posts dédiés au bien + 1 Reel
+- 1 annonce storytelling dédiée au bien
+- 3 posts réseaux sociaux + 1 script Reel
 - 1 mini landing page du bien
 - 1 email blast vers ta base d'acheteurs
 
-**CTA :** Booster un mandat →
+**CTA :** Booster mon prochain bien →
 
-**Mention :** Ponctuel, à la demande.
+**Mention :** Réservé aux abonnés. Ponctuel, à la demande.
 
 ---
 
-### Phrase d'ancrage (sous les 3 packs)
+### Phrase d'ancrage (sous les packs)
 
-197€/mois. Moins que ta commission sur un studio. Sauf que ça t'aide à en vendre dix.
+150€/mois. Moins que ta commission sur un studio. Sauf que ça t'aide à en vendre dix.
 
 Tous les prix sont TTC.
 
@@ -252,7 +265,7 @@ On utilise des outils IA pour personnaliser chaque contenu à ta zone (quartier,
 
 Quand tu commences, on te pose une vingtaine de questions : ta ville, ton quartier précis, ta spécialité (appartements, maisons, neuf, ancien), ton ton de communication, tes biens en cours. À partir de là, chaque contenu intègre des données locales réelles — les écoles du quartier, les commerces, les prix au m², les transports, l'ambiance. Pas juste le nom de ta ville en gras.
 
-### Q4 : 197€/mois, c'est rentable ?
+### Q4 : À partir de 100€/mois, c'est rentable ?
 
 Fais le calcul : ta commission moyenne sur une vente, c'est combien ? 3 000€ ? 5 000€ ? Il suffit d'UN mandat entrant supplémentaire par an grâce à ta visibilité en ligne pour rembourser l'abonnement annuel — et tout le reste, c'est du bonus. Aujourd'hui, combien de vendeurs te trouvent sur Google ou Instagram ? Si la réponse est zéro, tu sais déjà que c'est rentable.
 
@@ -266,7 +279,7 @@ Les templates de ton réseau, c'est le même visuel pour 18 000 mandataires. Ton
 
 ### Q7 : J'ai déjà essayé un community manager freelance et c'était décevant.
 
-On comprend. Le problème des CM freelance, c'est qu'ils ne connaissent pas l'immobilier. Ils postent des trucs génériques avec des hashtags random. ImmoCrew est fait uniquement pour les mandataires immobiliers. Nos rédacteurs connaissent ton métier, tes frustrations, tes clients. Et à 197€/mois au lieu de 500-800€, le risque est nettement plus faible.
+On comprend. Le problème des CM freelance, c'est qu'ils ne connaissent pas l'immobilier. Ils postent des trucs génériques avec des hashtags random. ImmoCrew est fait uniquement pour les mandataires immobiliers. Nos rédacteurs connaissent ton métier, tes frustrations, tes clients. Et à partir de 100€/mois au lieu de 500-800€, le risque est nettement plus faible.
 
 ### Q8 : Comment je reçois mes livrables ?
 
@@ -274,7 +287,7 @@ Tu as un espace client en ligne. Chaque mois, tu te connectes, tes livrables son
 
 ### Q9 : Je peux arrêter quand je veux ?
 
-Oui. Le Pack Mensuel est sans engagement. Tu peux résilier à tout moment, en un clic depuis ton espace client. Pas de frais cachés, pas de préavis de 3 mois, pas de coup de fil pour te retenir. Et pour le Pack Lancement, tu as une garantie satisfait ou remboursé de 14 jours.
+Oui. La formule Mensuel est sans engagement. Tu peux résilier à tout moment, en un clic depuis ton espace client. Pas de frais cachés, pas de préavis de 3 mois, pas de coup de fil pour te retenir. Les formules Trimestriel et Annuel s'engagent sur leur période, avec résiliation à chaque échéance. Et ton premier mois bénéficie d'une garantie satisfait ou remboursé de 14 jours.
 
 ### Q10 : Qui est derrière ImmoCrew ?
 
