@@ -56,8 +56,8 @@ describe("Pricing", () => {
 
   it("shows savings badges", () => {
     render(<Pricing />)
-    expect(screen.getByText(/Économise 20%/i)).toBeInTheDocument()
-    expect(screen.getByText(/Économise 33%/i)).toBeInTheDocument()
+    expect(screen.getByText(/Économise 90€/i)).toBeInTheDocument()
+    expect(screen.getByText(/4 mois offerts/i)).toBeInTheDocument()
   })
 
   it("shows '4 mois offerts' highlight on Annuel", () => {
