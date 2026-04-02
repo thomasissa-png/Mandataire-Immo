@@ -30,6 +30,7 @@ type TrackingEvent =
   | "referral_code_invalid"
   | "referral_converted"
   | "referral_credit_applied"
+  | "client_feedback"
 
 interface TrackingProperties {
   [key: string]: string | number | boolean | null | undefined
