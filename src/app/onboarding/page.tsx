@@ -73,7 +73,6 @@ interface BienData {
   surface: string
   pieces: string
   points_forts: string
-  lien_annonce: string
 }
 
 const EMPTY_BIEN: BienData = {
@@ -84,7 +83,6 @@ const EMPTY_BIEN: BienData = {
   surface: "",
   pieces: "",
   points_forts: "",
-  lien_annonce: "",
 }
 
 interface FieldConfig {
@@ -584,7 +582,7 @@ export default function OnboardingPage() {
         ...dataWithoutPhoto,
         photo_profil_key: photoKey,
         biens: JSON.stringify(
-          biens.filter((b) => b.titre.trim() !== "" || b.lien_annonce.trim() !== "")
+          biens.filter((b) => b.titre.trim() !== "")
         ),
       }
 
@@ -924,22 +922,6 @@ export default function OnboardingPage() {
                       placeholder="Vue Loire, parquet chêne, cave voûtée, 5 min tramway"
                       rows={2}
                       className="w-full px-4 py-3 rounded-md border border-neutral-300 bg-white text-body text-foreground placeholder:text-neutral-400 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast resize-y"
-                    />
-                  </div>
-                  {/* Lien annonce — optionnel, en bas */}
-                  <div>
-                    <label htmlFor={`bien-${index}-lien_annonce`} className="block text-caption font-medium text-neutral-400 mb-1">
-                      Lien vers ton annonce existante (optionnel)
-                    </label>
-                    <input
-                      id={`bien-${index}-lien_annonce`}
-                      type="url"
-                      value={bien.lien_annonce}
-                      onChange={(e) =>
-                        updateBien(index, "lien_annonce", e.target.value)
-                      }
-                      placeholder="https://www.leboncoin.fr/..."
-                      className="w-full h-12 px-4 rounded-md border border-neutral-200 bg-white text-body text-foreground placeholder:text-neutral-300 shadow-xs focus-visible:border-secondary focus-visible:shadow-inner focus-visible:outline-none transition-all duration-fast"
                     />
                   </div>
                 </div>
