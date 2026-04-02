@@ -25,7 +25,7 @@
 ---
 
 ## Positionnement
-- **Promesse unique** : Ton équipe marketing dédiée à 197€/mois — chaque mois, tu reçois tes posts, tes articles SEO, tes annonces, et tes scripts vidéo, 100% personnalisés pour ta zone, tes biens, et ton personal branding. Tu publies, on fait le reste.
+- **Promesse unique** : Ton équipe marketing dédiée à 150€/mois — chaque mois, tu reçois tes posts, tes articles SEO, tes annonces, et tes scripts vidéo, 100% personnalisés pour ta zone, tes biens, et ton personal branding. Tu publies, on fait le reste.
 - **Ton de marque** : Direct et complice — comme un collègue marketing qui te tutoie, parle concret, et ne te fait jamais sentir idiot de ne pas maîtriser le digital. Zéro jargon inutile, 100% orienté résultats.
 - **3 mots qui DÉFINISSENT la marque** : Concret, Personnalisé, Efficace
 - **3 mots qui ne DÉFINISSENT PAS la marque** : Générique, Technique, Froid
@@ -121,7 +121,7 @@
 
 ### Canal #4 — Partenariats team leaders
 - **Cible** : Responsables de secteur IAD/SAFTI/Capifrance (équipes de 10-50 mandataires)
-- **Tactique** : Offrir le Pack Lancement gratuit au team leader, il recommande à son équipe
+- **Tactique** : Offrir le premier mois gratuit au team leader, il recommande à son équipe
 - **Conversion attendue** : 1 partenariat/trimestre = 5-15 clients d'un coup
 
 ### Lancement Product Hunt + IndieHackers
@@ -262,6 +262,7 @@ ImmoCrew n'est PAS un outil. C'est une ÉQUIPE. Le mandataire rêve d'avoir un d
 | @fullstack | 2026-03-31 | Session 9 — Fix QA P1/P2 (annonce guard, breakpoints, tokens, grid) | Guard `ctx.biens.length > 0` dans pack-lancement. `sm:` → `tablet:` FilteredPageWrapper. `bg-blue-*` → `bg-info-*` ArticlesFiltered + DashboardContent. `grid-cols-5` → `grid-cols-4` calendrier. | Cohérence breakpoints custom (tablet: 768px) et design tokens (info au lieu de blue) dans tout le projet. |
 | @social | 2026-03-31 | Session 9 — Stratégie calendrier éditorial (`docs/social/editorial-calendar-strategy.md`) | Distribution 1/jour max, 26 jours dispo/mois, 19 contenus/mois. 5 piliers éditoriaux (expertise locale 35%, preuves sociales 25%, éducation 20%, personal branding 15%, engagement 5%). Règles par plateforme. 3 workflows repurposing. KPIs par plateforme avec seuils d'alerte. | Jours préférés par type de contenu basés sur les comportements audience immobilier (mardi/jeudi engagement max LinkedIn, samedi reach organique Instagram). Repurposing systématique car un article SEO peut devenir 3 posts + 1 thread — maximise le ROI contenu. |
 | @qa | 2026-03-31 | Session 9 — Audit QA corrections session | 3 P1 + 2 P2 identifiés : pack-lancement annonce guard, FilteredPageWrapper breakpoint, blue tokens, grid-cols calendrier. 284 tests passent (20 suites). | Audit ciblé sur les modifications de la session plutôt qu'audit exhaustif car les fondations sont stables (V5 GO sans réserve). |
+| @creative-strategy | 2026-04-02 | Restructuration offre pricing (`docs/strategy/pricing-restructure.md`) | Recommandation offre unique 150€/mois avec setup mois 1 inclus (Option B). Suppression du Pack Lancement comme offre séparée. Boost Mandat conservé à 100€/bien. Résolution incohérence 197€ vs 150€ : tranché sur 150€ dans project-context.md. Canal partenariats mis à jour (Pack Lancement gratuit → premier mois gratuit). | Option B retenue car supprime la friction de choix (550€ mois 1 perçu) et reste dans le budget Sophie (150€/mois = 1 vente/an pour ROI). Option D (200€/mois) écartée car 67% du budget max Sophie — seuil psychologique dépassé. Option C (2 packs autonomes) écartée car charge cognitive élevée et perception de service "au rabais" sur le mensuel. Scénario revenus révisé : 30 clients × 150€ + 14 boosts × 100€ = 5 900€/mois. |
 
 ---
 
