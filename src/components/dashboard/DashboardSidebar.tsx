@@ -59,6 +59,7 @@ const MORE_LINKS: SidebarLink[] = [
   { href: "/dashboard/biens", label: "Mes biens", icon: "🏡" },
   { href: "/dashboard/ma-page", label: "Ma page mandataire", icon: "🌐" },
   { href: "/dashboard/profile", label: "Mon profil", icon: "👤" },
+  { href: "/dashboard/support", label: "Support", icon: "💬" },
 ]
 
 export function DashboardSidebar() {
@@ -103,8 +104,12 @@ export function DashboardSidebar() {
 
           <hr className="border-border" />
           <a
-            href="mailto:contact@immocrew.fr"
-            className="w-full text-left px-3 py-2 rounded-lg text-body-sm flex items-center gap-2 text-neutral-600 hover:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+            href="/dashboard/support"
+            className={`w-full text-left px-3 py-2 rounded-lg text-body-sm flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 ${
+              isActive("/dashboard/support")
+                ? "bg-primary-50 text-primary font-semibold"
+                : "text-neutral-600 hover:bg-neutral-100"
+            }`}
           >
             <span className="text-sm" aria-hidden="true">💬</span>
             <span>Support</span>
