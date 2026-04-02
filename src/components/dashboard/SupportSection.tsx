@@ -30,8 +30,9 @@ export function SupportSection() {
       setMessage("")
       setTimeout(() => setSent(false), 5000)
     } catch {
-      // Fallback email
-      window.location.href = `mailto:contact@immocrew.fr?subject=${encodeURIComponent(`[${type}] Retour client`)}&body=${encodeURIComponent(message)}`
+      // Erreur réseau — message explicite, pas de redirection silencieuse
+      setSent(false)
+      alert("L'envoi a échoué. Tu peux nous écrire directement à contact@immocrew.fr")
     } finally {
       setSending(false)
     }
@@ -39,8 +40,7 @@ export function SupportSection() {
 
   return (
     <div className="rounded-lg bg-card border border-border p-5">
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-lg" aria-hidden="true">💬</span>
+      <div className="mb-3">
         <h2 className="font-display text-h4 text-primary">Un retour ? Une idée ?</h2>
       </div>
       <p className="text-body-sm text-neutral-500 mb-4">
@@ -78,7 +78,7 @@ export function SupportSection() {
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Décris ton retour ici..."
+            placeholder="Décris le problème ou ton idée en quelques mots..."
             rows={3}
             className="w-full px-4 py-3 rounded-lg border border-border bg-background text-body-sm text-foreground placeholder:text-neutral-400 resize-y focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50 mb-3"
           />
