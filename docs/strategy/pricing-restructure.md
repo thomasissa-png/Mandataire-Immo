@@ -100,6 +100,89 @@ Atteint l'objectif avec 0.47 boost/client/mois — cohérent avec 4-5 transactio
 
 ---
 
+---
+
+## Formules d'engagement
+
+> Décision fondateur 2026-04-02 : scinder l'abonnement unique 150€/mois en 3 formules avec discount à l'engagement.
+
+### Les 3 formules
+
+| Formule | Prix facturé | Équivalent/mois | Économie | Engagement |
+|---------|-------------|-----------------|----------|------------|
+| Mensuel | 150€/mois | 150€/mois | — | Sans engagement |
+| Trimestriel | 360€ / 3 mois | 120€/mois | 30€/mois (20%) | 3 mois |
+| Annuel | 1 200€ / an | 100€/mois | 50€/mois (33%) | 12 mois |
+
+**Règles de calcul :** prix ronds, pas de charm pricing. Trimestriel = 150€ × 3 × 0,80 = 360€. Annuel = 150€ × 12 × 0,67 = 1 206€ → arrondi à 1 200€ (cohérence et mémorabilité).
+
+### Logique des discounts
+
+**Pourquoi 20% trimestriel (pas 10-15%) :**
+30€/mois économisés = 90€ sur 3 mois — un montant tangible, pas symbolique. En dessous, Sophie fait le calcul et considère que l'économie ne justifie pas l'engagement. 20% est le seuil psychologique minimal pour déclencher un changement comportemental sur une décision à 150€/mois.
+
+**Pourquoi 33% annuel :**
+50€/mois économisés = 600€/an = 4 mois offerts. C'est l'argument qui fonctionne : "tu paies 8 mois, tu en as 12". Pour Sophie, 1 200€ en une fois représente 5-6% d'une commission — acceptable si elle a confiance dans le produit.
+
+**Seuil budget Sophie :**
+- Mensuel : 150€ — confort total, dans le budget déclaré
+- Trimestriel : 360€ paiement unique — au-dessus du budget mensuel mais paiement trimestriel. Présenter en équivalent mensuel (120€) + épargne automatique sur 3 mois
+- Annuel : 1 200€ — paiement unique significatif. Réservé aux Sophie qui ont déjà 1-2 mois d'expérience produit (upsell en-cours d'abonnement, pas en acquisition froide)
+
+### Formule featured : Trimestriel
+
+Mettre en avant le Trimestriel, pas l'Annuel. Raisons :
+1. Sophie doit d'abord faire confiance au produit — l'Annuel en acquisition froide = objection trésorerie
+2. 3 mois = durée suffisante pour voir les premiers résultats (mandats entrants, followers, trafic SEO)
+3. 90% de rétention à 3 mois (KPI North Star) — si Sophie reste 3 mois, elle reste 12
+
+### Scénario de revenus — 30 clients
+
+| Formule | Clients | MRR équivalent | Paiements upfront (tréso) |
+|---------|---------|----------------|--------------------------|
+| Mensuel (40%) | 12 | 1 800€/mois | 0€ |
+| Trimestriel (45%) | 13 | 1 560€/mois | 4 680€ tous les 3 mois |
+| Annuel (15%) | 5 | 500€/mois | 6 000€/an (~500€/mois) |
+| **Total** | **30** | **3 860€/mois** | |
+| + Boost Mandat (14 boosts) | — | 1 400€/mois | — |
+| **MRR total** | | **5 260€/mois** | |
+
+[HYPOTHESE : répartition 40/45/15 basée sur le comportement observé sur les SaaS avec discount trimestriel — à valider après 3 mois de données réelles.]
+
+Note : le MRR équivalent baisse (3 860€ vs 4 500€ tout-mensuel) mais la trésorerie s'améliore via les paiements upfront. Le Boost Mandat compense l'écart.
+
+### Présentation landing page
+
+**3 cartes pricing, hiérarchie claire :**
+- Gauche : Mensuel (sobre, sans badge)
+- Centre : Trimestriel — badge "Recommandé" + surlignage couleur primaire
+- Droite : Annuel — badge "Meilleur prix"
+
+**CTAs différenciés :**
+- Mensuel : "Commencer ce mois" (sans engagement, friction minimale)
+- Trimestriel : "Démarrer 3 mois" (engagement volontaire)
+- Annuel : "Passer à l'annuel" (réservé aux abonnés existants en priority — proposer aussi en acquisition)
+
+**Économie mise en avant :**
+- Trimestriel : "Économise 90€ tous les 3 mois"
+- Annuel : "4 mois offerts — économise 600€ par an"
+
+### Boost Mandat — inchangé
+
+100€/bien, réservé abonnés (toutes formules). Le discount d'engagement ne s'applique pas aux Boosts — c'est un achat ponctuel lié à une transaction, pas un abonnement. La cohérence du prix unique 100€/bien sur toutes les formules simplifie la décision.
+
+### Mois gratuit (code promo)
+
+Le mois d'essai gratuit s'applique au Mensuel uniquement. Pour Trimestriel et Annuel : proposer le premier mois à 0€ puis facturation du solde (360€ - 120€ = 240€ ou 1 200€ - 100€ = 1 100€). Cette mécanique évite les abus (inscriptions annuelles gratuites + résiliation).
+
+### Hypothèses à valider
+
+- [HYPOTHESE : répartition clients 40/45/15 — à ajuster selon données réelles à M+3]
+- [HYPOTHESE : 20% est le seuil psychologique de discount pour Sophie — à tester via A/B landing page]
+- [HYPOTHESE : l'Annuel est mieux converti en upsell (abonnés existants) qu'en acquisition froide — à monitorer via le tunnel Stripe]
+
+---
+
 **Handoff → @fullstack**
 - Fichiers produits : `docs/strategy/pricing-restructure.md`
 - Décisions prises : offre unique 150€/mois, setup mois 1 inclus, suppression du Pack Lancement comme offre séparée, Boost Mandat conservé à 100€/bien
