@@ -8,6 +8,7 @@ import { query } from "@/lib/db"
 import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
 import { markdownToHtml } from "@/lib/markdownRenderer"
+import { JsonLd } from "@/components/JsonLd"
 
 interface PageProps {
   params: Promise<{ slug: string; articleId: string }>
@@ -47,29 +48,39 @@ async function getArticle(slug: string, articleId: string): Promise<ArticleRow |
   return rows[0] || null
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://immocrew.fr"
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug, articleId } = await params
   const article = await getArticle(slug, articleId)
 
   if (!article) return { title: "Article non trouvé" }
 
+  const fullName = `${article.agent_prenom} ${article.agent_nom}`.trim()
   const description = typeof article.metadata?.meta_description === "string"
     ? article.metadata.meta_description
     : article.content.slice(0, 155).replace(/[#*\n]/g, " ").trim()
+
+  const canonicalUrl = `${BASE_URL}/agent/${slug}/blog/${articleId}`
 
   const robots = article.agent_indexation
     ? { index: true, follow: true }
     : { index: false, follow: false }
 
   return {
-    title: `${article.title} — ${article.agent_prenom} ${article.agent_nom}`,
+    title: `${article.title} — ${fullName}`,
     description,
     robots,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: article.title,
       description,
       type: "article",
       locale: "fr_FR",
+      url: canonicalUrl,
+      siteName: "ImmoCrew",
     },
   }
 }
@@ -87,8 +98,53 @@ export default async function AgentBlogArticlePage({ params }: PageProps) {
   })
   const fullName = `${article.agent_prenom} ${article.agent_nom}`.trim()
 
+  const articleDescription = typeof article.metadata?.meta_description === "string"
+    ? article.metadata.meta_description
+    : article.content.slice(0, 155).replace(/[#*\n]/g, " ").trim()
+
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: articleDescription,
+    datePublished: article.created_at,
+    dateModified: article.created_at,
+    url: `${BASE_URL}/agent/${slug}/blog/${articleId}`,
+    author: {
+      "@type": "Person",
+      name: fullName,
+      url: `${BASE_URL}/agent/${slug}`,
+      ...(article.agent_reseau
+        ? { jobTitle: `Mandataire immobilier ${article.agent_reseau}` }
+        : { jobTitle: "Mandataire immobilier indépendant" }),
+      ...(article.agent_ville
+        ? {
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: article.agent_ville,
+              addressCountry: "FR",
+            },
+          }
+        : {}),
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "ImmoCrew",
+      url: BASE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE_URL}/logo.png`,
+      },
+    },
+    inLanguage: "fr-FR",
+    ...(article.agent_ville
+      ? { about: { "@type": "Place", name: article.agent_ville } }
+      : {}),
+  }
+
   return (
     <>
+      <JsonLd data={articleJsonLd} />
       <Header />
       <main className="min-h-screen bg-background">
         {/* Header article */}

@@ -8,6 +8,7 @@ import { query } from "@/lib/db"
 import type { AgentPage, AgentProfile, AgentBienSummary } from "@/types/agent"
 import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
+import { JsonLd } from "@/components/JsonLd"
 import {
   HeroSection,
   QuiSuisJeSection,
@@ -189,6 +190,8 @@ function parsePhotos(raw: { url: string }[] | string | null): { url: string }[] 
 
 // ─── Metadata ───────────────────────────────────────────────────────
 
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://immocrew.fr"
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const data = await getAgentData(slug)
@@ -199,13 +202,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const { profile, page } = data
   const fullName = `${profile.prenom} ${profile.nom}`.trim()
-  const titleParts = [
-    profile.reseau ? `Mandataire ${profile.reseau}` : "Mandataire immobilier",
-    profile.ville ? `à ${profile.ville}` : null,
-    fullName || null,
-  ].filter(Boolean)
-  const title = titleParts.join(" — ")
-  const description = (page.bio_generee || profile.bio_personnelle || `${fullName}, mandataire immobilier`).slice(0, 150)
+  const ville = profile.ville || ""
+  const reseau = profile.reseau || ""
+
+  // Title : "{Prénom Nom} — Mandataire immobilier {Ville} | ImmoCrew"
+  const titleSegments: string[] = []
+  if (fullName) titleSegments.push(fullName)
+  titleSegments.push(
+    ["Mandataire immobilier", reseau, ville ? `à ${ville}` : ""]
+      .filter(Boolean)
+      .join(" ")
+  )
+  const title = titleSegments.join(" — ")
+
+  const description = (
+    page.bio_generee ||
+    profile.bio_personnelle ||
+    `${fullName}, mandataire immobilier${ville ? ` à ${ville}` : ""}. Découvrez son profil, ses biens et sa méthode d'accompagnement.`
+  ).slice(0, 155)
+
+  const canonicalUrl = `${BASE_URL}/agent/${slug}`
 
   const robots = page.indexation
     ? { index: true, follow: true }
@@ -215,11 +231,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     robots,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title,
       description,
       type: "profile",
       locale: "fr_FR",
+      url: canonicalUrl,
+      siteName: "ImmoCrew",
     },
   }
 }
@@ -235,8 +256,73 @@ export default async function AgentPageRoute({ params }: PageProps) {
   const biens = await getAgentBiens(page.client_id)
   const articles = await getAgentArticles(page.client_id)
 
+  const fullName = `${profile.prenom} ${profile.nom}`.trim()
+  const canonicalUrl = `${BASE_URL}/agent/${slug}`
+
+  // JSON-LD Person — mandataire immobilier
+  const personJsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: fullName,
+    jobTitle: profile.reseau
+      ? `Mandataire immobilier ${profile.reseau}`
+      : "Mandataire immobilier indépendant",
+    url: canonicalUrl,
+    ...(profile.photo_profil_key
+      ? { image: `${BASE_URL}/api/image/${profile.photo_profil_key}` }
+      : {}),
+    ...(profile.ville
+      ? {
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: profile.ville,
+            addressCountry: "FR",
+          },
+          areaServed: {
+            "@type": "City",
+            name: profile.ville,
+          },
+        }
+      : {}),
+    ...(profile.telephone ? { telephone: profile.telephone } : {}),
+    ...(email ? { email } : {}),
+    ...(profile.linkedin_url ? { sameAs: [profile.linkedin_url] } : {}),
+    ...(page.bio_generee || profile.bio_personnelle
+      ? { description: (page.bio_generee || profile.bio_personnelle || "").slice(0, 300) }
+      : {}),
+    worksFor: {
+      "@type": "Organization",
+      name: "ImmoCrew",
+      url: BASE_URL,
+    },
+  }
+
+  // JSON-LD LocalBusiness — complément pour le référencement local
+  const localBusinessJsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    name: fullName,
+    url: canonicalUrl,
+    ...(profile.ville
+      ? {
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: profile.ville,
+            addressRegion: profile.departement || undefined,
+            addressCountry: "FR",
+          },
+          areaServed: profile.quartiers || profile.ville,
+        }
+      : {}),
+    ...(profile.telephone ? { telephone: profile.telephone } : {}),
+    ...(email ? { email } : {}),
+    ...(profile.specialites ? { knowsAbout: profile.specialites } : {}),
+  }
+
   return (
     <>
+      <JsonLd data={personJsonLd} />
+      {profile.ville && <JsonLd data={localBusinessJsonLd} />}
       <Header />
       <main className="min-h-screen bg-background">
         <HeroSection profile={profile} />
