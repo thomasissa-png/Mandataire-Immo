@@ -43,7 +43,7 @@
 
 | Propriete | Type | Exemple | Obligatoire |
 |-----------|------|---------|-------------|
-| `cta_id` | string | `hero_main`, `hero_secondary`, `pricing_lancement`, `pricing_mensuel`, `pricing_boost`, `footer_main`, `footer_lead` | Oui |
+| `cta_id` | string | `hero_main`, `hero_secondary`, `pricing_mensuel`, `pricing_trimestriel`, `pricing_annuel`, `pricing_boost`, `footer_main`, `footer_lead` | Oui |
 | `cta_text` | string | `Commencer maintenant`, `Voir un exemple pour ma zone` | Oui |
 | `cta_location` | string | `hero`, `pricing`, `footer`, `social_proof` | Oui |
 | `target_url` | string | `/onboarding`, `https://checkout.stripe.com/...` | Oui |
@@ -134,7 +134,7 @@
 | Propriete | Type | Exemple | Obligatoire |
 |-----------|------|---------|-------------|
 | `source` | string | `post_payment`, `invitation`, `direct` | Oui |
-| `plan_purchased` | string | `lancement`, `mensuel`, `boost` | Oui |
+| `plan_purchased` | string | `mensuel`, `trimestriel`, `annuel`, `boost` | Oui |
 
 ---
 
@@ -231,7 +231,7 @@
 | `deliverable_id` | string | `del_2026_04_post_01` | Oui |
 | `deliverable_type` | string | `post_instagram`, `post_facebook`, `article_seo`, `script_video`, `annonce`, `newsletter`, `email_prospection` | Oui |
 | `deliverable_month` | string | `2026-04` | Oui |
-| `pack_type` | string | `mensuel`, `lancement`, `boost` | Oui |
+| `pack_type` | string | `mensuel`, `trimestriel`, `annuel`, `boost` | Oui |
 | `is_first_view` | boolean | `true` / `false` | Oui |
 
 ---
@@ -251,7 +251,7 @@
 | `deliverable_id` | string | `del_2026_04_post_01` | Oui |
 | `deliverable_type` | string | `post_instagram`, `article_seo`, `annonce` | Oui |
 | `download_format` | string | `copy_text`, `pdf`, `image_png`, `docx` | Oui |
-| `pack_type` | string | `mensuel`, `lancement`, `boost` | Oui |
+| `pack_type` | string | `mensuel`, `trimestriel`, `annuel`, `boost` | Oui |
 
 ---
 
@@ -322,8 +322,8 @@
 
 | Propriete | Type | Exemple | Obligatoire |
 |-----------|------|---------|-------------|
-| `plan` | string | `lancement`, `mensuel`, `boost` | Oui |
-| `price` | number | `497`, `197`, `97` | Oui |
+| `plan` | string | `mensuel`, `trimestriel`, `annuel`, `boost` | Oui |
+| `price` | number | `150`, `120`, `100` | Oui |
 | `currency` | string | `EUR` | Oui |
 | `source_page` | string | `landing_pricing`, `landing_hero`, `espace_client` | Oui |
 | `coupon_code` | string | `PARRAIN20` | Non |
@@ -342,8 +342,8 @@
 
 | Propriete | Type | Exemple | Obligatoire |
 |-----------|------|---------|-------------|
-| `plan` | string | `lancement`, `mensuel`, `boost` | Oui |
-| `amount` | number | `197` | Oui |
+| `plan` | string | `mensuel`, `trimestriel`, `annuel`, `boost` | Oui |
+| `amount` | number | `150` | Oui |
 | `currency` | string | `EUR` | Oui |
 | `is_first_payment` | boolean | `true` / `false` | Oui |
 | `stripe_customer_id` | string | `cus_abc123` | Oui |
@@ -365,7 +365,7 @@
 | Propriete | Type | Exemple | Obligatoire |
 |-----------|------|---------|-------------|
 | `plan` | string | `mensuel` | Oui |
-| `amount` | number | `197` | Oui |
+| `amount` | number | `150` | Oui |
 | `failure_reason` | string | `card_declined`, `insufficient_funds`, `expired_card` | Oui |
 | `retry_count` | number | `1`, `2`, `3` | Oui |
 | `stripe_customer_id` | string | `cus_abc123` | Oui |
@@ -388,7 +388,7 @@
 | `months_subscribed` | number | `3` | Oui |
 | `cancel_reason` | string | `too_expensive`, `not_useful`, `switching_competitor`, `quitting_business`, `other` | Oui |
 | `cancel_feedback` | string | texte libre | Non |
-| `mrr_lost` | number | `197` | Oui |
+| `mrr_lost` | number | `150` | Oui |
 
 ---
 
@@ -488,7 +488,7 @@ Ces proprietes sont attachees au profil utilisateur PostHog (via `posthog.identi
 
 | Propriete | Type | Source | Moment de mise a jour |
 |-----------|------|--------|----------------------|
-| `plan` | string (`lancement`, `mensuel`, `boost`, `churned`, `lead`) | Stripe webhooks | A chaque changement de statut |
+| `plan` | string (`mensuel`, `trimestriel`, `annuel`, `boost`, `churned`, `lead`) | Stripe webhooks | A chaque changement de statut |
 | `signup_date` | date | Creation du compte Clerk | Une seule fois |
 | `first_payment_date` | date | Premier `payment_success` | Une seule fois |
 | `mrr_contribution` | number | Stripe | A chaque paiement |
@@ -526,7 +526,7 @@ Ces proprietes sont attachees au profil utilisateur PostHog (via `posthog.identi
 | Segment | Filtre PostHog |
 |---------|----------------|
 | Leads (non payants) | `plan = "lead"` |
-| Pack Lancement uniquement | `plan = "lancement" AND months_subscribed = 0` |
+| Abonnes annuels | `plan = "annuel"` |
 | Abonnes mensuels actifs | `plan = "mensuel"` |
 | Abonnes + Boost | `plan = "mensuel" AND has_boost = true` |
 | Churned | `plan = "churned"` |
@@ -648,7 +648,7 @@ posthogServer.capture({
   event: 'payment_success',
   properties: {
     plan: 'mensuel',
-    amount: 197,
+    amount: 150,
     currency: 'EUR',
     is_first_payment: true,
     stripe_customer_id: stripeCustomerId,

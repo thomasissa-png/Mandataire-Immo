@@ -111,9 +111,9 @@ describe("POST /api/webhooks/stripe", () => {
     const event = makeStripeEvent("checkout.session.completed", {
       customer_email: "sophie@example.com",
       customer: "cus_test_123",
-      metadata: { pack: "lancement" },
+      metadata: { pack: "mensuel" },
       subscription: null,
-      amount_total: 49700,
+      amount_total: 15000,
       currency: "eur",
       id: "cs_test_123",
     })
@@ -128,7 +128,7 @@ describe("POST /api/webhooks/stripe", () => {
       expect.arrayContaining([
         "sophie@example.com",
         "cus_test_123",
-        "lancement",
+        "mensuel",
         "active",
       ])
     )
@@ -140,9 +140,9 @@ describe("POST /api/webhooks/stripe", () => {
         "sophie@example.com",
         "cs_test_123",
         "cus_test_123",
-        497,
+        150,
         "eur",
-        "lancement",
+        "mensuel",
         "completed",
       ])
     )
@@ -154,7 +154,7 @@ describe("POST /api/webhooks/stripe", () => {
       customer: "cus_test_123",
       metadata: {},
       subscription: "sub_test_123",
-      amount_total: 19700,
+      amount_total: 15000,
       currency: "eur",
       id: "cs_test_456",
     })
@@ -187,7 +187,7 @@ describe("POST /api/webhooks/stripe", () => {
     const event = makeStripeEvent("invoice.paid", {
       customer_email: "sophie@example.com",
       customer: "cus_test_123",
-      amount_paid: 19700,
+      amount_paid: 15000,
       currency: "eur",
       id: "in_test_123",
     })
@@ -200,7 +200,7 @@ describe("POST /api/webhooks/stripe", () => {
       expect.stringContaining("INSERT INTO payments"),
       expect.arrayContaining([
         "sophie@example.com",
-        197,
+        150,
         "mensuel",
         "completed",
       ])
@@ -211,7 +211,7 @@ describe("POST /api/webhooks/stripe", () => {
     const event = makeStripeEvent("invoice.paid", {
       customer_email: null,
       customer: "cus_test_123",
-      amount_paid: 19700,
+      amount_paid: 15000,
       currency: "eur",
       id: "in_test_456",
     })
@@ -292,7 +292,7 @@ describe("POST /api/webhooks/stripe", () => {
       customer: "cus_test_123",
       metadata: { pack: "mensuel" },
       subscription: null,
-      amount_total: 19700,
+      amount_total: 15000,
       currency: "eur",
       id: "cs_test_err",
     })

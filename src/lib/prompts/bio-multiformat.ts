@@ -1,6 +1,6 @@
 /**
  * Prompt — Bio optimisee multi-format (Instagram, LinkedIn, Google Business, general)
- * Utilise pour : L2 (Pack Lancement — 4 versions de bio)
+ * Utilise pour : S1 (Setup mois 1 — 4 versions de bio, inclus dans tous les abonnements)
  * Output : JSON avec les 4 formats de bio
  */
 

@@ -1,6 +1,6 @@
 /**
  * Prompt — Annonces immobilieres storytelling (600-900 mots)
- * Utilise pour : L3 (5 annonces Pack Lancement), M5 (4 annonces/mois Pack Mensuel), B1 (annonce Boost Mandat)
+ * Utilise pour : M5 (4 annonces/mois, inclus dans tous les abonnements), B1 (annonce Boost Mandat)
  * Output : Markdown par annonce avec accroche courte
  */
 

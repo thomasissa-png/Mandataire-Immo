@@ -1,6 +1,6 @@
 /**
  * Prompt — Scripts video/Reels scene par scene
- * Utilise pour : L7 (10 scripts Pack Lancement), M2 (4 scripts/mois Pack Mensuel), B2 (1 Reel Boost)
+ * Utilise pour : M2 (4 scripts/mois, inclus dans tous les abonnements), B2 (1 Reel Boost)
  * Output : JSON avec scripts structures scene par scene
  */
 

@@ -1,6 +1,6 @@
 /**
  * Prompt — Posts reseaux sociaux (Instagram, Facebook, LinkedIn)
- * Utilise pour : L6 (20 posts Pack Lancement), M1 (12 posts/mois Pack Mensuel), B2 (3 posts Boost)
+ * Utilise pour : M1 (12 posts/mois, inclus dans tous les abonnements), B2 (3 posts Boost)
  * Output : JSON array de posts prets a publier
  */
 

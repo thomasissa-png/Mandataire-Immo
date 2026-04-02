@@ -6,7 +6,7 @@ import { test, expect } from "./fixtures"
  * Why these tests exist:
  * The dashboard is where Sophie sees her livrables. It's the core value
  * delivery interface. The empty state (first visit after payment) is
- * particularly critical: Sophie just paid 197 EUR, lands on an empty page,
+ * particularly critical: Sophie just paid (150/120/100 EUR selon la formule), lands on an empty page,
  * and needs immediate reassurance that her team is working.
  *
  * Clerk auth bypass:
