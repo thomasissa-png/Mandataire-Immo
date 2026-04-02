@@ -7,9 +7,12 @@
  *   paiements non enregistres, clients marques comme actifs alors qu'ils ont resilie.
  * - La verification de signature est critique : sans elle, n'importe qui peut
  *   simuler des webhooks et creer de faux comptes.
+ * - Le traitement des codes parrainage est critique pour l'acquisition : un filleul
+ *   non creditee = un parrain frustre = bouche-a-oreille casse.
  *
  * Ce qui est mocke :
  * - stripe.webhooks.constructEvent : simule la verification de signature
+ * - stripe.subscriptions.retrieve : simule la recuperation de metadata pack
  * - query : la fonction d'acces DB via pg pool
  * - next/headers : simule les headers HTTP
  */
@@ -23,10 +26,12 @@ const {
   mockConstructEvent,
   mockQuery,
   mockHeaderStore,
+  mockSubscriptionRetrieve,
 } = vi.hoisted(() => ({
   mockConstructEvent: vi.fn(),
   mockQuery: vi.fn().mockResolvedValue({ rows: [], rowCount: 1 }),
   mockHeaderStore: { headers: {} as Record<string, string | null> },
+  mockSubscriptionRetrieve: vi.fn(),
 }))
 
 vi.mock("@/lib/stripe", () => ({
@@ -36,6 +41,9 @@ vi.mock("@/lib/stripe", () => ({
     },
     customers: {
       retrieve: vi.fn().mockResolvedValue({ deleted: false, email: "test@example.com" }),
+    },
+    subscriptions: {
+      retrieve: (...args: unknown[]) => mockSubscriptionRetrieve(...args),
     },
   },
 }))
@@ -82,6 +90,7 @@ describe("POST /api/webhooks/stripe", () => {
     vi.clearAllMocks()
     mockHeaderStore.headers = { "stripe-signature": "sig_test_123" }
     mockQuery.mockResolvedValue({ rows: [], rowCount: 1 })
+    mockSubscriptionRetrieve.mockResolvedValue({ metadata: { pack: "mensuel" } })
   })
 
   // --- Signature verification ---
@@ -181,13 +190,104 @@ describe("POST /api/webhooks/stripe", () => {
     expect(mockQuery).not.toHaveBeenCalled()
   })
 
+  // --- checkout.session.completed — referral processing ---
+
+  it("processes referral code on checkout with valid referral", async () => {
+    // Mock referral code lookup
+    mockQuery
+      .mockResolvedValueOnce({ rows: [], rowCount: 1 }) // INSERT clients
+      .mockResolvedValueOnce({ rows: [], rowCount: 1 }) // INSERT payments
+      .mockResolvedValueOnce({ rows: [{ id: "rc_1", user_id: "user_parrain" }], rowCount: 1 }) // SELECT referral_codes
+      .mockResolvedValueOnce({ rows: [{ id: "user_filleul" }], rowCount: 1 }) // SELECT clients (referee)
+      .mockResolvedValueOnce({ rows: [], rowCount: 1 }) // INSERT referrals
+      .mockResolvedValueOnce({ rows: [], rowCount: 1 }) // UPDATE clients (credit)
+
+    const event = makeStripeEvent("checkout.session.completed", {
+      customer_email: "filleul@example.com",
+      customer: "cus_filleul",
+      metadata: { pack: "mensuel", referral_code: "IMMOCREW-SOPH7K2M" },
+      subscription: "sub_test_ref",
+      amount_total: 15000,
+      currency: "eur",
+      id: "cs_test_ref",
+    })
+    mockConstructEvent.mockReturnValueOnce(event)
+
+    const response = await POST(makeRequest())
+    expect(response.status).toBe(200)
+
+    // Should have inserted into referrals
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("INSERT INTO referrals"),
+      expect.arrayContaining(["rc_1", "user_parrain", "user_filleul", "filleul@example.com"])
+    )
+
+    // Should have credited the referrer
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("referral_credit_months_remaining + 1"),
+      ["user_parrain"]
+    )
+  })
+
+  it("does not process referral if no referral_code in metadata", async () => {
+    const event = makeStripeEvent("checkout.session.completed", {
+      customer_email: "solo@example.com",
+      customer: "cus_solo",
+      metadata: { pack: "mensuel" },
+      subscription: null,
+      amount_total: 15000,
+      currency: "eur",
+      id: "cs_test_solo",
+    })
+    mockConstructEvent.mockReturnValueOnce(event)
+
+    await POST(makeRequest())
+
+    // Should NOT query referral_codes
+    expect(mockQuery).not.toHaveBeenCalledWith(
+      expect.stringContaining("referral_codes"),
+      expect.anything()
+    )
+  })
+
+  it("handles invalid referral code gracefully", async () => {
+    mockQuery
+      .mockResolvedValueOnce({ rows: [], rowCount: 1 }) // INSERT clients
+      .mockResolvedValueOnce({ rows: [], rowCount: 1 }) // INSERT payments
+      .mockResolvedValueOnce({ rows: [], rowCount: 0 }) // SELECT referral_codes — not found
+
+    const event = makeStripeEvent("checkout.session.completed", {
+      customer_email: "filleul@example.com",
+      customer: "cus_filleul",
+      metadata: { pack: "mensuel", referral_code: "IMMOCREW-INVALID" },
+      subscription: "sub_test_bad",
+      amount_total: 15000,
+      currency: "eur",
+      id: "cs_test_bad_ref",
+    })
+    mockConstructEvent.mockReturnValueOnce(event)
+
+    const response = await POST(makeRequest())
+    expect(response.status).toBe(200) // Should not crash
+  })
+
   // --- invoice.paid ---
 
-  it("records payment on invoice.paid", async () => {
+  it("records payment on invoice.paid with correct pack from subscription", async () => {
+    mockSubscriptionRetrieve.mockResolvedValueOnce({
+      metadata: { pack: "trimestriel" },
+    })
+
+    // Mock query responses: INSERT payments, then SELECT credit
+    mockQuery
+      .mockResolvedValueOnce({ rows: [], rowCount: 1 }) // INSERT payments
+      .mockResolvedValueOnce({ rows: [{ referral_credit_months_remaining: 0 }], rowCount: 1 }) // SELECT credit
+
     const event = makeStripeEvent("invoice.paid", {
       customer_email: "sophie@example.com",
       customer: "cus_test_123",
-      amount_paid: 15000,
+      subscription: "sub_test_tri",
+      amount_paid: 36000,
       currency: "eur",
       id: "in_test_123",
     })
@@ -200,10 +300,40 @@ describe("POST /api/webhooks/stripe", () => {
       expect.stringContaining("INSERT INTO payments"),
       expect.arrayContaining([
         "sophie@example.com",
-        150,
-        "mensuel",
+        360,
+        "trimestriel",
         "completed",
       ])
+    )
+  })
+
+  it("applies referral credit on invoice.paid when credit months remaining > 0", async () => {
+    mockSubscriptionRetrieve.mockResolvedValueOnce({
+      metadata: { pack: "mensuel" },
+    })
+
+    mockQuery
+      .mockResolvedValueOnce({ rows: [], rowCount: 1 }) // INSERT payments
+      .mockResolvedValueOnce({ rows: [{ referral_credit_months_remaining: 2 }], rowCount: 1 }) // SELECT credit
+      .mockResolvedValueOnce({ rows: [], rowCount: 1 }) // UPDATE credit
+
+    const event = makeStripeEvent("invoice.paid", {
+      customer_email: "parrain@example.com",
+      customer: "cus_parrain",
+      subscription: "sub_parrain",
+      amount_paid: 15000,
+      currency: "eur",
+      id: "in_credit",
+    })
+    mockConstructEvent.mockReturnValueOnce(event)
+
+    const response = await POST(makeRequest())
+    expect(response.status).toBe(200)
+
+    // Should decrement credit
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("referral_credit_months_remaining - 1"),
+      ["cus_parrain"]
     )
   })
 
@@ -252,6 +382,36 @@ describe("POST /api/webhooks/stripe", () => {
     expect(mockQuery).toHaveBeenCalledWith(
       expect.stringContaining("UPDATE clients SET status"),
       ["inactive", "cus_test_123"]
+    )
+  })
+
+  // --- invoice.payment_failed ---
+
+  it("records failed payment with correct pack", async () => {
+    mockSubscriptionRetrieve.mockResolvedValueOnce({
+      metadata: { pack: "annuel" },
+    })
+
+    const event = makeStripeEvent("invoice.payment_failed", {
+      customer_email: "sophie@example.com",
+      customer: "cus_test_fail",
+      subscription: "sub_annuel",
+      amount_due: 120000,
+      currency: "eur",
+      id: "in_fail_123",
+    })
+    mockConstructEvent.mockReturnValueOnce(event)
+
+    await POST(makeRequest())
+
+    expect(mockQuery).toHaveBeenCalledWith(
+      expect.stringContaining("INSERT INTO payments"),
+      expect.arrayContaining([
+        "sophie@example.com",
+        1200,
+        "annuel",
+        "failed",
+      ])
     )
   })
 

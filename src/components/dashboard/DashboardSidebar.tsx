@@ -27,6 +27,7 @@ const NAV_SECTIONS: SidebarSection[] = [
       { href: "/dashboard/profile", label: "Mon profil", icon: "👤" },
       { href: "/dashboard/ma-page", label: "Ma page mandataire", icon: "🌐" },
       { href: "/dashboard/biens", label: "Mes biens", icon: "🏡" },
+      { href: "/dashboard/parrainage", label: "Parrainage", icon: "🤝" },
     ],
   },
   {
@@ -58,6 +59,7 @@ const MORE_LINKS: SidebarLink[] = [
   { href: "/dashboard/strategie", label: "Bios et positionnement", icon: "🎯" },
   { href: "/dashboard/biens", label: "Mes biens", icon: "🏡" },
   { href: "/dashboard/ma-page", label: "Ma page mandataire", icon: "🌐" },
+  { href: "/dashboard/parrainage", label: "Parrainage", icon: "🤝" },
   { href: "/dashboard/profile", label: "Mon profil", icon: "👤" },
   { href: "/dashboard/support", label: "Support", icon: "💬" },
 ]
