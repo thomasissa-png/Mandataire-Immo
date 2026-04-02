@@ -119,8 +119,8 @@ async function sendNurturingForClient(
     unsubscribeUrl: buildUnsubscribeUrl(client.email),
   }
 
-  // J+2 : Pack Lancement, >= 2 jours
-  if (daysSinceCreation >= 2 && client.pack === "lancement") {
+  // J+2 : Nouveaux clients, >= 2 jours
+  if (daysSinceCreation >= 2) {
     const alreadySent = await isEmailSent(clientId, "nurturing_j2")
     if (!alreadySent) {
       const template = nurturingJ2(templateParams)
@@ -157,8 +157,8 @@ async function sendNurturingForClient(
     }
   }
 
-  // J+14 : Pack Lancement sans mensuel, >= 14 jours
-  if (daysSinceCreation >= 14 && client.pack === "lancement" && !client.stripe_subscription_id) {
+  // J+14 : Clients sans abonnement Stripe actif, >= 14 jours
+  if (daysSinceCreation >= 14 && !client.stripe_subscription_id) {
     const alreadySent = await isEmailSent(clientId, "nurturing_j14")
     if (!alreadySent) {
       const template = nurturingJ14(templateParams)

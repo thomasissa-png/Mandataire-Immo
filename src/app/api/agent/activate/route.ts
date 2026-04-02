@@ -34,7 +34,7 @@ interface ExistingPage {
 
 // ─── Validation ─────────────────────────────────────────────────────
 
-const VALID_PACKS = new Set(["lancement", "mensuel"])
+const VALID_PACKS = new Set(["mensuel", "trimestriel", "annuel"])
 
 // ─── Handler ────────────────────────────────────────────────────────
 
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
   const pack = (body as Record<string, unknown>)?.pack
   if (typeof pack !== "string" || !VALID_PACKS.has(pack)) {
     return NextResponse.json(
-      { error: "Pack invalide. Valeurs acceptées : lancement, mensuel" },
+      { error: "Pack invalide. Valeurs acceptées : mensuel, trimestriel, annuel" },
       { status: 400 }
     )
   }

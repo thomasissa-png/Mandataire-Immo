@@ -43,14 +43,13 @@ export async function GET(request: NextRequest) {
 
   try {
     // ------------------------------------------------------------------
-    // J+2 — Clients Pack Lancement inscrits il y a >= 2 jours
+    // J+2 — Nouveaux clients inscrits il y a >= 2 jours
     // ------------------------------------------------------------------
     await processNurturing({
       label: "j2",
       emailType: "nurturing_j2",
       sqlWhere: `
         c.created_at <= NOW() - INTERVAL '2 days'
-        AND c.pack = 'lancement'
         AND c.status != 'pending'
         AND (c.email_unsubscribed = FALSE OR c.email_unsubscribed IS NULL)
         AND c.id NOT IN (
@@ -94,14 +93,13 @@ export async function GET(request: NextRequest) {
     })
 
     // ------------------------------------------------------------------
-    // J+14 — Clients Pack Lancement sans abonnement mensuel, >= 14 jours
+    // J+14 — Clients sans abonnement Stripe actif, >= 14 jours
     // ------------------------------------------------------------------
     await processNurturing({
       label: "j14",
       emailType: "nurturing_j14",
       sqlWhere: `
         c.created_at <= NOW() - INTERVAL '14 days'
-        AND c.pack = 'lancement'
         AND c.stripe_subscription_id IS NULL
         AND c.status != 'pending'
         AND (c.email_unsubscribed = FALSE OR c.email_unsubscribed IS NULL)

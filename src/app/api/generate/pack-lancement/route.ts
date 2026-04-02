@@ -12,7 +12,7 @@ import { buildPositioningStatementPrompt } from "@/lib/prompts/positioning-state
 import { buildBioMultiformatPrompt } from "@/lib/prompts/bio-multiformat"
 import { buildEditorialCalendarPrompt } from "@/lib/prompts/editorial-calendar"
 
-interface PackLancementBody {
+interface SetupMois1Body {
   client_id: string
 }
 
@@ -22,9 +22,10 @@ interface DeliverableRow {
 
 /**
  * POST /api/generate/pack-lancement
- * Génère le pack lancement complet pour un client :
+ * Génère le setup mois 1 complet pour un nouveau client :
  * L1: positionnement, L2: bio multiformat, L3: 5 annonces,
  * L4: 5 articles SEO, L6: 20 posts, L7: 10 scripts, design brief.
+ * Ce setup est inclus dans toutes les formules d'abonnement (mensuel, trimestriel, annuel).
  * Admin-only.
  */
 export async function POST(request: NextRequest) {
@@ -34,7 +35,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Accès refusé" }, { status: 403 })
   }
 
-  let body: PackLancementBody
+  let body: SetupMois1Body
   try {
     body = await request.json()
   } catch {
@@ -67,7 +68,7 @@ export async function POST(request: NextRequest) {
 
   await trackServer("production_started", "admin", {
     client_id,
-    pack_type: "lancement",
+    pack_type: "setup",
   })
 
   // Vérifier que la clé API est configurée avant de lancer 7 appels Claude

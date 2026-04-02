@@ -10,7 +10,7 @@ import { query } from "@/lib/db"
  * Body : { email: string, pack?: string, status?: string }
  * Exemples :
  *   { "email": "sophie@test.fr", "pack": "mensuel", "status": "active" }
- *   { "email": "sophie@test.fr", "pack": "lancement" }
+ *   { "email": "sophie@test.fr", "pack": "trimestriel" }
  *   { "email": "sophie@test.fr", "status": "frozen" }
  */
 export async function POST(request: NextRequest) {
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const validPacks = ["lancement", "mensuel", "boost", null]
+  const validPacks = ["mensuel", "trimestriel", "annuel", "boost", null]
   const validStatuses = ["pending", "active", "frozen", "cancelled", null]
 
   if (pack && !validPacks.includes(pack)) {
