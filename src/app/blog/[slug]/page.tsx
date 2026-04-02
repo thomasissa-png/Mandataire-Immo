@@ -33,11 +33,13 @@ export async function generateMetadata({
     return { title: "Article introuvable" }
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://immocrew.fr"
+
   return {
     title: article.metaTitle,
     description: article.metaDescription,
     alternates: {
-      canonical: `/blog/${article.slug}`,
+      canonical: `${baseUrl}/blog/${article.slug}`,
     },
     openGraph: {
       title: article.metaTitle,
@@ -45,7 +47,7 @@ export async function generateMetadata({
       type: "article",
       publishedTime: article.date,
       authors: ["ImmoCrew"],
-      url: `/blog/${article.slug}`,
+      url: `${baseUrl}/blog/${article.slug}`,
       images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
     },
     twitter: {

@@ -10,6 +10,7 @@ import { PropertyContact } from "@/components/property/PropertyContact"
 import { PrintButton } from "@/components/property/PrintButton"
 import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
+import { JsonLd } from "@/components/JsonLd"
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -30,6 +31,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: "Bien non trouvé" }
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://immocrew.fr"
+  const slug = property.slug || id
   const title = property.titre_annonce || property.titre
   const description =
     property.accroche_courte ||
@@ -38,6 +41,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    alternates: {
+      canonical: `${baseUrl}/bien/${slug}`,
+    },
     openGraph: {
       title,
       description,
@@ -53,6 +59,76 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+function buildPropertyJsonLd(property: PropertyPage) {
+  const titre = property.titre_annonce || property.titre
+  const ville = property.city
+    ? `${property.city}${property.postcode ? `, ${property.postcode}` : ""}`
+    : property.adresse
+  const photos = [
+    ...property.photos_staging.map((p) => p.url),
+    ...property.photos_originales.map((p) => p.url),
+  ].slice(0, 10)
+
+  const jsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateListing",
+    name: titre,
+    description:
+      property.accroche_courte ||
+      `${property.type_bien} ${property.pieces} pièces — ${property.surface} m² à ${ville}`,
+    url: property.slug
+      ? `https://immocrew.fr/bien/${property.slug}`
+      : `https://immocrew.fr/bien/${property.id}`,
+    datePosted: property.published_at || property.created_at,
+    price: property.prix,
+    priceCurrency: "EUR",
+    floorSize: {
+      "@type": "QuantitativeValue",
+      value: property.surface,
+      unitCode: "MTK",
+    },
+    numberOfRooms: property.pieces,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: property.adresse,
+      addressLocality: property.city ?? undefined,
+      postalCode: property.postcode ?? undefined,
+      addressCountry: "FR",
+    },
+  }
+
+  if (photos.length > 0) {
+    jsonLd.image = photos
+  }
+
+  if (property.lat !== null && property.lon !== null) {
+    jsonLd.geo = {
+      "@type": "GeoCoordinates",
+      latitude: property.lat,
+      longitude: property.lon,
+    }
+  }
+
+  if (property.dpe_classe !== null) {
+    jsonLd.energyConsumptionDetails = {
+      "@type": "EnergyConsumptionDetails",
+      hasEnergyEfficiencyCategory:
+        `https://schema.org/EUEnergyEfficiencyCategory${property.dpe_classe}`,
+    }
+  }
+
+  if (property.nom_mandataire) {
+    jsonLd.seller = {
+      "@type": "RealEstateAgent",
+      name: property.nom_mandataire,
+      email: property.email_contact ?? undefined,
+      telephone: property.telephone_contact ?? undefined,
+    }
+  }
+
+  return jsonLd
+}
+
 export default async function PropertyPageRoute({ params }: PageProps) {
   const { id } = await params
   const property = await getProperty(id)
@@ -63,9 +139,11 @@ export default async function PropertyPageRoute({ params }: PageProps) {
   const hasDVF = property.dvf_prix_m2_moyen !== null
   const hasDPE = property.dpe_classe !== null
   const hasMap = property.lat !== null && property.lon !== null
+  const propertyJsonLd = buildPropertyJsonLd(property)
 
   return (
     <>
+    <JsonLd data={propertyJsonLd} />
     <Header />
     <main className="min-h-screen bg-background">
       {/* Header du bien */}

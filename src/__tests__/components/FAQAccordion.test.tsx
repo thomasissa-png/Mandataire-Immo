@@ -3,20 +3,20 @@
  *
  * Pourquoi ces tests existent :
  * - Le composant FAQAccordion est distinct du FAQ landing (FAQ.tsx).
- *   Il est réutilisable avec des items dynamiques passés en props.
+ *   Il utilise <details>/<summary> HTML natifs pour le SEO (contenu visible sans JS).
  * - Le premier item est ouvert par défaut (spec UX : réponse immédiate).
- * - Comportement "un seul item ouvert à la fois" : même spec que le FAQ landing.
- * - Accessibilité : aria-expanded, aria-controls, id uniques — conformité RGAA.
+ * - Accessibilité : aria-controls, id uniques, role="region" — conformité RGAA.
  *
  * Ce qui est testé :
- * - Rendu initial : premier item ouvert, les autres fermés
- * - Interaction : click ouvre un item et ferme les autres
- * - ARIA : aria-expanded synchronisé, aria-controls pointe vers le bon panel
+ * - Rendu initial : tous les items affichés, premier ouvert
  * - IDs uniques et correspondance heading/panel
+ * - Panels et leur aria-labelledby
+ * - Contenu visible au premier rendu
+ * - Gestion liste vide
  */
 
 import { describe, it, expect } from "vitest"
-import { render, screen, fireEvent, within } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import { FAQAccordion } from "@/components/faq/FAQAccordion"
 
 const MOCK_ITEMS = [
@@ -43,88 +43,36 @@ describe("FAQAccordion", () => {
     }
   })
 
-  it("le premier item est ouvert par défaut (aria-expanded=true)", () => {
-    render(<FAQAccordion items={MOCK_ITEMS} />)
-    const buttons = screen.getAllByRole("button")
+  it("le premier item est ouvert par défaut (attribut open)", () => {
+    const { container } = render(<FAQAccordion items={MOCK_ITEMS} />)
+    const detailsElements = container.querySelectorAll("details")
 
-    expect(buttons[0]).toHaveAttribute("aria-expanded", "true")
+    expect(detailsElements[0]).toHaveAttribute("open")
   })
 
-  it("les autres items sont fermés par défaut (aria-expanded=false)", () => {
-    render(<FAQAccordion items={MOCK_ITEMS} />)
-    const buttons = screen.getAllByRole("button")
+  it("les autres items sont fermés par défaut (pas d'attribut open)", () => {
+    const { container } = render(<FAQAccordion items={MOCK_ITEMS} />)
+    const detailsElements = container.querySelectorAll("details")
 
-    expect(buttons[1]).toHaveAttribute("aria-expanded", "false")
-    expect(buttons[2]).toHaveAttribute("aria-expanded", "false")
+    expect(detailsElements[1]).not.toHaveAttribute("open")
+    expect(detailsElements[2]).not.toHaveAttribute("open")
   })
 
-  it("cliquer sur un item fermé l'ouvre et ferme l'item ouvert", () => {
-    render(<FAQAccordion items={MOCK_ITEMS} />)
-    const buttons = screen.getAllByRole("button")
+  it("chaque summary a un id unique au format faq-page-heading-{index}", () => {
+    const { container } = render(<FAQAccordion items={MOCK_ITEMS} />)
+    const summaries = container.querySelectorAll("summary")
 
-    // État initial : item 0 ouvert
-    expect(buttons[0]).toHaveAttribute("aria-expanded", "true")
-    expect(buttons[1]).toHaveAttribute("aria-expanded", "false")
-
-    // Click sur item 1
-    fireEvent.click(buttons[1])
-
-    expect(buttons[1]).toHaveAttribute("aria-expanded", "true")
-    expect(buttons[0]).toHaveAttribute("aria-expanded", "false")
-    expect(buttons[2]).toHaveAttribute("aria-expanded", "false")
-  })
-
-  it("cliquer sur l'item déjà ouvert le ferme (aucun item ouvert)", () => {
-    render(<FAQAccordion items={MOCK_ITEMS} />)
-    const buttons = screen.getAllByRole("button")
-
-    // Item 0 est ouvert par défaut
-    expect(buttons[0]).toHaveAttribute("aria-expanded", "true")
-
-    // Click sur item 0 pour le fermer
-    fireEvent.click(buttons[0])
-
-    // Tous fermés
-    for (const button of buttons) {
-      expect(button).toHaveAttribute("aria-expanded", "false")
-    }
-  })
-
-  it("un seul item ouvert à la fois — vérification sur 3 clicks successifs", () => {
-    render(<FAQAccordion items={MOCK_ITEMS} />)
-    const buttons = screen.getAllByRole("button")
-
-    // Click item 2
-    fireEvent.click(buttons[2])
-    expect(buttons[2]).toHaveAttribute("aria-expanded", "true")
-    expect(buttons.filter((b) => b.getAttribute("aria-expanded") === "true")).toHaveLength(1)
-
-    // Click item 1
-    fireEvent.click(buttons[1])
-    expect(buttons[1]).toHaveAttribute("aria-expanded", "true")
-    expect(buttons.filter((b) => b.getAttribute("aria-expanded") === "true")).toHaveLength(1)
-
-    // Click item 0
-    fireEvent.click(buttons[0])
-    expect(buttons[0]).toHaveAttribute("aria-expanded", "true")
-    expect(buttons.filter((b) => b.getAttribute("aria-expanded") === "true")).toHaveLength(1)
-  })
-
-  it("chaque bouton a un id unique au format faq-page-heading-{index}", () => {
-    render(<FAQAccordion items={MOCK_ITEMS} />)
-    const buttons = screen.getAllByRole("button")
-
-    buttons.forEach((button, index) => {
-      expect(button).toHaveAttribute("id", `faq-page-heading-${index}`)
+    summaries.forEach((summary, index) => {
+      expect(summary).toHaveAttribute("id", `faq-page-heading-${index}`)
     })
   })
 
-  it("chaque bouton a un aria-controls pointant vers le panel correspondant", () => {
-    render(<FAQAccordion items={MOCK_ITEMS} />)
-    const buttons = screen.getAllByRole("button")
+  it("chaque summary a un aria-controls pointant vers le panel correspondant", () => {
+    const { container } = render(<FAQAccordion items={MOCK_ITEMS} />)
+    const summaries = container.querySelectorAll("summary")
 
-    buttons.forEach((button, index) => {
-      expect(button).toHaveAttribute("aria-controls", `faq-page-panel-${index}`)
+    summaries.forEach((summary, index) => {
+      expect(summary).toHaveAttribute("aria-controls", `faq-page-panel-${index}`)
     })
   })
 
@@ -148,6 +96,20 @@ describe("FAQAccordion", () => {
 
   it("gère une liste vide sans erreur", () => {
     const { container } = render(<FAQAccordion items={[]} />)
-    expect(container.querySelector("[role='region']")).toBeNull()
+    expect(container.querySelector("details")).toBeNull()
+  })
+
+  it("affiche le bon nombre de details elements", () => {
+    const { container } = render(<FAQAccordion items={MOCK_ITEMS} />)
+    const detailsElements = container.querySelectorAll("details")
+    expect(detailsElements).toHaveLength(3)
+  })
+
+  it("chaque réponse est dans le DOM (SSR-friendly, visible par les crawlers)", () => {
+    render(<FAQAccordion items={MOCK_ITEMS} />)
+
+    for (const item of MOCK_ITEMS) {
+      expect(screen.getByText(item.answer)).toBeInTheDocument()
+    }
   })
 })

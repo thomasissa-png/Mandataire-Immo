@@ -18,6 +18,7 @@ export const metadata: Metadata = {
     description:
       "Questions fréquentes sur ImmoCrew : prix, fonctionnement, personnalisation, résiliation, RGPD.",
     url: "https://immocrew.fr/faq",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 }
 

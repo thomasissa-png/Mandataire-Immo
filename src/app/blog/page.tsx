@@ -5,19 +5,22 @@ import { Footer } from "@/components/landing/Footer"
 import { getAllArticles } from "@/lib/blog"
 import { BlogGrid } from "@/components/blog/BlogGrid"
 
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://immocrew.fr"
+
 export const metadata: Metadata = {
   title: "Blog ImmoCrew — Marketing et SEO pour mandataires immobiliers",
   description:
     "Conseils concrets de marketing digital pour mandataires immobiliers indépendants : réseaux sociaux, SEO local, annonces, personal branding. Gratuit.",
   alternates: {
-    canonical: "/blog",
+    canonical: `${BASE_URL}/blog`,
   },
   openGraph: {
     title: "Blog ImmoCrew — Marketing et SEO pour mandataires immobiliers",
     description:
       "Guides pratiques pour ta présence digitale : posts, annonces, SEO local, Google Business Profile.",
-    url: "/blog",
+    url: `${BASE_URL}/blog`,
     type: "website",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 }
 

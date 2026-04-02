@@ -17,6 +17,7 @@ export const metadata: Metadata = {
     description:
       `Service de marketing clé en main pour mandataires immobiliers indépendants. 12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo par mois. ${formatPrice(PACK_MENSUEL)}.`,
     url: "https://immocrew.fr/a-propos",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
 }
 
