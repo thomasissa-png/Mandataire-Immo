@@ -61,7 +61,7 @@ export default async function ProfilePage() {
     <DashboardPageLayout
       icon="👤"
       title="Mon profil"
-      description="Modifie tes infos pour que tes contenus soient toujours dans le mille."
+      description="Ces infos sont utilisées pour personnaliser tes contenus chaque mois — quartiers, spécialités, ton, tout est calibré sur ce que tu renseignes ici."
     >
       <div className="max-w-2xl">
         <ProfileSectionNav />

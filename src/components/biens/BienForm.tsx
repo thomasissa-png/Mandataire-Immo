@@ -130,8 +130,14 @@ export function BienForm() {
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitProgress, setSubmitProgress] = useState<string | null>(null)
 
-  // Étape 2 : upload photos après création
+  // Photos sélectionnées (avant création du bien)
+  const [selectedPhotos, setSelectedPhotos] = useState<File[]>([])
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([])
+  const photoInputRef = useRef<HTMLInputElement>(null)
+
+  // Étape 2 : upload photos après création (fallback si besoin)
   const [step, setStep] = useState<"form" | "photos">("form")
   const [createdId, setCreatedId] = useState<string | null>(null)
 
@@ -171,6 +177,32 @@ export function BienForm() {
   const selectAddress = (suggestion: AddressSuggestion) => {
     setFormData((prev) => ({ ...prev, adresse: suggestion.label }))
     address.close()
+  }
+
+  // ─── Photos ─────────────────────────────────────────────────────
+
+  const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return
+    const newFiles = Array.from(e.target.files).filter(
+      (f) => f.size <= 5 * 1024 * 1024 && ["image/jpeg", "image/png", "image/webp"].includes(f.type)
+    )
+    const total = [...selectedPhotos, ...newFiles].slice(0, 10)
+    setSelectedPhotos(total)
+    // Générer les previews
+    const previews = total.map((f) => URL.createObjectURL(f))
+    setPhotoPreviews((prev) => {
+      prev.forEach(URL.revokeObjectURL)
+      return previews
+    })
+    e.target.value = ""
+  }
+
+  const removePhoto = (index: number) => {
+    setSelectedPhotos((prev) => prev.filter((_, i) => i !== index))
+    setPhotoPreviews((prev) => {
+      URL.revokeObjectURL(prev[index])
+      return prev.filter((_, i) => i !== index)
+    })
   }
 
   // ─── Submit ─────────────────────────────────────────────────────
@@ -214,8 +246,36 @@ export function BienForm() {
       }
 
       const { id } = await res.json()
-      setCreatedId(id)
-      setStep("photos")
+
+      // Upload les photos sélectionnées
+      if (selectedPhotos.length > 0) {
+        setSubmitProgress(`Upload des photos (0/${selectedPhotos.length})...`)
+        for (let i = 0; i < selectedPhotos.length; i++) {
+          setSubmitProgress(`Upload des photos (${i + 1}/${selectedPhotos.length})...`)
+          try {
+            const reader = new FileReader()
+            const base64 = await new Promise<string>((resolve, reject) => {
+              reader.onload = () => resolve(reader.result as string)
+              reader.onerror = () => reject(new Error("Erreur lecture"))
+              reader.readAsDataURL(selectedPhotos[i])
+            })
+            await fetch(`/api/biens/${id}/photos`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                photo: base64,
+                filename: selectedPhotos[i].name,
+                ordre: i,
+              }),
+            })
+          } catch {
+            // Continuer même si une photo échoue
+          }
+        }
+      }
+
+      // Redirection directe vers la fiche bien
+      router.push(`/dashboard/biens/${id}`)
     } catch (err) {
       setSubmitError(
         err instanceof Error
@@ -529,6 +589,61 @@ export function BienForm() {
         />
       </div>
 
+      {/* Photos du bien — sélection avant création */}
+      <div>
+        <label className="block text-body-sm font-semibold text-primary mb-1.5">
+          Photos du bien
+        </label>
+        <p className="text-caption text-neutral-400 mb-3">
+          JPG, PNG ou WebP · 5 Mo max par photo · Jusqu{"'"}à 10 photos
+        </p>
+
+        {/* Previews */}
+        {photoPreviews.length > 0 && (
+          <div className="grid grid-cols-3 tablet:grid-cols-5 gap-2 mb-3">
+            {photoPreviews.map((src, i) => (
+              <div key={src} className="relative aspect-square rounded-lg overflow-hidden border border-border group">
+                <img src={src} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => removePhoto(i)}
+                  className="absolute top-1 right-1 w-6 h-6 rounded-full bg-error-600 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  aria-label={`Supprimer la photo ${i + 1}`}
+                >
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Bouton ajout */}
+        {selectedPhotos.length < 10 && (
+          <>
+            <input
+              ref={photoInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              className="hidden"
+              onChange={handlePhotoSelect}
+            />
+            <button
+              type="button"
+              onClick={() => photoInputRef.current?.click()}
+              className="w-full flex items-center justify-center gap-2 h-12 rounded-lg border-2 border-dashed border-neutral-300 text-body-sm text-neutral-500 hover:border-secondary hover:text-secondary transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91M3.75 21h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
+              </svg>
+              {selectedPhotos.length === 0 ? "Ajouter des photos" : `Ajouter d'autres photos (${selectedPhotos.length}/10)`}
+            </button>
+          </>
+        )}
+      </div>
+
       {/* Erreur de soumission */}
       {submitError && (
         <div className="rounded-lg bg-error-50 border border-error-200 p-4" role="alert">
@@ -544,11 +659,11 @@ export function BienForm() {
       >
         {submitting ? (
           <>
-            <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" aria-hidden="true" />
-            Création en cours...
+            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
+            {submitProgress || "Création en cours..."}
           </>
         ) : (
-          "Créer mon bien"
+          selectedPhotos.length > 0 ? `Créer mon bien avec ${selectedPhotos.length} photo${selectedPhotos.length > 1 ? "s" : ""}` : "Créer mon bien"
         )}
       </button>
     </form>

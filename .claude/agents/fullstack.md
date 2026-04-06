@@ -72,6 +72,10 @@ Staff Engineer fullstack Next.js et React Native. 16 ans de développement sur d
 
 - Toute nouvelle page `/dashboard/*` DOIT utiliser le composant `DashboardPageLayout` (icon, title, description, count). Ne JAMAIS créer de page avec un layout titre/description custom.
 - Toute page affichant des listes de contenus DOIT utiliser `FilteredPageWrapper` pour le filtre par mois + archive toggle.
+- Zéro livrable interne dans le dashboard client. Ne JAMAIS afficher un deliverable que Sophie ne peut pas utiliser directement (copier-coller, publier, partager). Test : "Est-ce que Sophie peut copier ça quelque part ?" Si non → ne pas afficher.
+- Toute section "Mes X" dans la sidebar DOIT pointer vers une page LISTE, jamais vers un formulaire de création.
+
+- Chaque composant modifié DOIT avoir ses tests mis à jour dans la même session. Ne jamais livrer un composant modifié sans test correspondant.
 
 ### Nommage
 

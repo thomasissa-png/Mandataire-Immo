@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Header } from "@/components/landing/Header"
 import { Footer } from "@/components/landing/Footer"
 import { JsonLd } from "@/components/JsonLd"
-import { PACK_LANCEMENT, PACK_MENSUEL, PACK_BOOST, formatPrice, formatPriceTTC } from "@/lib/pricing"
+import { PACK_MENSUEL, PACK_TRIMESTRIEL, PACK_ANNUEL, PACK_BOOST, PRIX_MIN_MENSUEL, formatPrice, formatPriceTTC, formatStartingPrice } from "@/lib/pricing"
 import { FAQAccordion } from "@/components/faq/FAQAccordion"
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Qu'est-ce qu'ImmoCrew ?",
     answer:
-      "ImmoCrew est un service de marketing clé en main destiné aux mandataires immobiliers indépendants en France. Chaque mois, le mandataire reçoit ses contenus marketing complets (12 posts réseaux sociaux, 2 articles SEO local, 4 annonces personnalisées, 4 scripts vidéo, 1 newsletter, 1 email de prospection), personnalisés pour sa zone géographique et prêts à publier. Il n'y a aucun outil à configurer, aucun template à adapter.",
+      "ImmoCrew est un service de marketing clé en main destiné aux mandataires immobiliers indépendants en France. Chaque mois, le mandataire reçoit ses contenus marketing complets (12 posts réseaux sociaux, 4 articles SEO local, 4 annonces personnalisées, 4 scripts vidéo, 1 newsletter, 1 email de prospection), personnalisés pour sa zone géographique et prêts à publier. Il n'y a aucun outil à configurer, aucun template à adapter.",
   },
   {
     question: "Comment fonctionne ImmoCrew ?",
@@ -35,7 +35,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Combien coûte ImmoCrew ?",
     answer:
-      `ImmoCrew propose trois formules. Le ${PACK_MENSUEL.name} à ${formatPriceTTC(PACK_MENSUEL)} par mois (sans engagement) inclut le contenu mensuel complet : 12 posts, 4 scripts vidéo, 2 articles SEO, 4 annonces, 1 newsletter, 1 email de prospection. Le ${PACK_LANCEMENT.name} à ${formatPriceTTC(PACK_LANCEMENT)} (one-shot) fournit un kit de démarrage complet avec 20 posts, 5 articles SEO, 10 scripts Reels et un calendrier éditorial sur 30 jours. Le ${PACK_BOOST.name} à ${formatPriceTTC(PACK_BOOST)} par bien met un bien spécifique en avant avec une annonce storytelling, 3 posts dédiés, 1 Reel, 1 mini landing page et 1 email blast.`,
+      `ImmoCrew propose trois formules d'abonnement. Le ${PACK_MENSUEL.name} à ${formatPriceTTC(PACK_MENSUEL)} (sans engagement). Le ${PACK_TRIMESTRIEL.name} à ${PACK_TRIMESTRIEL.price}€/mois, facturé ${PACK_TRIMESTRIEL.totalPrice}€ tous les 3 mois (-${PACK_TRIMESTRIEL.savings}). Le ${PACK_ANNUEL.name} à ${PACK_ANNUEL.price}€/mois, facturé ${PACK_ANNUEL.totalPrice}€/an (-${PACK_ANNUEL.savings}, 4 mois offerts). Chaque formule inclut le même contenu mensuel : 12 posts, 4 scripts vidéo, 4 articles SEO, 4 annonces, 1 newsletter, 1 email de prospection, et le setup du mois 1. En complément, le ${PACK_BOOST.name} à ${formatPriceTTC(PACK_BOOST)} par bien (réservé aux abonnés) met un bien spécifique en avant.`,
   },
   {
     question: "Qui utilise ImmoCrew ?",
@@ -45,7 +45,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Quelle est la différence entre ImmoCrew et un community manager freelance ?",
     answer:
-      `Un community manager freelance facture généralement entre 500€ et 800€ par mois pour du contenu souvent générique, avec des délais variables et un résultat dépendant de la personne. ImmoCrew est un service productisé à prix fixe (${formatPrice(PACK_MENSUEL)}) avec un volume de contenus garanti chaque mois, personnalisés pour la zone géographique exacte du mandataire. Le mandataire sait exactement ce qu'il reçoit, quand il le reçoit, et combien ça coûte.`,
+      `Un community manager freelance facture généralement entre 500€ et 800€ par mois pour du contenu souvent générique, avec des délais variables et un résultat dépendant de la personne. ImmoCrew est un service productisé à partir de ${PRIX_MIN_MENSUEL}€/mois avec un volume de contenus garanti chaque mois, personnalisés pour la zone géographique exacte du mandataire. Le mandataire sait exactement ce qu'il reçoit, quand il le reçoit, et combien ça coûte.`,
   },
   {
     question: "Quelle est la différence entre ImmoCrew et une plateforme SaaS de marketing ?",
@@ -65,7 +65,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Peut-on résilier à tout moment ?",
     answer:
-      "Oui. Le Pack Mensuel est sans engagement. La résiliation est libre, sans frais, depuis l'espace client ou par email à contact@immocrew.fr. Elle prend effet à la fin de la période mensuelle en cours. Les contenus déjà livrés restent accessibles. Le Pack Lancement bénéficie d'une garantie satisfait ou remboursé de 14 jours.",
+      "Oui. La formule Mensuel est sans engagement. La résiliation est libre, sans frais, depuis l'espace client ou par email à contact@immocrew.fr. Les formules Trimestriel et Annuel s'engagent sur leur période, avec résiliation à chaque échéance. Dans tous les cas, les contenus déjà livrés restent accessibles. Le premier mois bénéficie d'une garantie satisfait ou remboursé de 14 jours.",
   },
   {
     question: "Combien de temps faut-il pour publier les contenus ?",
@@ -90,17 +90,17 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "ImmoCrew crée-t-il mes visuels et mes photos ?",
     answer:
-      "Non. ImmoCrew produit les contenus rédactionnels : textes de posts, articles, annonces, scripts vidéo, newsletters. Les visuels (photos de biens, portraits, créations graphiques) ne sont pas inclus dans le service. Le brief d'identité visuelle fourni dans le Pack Lancement donne des recommandations pour créer une identité cohérente, mais la production graphique reste à la charge du mandataire.",
+      "Non. ImmoCrew produit les contenus rédactionnels : textes de posts, articles, annonces, scripts vidéo, newsletters. Les visuels (photos de biens, portraits, créations graphiques) ne sont pas inclus dans le service. Le brief d'identité visuelle fourni lors du setup du mois 1 donne des recommandations pour créer une identité cohérente, mais la production graphique reste à la charge du mandataire.",
   },
   {
     question: "Puis-je voir un exemple de contenu avant de m'abonner ?",
     answer:
-      "Oui. La page d'accueil d'immocrew.fr présente des exemples avant/après d'annonces immobilières produites par ImmoCrew. Ces exemples montrent la différence entre une annonce standard et une annonce storytelling personnalisée pour une zone précise. Le Pack Lancement bénéficie également d'une garantie satisfait ou remboursé de 14 jours.",
+      "Oui. La page d'accueil d'immocrew.fr présente des exemples avant/après d'annonces immobilières produites par ImmoCrew. Ces exemples montrent la différence entre une annonce standard et une annonce storytelling personnalisée pour une zone précise. Le premier mois bénéficie d'une garantie satisfait ou remboursé de 14 jours.",
   },
   {
     question: "ImmoCrew inclut-il des articles pour le référencement local (SEO) ?",
     answer:
-      "Oui. Chaque Pack Mensuel inclut 2 articles SEO local par mois. Ces articles ciblent des requêtes comme « mandataire immobilier [ville] », « vendre appartement [quartier] » ou « estimation bien immobilier [zone] ». Ils sont structurés pour améliorer la visibilité organique du mandataire dans les résultats Google locaux.",
+      "Oui. Chaque Pack Mensuel inclut 4 articles SEO local par mois. Ces articles ciblent des requêtes comme « mandataire immobilier [ville] », « vendre appartement [quartier] » ou « estimation bien immobilier [zone] ». Ils sont structurés pour améliorer la visibilité organique du mandataire dans les résultats Google locaux.",
   },
   {
     question: "Le contenu généré par IA sera-t-il détecté par Google ou mes clients ?",
@@ -137,11 +137,11 @@ export default function FAQPage() {
           <article className="max-w-3xl mx-auto">
             {/* H1 */}
             <h1 className="font-display text-h1 desktop:text-display-lg font-bold text-primary mb-3">
-              FAQ ImmoCrew &mdash; Toutes les r&eacute;ponses pour les mandataires immobiliers
+              FAQ ImmoCrew — Toutes les réponses pour les mandataires immobiliers
             </h1>
             <p className="text-body-lg text-neutral-500 mb-10 desktop:mb-14">
-              Tu te poses des questions sur ImmoCrew ? Tu trouveras ici les r&eacute;ponses
-              les plus fr&eacute;quentes sur le fonctionnement, les prix, la personnalisation
+              Tu te poses des questions sur ImmoCrew ? Tu trouveras ici les réponses
+              les plus fréquentes sur le fonctionnement, les prix, la personnalisation
               et les garanties du service.
             </p>
 
@@ -151,23 +151,23 @@ export default function FAQPage() {
             {/* CTA */}
             <div className="mt-14 rounded-xl bg-primary p-8 desktop:p-10 text-center">
               <p className="font-display text-h3 text-white mb-3">
-                Tu n&rsquo;as pas trouv&eacute; ta r&eacute;ponse ?
+                Tu n&rsquo;as pas trouvé ta réponse ?
               </p>
               <p className="text-body text-primary-200 mb-6">
-                &Eacute;cris-nous &agrave;{" "}
+                Écris-nous à{" "}
                 <a
                   href="mailto:contact@immocrew.fr"
                   className="text-secondary underline underline-offset-2 hover:text-secondary-300 transition-colors"
                 >
                   contact@immocrew.fr
                 </a>
-                {" "}&mdash; on r&eacute;pond en moins de 24h.
+                {" "}— on répond en moins de 24h.
               </p>
               <a
                 href="/#pricing"
                 className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-secondary text-white font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
               >
-                D&eacute;couvrir les offres &rarr;
+                Découvrir les offres →
               </a>
             </div>
 
@@ -177,7 +177,7 @@ export default function FAQPage() {
                 href="/"
                 className="text-secondary font-semibold hover:text-secondary-700 transition-colors"
               >
-                &larr; Retour &agrave; l&rsquo;accueil
+                &larr; Retour à l&rsquo;accueil
               </Link>
             </div>
           </article>

@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 
   if (!pack || !(pack in STRIPE_PRICES)) {
     return NextResponse.json(
-      { error: "Invalid pack. Must be one of: mensuel, mensuel-trimestriel, lancement, boost" },
+      { error: "Invalid pack. Must be one of: mensuel, trimestriel, annuel, boost" },
       { status: 400 }
     )
   }
@@ -18,8 +18,8 @@ export async function GET(request: NextRequest) {
   const priceId = STRIPE_PRICES[pack]
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://immocrew.fr"
 
-  // Determine payment mode based on pack type
-  const isSubscription = pack === "mensuel" || pack === "mensuel-trimestriel"
+  // All packs are subscriptions except boost (one-shot)
+  const isSubscription = pack === "mensuel" || pack === "trimestriel" || pack === "annuel"
 
   // Referral code: if valid, apply 7-day trial for the referee
   const hasReferralCode = Boolean(referralCode && referralCode.startsWith("IMMOCREW-"))
@@ -37,7 +37,6 @@ export async function GET(request: NextRequest) {
       cancel_url: `${appUrl}/#pricing`,
       metadata: {
         pack,
-        ...(pack === "mensuel-trimestriel" && { engagement_months: "3" }),
         ...(hasReferralCode && { referral_code: referralCode! }),
       },
       ...(isSubscription && hasReferralCode && {

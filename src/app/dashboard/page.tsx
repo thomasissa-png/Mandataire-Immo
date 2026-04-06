@@ -1,7 +1,9 @@
+import { redirect } from "next/navigation"
 import { getSessionUser } from "@/lib/getSessionUser"
 import { query } from "@/lib/db"
 import { getDeliverables } from "@/lib/getDeliverables"
 import { DashboardContent } from "@/components/dashboard/DashboardContent"
+import { getAllArticles } from "@/lib/blog"
 
 interface ClientRow {
   id: string
@@ -16,7 +18,7 @@ export default async function DashboardPage() {
   const user = await getSessionUser()
 
   if (!user) {
-    return null
+    redirect("/sign-in")
   }
 
   const primaryEmail = user.email
@@ -90,6 +92,10 @@ export default async function DashboardPage() {
     nb_transactions_an: String(ctx.nb_transactions_an || ""),
     type_biens: String(ctx.type_biens || ""),
     linkedin_url: String(ctx.linkedin_url || ""),
+    instagram: String(ctx.instagram || ""),
+    facebook: String(ctx.facebook || ""),
+    site_web: String(ctx.site_web || ""),
+    confort_camera: String(ctx.confort_camera || "debutant"),
     quartiers: String(ctx.quartiers || ""),
     gamme_prix: String(ctx.gamme_prix || ""),
     ton_communication: String(ctx.ton_communication || ""),
@@ -110,6 +116,22 @@ export default async function DashboardPage() {
 
   const profileIncomplete = !ctx || !ctx.ville
 
+  // Rediriger vers l'onboarding si client_context est totalement vide
+  // (Google sign-up saute l'onboarding — on le rattrape ici)
+  if (!ctx || Object.keys(ctx).length === 0) {
+    redirect("/onboarding")
+  }
+
+  // Sélectionner 2 articles blog recommandés (varier par mois)
+  const allBlogArticles = getAllArticles()
+  const monthIndex = new Date().getMonth()
+  const recommended = allBlogArticles.length > 0
+    ? [
+        allBlogArticles[monthIndex % allBlogArticles.length],
+        allBlogArticles[(monthIndex + 1) % allBlogArticles.length],
+      ].filter((a, i, arr) => arr.indexOf(a) === i) // déduplique si 1 seul article
+    : []
+
   return (
     <DashboardContent
       userName={user.firstName || user.name || ""}
@@ -119,6 +141,7 @@ export default async function DashboardPage() {
       deliverables={monthDeliverables}
       profile={profile}
       profileIncomplete={profileIncomplete}
+      recommendedArticles={recommended.map((a) => ({ slug: a.slug, title: a.title, description: a.description }))}
     />
   )
 }

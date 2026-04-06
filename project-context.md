@@ -25,7 +25,7 @@
 ---
 
 ## Positionnement
-- **Promesse unique** : Ton équipe marketing dédiée à 197€/mois — chaque mois, tu reçois tes posts, tes articles SEO, tes annonces, et tes scripts vidéo, 100% personnalisés pour ta zone, tes biens, et ton personal branding. Tu publies, on fait le reste.
+- **Promesse unique** : Ton équipe marketing dédiée à partir de 100€/mois — chaque mois, tu reçois tes posts, tes articles SEO, tes annonces, et tes scripts vidéo, 100% personnalisés pour ta zone, tes biens, et ton personal branding. Tu publies, on fait le reste.
 - **Ton de marque** : Direct et complice — comme un collègue marketing qui te tutoie, parle concret, et ne te fait jamais sentir idiot de ne pas maîtriser le digital. Zéro jargon inutile, 100% orienté résultats.
 - **3 mots qui DÉFINISSENT la marque** : Concret, Personnalisé, Efficace
 - **3 mots qui ne DÉFINISSENT PAS la marque** : Générique, Technique, Froid
@@ -50,7 +50,7 @@
 - **Hébergement** : Replit (Deployments)
 - **Outils IA utilisés** : Claude API (génération de contenu personnalisé via le framework Gradient Agents — 19 agents coordonnés : @copywriter, @seo, @geo, @social, @design, @creative-strategy)
 - **Budget IA mensuel (tokens)** : À définir (estimation : 50-100€/mois pour 30 clients)
-- **Volume d'usage IA prévu** : ~30 sessions d'agents/mois (1 par client), chaque session génère 12 posts + 2 articles + 4 annonces + 4 scripts vidéo
+- **Volume d'usage IA prévu** : ~30 sessions d'agents/mois (1 par client), chaque session génère 12 posts + 4 articles + 4 annonces + 4 scripts vidéo
 - **Latence IA cible** : Pas de contrainte temps réel — production batch, livrables livrés sous 24-48h
 - **Outils d'analytics** : Umami Cloud (remplace PostHog — décision fondateur 2026-03-28). Website ID : 533b1471-2f40-41dd-8754-02fa0f0615f8. Région : EU. URL : https://cloud.umami.is
 
@@ -62,22 +62,24 @@
 - **Données sensibles collectées** : [x] Non  [ ] Oui (on collecte uniquement : nom, zone géographique, spécialité immobilière, ton de communication — aucune donnée financière client)
 - **Utilisation d'IA générative** : [x] Oui — usage prévu : Production intégrale du contenu marketing (textes, scripts, stratégie) via agents IA coordonnés. Les livrables sont relus/validés avant livraison.
 
-### Détail du pricing
+### Détail du pricing (restructuré 2026-04-02)
 
-| Offre | Prix | Contenu | Cible |
-|-------|------|---------|-------|
-| Pack Lancement (one-shot) | 400€ | Ce qui te rend unique, bio optimisée, 5 annonces, 5 articles SEO local, plan de publication 30j, 20 posts, 10 scripts Reels, charte visuelle | Nouveaux clients — onboarding |
-| Pack Mensuel | 150€/mois | 12 posts/mois, 4 scripts vidéo, 2 articles SEO, 1 newsletter, 4 annonces, 1 email prospection, calendrier mensuel | Récurrent — cœur du business |
-| Boost Mandat (upsell) | 100€/bien | Annonce rédigée, 3 posts + 1 Reel, page web du bien, email acheteurs | Réservé abonnés Pack Mensuel |
+| Formule | Prix | Équivalent/mois | Contenu |
+|---------|------|-----------------|---------|
+| Mensuel | 150€/mois | 150€ | Setup mois 1 inclus + 12 posts, 4 scripts vidéo, 4 articles SEO, 4 annonces, 1 newsletter, 1 email prospection, calendrier mensuel |
+| Trimestriel (recommandé) | 360€/3 mois | 120€/mois (-20%) | Identique au mensuel. Engagement 3 mois, résiliation à chaque échéance |
+| Annuel | 1 200€/an | 100€/mois (-33%) | Identique au mensuel. Engagement 12 mois, 4 mois offerts |
+| Boost Mandat (upsell) | 100€/bien | — | Annonce rédigée, 3 posts + 1 Reel, page web du bien, email acheteurs. Réservé abonnés |
+
+Notes : Pack Lancement supprimé (setup intégré au mois 1 de chaque formule). Mois gratuit (codes promo) : mensuel uniquement.
 
 ### Scénario de revenus (objectif 5K/mois)
 
 | Source | Volume | CA mensuel |
 |--------|--------|------------|
-| Packs mensuels | 15 clients | 2 955€ |
-| Packs lancement | 2/mois | 994€ |
-| Boosts mandat | 10/mois | 970€ |
-| **Total** | | **4 919€** |
+| Abonnements (mix formules) | 15 clients | 2 250€ |
+| Boosts mandat | 10/mois | 1 000€ |
+| **Total** | | **3 250€** |
 
 ---
 
@@ -85,7 +87,7 @@
 - **Budget mensuel infrastructure** : < 100€ (Replit + Supabase + domaine + email)
 - **Budget mensuel acquisition** : 0€ — acquisition 100% organique (SEO, LinkedIn, groupes Facebook, Product Hunt, partenariats)
 - **Budget analytics** : 0€ (PostHog gratuit tier)
-- **Timeline de lancement** : Site + Pack Lancement opérationnel en 2 semaines. Premiers clients beta en semaine 3. Facturation dès le mois 2.
+- **Timeline de lancement** : Site opérationnel en 2 semaines. Premiers clients beta en semaine 3. Facturation dès le mois 2.
 - **Contraintes légales ou sectorielles** : RGPD standard. Loi Hoguet (pas de contrainte directe — on ne fait pas de transaction immobilière). Mention obligatoire que le contenu est produit avec assistance IA si requis par évolution réglementaire.
 - **Ressources disponibles** : [x] Solo + framework Gradient Agents (19 agents IA)
 
@@ -121,7 +123,7 @@
 
 ### Canal #4 — Partenariats team leaders
 - **Cible** : Responsables de secteur IAD/SAFTI/Capifrance (équipes de 10-50 mandataires)
-- **Tactique** : Offrir le Pack Lancement gratuit au team leader, il recommande à son équipe
+- **Tactique** : Offrir le premier mois gratuit au team leader, il recommande à son équipe
 - **Conversion attendue** : 1 partenariat/trimestre = 5-15 clients d'un coup
 
 ### Lancement Product Hunt + IndieHackers
@@ -132,7 +134,7 @@
 ## Brief créatif (pour @creative-strategy et @copywriter)
 
 ### Positionnement narratif
-ImmoCrew n'est PAS un outil. C'est une ÉQUIPE. Le mandataire rêve d'avoir un directeur marketing, un graphiste, un rédacteur, un community manager. Il ne peut pas se les payer. ImmoCrew lui donne tout ça pour 197€/mois. C'est la démocratisation de l'équipe marketing.
+ImmoCrew n'est PAS un outil. C'est une ÉQUIPE. Le mandataire rêve d'avoir un directeur marketing, un graphiste, un rédacteur, un community manager. Il ne peut pas se les payer. ImmoCrew lui donne tout ça à partir de 100€/mois. C'est la démocratisation de l'équipe marketing.
 
 ### Angle émotionnel
 "Tu n'as pas choisi l'immobilier pour passer tes soirées sur Canva." Le mandataire veut faire de l'immobilier — visiter des biens, rencontrer des vendeurs, closer des mandats. Pas écrire des posts Instagram à 22h. ImmoCrew lui rend son métier.
@@ -262,6 +264,9 @@ ImmoCrew n'est PAS un outil. C'est une ÉQUIPE. Le mandataire rêve d'avoir un d
 | @fullstack | 2026-03-31 | Session 9 — Fix QA P1/P2 (annonce guard, breakpoints, tokens, grid) | Guard `ctx.biens.length > 0` dans pack-lancement. `sm:` → `tablet:` FilteredPageWrapper. `bg-blue-*` → `bg-info-*` ArticlesFiltered + DashboardContent. `grid-cols-5` → `grid-cols-4` calendrier. | Cohérence breakpoints custom (tablet: 768px) et design tokens (info au lieu de blue) dans tout le projet. |
 | @social | 2026-03-31 | Session 9 — Stratégie calendrier éditorial (`docs/social/editorial-calendar-strategy.md`) | Distribution 1/jour max, 26 jours dispo/mois, 19 contenus/mois. 5 piliers éditoriaux (expertise locale 35%, preuves sociales 25%, éducation 20%, personal branding 15%, engagement 5%). Règles par plateforme. 3 workflows repurposing. KPIs par plateforme avec seuils d'alerte. | Jours préférés par type de contenu basés sur les comportements audience immobilier (mardi/jeudi engagement max LinkedIn, samedi reach organique Instagram). Repurposing systématique car un article SEO peut devenir 3 posts + 1 thread — maximise le ROI contenu. |
 | @qa | 2026-03-31 | Session 9 — Audit QA corrections session | 3 P1 + 2 P2 identifiés : pack-lancement annonce guard, FilteredPageWrapper breakpoint, blue tokens, grid-cols calendrier. 284 tests passent (20 suites). | Audit ciblé sur les modifications de la session plutôt qu'audit exhaustif car les fondations sont stables (V5 GO sans réserve). |
+| @creative-strategy | 2026-04-02 | Restructuration offre pricing (`docs/strategy/pricing-restructure.md`) | Recommandation offre unique 150€/mois avec setup mois 1 inclus (Option B). Suppression du Pack Lancement comme offre séparée. Boost Mandat conservé à 100€/bien. Résolution incohérence 197€ vs 150€ : tranché sur 150€ dans project-context.md. Canal partenariats mis à jour (Pack Lancement gratuit → premier mois gratuit). | Option B retenue car supprime la friction de choix (550€ mois 1 perçu) et reste dans le budget Sophie (150€/mois = 1 vente/an pour ROI). Option D (200€/mois) écartée car 67% du budget max Sophie — seuil psychologique dépassé. Option C (2 packs autonomes) écartée car charge cognitive élevée et perception de service "au rabais" sur le mensuel. Scénario revenus révisé : 30 clients × 150€ + 14 boosts × 100€ = 5 900€/mois. |
+| @creative-strategy | 2026-04-02 | Section "Formules d'engagement" dans `docs/strategy/pricing-restructure.md` | 3 formules : Mensuel 150€, Trimestriel 360€ (120€/mois, -20%), Annuel 1 200€ (100€/mois, -33%). Trimestriel featured. Boost Mandat inchangé à 100€/bien. Mois gratuit réservé au Mensuel. Scénario 30 clients 40/45/15 : MRR équivalent 3 860€ + 1 400€ boosts = 5 260€/mois. | 20% trimestriel retenu (vs 10-15%) car en dessous du seuil psychologique de déclenchement comportemental — 30€/mois d'économie (90€ sur 3 mois) est le minimum tangible. 33% annuel = "4 mois offerts" — argument mémorable. Trimestriel en featured (pas Annuel) car : Sophie doit d'abord valider le produit sur 3 mois avant de s'engager annuellement ; la durée 3 mois coïncide avec le KPI rétention North Star. Mois gratuit réservé au Mensuel pour éviter les abus (inscriptions annuelles gratuites + résiliation). Annuel positionné en upsell (abonnés existants) plutôt qu'en acquisition froide car 1 200€ one-shot = objection trésorerie bloquante pour Sophie sans historique produit. |
+| @copywriter | 2026-04-02 | Audit pricing complet (`docs/reviews/copy-audit-pricing.md`) | 39 corrections dans 12 fichiers : layout.tsx meta (197→100€), brand-voice.md (4 occurrences 197€ + Pack Lancement CTA), kpi-framework.md (NSM/ARPU/segments), tracking-plan.md (exemples d'events), tests Stripe (amount 19700→15000 centimes), prompts (Pack Lancement→Setup mois 1), E2E landing (assertion /197/, badge "Le plus populaire", montants). | Approche exhaustive via Grep multi-patterns avant toute correction. Distinction conservée entre données historiques (Historique des agents) et contenu actif. Tests Stripe corrigés sur le fond (nouveaux montants réels) et pas juste les commentaires — un test qui valide 197 sur un système à 150 est un faux positif. Badge E2E "Le plus populaire" corrigé en "Recommandé" car le Trimestriel est le featured pack (pas le Mensuel) dans pricing.ts. |
 
 ---
 
@@ -308,44 +313,55 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 
 ## Memo de reprise — dernière session
 
-- **Date de clôture** : 2026-03-31, session 9
-- **Branche** : `claude/session-recovery-analysis-hGjj4`
-- **Résumé de la session** : Session riche en features dashboard : liens partageables pour les annonces, photos de ville sur le blog, layout compact single-column, filtre par mois + archivage sur les 6 pages de contenus, calendrier éditorial visuel (1 contenu/jour, jours préférés par type), système de parrainage complet (code, UI, Stripe, 57 tests), corrections blog (recommandations Sophie : content-first, hero réduit), fix photo profil, fix QA (annonce guard, breakpoints, tokens design system, grid calendrier). @social a produit la stratégie calendrier éditorial.
+- **Date de clôture** : 2026-04-02, session 10
+- **Branche** : `claude/extract-project-context-Pxon1`
+- **Résumé de la session** : Session massive — restructuration pricing (3 formules mensuel/trimestriel/annuel), refonte complète dashboard (13 composants, 50+ corrections), pipeline IA hebdomadaire, visuels gpt-image-1.5, blog mandataire, éditeur articles, section support, codes promo. Audits consolidés @moi + @mandataire sur dashboard, onboarding, site public. 357 tests passent.
 - **Travaux terminés cette session** :
-  - Liens publics partageables annonces (`/annonce/[token]`)
-  - Photos ville Unsplash sur blog articles + grille blog
-  - Layout compact single-column sur toutes les pages dashboard
-  - Filtre par mois + archive toggle sur 6 pages (annonces, scripts, emails, stratégie, posts, articles)
-  - Calendrier éditorial visuel (`EditorialCalendar.tsx`, page `/dashboard/calendrier`)
-  - Système parrainage complet (spec, 2 migrations SQL, 4 routes API, 3 composants UI, checkout intégré)
-  - Corrections blog Sophie (H1 avant hero, hero 80px mobile, CategoryIcon, max-w-4xl)
-  - Fix photo profil (préfixe `clients/` dans `/api/images/[key]`)
-  - Fix QA : guard annonces pack-lancement, breakpoint `tablet:`, tokens `info`, grid-cols-4
-  - Sécurité : XSS sanitizer renforcé, anti-auto-parrainage, rate limiting lazy, race condition archive
-  - Tests : 57 nouveaux (referral, MonthFilter, sanitizer), total 284 tests passent
-  - Stratégie calendrier éditorial (@social)
+  - Pricing restructuré : Pack Lancement supprimé, 3 formules (150€/120€/100€ par mois), Boost inchangé
+  - 10 codes promo pour essai gratuit (sql/019)
+  - Audit pricing complet : 39 corrections, 0 incohérence
+  - Calendrier éditorial : template hebdo (Lun=article, Mar/Jeu/Sam=posts, Ven=vidéo), overflow, modal centré, dots lettres
+  - Posts : plateforme intelligente, tips horaires, brief visuel, hashtags max 3
+  - Scripts vidéo : confort_camera branché, diaporama débutant, gardes null/undefined
+  - Articles SEO : éditeur inline (modifier avant publication), DeliverableCard
+  - Annonces : modal portail (titre+description séparés, compteur), photos, CTA contact
+  - Stratégie : sections fixes, regénérer visible, brief graphique retiré
+  - Blog mandataire : section articles sur /agent/[slug], page article publique
+  - Page Support : formulaire feedback (amélioration/bug/question)
+  - Visuels IA : gpt-image-1.5, 7 types de prompts, pipeline intégré
+  - Pipeline hebdomadaire : weekly-batch + cron + retry backoff
+  - Regénération avec approbation admin (pending_review)
+  - Onboarding : autocomplete ville, département auto, subtitles "pourquoi", LinkedIn fusionné
+  - Blog : cards verticales, hero 160px, CTA contextualisé
+  - Site public : faux témoignages supprimés, 181 entités HTML→UTF-8, Header/Footer page bien
+  - Hook pre-commit tsc --noEmit
+  - 28 suites, 357 tests, 0 échec
 - **Travaux en cours / non terminés** :
-  - Webhook Stripe `invoice.payment_succeeded` : logique crédit parrain pas encore implémentée
-  - Migrations SQL 015 + 016 (annonce share + referral) : à exécuter en production
-  - 3 learnings S9 P0/P1 propagés dans les fichiers cibles (CLAUDE.md, fullstack.md)
+  - Stripe intégration : 3 produits à créer (mensuel/trimestriel/annuel), checkout, webhooks
+  - Webhook `invoice.payment_succeeded` : logique crédit parrain
+  - Migrations SQL 015-019 à exécuter en production
+  - Emails nurturing : quelques références "Pack Lancement" résiduelles dans les templates
+  - Visuels IA : à tester avec OPENAI_API_KEY réelle
+  - Pipeline hebdomadaire : à tester avec ANTHROPIC_API_KEY
 - **Promesses restantes à tenir pour Sophie** :
-  - Landing page personnalisée `/agent/[slug]` (spec dans `docs/product/landing-mandataire-spec.md`, pas encore codée)
   - Scraping/enrichissement lien annonce (texte reformulé, feature dans le backlog)
+  - Génération automatique de visuels pour TOUS les posts (pipeline en place, clé API nécessaire)
 - **Prochaines actions recommandées** :
-  1. **@fullstack : Stripe intégration** — créer les produits Stripe, tester le checkout flow, implémenter le webhook `invoice.payment_succeeded` avec logique parrainage. Priorité car bloque la mise en production.
-  2. **@fullstack : Landing page perso `/agent/[slug]`** — spec prête, dernière promesse manquante pour Sophie. Différenciateur fort vs concurrence.
-  3. **@mandataire : Re-audit Sophie complet** — vérifier toutes les features sessions 8+9. Score cible : 9+/10.
-  4. **@qa : Tests nouveaux composants** — EditorialCalendar, ReferralSection, FilteredPageWrapper, AnnonceList share/archive.
-  5. **@seo : Audit SEO pages publiques** — sitemap à jour, meta OG sur /annonce/[token] et /bien/[slug].
+  1. **@fullstack : Stripe intégration** — créer 3 produits Stripe (mensuel 150€, trimestriel 360€, annuel 1200€), implémenter checkout + webhooks + logique parrainage. PRIORITÉ ABSOLUE — bloque la mise en production.
+  2. **@fullstack : Migrations SQL** — exécuter 015-019 en production
+  3. **@fullstack : Tester pipeline hebdomadaire** — configurer ANTHROPIC_API_KEY + CRON_SECRET, lancer un batch de test
+  4. **@fullstack : Tester visuels IA** — configurer OPENAI_API_KEY, vérifier la qualité sur 5 posts
+  5. **@seo : Audit SEO pages publiques** — sitemap à jour, meta OG, Schema.org
 - **Blockers** :
-  - STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET + produits Stripe à créer (bloque le lancement)
-  - ANTHROPIC_API_KEY nécessaire pour la génération IA
-  - Migrations SQL à exécuter : `for f in sql/015*.sql sql/016*.sql; do psql $DATABASE_URL -f $f; done`
-  - RESEND_API_KEY pour emails réels (Resend intégré, mode log-only actif)
-  - CRON_SECRET pour le cron nurturing
+  - STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET + 3 produits Stripe à créer
+  - ANTHROPIC_API_KEY pour la génération IA
+  - OPENAI_API_KEY pour les visuels auto
+  - RESEND_API_KEY pour emails réels
+  - CRON_SECRET pour le cron hebdomadaire
+  - Migrations SQL : `for f in sql/015*.sql sql/016*.sql sql/017*.sql sql/018*.sql sql/019*.sql; do psql $DATABASE_URL -f $f; done`
   - Marque INPI "ImmoCrew" à vérifier
 - **Commande de reprise suggérée** :
 
 ```
-@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 9). Branche claude/session-recovery-analysis-hGjj4. Session 9 terminée : features dashboard avancées (parrainage, calendrier éditorial, filtres mois, liens partageables). 284 tests passent. Prochaines priorités : Stripe intégration + webhook parrainage, landing perso /agent/[slug], re-audit Sophie, tests nouveaux composants.
+@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 10). Branche claude/extract-project-context-Pxon1. Session 10 terminée : pricing restructuré (3 formules), dashboard complet, pipeline IA hebdomadaire, 357 tests. Prochaine priorité : Stripe intégration (3 produits + checkout + webhooks).
 ```

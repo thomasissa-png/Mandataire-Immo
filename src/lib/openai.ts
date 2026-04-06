@@ -4,6 +4,7 @@
  */
 
 const OPENAI_API_URL = "https://api.openai.com/v1/images/generations"
+const OPENAI_IMAGE_MODEL = "gpt-image-1.5"
 const TIMEOUT_MS = 60_000 // 60s pour la generation d'images
 
 interface ImageGenerationOptions {
@@ -47,7 +48,7 @@ export async function generateImage(
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: "gpt-image-1",
+      model: OPENAI_IMAGE_MODEL,
       prompt,
       size,
       quality,

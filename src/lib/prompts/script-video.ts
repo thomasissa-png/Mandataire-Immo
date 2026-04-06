@@ -1,6 +1,6 @@
 /**
  * Prompt — Scripts video/Reels scene par scene
- * Utilise pour : L7 (10 scripts Pack Lancement), M2 (4 scripts/mois Pack Mensuel), B2 (1 Reel Boost)
+ * Utilise pour : M2 (4 scripts/mois, inclus dans tous les abonnements), B2 (1 Reel Boost)
  * Output : JSON avec scripts structures scene par scene
  */
 
@@ -96,7 +96,7 @@ FORMAT DIAPORAMA (prioritaire pour ce mandataire) :
 - Pas besoin de se filmer — le mandataire prend des photos et l'appli fait le montage
 - Structure : photo 1 (3s) + texte hook -> photo 2 (3s) + texte info -> photo 3 (3s) + texte CTA
 - Indiquer pour chaque scène : quelle photo prendre (ex: "Photo de la façade depuis le trottoir d'en face")
-- Suggérer l'appli de montage : CapCut ou InShot (gratuit)
+- Le mandataire publie DIRECTEMENT sans montage — les photos et le texte sont ajoutés via l'interface Reels d'Instagram
 - Musique tendance Instagram suggérée pour chaque script`
     : ''
 

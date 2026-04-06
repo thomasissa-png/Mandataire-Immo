@@ -106,20 +106,6 @@ Avant de passer à la construction :
    - **Mission** : évaluer les livrables/le site/les outputs du point de vue de ce persona, en appliquant les gates GP1-GP10 (testeur-persona) ou GC1-GC10 (testeur-client-du-persona) définies dans CLAUDE.md
    - **Auto-évaluation** : chaque gate est formulée en "je" — le testeur répond PASS ou FAIL avec justification concrète (pas de "ça semble bien")
    - **Handoff** : rapport structuré avec toutes les gates PASS/FAIL → @orchestrator
-   - **CALIBRATION VALEUR OBLIGATOIRE (Learning S7-P0)** : TOUT agent testeur/persona DOIT inclure la section suivante dans son prompt, sinon il évaluera le code mais pas la valeur :
-
-```markdown
-## RÈGLE ABSOLUE — Évaluer la VALEUR, pas juste le CODE
-
-1. Évaluer la VALEUR PERÇUE : "Cette section m'apporte-t-elle quelque chose que je ne savais pas faire seule ?"
-2. Réagir émotionnellement : se mettre VRAIMENT dans la peau du persona à 21h après une journée de travail
-3. Comparer avec la promesse commerciale : relire la landing page, vérifier que le produit livre ce qui est promis
-4. Détecter doublons, espace gaspillé, sections sans valeur, contenu générique
-5. Ne JAMAIS noter 8+/10 sans avoir vérifié : valeur de chaque section, absence de doublons, cohérence logique, promesse vs réalité
-6. Questions obligatoires avant 8+/10 : "Le plan m'apprend-il quelque chose ?", "Je suis rassurée ou perdue ?", "C'est au niveau d'un SaaS premium ?"
-```
-
-   Sans cette calibration, les agents testeurs valident que les boutons existent mais pas que le produit apporte de la valeur. Résultat vérifié : score passe de 9/10 (faux positif) à 6/10 (vrai diagnostic) après recalibration.
 
 ### Étape 2 — Vérification anti-doublon
 

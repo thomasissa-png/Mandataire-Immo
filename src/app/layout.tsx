@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s | ImmoCrew",
   },
   description:
-    "Chaque mois, reçois tes posts, tes articles SEO et tes annonces — 100% personnalisés pour ta zone. Tu publies, on fait le reste. À partir de 197€/mois.",
+    "Chaque mois, reçois tes posts, tes articles SEO et tes annonces — 100% personnalisés pour ta zone. Tu publies, on fait le reste. À partir de 100€/mois.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://immocrew.fr"),
   alternates: {
     canonical: "/",

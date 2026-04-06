@@ -186,11 +186,9 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 - **2026-03-31 S9** : Phase 9 — Features dashboard avancées : liens partageables annonces, photos ville blog, filtres mois + archive (6 pages), calendrier éditorial visuel (1/jour, jours préférés), parrainage complet (4 API + UI + Stripe), corrections blog Sophie, fix profil photo, QA 3P1+2P2 corrigés. 284 tests. @social stratégie calendrier éditorial.
 
 ## État pour reprise prochaine session
-- **Phases terminées** : 0, 1, 2, 3, 4, 5, 6 (pipeline IA livré — 9.2/10 revue V3), 7 (upload photos, profil, onboarding serveur, email nurturing, dashboard refondu, migration Umami), 8 (corrections P0/P1 Sophie + polish)
-- **Phase en cours** : 9 (features dashboard avancées + QA)
-  - Session 9 (2026-03-31) : Liens partageables annonces, photos ville blog, layout compact, filtre par mois + archive sur 6 pages, calendrier éditorial visuel, système parrainage complet, corrections blog (Sophie), fix profil photo, fix QA (annonce guard, breakpoints, tokens, grid)
-  - @social : stratégie calendrier éditorial produite (`docs/social/editorial-calendar-strategy.md`)
-  - @qa : audit 3 P1 + 2 P2, tous corrigés, 284 tests passent
-- **Prochaine phase** : 10 — Stripe intégration + landing page perso /agent/[slug] + re-audit Sophie + tests nouveaux composants
-- **Blockers** : ANTHROPIC_API_KEY, RESEND_API_KEY, STRIPE_* + produits Stripe à créer, migrations SQL (015, 016), INPI, webhook Stripe `invoice.payment_succeeded` pour crédits parrainage
+- **Phases terminées** : 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 (pricing restructuré, dashboard complet, pipeline IA hebdomadaire, visuels gpt-image-1.5, 357 tests)
+- **Phase en cours** : 11 — Stripe intégration + déploiement production
+  - Session 10 (2026-04-02) : Pricing 3 formules (mensuel/trimestriel/annuel), 50+ corrections dashboard, pipeline hebdomadaire, visuels IA, blog mandataire, éditeur articles, support, codes promo, onboarding amélioré, audits @moi + Sophie sur tout
+- **Prochaine phase** : 11 — Stripe intégration (3 produits, checkout, webhooks, parrainage) + déploiement
+- **Blockers** : STRIPE_*, ANTHROPIC_API_KEY, OPENAI_API_KEY, RESEND_API_KEY, CRON_SECRET, migrations SQL 015-019, INPI
 - **Pour reprendre** : voir mémo de reprise dans project-context.md

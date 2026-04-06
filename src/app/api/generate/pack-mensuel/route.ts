@@ -6,6 +6,7 @@ import { getClientContext } from "@/lib/client-context"
 import { trackServer } from "@/lib/tracking"
 import { buildPostSocialPrompt } from "@/lib/prompts/post-social"
 import { buildAnnonceStorytellingPrompt } from "@/lib/prompts/annonce-storytelling"
+import { generatePostVisual, canAutoGenerate } from "@/lib/generate-post-visual"
 import { buildArticleSeoPrompt } from "@/lib/prompts/article-seo"
 import { buildScriptVideoPrompt } from "@/lib/prompts/script-video"
 import { buildNewsletterPrompt } from "@/lib/prompts/newsletter"
@@ -23,8 +24,8 @@ interface DeliverableRow {
 
 /**
  * POST /api/generate/pack-mensuel
- * Genere le pack mensuel complet pour un client :
- * M1: 12 posts, M2: 4 scripts video, M3: 2 articles SEO,
+ * Génère le pack mensuel complet pour un client :
+ * M1: 12 posts, M2: 4 scripts video, M3: 4 articles SEO,
  * M4: 1 newsletter, M5: 4 annonces, M6: 1 email prospection.
  * Admin-only.
  */
@@ -79,7 +80,7 @@ export async function POST(request: NextRequest) {
   const moisLabel = formatMoisLabel(mois)
 
   try {
-    // M1 : 12 posts reseaux sociaux
+    // M1 : 12 posts réseaux sociaux
     const postsPrompt = buildPostSocialPrompt({
       ...ctx,
       plateforme: "mix",
@@ -100,6 +101,28 @@ export async function POST(request: NextRequest) {
         month: mois,
       })
       deliverableIds.push(id)
+
+      // Générer un visuel IA si le brief le permet (non-bloquant)
+      if (post.brief_visuel && canAutoGenerate(post.brief_visuel)) {
+        try {
+          const visual = await generatePostVisual({
+            briefVisuel: post.brief_visuel,
+            postContent: post.texte,
+            titre: post.hook || `Post ${post.plateforme}`,
+            plateforme: post.plateforme,
+            mandatairePrenom: ctx.prenom,
+            ville: ctx.zone_geo.ville,
+          }, id)
+          if (visual) {
+            await query(
+              `UPDATE deliverables SET metadata = jsonb_set(metadata, '{visual_key}', $1::jsonb) WHERE id = $2`,
+              [JSON.stringify(visual.key), id]
+            )
+          }
+        } catch {
+          // Pas bloquant — le post est livré sans visuel
+        }
+      }
     }
 
     // M5 : annonces — uniquement si le client a des biens réels
@@ -118,17 +141,17 @@ export async function POST(request: NextRequest) {
           type: "annonce",
           title: annonce.titre_annonce,
           content: annonce.annonce_complete,
-          metadata: { accroche_courte: annonce.accroche_courte, mots_cles_seo: annonce.mots_cles_seo },
+          metadata: { accroche_courte: annonce.accroche_courte, mots_cles_seo: annonce.mots_cles_seo, bien_titre: annonce.bien_titre },
           month: mois,
         })
         deliverableIds.push(id)
       }
     }
 
-    // M3 : 2 articles SEO
+    // M3 : 4 articles SEO (1/semaine)
     const articlesPrompt = buildArticleSeoPrompt({
       ...ctx,
-      nombre_articles: 2,
+      nombre_articles: 4,
       mois_cible: moisLabel,
     })
     const articlesResult = await generateJSON<{ articles: Array<{ frontmatter: { title: string; meta_description: string; slug: string }; contenu_markdown: string; liens_internes_suggeres: string[] }> }>(
@@ -153,22 +176,82 @@ export async function POST(request: NextRequest) {
       nombre_scripts: 4,
       format: "mix",
       confort_camera: ctx.confort_camera || "debutant",
-      type_video: "face_camera",
+      // Adapter le type vidéo au confort caméra — débutant = diaporama, pas face caméra
+      type_video: (ctx.confort_camera === "a_laise" || ctx.confort_camera === "expert") ? "face_camera" : "diaporama",
     })
-    const scriptsResult = await generateJSON<{ scripts: Array<{ titre: string; format: string; duree_cible: string; scenes: Array<{ numero: number; duree: string; voix_off: string; indication_visuelle: string }>; musique_suggeree: string; hook: string }> }>(
+    const scriptsResult = await generateJSON<{ scripts: Array<{
+      titre: string
+      type: string
+      duree_totale_secondes: number
+      hook: string
+      scenes: Array<{
+        numero: number
+        duree_secondes: number
+        visuel: string
+        texte_ecran: string | null
+        voix_off: string | null
+        indication_tournage: string
+      }>
+      musique_suggeree: string
+      cta_final: string
+      brief_tournage: string
+    }> }>(
       { ...scriptsPrompt, maxTokens: 16384 }
     )
     for (const script of scriptsResult.data.scripts) {
-      const scenesText = script.scenes
-        .map((s) => `Scene ${s.numero} (${s.duree}):\nVoix off: ${s.voix_off}\nVisuel: ${s.indication_visuelle}`)
-        .join("\n\n")
+      // Formater le content de manière lisible pour Sophie (pas de montage, juste filmer)
+      const lines: string[] = []
+
+      // En-tête
+      lines.push(`# ${script.titre}`)
+      lines.push("")
+      lines.push(`**Durée :** ~${script.duree_totale_secondes || 30} secondes`)
+      lines.push(`**Type :** ${script.type || "Reel"}`)
+      lines.push("")
+
+      // Brief tournage — le plus important pour Sophie
+      if (script.brief_tournage) {
+        lines.push("## 📍 Où et quand filmer")
+        lines.push(script.brief_tournage)
+        lines.push("")
+      }
+
+      // Scènes
+      lines.push("## 🎬 Le script (scène par scène)")
+      lines.push("")
+      for (const scene of script.scenes || []) {
+        const dur = scene.duree_secondes || 5
+        lines.push(`### Scène ${scene.numero} — ${dur}s`)
+        if (scene.indication_tournage) lines.push(`📱 **Comment filmer :** ${scene.indication_tournage}`)
+        if (scene.texte_ecran && scene.texte_ecran !== "null" && scene.texte_ecran !== "undefined") lines.push(`📝 **Texte à l'écran :** ${scene.texte_ecran}`)
+        if (scene.voix_off && scene.voix_off !== "null" && scene.voix_off !== "undefined") lines.push(`🗣️ **Ce que tu dis :** « ${scene.voix_off} »`)
+        if (scene.visuel && !scene.indication_tournage) lines.push(`👁️ **Ce qu'on voit :** ${scene.visuel}`)
+        lines.push("")
+      }
+
+      // Fin
+      if (script.cta_final) {
+        lines.push(`## ✅ Fin de la vidéo`)
+        lines.push(script.cta_final)
+        lines.push("")
+      }
+      if (script.musique_suggeree) {
+        lines.push(`🎵 **Musique suggérée :** ${script.musique_suggeree}`)
+      }
+
       const id = await insertDeliverable({
         clientEmail,
         clientId: client_id,
         type: "script_video",
-        title: script.titre || script.hook,
-        content: `${script.titre}\nFormat: ${script.format} | Duree: ${script.duree_cible}\nMusique: ${script.musique_suggeree}\n\n${scenesText}`,
-        metadata: { format: script.format, duree_cible: script.duree_cible, hook: script.hook },
+        title: script.titre || script.hook || "Script vidéo",
+        content: lines.join("\n"),
+        metadata: {
+          format: "reel",
+          duree_secondes: script.duree_totale_secondes,
+          hook: script.hook,
+          type_video: script.type,
+          brief_tournage: script.brief_tournage,
+        },
         month: mois,
       })
       deliverableIds.push(id)

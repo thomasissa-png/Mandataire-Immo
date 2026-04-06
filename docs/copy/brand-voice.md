@@ -24,7 +24,7 @@ Chaque phrase contient un bénéfice tangible ou un chiffre réel. Jamais de pro
 | Bien | Mal |
 |------|-----|
 | "12 posts par mois, personnalisés pour ton quartier." | "Du contenu de qualité pour booster votre présence en ligne." |
-| "197€/mois. Moins que ta commission sur un studio." | "Un investissement stratégique pour votre croissance digitale." |
+| "150€/mois. Moins que ta commission sur un studio." | "Un investissement stratégique pour votre croissance digitale." |
 
 ### Principe 3 — Action immédiate
 
@@ -51,7 +51,7 @@ L'IA est notre moyen de production, jamais notre argument de vente. On parle de 
 
 | Bien | Mal |
 |------|-----|
-| "Ton équipe marketing à 197€/mois" | "Notre IA marketing à 197€/mois" |
+| "Ton équipe marketing à 150€/mois" | "Notre IA marketing à 150€/mois" |
 | "Nos rédacteurs connaissent ton métier" | "Notre intelligence artificielle analyse votre secteur" |
 | "On rédige tes posts, personnalisés pour ta zone" | "L'IA génère des contenus optimisés pour votre géolocalisation" |
 
@@ -177,7 +177,7 @@ Salut [Prénom],
 
 Tu es mandataire à [ville], c'est ça ? On fait le marketing des mandataires comme toi : posts, articles SEO, annonces — tout personnalisé pour ta zone, livré chaque mois.
 
-197€/mois, aucun engagement, et tu ne touches à rien sauf pour publier.
+À partir de 100€/mois, aucun engagement sur la formule mensuelle, et tu ne touches à rien sauf pour publier.
 
 Si tu veux voir un exemple pour ton quartier : [lien]
 
@@ -205,7 +205,7 @@ Aucun engagement. Si après 30 jours tu trouves que les livrables ne te correspo
 
 **"J'ai essayé un CM freelance, c'était nul."**
 
-On comprend. Le problème, c'est qu'un CM freelance ne connaît pas l'immobilier. Il poste des trucs génériques. Nous, on fait uniquement du marketing pour les mandataires. Nos rédacteurs connaissent ton métier, tes frustrations, tes clients. Et à 197€/mois au lieu de 500-800€, le risque est beaucoup plus faible.
+On comprend. Le problème, c'est qu'un CM freelance ne connaît pas l'immobilier. Il poste des trucs génériques. Nous, on fait uniquement du marketing pour les mandataires. Nos rédacteurs connaissent ton métier, tes frustrations, tes clients. Et à partir de 100€/mois au lieu de 500-800€, le risque est beaucoup plus faible.
 
 ---
 
@@ -217,7 +217,7 @@ On comprend. Le problème, c'est qu'un CM freelance ne connaît pas l'immobilier
 |-------|-------|
 | Voir | CTA de découverte ("Voir un exemple pour ma zone") |
 | Commencer | CTA d'achat ("Commencer maintenant") |
-| Démarrer | CTA Pack Lancement ("Démarrer mon lancement") |
+| Démarrer | CTA abonnement ("Démarrer ce mois-ci") |
 | Booster | CTA upsell ("Booster un mandat") |
 | Essayer | CTA essai gratuit ("Essayer gratuitement") |
 

@@ -1,6 +1,6 @@
 /**
  * Prompt — Calendrier editorial 30 jours
- * Utilise pour : L5 (Pack Lancement)
+ * Utilise pour : S5 (Setup mois 1, inclus dans tous les abonnements)
  * Output : JSON array de 30 entrees (date, plateforme, type, sujet, angle, hashtags)
  */
 

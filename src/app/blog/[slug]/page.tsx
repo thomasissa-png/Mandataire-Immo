@@ -208,7 +208,7 @@ export default async function BlogArticlePage({
                   href={shareLinkedIn}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center h-10 px-4 rounded-lg border border-border text-body-sm font-medium text-foreground hover:bg-primary-50 hover:border-primary-200 transition-all duration-normal"
+                  className="inline-flex items-center justify-center h-11 min-w-[44px] px-4 rounded-lg border border-border text-body-sm font-medium text-foreground hover:bg-primary-50 hover:border-primary-200 transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
                 >
                   LinkedIn
                 </a>
@@ -216,7 +216,7 @@ export default async function BlogArticlePage({
                   href={shareFacebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center h-10 px-4 rounded-lg border border-border text-body-sm font-medium text-foreground hover:bg-primary-50 hover:border-primary-200 transition-all duration-normal"
+                  className="inline-flex items-center justify-center h-11 min-w-[44px] px-4 rounded-lg border border-border text-body-sm font-medium text-foreground hover:bg-primary-50 hover:border-primary-200 transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
                 >
                   Facebook
                 </a>
@@ -224,7 +224,7 @@ export default async function BlogArticlePage({
                   href={shareTwitter}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center h-10 px-4 rounded-lg border border-border text-body-sm font-medium text-foreground hover:bg-primary-50 hover:border-primary-200 transition-all duration-normal"
+                  className="inline-flex items-center justify-center h-11 min-w-[44px] px-4 rounded-lg border border-border text-body-sm font-medium text-foreground hover:bg-primary-50 hover:border-primary-200 transition-all duration-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
                 >
                   Twitter
                 </a>

@@ -22,7 +22,7 @@ export default function DashboardLayout({
               Mon espace
             </a>
             <a
-              href="mailto:support@immocrew.fr"
+              href="mailto:contact@immocrew.fr"
               className="hidden tablet:inline text-body-sm text-neutral-500 hover:text-secondary transition-colors duration-normal py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded"
             >
               Une question ?

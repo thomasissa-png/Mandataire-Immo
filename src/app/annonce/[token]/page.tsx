@@ -8,6 +8,7 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { query } from "@/lib/db"
 import Link from "next/link"
+import Image from "next/image"
 
 interface AnnonceRow {
   id: string
@@ -16,6 +17,15 @@ interface AnnonceRow {
   metadata: Record<string, unknown>
   created_at: string
   client_email: string
+  client_first_name: string | null
+  client_last_name: string | null
+  client_phone: string | null
+  client_id: string
+}
+
+interface PhotoRow {
+  key: string
+  ordre: number
 }
 
 interface PageProps {
@@ -24,13 +34,61 @@ interface PageProps {
 
 async function getAnnonceByToken(token: string): Promise<AnnonceRow | null> {
   const { rows } = await query<AnnonceRow>(
-    `SELECT id, title, content, metadata, created_at, client_email
-     FROM deliverables
-     WHERE share_token = $1 AND type = 'annonce' AND status = 'delivered'
+    `SELECT d.id, d.title, d.content, d.metadata, d.created_at, d.client_id,
+            c.email AS client_email, c.first_name AS client_first_name,
+            c.last_name AS client_last_name,
+            (c.client_context->>'telephone')::text AS client_phone
+     FROM deliverables d
+     JOIN clients c ON d.client_id = c.id
+     WHERE d.share_token = $1 AND d.type = 'annonce' AND d.status = 'delivered'
      LIMIT 1`,
     [token]
   )
   return rows[0] || null
+}
+
+/** Récupère les photos du bien associé à l'annonce */
+async function getAnnoncePhotos(annonce: AnnonceRow): Promise<string[]> {
+  const meta = annonce.metadata || {}
+  const bienTitre = typeof meta.bien_titre === "string" ? meta.bien_titre : null
+  const propertyId = typeof meta.property_id === "string" ? meta.property_id : null
+
+  // Priorité 1 : property_id explicite (boost-mandat)
+  if (propertyId) {
+    const { rows } = await query<{ photos_originales: PhotoRow[] | string | null; photos_staging: PhotoRow[] | string | null }>(
+      `SELECT photos_originales, photos_staging FROM property_pages WHERE id = $1 AND client_id = $2 LIMIT 1`,
+      [propertyId, annonce.client_id]
+    )
+    if (rows[0]) {
+      const photos = parsePhotos(rows[0].photos_staging) || parsePhotos(rows[0].photos_originales)
+      if (photos.length > 0) return photos.map((p) => `/api/photos/${p.key}`)
+    }
+  }
+
+  // Priorité 2 : match par titre du bien
+  if (bienTitre) {
+    const { rows } = await query<{ photos_originales: PhotoRow[] | string | null; photos_staging: PhotoRow[] | string | null }>(
+      `SELECT photos_originales, photos_staging FROM property_pages WHERE client_id = $1 AND (titre = $2 OR titre_annonce = $2) AND status = 'published' LIMIT 1`,
+      [annonce.client_id, bienTitre]
+    )
+    if (rows[0]) {
+      const photos = parsePhotos(rows[0].photos_staging) || parsePhotos(rows[0].photos_originales)
+      if (photos.length > 0) return photos.map((p) => `/api/photos/${p.key}`)
+    }
+  }
+
+  return []
+}
+
+function parsePhotos(raw: PhotoRow[] | string | null): PhotoRow[] {
+  if (!raw) return []
+  if (Array.isArray(raw)) return raw
+  try {
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
 }
 
 /**
@@ -89,41 +147,145 @@ export default async function AnnoncePublicPage({ params }: PageProps) {
     year: "numeric",
   })
 
+  const agentName = [annonce.client_first_name, annonce.client_last_name].filter(Boolean).join(" ")
+  const photos = await getAnnoncePhotos(annonce)
+
   return (
-    <main className="min-h-screen bg-[#F8F6F2]">
+    <main className="min-h-screen bg-background">
       {/* Header branded */}
-      <header className="bg-[#1B2A4A] text-white">
+      <header className="bg-primary text-white">
         <div className="max-w-3xl mx-auto px-6 py-8">
-          <p className="text-[#F27A1A] font-semibold text-sm uppercase tracking-wider mb-3">
+          <p className="text-secondary font-semibold text-sm uppercase tracking-wider mb-3">
             Annonce immobilière
           </p>
-          <h1 className="text-2xl md:text-3xl font-bold leading-tight">
+          <h1 className="text-h2 tablet:text-h1 font-bold leading-tight">
             {annonce.title}
           </h1>
-          <p className="text-neutral-400 text-sm mt-3">
-            Publiée le {formattedDate}
-          </p>
+          <div className="flex items-center gap-4 mt-3 text-sm text-neutral-400">
+            <span>Publiée le {formattedDate}</span>
+            {agentName && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>Par {agentName}</span>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
+      {/* Bouton contact mandataire */}
+      {(annonce.client_phone || annonce.client_email) && (
+        <div className="max-w-3xl mx-auto px-6 mt-6 mb-2">
+          <div className="flex items-center gap-3 flex-wrap">
+            {annonce.client_phone && (
+              <a
+                href={`tel:${annonce.client_phone}`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-secondary text-white font-bold text-sm hover:bg-secondary-600 transition-all shadow-sm"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                </svg>
+                Appeler {agentName || "le mandataire"}
+              </a>
+            )}
+            <a
+              href={`mailto:${annonce.client_email}`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-primary text-primary font-bold text-sm hover:bg-primary hover:text-white transition-all"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
+              Envoyer un email
+            </a>
+          </div>
+        </div>
+      )}
+
+      {/* Galerie photos du bien */}
+      {photos.length > 0 && (
+        <div className="max-w-3xl mx-auto px-6 pt-8">
+          <div className="grid grid-cols-2 tablet:grid-cols-3 gap-2 rounded-xl overflow-hidden">
+            {photos.slice(0, 6).map((url, i) => (
+              <div
+                key={url}
+                className={`relative ${i === 0 ? "col-span-2 row-span-2 min-h-[280px] tablet:min-h-[360px]" : "min-h-[140px] tablet:min-h-[170px]"}`}
+              >
+                <Image
+                  src={url}
+                  alt={`Photo ${i + 1} — ${annonce.title}`}
+                  fill
+                  className="object-cover"
+                  sizes={i === 0 ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 50vw, 33vw"}
+                  priority={i === 0}
+                />
+              </div>
+            ))}
+          </div>
+          {photos.length > 6 && (
+            <p className="text-caption text-neutral-400 mt-2 text-center">
+              +{photos.length - 6} autres photos
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Message si pas de photos */}
+      {photos.length === 0 && (
+        <div className="max-w-3xl mx-auto px-6 pt-6">
+          <div className="flex items-center gap-2 rounded-lg bg-neutral-100 px-4 py-3">
+            <svg className="w-5 h-5 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91M3.75 21h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
+            </svg>
+            <p className="text-body-sm text-neutral-500">
+              Photos disponibles sur demande — contacte {agentName || "le mandataire"} directement.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Contenu de l'annonce */}
-      <article className="max-w-3xl mx-auto px-6 py-10">
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 md:p-10">
+      <article className="max-w-3xl mx-auto px-6 py-8">
+        <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 tablet:p-10">
           <AnnonceContent content={annonce.content} />
         </div>
       </article>
+
+      {/* CTA Contact mandataire — en bas après le contenu */}
+      {(annonce.client_phone || annonce.client_email) && (
+        <div className="max-w-3xl mx-auto px-6 py-6 border-t border-neutral-200">
+          <p className="text-body-sm text-neutral-600 text-center mb-3">
+            Intéressé par ce bien ? Contacte {agentName || "le mandataire"} directement.
+          </p>
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            {annonce.client_phone && (
+              <a
+                href={`tel:${annonce.client_phone}`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-secondary text-white font-bold text-sm hover:bg-secondary-600 transition-all shadow-sm"
+              >
+                Appeler {agentName || "le mandataire"}
+              </a>
+            )}
+            <a
+              href={`mailto:${annonce.client_email}`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-primary text-primary font-bold text-sm hover:bg-primary hover:text-white transition-all"
+            >
+              Envoyer un email
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* Footer CTA */}
       <footer className="border-t border-neutral-200 bg-white">
         <div className="max-w-3xl mx-auto px-6 py-8 text-center">
           <p className="text-neutral-500 text-sm mb-2">
-            Annonce générée par
+            Annonce{agentName ? ` de ${agentName},` : ""} générée par
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-[#1B2A4A] font-bold text-lg hover:text-[#F27A1A] transition-colors"
+            className="inline-flex items-center gap-2 text-primary font-bold text-lg hover:text-secondary transition-colors"
           >
-            <span className="text-[#F27A1A]">Immo</span>Crew
+            <span className="text-secondary">Immo</span>Crew
           </Link>
           <p className="text-neutral-400 text-xs mt-3">
             Ton équipe marketing immobilier, clé en main.
@@ -143,13 +305,13 @@ function AnnonceContent({ content }: { content: string }) {
   return (
     <div
       className="prose prose-lg max-w-none text-neutral-800
-        prose-headings:text-[#1B2A4A] prose-headings:font-bold
+        prose-headings:text-primary prose-headings:font-bold
         prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-3
         prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-2
         prose-p:leading-relaxed prose-p:mb-4
-        prose-strong:text-[#1B2A4A]
+        prose-strong:text-primary
         prose-li:leading-relaxed
-        prose-a:text-[#F27A1A] prose-a:no-underline hover:prose-a:underline"
+        prose-a:text-secondary prose-a:no-underline hover:prose-a:underline"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   )
@@ -220,7 +382,7 @@ function serverMarkdownToHtml(md: string): string {
     // Blockquote
     if (trimmed.startsWith("> ")) {
       if (inList) { html.push(listType === "ul" ? "</ul>" : "</ol>"); inList = false }
-      html.push(`<blockquote class="border-l-4 border-[#F27A1A]/30 pl-4 my-4 text-neutral-600 italic"><p>${formatInline(trimmed.slice(2))}</p></blockquote>`)
+      html.push(`<blockquote class="border-l-4 border-secondary/30 pl-4 my-4 text-neutral-600 italic"><p>${formatInline(trimmed.slice(2))}</p></blockquote>`)
       continue
     }
 

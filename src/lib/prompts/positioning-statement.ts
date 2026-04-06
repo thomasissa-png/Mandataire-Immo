@@ -1,6 +1,6 @@
 /**
  * Prompt — Positionnement + proposition de valeur personnalisee
- * Utilise pour : L1 (Pack Lancement — premier livrable, fondation de tous les autres)
+ * Utilise pour : S1 (Setup mois 1 — premier livrable, fondation de tous les autres)
  * Output : JSON avec Markdown structure
  */
 
@@ -172,7 +172,7 @@ CONSIGNES :
 - Si le parcours avant l'immobilier est fourni, l'intégrer dans l'histoire personnelle comme une force (les compétences transférables)
 - Les piliers de différenciation doivent être CONCRETS : pas "proche de ses clients" mais "répond à chaque appel en moins de 2h, même le dimanche" (si c'est vrai selon le profil)
 - L'accroche identitaire sera réutilisée dans la bio (L2), les posts (L6/M1), et les articles (L4/M3) — elle doit être mémorable et répétable
-- Le document Markdown complet doit être livrable tel quel au client comme premier livrable du Pack Lancement`
+- Le document Markdown complet doit être livrable tel quel au client comme premier livrable du Setup mois 1`
 
   return { system, user }
 }

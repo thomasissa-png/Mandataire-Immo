@@ -10,7 +10,7 @@
 
 ### Definition
 
-**Nombre de clients recurrents actifs** : nombre de clients ayant un abonnement Pack Mensuel (197 EUR/mois) avec un paiement a jour (pas en impaye, pas en pause, pas annule).
+**Nombre de clients recurrents actifs** : nombre de clients ayant un abonnement actif (Mensuel 150 EUR/mois, Trimestriel 120 EUR/mois, Annuel 100 EUR/mois) avec un paiement a jour (pas en impaye, pas en pause, pas annule).
 
 ### Formule
 
@@ -101,7 +101,7 @@ ACQUISITION → ACTIVATION → RETENTION → REVENUE → REFERRAL
 | NPS | Score enquete trimestrielle (-100 a +100) | >= 60 | Trimestriel | Enquete externe (Typeform) + event PostHog |
 | Taux d'utilisation des livrables | livrables_telecharges / livrables_livres | > 70% | Mensuel | Events `deliverable_download` |
 | Frequence de connexion | sessions_espace_client / mois / client | >= 2 / mois | Mensuel | Event `login` |
-| Delai moyen de livraison | AVG(livraison_date - debut_mois) | < 48h (mensuel), < 7j (lancement) | Par livraison | Donnees internes |
+| Delai moyen de livraison | AVG(livraison_date - debut_mois) | < 48h | Par livraison | Donnees internes |
 
 **Seuils d'alerte Retention :**
 - WARNING : churn mensuel > 8% → analyser les raisons (enquete sortie), verifier qualite livrables
@@ -114,11 +114,11 @@ ACQUISITION → ACTIVATION → RETENTION → REVENUE → REFERRAL
 |-----|---------|-------------|-----------|--------|
 | MRR (Monthly Recurring Revenue) | SUM(abonnements_actifs * prix_mensuel) | 5 900 EUR | Mensuel | Stripe + PostHog |
 | ARR (Annual Recurring Revenue) | MRR * 12 | 70 800 EUR | Mensuel | Calcule |
-| ARPU (Average Revenue Per User) | MRR / nombre_clients_actifs | ~197 EUR (pack mensuel pur) | Mensuel | Calcule |
+| ARPU (Average Revenue Per User) | MRR / nombre_clients_actifs | ~120-150 EUR (mix formules) | Mensuel | Calcule |
 | LTV (Lifetime Value) | ARPU * duree_moyenne_abonnement_mois | > 2 000 EUR (cible 10+ mois) | Trimestriel | Calcule |
 | CAC (Cout Acquisition Client) | depenses_acquisition / nouveaux_clients | 0 EUR (organique) | Mensuel | Manuel |
 | Ratio LTV/CAC | LTV / CAC | Infini (organique) — surveiller si paid demarre | Trimestriel | Calcule |
-| Revenue par offre | GROUP BY offre (Lancement, Mensuel, Boost) | Mensuel > 50% du CA | Mensuel | Stripe |
+| Revenue par offre | GROUP BY offre (Mensuel, Trimestriel, Annuel, Boost) | Abonnements > 80% du CA | Mensuel | Stripe |
 | Taux d'impaye | paiements_echoues / paiements_tentes | < 3% | Mensuel | Event `payment_failed` |
 | Taux d'upsell Boost | clients_boost / clients_mensuels | > 30% | Mensuel | Stripe |
 
@@ -186,7 +186,7 @@ ACQUISITION → ACTIVATION → RETENTION → REVENUE → REFERRAL
 ### Dashboard 5 : Revenue (review mensuelle)
 
 **Widgets :**
-1. **MRR breakdown** — Stacked bar (Mensuel + Lancement + Boost)
+1. **MRR breakdown** — Stacked bar (Mensuel + Trimestriel + Annuel + Boost)
 2. **MRR evolution** — Ligne avec objectif en pointille
 3. **ARPU** — Trend
 4. **Paiements echoues** — Compteur + liste
@@ -243,7 +243,7 @@ ACQUISITION → ACTIVATION → RETENTION → REVENUE → REFERRAL
 
 | Segment | Definition | Pourquoi |
 |---------|------------|----------|
-| Par plan | Lancement seul / Mensuel / Mensuel + Boost | Comprendre la valeur percue par offre |
+| Par plan | Mensuel / Trimestriel / Annuel / Avec Boost | Comprendre la valeur percue par offre |
 | Par reseau | IAD / SAFTI / Capifrance / Autre | Adapter l'acquisition par reseau |
 | Par anciennete client | < 1 mois / 1-3 mois / 3-6 mois / 6+ mois | Identifier les moments critiques de churn |
 | Par anciennete metier | < 1 an / 1-2 ans / 3-5 ans / 5+ ans | Adapter le message et les livrables |

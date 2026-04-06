@@ -5,7 +5,7 @@
  * - La page mandataire est la vitrine publique de Sophie. Un bug visible
  *   (téléphone masqué, prix mal formaté, photo cassée) = prospect perdu.
  * - HeroSection : l'accroche tronquée à 120 chars évite un pavé illisible.
- * - ContactSection : le fallback "Parlons de votre projet immobilier" garantit
+ * - ContactSection : le fallback "Parlons de ton projet immobilier" garantit
  *   qu'un texte est toujours affiché même si ce_qui_te_differencie est vide.
  * - MesBiensSection : l'état vide avec CTA "Me contacter" évite une section morte.
  * - MaMethodeSection : les 3 étapes par défaut garantissent du contenu même sans
@@ -184,7 +184,7 @@ describe("ContactSection", () => {
         email="sophie@immocrew.fr"
       />
     )
-    expect(screen.getByText("Parlons de votre projet immobilier")).toBeInTheDocument()
+    expect(screen.getByText("Parlons de ton projet immobilier")).toBeInTheDocument()
   })
 
   it("affiche ce_qui_te_differencie si renseigné", () => {
@@ -195,7 +195,7 @@ describe("ContactSection", () => {
       />
     )
     expect(screen.getByText("Je connais chaque rue d'Angers.")).toBeInTheDocument()
-    expect(screen.queryByText("Parlons de votre projet immobilier")).not.toBeInTheDocument()
+    expect(screen.queryByText("Parlons de ton projet immobilier")).not.toBeInTheDocument()
   })
 
   it("le lien email contient le sujet avec le nom de l'agent", () => {
@@ -223,7 +223,7 @@ describe("MesBiensSection", () => {
   it("affiche l'état vide avec message et CTA si aucun bien", () => {
     render(<MesBiensSection biens={[]} />)
     expect(
-      screen.getByText(/Aucun bien en vente actuellement/)
+      screen.getByText(/Pas de bien en vente actuellement/)
     ).toBeInTheDocument()
     expect(screen.getByText("Me contacter →")).toBeInTheDocument()
   })
@@ -272,7 +272,7 @@ describe("MesBiensSection", () => {
 describe("MaMethodeSection", () => {
   it("affiche les 3 étapes par défaut si methode_etapes est vide", () => {
     render(<MaMethodeSection profile={makeProfile({ methode_etapes: [] })} />)
-    expect(screen.getByText("Estimation gratuite et personnalisée de votre bien")).toBeInTheDocument()
+    expect(screen.getByText("Estimation gratuite et personnalisée de ton bien")).toBeInTheDocument()
     expect(screen.getByText("Mise en valeur professionnelle (photos, annonce, diffusion)")).toBeInTheDocument()
     expect(screen.getByText(/Accompagnement de A à Z/)).toBeInTheDocument()
   })

@@ -1,8 +1,9 @@
 /**
- * Composants des 6 sections de la landing page mandataire /agent/[slug].
+ * Composants des sections de la landing page mandataire /agent/[slug].
  * Server Components — reçoivent les données en props, zéro état client.
  */
 import type { AgentProfile, AgentBienSummary } from "@/types/agent"
+import type { AgentArticle } from "@/app/agent/[slug]/page"
 
 // ─── Helpers ────────────────────────────────────────────────────────
 
@@ -96,6 +97,27 @@ export function HeroSection({ profile }: HeroProps) {
           <p className="text-body-lg text-white/80 max-w-2xl">{accroche}</p>
         )}
 
+        {/* Stats clés — expérience et transactions */}
+        {(profile.experience_annees || profile.nb_transactions_an) && (
+          <div className="flex items-center gap-6 mt-1">
+            {profile.experience_annees && (
+              <div className="text-center">
+                <p className="text-display-lg font-bold text-secondary">{profile.experience_annees}</p>
+                <p className="text-caption text-neutral-300">{Number(profile.experience_annees) > 1 ? "ans d'expérience" : "an d'expérience"}</p>
+              </div>
+            )}
+            {profile.experience_annees && profile.nb_transactions_an && (
+              <div className="w-px h-10 bg-white/20" aria-hidden="true" />
+            )}
+            {profile.nb_transactions_an && (
+              <div className="text-center">
+                <p className="text-display-lg font-bold text-secondary">{profile.nb_transactions_an}</p>
+                <p className="text-caption text-neutral-300">transactions/an</p>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* CTA rapide : téléphone + email */}
         <div className="flex flex-col tablet:flex-row items-center gap-3 mt-2">
           {profile.telephone && (
@@ -155,7 +177,7 @@ export function QuiSuisJeSection({ profile, bioGeneree }: QuiSuisJeProps) {
                 <p className="text-display-lg font-display text-secondary font-bold">
                   {profile.experience_annees}
                 </p>
-                <p className="text-caption text-muted-foreground">ans d'expérience</p>
+                <p className="text-caption text-neutral-500">ans d'expérience</p>
               </div>
             )}
             {profile.nb_transactions_an && (
@@ -163,7 +185,7 @@ export function QuiSuisJeSection({ profile, bioGeneree }: QuiSuisJeProps) {
                 <p className="text-display-lg font-display text-secondary font-bold">
                   {profile.nb_transactions_an}
                 </p>
-                <p className="text-caption text-muted-foreground">transactions / an</p>
+                <p className="text-caption text-neutral-500">transactions / an</p>
               </div>
             )}
           </div>
@@ -194,7 +216,7 @@ interface MaMethodeProps {
 }
 
 const DEFAULT_METHODE = [
-  "Estimation gratuite et personnalisée de votre bien",
+  "Estimation gratuite et personnalisée de ton bien",
   "Mise en valeur professionnelle (photos, annonce, diffusion)",
   "Accompagnement de A à Z jusqu'à la signature",
 ]
@@ -251,13 +273,13 @@ export function MaZoneSection({ profile }: MaZoneProps) {
             <div>
               <h3 className="text-h4 font-display text-foreground mb-3">Zone géographique</h3>
               {profile.departement && (
-                <p className="text-body text-muted-foreground mb-2">
+                <p className="text-body text-neutral-500 mb-2">
                   Département : <span className="text-foreground font-medium">{profile.departement}</span>
                 </p>
               )}
               {quartiers.length > 0 && (
                 <div>
-                  <p className="text-body text-muted-foreground mb-2">Quartiers :</p>
+                  <p className="text-body text-neutral-500 mb-2">Quartiers :</p>
                   <div className="flex flex-wrap gap-2">
                     {quartiers.map((q) => (
                       <span
@@ -292,12 +314,12 @@ export function MaZoneSection({ profile }: MaZoneProps) {
                 </div>
               )}
               {typeBiens.length > 0 && (
-                <p className="text-body text-muted-foreground mb-2">
+                <p className="text-body text-neutral-500 mb-2">
                   Types de biens : <span className="text-foreground font-medium">{typeBiens.join(", ")}</span>
                 </p>
               )}
               {profile.gamme_prix && (
-                <p className="text-body text-muted-foreground">
+                <p className="text-body text-neutral-500">
                   Gamme de prix : <span className="text-foreground font-medium">{profile.gamme_prix}</span>
                 </p>
               )}
@@ -326,8 +348,8 @@ export function MesBiensSection({ biens }: MesBiensProps) {
             <svg className="w-10 h-10 text-neutral-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819" />
             </svg>
-            <p className="text-body text-muted-foreground mb-3">
-              Aucun bien en vente actuellement — contactez-moi pour discuter de votre projet.
+            <p className="text-body text-neutral-500 mb-3">
+              Pas de bien en vente actuellement — contacte-moi pour discuter de ton projet.
             </p>
             <a
               href="#contact"
@@ -378,7 +400,7 @@ export function MesBiensSection({ biens }: MesBiensProps) {
                   <h3 className="text-body font-semibold text-foreground mb-1 line-clamp-1">
                     {bien.titre_annonce || bien.titre}
                   </h3>
-                  <p className="text-body-sm text-muted-foreground mb-2">
+                  <p className="text-body-sm text-neutral-500 mb-2">
                     {bien.type_bien} &middot; {bien.pieces} pièces &middot; {bien.surface} m²
                     {bien.city ? ` · ${bien.city}` : ""}
                   </p>
@@ -426,7 +448,7 @@ export function TemoignagesSection({ profile }: TemoignagesProps) {
               <div>
                 <p className="text-body-sm font-semibold text-primary">{t.nom}</p>
                 {(t.contexte || t.date) && (
-                  <p className="text-caption text-muted-foreground">
+                  <p className="text-caption text-neutral-500">
                     {t.contexte}{t.contexte && t.date ? " · " : ""}{t.date}
                   </p>
                 )}
@@ -457,7 +479,7 @@ export function ContactSection({ profile, email }: ContactProps) {
         {tagline ? (
           <p className="text-body-lg text-white/80 mb-8">{tagline}</p>
         ) : (
-          <p className="text-body-lg text-white/80 mb-8">Parlons de votre projet immobilier</p>
+          <p className="text-body-lg text-white/80 mb-8">Parlons de ton projet immobilier</p>
         )}
 
         <div className="flex flex-col tablet:flex-row items-center justify-center gap-4">
@@ -521,7 +543,7 @@ export function ReseauxSection({ profile }: ReseauxProps) {
               <span className="w-12 h-12 rounded-full bg-primary-50 text-primary-700 flex items-center justify-center group-hover:bg-primary-100 transition-colors duration-normal">
                 <link.icon />
               </span>
-              <span className="text-caption text-muted-foreground group-hover:text-primary-700 transition-colors">
+              <span className="text-caption text-neutral-500 group-hover:text-primary-700 transition-colors">
                 {link.label}
               </span>
             </a>
@@ -569,5 +591,63 @@ function GlobeIcon() {
       <path d="M2 12h20" />
       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
     </svg>
+  )
+}
+
+// ─── 7. BlogSection ─────────────────────────────────────────────
+
+interface BlogProps {
+  articles: AgentArticle[]
+  prenom: string
+  slug: string
+}
+
+export function BlogSection({ articles, prenom, slug }: BlogProps) {
+  if (articles.length === 0) return null
+
+  return (
+    <section className="section-padding bg-card">
+      <div className="container-immocrew">
+        <h2 className="text-h2 font-display text-primary mb-2">Mes articles</h2>
+        <p className="text-body-sm text-neutral-500 mb-6">
+          Conseils immobiliers et actualités locales par {prenom}
+        </p>
+
+        <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
+          {articles.map((article) => {
+            const date = new Date(article.created_at).toLocaleDateString("fr-FR", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })
+            return (
+              <a
+                key={article.id}
+                href={`/agent/${slug}/blog/${article.id}`}
+                className="group rounded-xl border border-border bg-background p-5 hover:shadow-md hover:border-secondary/30 transition-all"
+              >
+                <div className="flex items-center gap-2 text-caption text-neutral-400 mb-2">
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                  </svg>
+                  <time dateTime={String(article.created_at)}>{date}</time>
+                </div>
+                <h3 className="font-display text-body font-semibold text-primary group-hover:text-secondary transition-colors line-clamp-2 mb-2">
+                  {article.title}
+                </h3>
+                {article.meta_description && (
+                  <p className="text-body-sm text-neutral-500 line-clamp-2">
+                    {article.meta_description}
+                  </p>
+                )}
+                <span className="text-body-sm font-semibold text-secondary mt-3 inline-block group-hover:underline">
+                  Lire l{"'"}article →
+                </span>
+              </a>
+            )
+          })}
+        </div>
+      </div>
+    </section>
   )
 }

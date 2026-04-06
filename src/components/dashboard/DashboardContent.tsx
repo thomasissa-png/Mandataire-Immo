@@ -3,6 +3,8 @@
 import { useState, useMemo } from "react"
 import { MesBiensSection } from "./MesBiensSection"
 import { ReferralSection } from "./ReferralSection"
+import { SupportSection } from "./SupportSection"
+import { PACK_MENSUEL, formatPrice } from "@/lib/pricing"
 import type { Deliverable } from "@/types/deliverable"
 
 interface DashboardContentProps {
@@ -23,6 +25,10 @@ interface DashboardContentProps {
     nb_transactions_an: string
     type_biens: string
     linkedin_url: string
+    instagram: string
+    facebook: string
+    site_web: string
+    confort_camera: string
     quartiers: string
     gamme_prix: string
     ton_communication: string
@@ -39,6 +45,7 @@ interface DashboardContentProps {
     }>
   } | null
   profileIncomplete?: boolean
+  recommendedArticles?: Array<{ slug: string; title: string; description: string }>
 }
 
 /* ------------------------------------------------------------------ */
@@ -53,6 +60,7 @@ export function DashboardContent({
   deliverables,
   profile,
   profileIncomplete,
+  recommendedArticles = [],
 }: DashboardContentProps) {
   const [showWelcome, setShowWelcome] = useState(() =>
     typeof window !== "undefined" && !localStorage.getItem("immocrew_welcome_dismissed")
@@ -63,7 +71,7 @@ export function DashboardContent({
   const initials = profile
     ? `${(profile.prenom[0] || "").toUpperCase()}${(profile.nom[0] || "").toUpperCase()}`
     : "?"
-  const packLabel = pack === "mensuel" ? "Pack Mensuel" : pack === "lancement" ? "Pack Lancement" : null
+  const packLabel = pack === "mensuel" ? "Mensuel" : pack === "trimestriel" ? "Trimestriel" : pack === "annuel" ? "Annuel" : null
 
   const missingFields: string[] = []
   if (profile) {
@@ -84,12 +92,12 @@ export function DashboardContent({
       if (d.type === "annonce") r.annonces.push(d)
       else if (d.type === "post") {
         r.posts++
-        if (d.month === currentMonth || d.created_at.startsWith(currentMonth)) r.postsThisMonth++
+        if (d.month === currentMonth || String(d.created_at).startsWith(currentMonth)) r.postsThisMonth++
       }
       else if (d.type === "script_video") r.scripts++
       else if (d.type === "article_seo") r.articles++
       else if (d.type === "newsletter" || d.type === "email_prospection") r.emails++
-      else if (["bio", "brief_graphique", "calendrier", "positionnement", "landing_page"].includes(d.type)) r.strategie++
+      else if (["bio", "positionnement", "landing_page"].includes(d.type)) r.strategie++
     }
     return r
   }, [deliverables, currentMonth])
@@ -181,6 +189,21 @@ export function DashboardContent({
         </a>
       ) : null}
 
+      {/* Monthly update banner — en haut pour visibilité maximale */}
+      {showMonthlyBanner ? (
+        <a href="/dashboard/monthly-update" className="group block rounded-lg border border-secondary/30 bg-gradient-to-r from-secondary-50 to-card p-4 hover:shadow-md transition-all">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-secondary-100 flex items-center justify-center flex-shrink-0">
+              <span className="text-secondary-700" aria-hidden="true">📝</span>
+            </div>
+            <div className="flex-1">
+              <p className="text-body-sm font-semibold text-primary">Dis-nous ce qui a changé ce mois-ci</p>
+              <p className="text-caption text-neutral-500">10 min, et tes prochains contenus seront encore plus dans le mille.</p>
+            </div>
+          </div>
+        </a>
+      ) : null}
+
       {/* ============================================================ */}
       {/* PROFILE CARD — compact, inline                                */}
       {/* ============================================================ */}
@@ -228,6 +251,9 @@ export function DashboardContent({
             {profile.nb_transactions_an ? <span className="px-2.5 py-1 rounded-lg bg-success-50 text-caption font-medium text-success-700">{profile.nb_transactions_an} transactions/an</span> : null}
             {profile.type_biens ? <span className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700">{profile.type_biens}</span> : null}
             {profile.linkedin_url ? <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-info-50 text-caption font-medium text-info-700 hover:bg-info-100 transition-colors">LinkedIn</a> : null}
+            {profile.instagram ? <a href={`https://instagram.com/${profile.instagram.replace("@", "")}`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-secondary-50 text-caption font-medium text-secondary-700 hover:bg-secondary-100 transition-colors">Instagram</a> : null}
+            {profile.facebook ? <a href={profile.facebook} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-info-50 text-caption font-medium text-info-700 hover:bg-info-100 transition-colors">Facebook</a> : null}
+            {profile.site_web ? <a href={profile.site_web.startsWith("http") ? profile.site_web : `https://${profile.site_web}`} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded-lg bg-neutral-100 text-caption font-medium text-neutral-600 hover:bg-neutral-200 transition-colors">Site web</a> : null}
           </div>
         ) : null}
       </div>
@@ -288,7 +314,7 @@ export function DashboardContent({
                 <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">👤</span>
                 <div>
                   <p className="text-body-sm font-semibold text-primary">Mets à jour tes bios et ton positionnement</p>
-                  <p className="text-caption text-neutral-500">Copie-les sur Instagram, Facebook et LinkedIn.</p>
+                  <p className="text-caption text-neutral-500">Copie-les sur {[profile.instagram && "Instagram", profile.linkedin_url && "LinkedIn", profile.facebook && "Facebook"].filter(Boolean).join(", ") || "tes réseaux sociaux"}.</p>
                   <p className="text-caption mt-1.5">
                     <a href="/dashboard/strategie" className="text-secondary-700 font-semibold hover:underline">Voir mes bios →</a>
                   </p>
@@ -303,7 +329,11 @@ export function DashboardContent({
                 <div>
                   <p className="text-body-sm font-semibold text-primary">Tes {counts.postsThisMonth > 0 ? counts.postsThisMonth : counts.posts} posts sont prêts</p>
                   <p className="text-caption text-neutral-500">
-                    Publie sur Instagram et LinkedIn — tes deux meilleurs canaux pour toucher des vendeurs locaux. Le matin (7h-9h) sur LinkedIn pour les pros, le soir (18h-20h) sur Instagram pour les particuliers.
+                    {[
+                      profile.linkedin_url && "LinkedIn (7h-9h, pour les pros)",
+                      profile.instagram && "Instagram (18h-20h, pour les particuliers)",
+                      profile.facebook && "Facebook (12h-13h)",
+                    ].filter(Boolean).join(" · ") || "Publie sur tes réseaux aux heures de forte activité."}
                   </p>
                   <p className="text-caption mt-1.5">
                     <a href="/dashboard/posts" className="text-secondary-700 font-semibold hover:underline">Voir mes posts →</a>
@@ -319,7 +349,9 @@ export function DashboardContent({
                 <div>
                   <p className="text-body-sm font-semibold text-primary">{counts.scripts} script{counts.scripts > 1 ? "s" : ""} vidéo prêt{counts.scripts > 1 ? "s" : ""} à tourner</p>
                   <p className="text-caption text-neutral-500">
-                    Format Reel (30-60 sec) vertical. Filme-toi face caméra en lumière naturelle. Pas besoin que ce soit parfait — l{"'"}authenticité marche mieux que la production.
+                    {profile.confort_camera === "debutant" || !profile.confort_camera
+                      ? "Pas besoin de te filmer ! Prends des photos et crée un diaporama avec texte animé sur Instagram Reels. Smartphone en mode portrait, lumière naturelle."
+                      : "Format Reel (30-60 sec) vertical. Filme-toi face caméra en lumière naturelle. L'authenticité marche mieux que la production."}
                   </p>
                   <p className="text-caption mt-1.5">
                     <a href="/dashboard/scripts" className="text-secondary-700 font-semibold hover:underline">Voir mes scripts →</a>
@@ -348,7 +380,7 @@ export function DashboardContent({
                 <div>
                   <p className="text-body-sm font-semibold text-primary">{counts.articles} article{counts.articles > 1 ? "s" : ""} SEO pour ta visibilité locale</p>
                   <p className="text-caption text-neutral-500">
-                    Publie-les sur ton blog ou ta page Facebook. Le SEO local met 2-3 mois à porter ses fruits — la régularité est la clé.
+                    Tes articles sont publiés automatiquement sur ta page mandataire. Partage le lien sur LinkedIn pour plus de visibilité. Le SEO local met 2-3 mois à porter ses fruits — la régularité est la clé.
                   </p>
                   <p className="text-caption mt-1.5">
                     <a href="/dashboard/articles" className="text-secondary-700 font-semibold hover:underline">Voir mes articles →</a>
@@ -371,35 +403,34 @@ export function DashboardContent({
             <span className="text-secondary-600 font-semibold text-body-sm group-hover:translate-x-0.5 transition-transform" aria-hidden="true">→</span>
           </a>
 
-          {/* Recommandations de lecture du mois */}
-          <div className="mt-4 pt-4 border-t border-border">
-            <div className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50">
-              <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">📚</span>
-              <div>
-                <p className="text-body-sm font-semibold text-primary mb-1">Nos recommandations de lecture du mois</p>
-                <ul className="space-y-1.5">
-                  <li>
-                    <a href="/blog/se-differencier-mandataire-immobilier" className="text-caption text-secondary-700 font-medium hover:underline">
-                      Se différencier comme mandataire immobilier →
-                    </a>
-                    <p className="text-caption text-neutral-400">Les clés pour te démarquer dans ton secteur</p>
-                  </li>
-                  <li>
-                    <a href="/blog/google-business-profile-mandataire" className="text-caption text-secondary-700 font-medium hover:underline">
-                      Google Business Profile pour mandataire →
-                    </a>
-                    <p className="text-caption text-neutral-400">Optimise ta visibilité locale en 30 minutes</p>
-                  </li>
-                </ul>
+          {/* Recommandations de lecture du mois — dynamiques */}
+          {recommendedArticles.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50">
+                <span className="text-lg mt-0.5 flex-shrink-0" aria-hidden="true">📚</span>
+                <div>
+                  <p className="text-body-sm font-semibold text-primary mb-1">Nos recommandations de lecture</p>
+                  <ul className="space-y-1.5">
+                    {recommendedArticles.map((article) => (
+                      <li key={article.slug}>
+                        <a href={`/blog/${article.slug}`} target="_blank" rel="noopener noreferrer" className="text-caption text-secondary-700 font-medium hover:underline inline-flex items-center gap-1">
+                          {article.title}
+                          <svg className="w-3 h-3 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                        </a>
+                        <p className="text-caption text-neutral-400">{article.description.slice(0, 80)}{article.description.length > 80 ? "..." : ""}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Question / feedback */}
           <div className="mt-3 pt-3 border-t border-border">
             <p className="text-body-sm text-neutral-500">
               Une question ? Un souci avec un contenu ?{" "}
-              <a href="mailto:support@immocrew.fr?subject=Retour%20sur%20mes%20contenus" className="text-secondary-700 font-semibold hover:underline">
+              <a href="mailto:contact@immocrew.fr?subject=Retour%20sur%20mes%20contenus" className="text-secondary-700 font-semibold hover:underline">
                 Écris-nous, on te répond au plus vite
               </a>
             </p>
@@ -408,9 +439,9 @@ export function DashboardContent({
       ) : null}
 
       {/* ============================================================ */}
-      {/* PARRAINAGE — abonnés Pack Mensuel uniquement                    */}
+      {/* PARRAINAGE — visible pour tous les clients avec un pack        */}
       {/* ============================================================ */}
-      {pack === "mensuel" && <ReferralSection />}
+      {pack && <ReferralSection />}
 
       {/* ============================================================ */}
       {/* MES BIENS (self-service — property_pages)                       */}
@@ -422,35 +453,23 @@ export function DashboardContent({
         <div className="rounded-lg bg-gradient-to-r from-primary to-primary-700 p-4 flex flex-col tablet:flex-row items-start tablet:items-center justify-between gap-4 text-white">
           <div>
             <p className="font-display text-h4 text-white">Continue sur ta lancée — passe au mensuel</p>
-            <p className="text-body-sm text-primary-200 mt-1">12 posts, 2 articles, 4 scripts, 4 annonces — livrés chaque mois. 150€/mois, sans engagement.</p>
+            <p className="text-body-sm text-primary-200 mt-1">12 posts, 4 articles, 4 scripts, 4 annonces — livrés chaque mois. {formatPrice(PACK_MENSUEL)}, sans engagement.</p>
           </div>
-          <a href="/api/checkout?pack=mensuel" className="flex-shrink-0 px-6 py-2.5 rounded-full bg-secondary text-white font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm">
+          <a href={PACK_MENSUEL.ctaHref} className="flex-shrink-0 px-6 py-2.5 rounded-full bg-secondary text-white font-display font-bold text-body-sm hover:bg-secondary-600 hover:text-white transition-all shadow-sm">
             Commencer le mensuel →
           </a>
         </div>
       ) : null}
 
-      {/* Monthly update banner */}
-      {showMonthlyBanner ? (
-        <a href="/dashboard/monthly-update" className="group block rounded-lg border border-secondary/30 bg-gradient-to-r from-secondary-50 to-card p-4 hover:shadow-md transition-all">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-secondary-100 flex items-center justify-center flex-shrink-0">
-              <span className="text-secondary-700" aria-hidden="true">📝</span>
-            </div>
-            <div className="flex-1">
-              <p className="text-body-sm font-semibold text-primary">Dis-nous ce qui a changé ce mois-ci</p>
-              <p className="text-caption text-neutral-500">10 min, et tes prochains contenus seront encore plus dans le mille.</p>
-            </div>
-          </div>
-        </a>
-      ) : null}
+      {/* SUPPORT / FEEDBACK */}
+      <SupportSection />
 
       {/* FOOTER */}
       <div className="pt-6 border-t border-border flex flex-wrap items-center gap-4">
         {stripeCustomerId ? (
           <a href="/api/portal" className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors">Gérer mon abonnement (modifier, résilier)</a>
         ) : null}
-        <a href="mailto:support@immocrew.fr" className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors">Une question sur tes contenus ?</a>
+        <a href="mailto:contact@immocrew.fr" className="text-body-sm text-neutral-500 hover:text-secondary-700 underline transition-colors">Une question sur tes contenus ?</a>
       </div>
 
     </div>

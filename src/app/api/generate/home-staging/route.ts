@@ -20,7 +20,7 @@ interface HomeStagingBody {
 
 /**
  * POST /api/generate/home-staging
- * Genere des visuels home staging a partir de photos uploadees.
+ * Génère des visuels home staging a partir de photos uploadees.
  * Utilise gpt-image-1 (OpenAI). Max 5 images par bien.
  * Admin-only.
  */
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     items_count: items.length,
   })
 
-  // ─── Generer les images une par une ─────────────────────────────
+  // ─── Générer les images une par une ─────────────────────────────
   const results: StagingPhoto[] = []
   const errors: Array<{ photo_key: string; error: string }> = []
 
@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
       }
       const prompt = buildHomeStagingPrompt(stagingInput)
 
-      // Generer l'image via OpenAI gpt-image-1
+      // Générer l'image via OpenAI gpt-image-1
       const imageResult = await generateImage({
         prompt,
         size: "1024x1024",

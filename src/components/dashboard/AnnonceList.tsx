@@ -7,7 +7,7 @@ import { markdownToHtml, stripMarkdown } from "@/lib/markdownRenderer"
 interface Annonce {
   id: string
   title: string
-  status: "draft" | "delivered" | "archived"
+  status: "draft" | "delivered" | "archived" | "pending_review"
   createdAt?: string
   shareToken?: string | null
 }
@@ -34,6 +34,14 @@ export function AnnonceList({ annonces, onArchiveToggle }: AnnonceListProps) {
   )
 }
 
+interface PortailModalData {
+  portailName: string
+  portailIcon: string
+  maxChars: number | null
+  title: string
+  description: string
+}
+
 function AnnonceRow({ annonce, onArchiveToggle }: { annonce: Annonce; onArchiveToggle?: (id: string) => void }) {
   const [expanded, setExpanded] = useState(false)
   const [content, setContent] = useState<string | null>(null)
@@ -42,6 +50,7 @@ function AnnonceRow({ annonce, onArchiveToggle }: { annonce: Annonce; onArchiveT
   const [shareLoading, setShareLoading] = useState(false)
   const [shareUrl, setShareUrl] = useState<string | null>(null)
   const [archiving, setArchiving] = useState(false)
+  const [portailModal, setPortailModal] = useState<PortailModalData | null>(null)
 
   const isArchived = annonce.status === "archived"
 
@@ -214,6 +223,20 @@ function AnnonceRow({ annonce, onArchiveToggle }: { annonce: Annonce; onArchiveT
               )}
             </button>
 
+            {/* Ouvrir le lien partageable dans un nouvel onglet */}
+            {shareUrl && (
+              <a
+                href={shareUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-caption font-semibold bg-neutral-100 text-neutral-700 hover:bg-neutral-200 transition-all"
+                aria-label="Ouvrir l'annonce dans un nouvel onglet"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                Ouvrir
+              </a>
+            )}
+
             {/* Copier tout */}
             <button
               type="button"
@@ -285,23 +308,30 @@ function AnnonceRow({ annonce, onArchiveToggle }: { annonce: Annonce; onArchiveT
       {/* Expanded content */}
       {expanded && content !== null && (
         <div className="border-t border-border">
-          {/* Export buttons */}
+          {/* Export buttons — ouvre un modal avec le contenu formaté */}
           <div className="px-4 pt-3 pb-2 flex flex-wrap gap-2">
             <span className="text-caption text-neutral-400 py-1">Exporter pour :</span>
             {PORTAILS.map((p) => (
               <button
                 key={p.name}
                 type="button"
-                onClick={() => handleCopy(p.name, p.maxChars)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-caption font-medium transition-all ${
-                  copied === p.name
-                    ? "bg-success-50 text-success-700 ring-1 ring-success-200"
-                    : "bg-neutral-50 text-neutral-600 hover:bg-neutral-100 ring-1 ring-neutral-200"
-                }`}
+                onClick={() => {
+                  const plain = stripMarkdown(content)
+                  const desc = p.maxChars && plain.length > p.maxChars
+                    ? plain.slice(0, p.maxChars - 3) + "..."
+                    : plain
+                  setPortailModal({
+                    portailName: p.name,
+                    portailIcon: p.icon,
+                    maxChars: p.maxChars,
+                    title: annonce.title,
+                    description: desc,
+                  })
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-caption font-medium transition-all bg-neutral-50 text-neutral-600 hover:bg-neutral-100 ring-1 ring-neutral-200"
               >
                 <span aria-hidden="true">{p.icon}</span>
-                {copied === p.name ? "Copié !" : p.name}
-                {p.maxChars && <span className="text-neutral-400">({p.maxChars} car.)</span>}
+                {p.name}
               </button>
             ))}
           </div>
@@ -314,6 +344,140 @@ function AnnonceRow({ annonce, onArchiveToggle }: { annonce: Annonce; onArchiveT
 
         </div>
       )}
+
+      {/* Modal portail — titre + description formatée pour le portail */}
+      {portailModal && (
+        <PortailExportModal
+          data={portailModal}
+          onClose={() => setPortailModal(null)}
+          onCopied={(field) => {
+            setCopied(field)
+            setTimeout(() => setCopied(null), 2000)
+          }}
+          copied={copied}
+        />
+      )}
     </article>
+  )
+}
+
+function PortailExportModal({
+  data,
+  onClose,
+  onCopied,
+  copied,
+}: {
+  data: PortailModalData
+  onClose: () => void
+  onCopied: (field: string) => void
+  copied: string | null
+}) {
+  const copyField = async (field: string, value: string) => {
+    try {
+      await navigator.clipboard.writeText(value)
+      onCopied(field)
+      track("deliverable_download", { type: "annonce", method: "copy", portail: data.portailName, field })
+    } catch {
+      // Clipboard unavailable
+    }
+  }
+
+  return (
+    <>
+      {/* Overlay */}
+      <div className="fixed inset-0 bg-primary/30 backdrop-blur-sm z-40" onClick={onClose} />
+
+      {/* Modal */}
+      <div className="fixed inset-x-4 top-[10vh] tablet:inset-x-auto tablet:left-1/2 tablet:-translate-x-1/2 tablet:w-[560px] max-h-[80vh] bg-card rounded-xl border border-border shadow-xl z-50 flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border flex-shrink-0">
+          <div className="flex items-center gap-2">
+            <span className="text-lg" aria-hidden="true">{data.portailIcon}</span>
+            <h3 className="font-display text-h4 text-primary">Exporter pour {data.portailName}</h3>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 rounded-lg text-neutral-400 hover:text-primary hover:bg-neutral-100 transition-colors"
+            aria-label="Fermer"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-5 space-y-5">
+          {/* Titre */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-caption font-semibold text-neutral-500 uppercase tracking-wider">Titre de l{"'"}annonce</label>
+              <button
+                type="button"
+                onClick={() => copyField("titre", data.title)}
+                className={`flex items-center gap-1 px-3 py-1 rounded-lg text-caption font-semibold transition-all ${
+                  copied === "titre" ? "bg-success-50 text-success-700" : "bg-secondary-50 text-secondary-700 hover:bg-secondary-100"
+                }`}
+              >
+                {copied === "titre" ? "Copié !" : "Copier"}
+              </button>
+            </div>
+            <div className="rounded-lg bg-background border border-border p-3 text-body-sm text-foreground select-all">
+              {data.title}
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-caption font-semibold text-neutral-500 uppercase tracking-wider">
+                Description
+                {data.maxChars && (
+                  <span className="font-normal text-neutral-400 ml-1">
+                    ({data.description.length}/{data.maxChars} car.)
+                  </span>
+                )}
+              </label>
+              <button
+                type="button"
+                onClick={() => copyField("description", data.description)}
+                className={`flex items-center gap-1 px-3 py-1 rounded-lg text-caption font-semibold transition-all ${
+                  copied === "description" ? "bg-success-50 text-success-700" : "bg-secondary-50 text-secondary-700 hover:bg-secondary-100"
+                }`}
+              >
+                {copied === "description" ? "Copié !" : "Copier"}
+              </button>
+            </div>
+            <div className="rounded-lg bg-background border border-border p-3 text-body-sm text-foreground whitespace-pre-wrap max-h-[40vh] overflow-y-auto select-all">
+              {data.description}
+            </div>
+          </div>
+        </div>
+
+        {/* Footer — copier tout */}
+        <div className="px-5 py-4 border-t border-border flex-shrink-0">
+          <button
+            type="button"
+            onClick={() => copyField("tout", `${data.title}\n\n${data.description}`)}
+            className={`w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-display font-bold text-body-sm transition-all ${
+              copied === "tout" ? "bg-success-50 text-success-700" : "bg-secondary text-white hover:bg-secondary-600"
+            }`}
+          >
+            {copied === "tout" ? (
+              <>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                Tout copié !
+              </>
+            ) : (
+              <>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                Copier titre + description
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    </>
   )
 }

@@ -61,20 +61,23 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* CTA */}
+        {/* CTA — contextualisé pour les visiteurs blog (pas direct pricing) */}
         <section className="section-padding border-t border-border">
-          <div className="container-immocrew text-center">
+          <div className="container-immocrew text-center max-w-xl mx-auto">
             <p className="font-display text-h2 font-bold text-primary mb-3">
               Tu veux que quelqu&apos;un le fasse à ta place ?
             </p>
-            <p className="text-body-lg text-neutral-500 mb-6 max-w-lg mx-auto">
-              Posts, articles SEO, annonces storytelling — 100% personnalisés pour ta zone. À partir de 150&nbsp;€/mois.
+            <p className="text-body-lg text-neutral-500 mb-3">
+              Ces articles, ces posts, ces annonces — on les produit chaque semaine pour des mandataires comme toi. 100% personnalisés pour ta zone.
+            </p>
+            <p className="text-body-sm text-neutral-400 mb-6">
+              3 posts/semaine, 1 article SEO, 1 script vidéo, 1 newsletter — prêts à publier. Tu copies, tu colles, tu retournes faire ton métier.
             </p>
             <Link
-              href="/#pricing"
+              href="/"
               className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-secondary text-white font-display font-bold text-body shadow-sm hover:bg-secondary-600 hover:shadow-md active:scale-[0.97] transition-all duration-normal"
             >
-              Découvrir les offres
+              Découvrir ImmoCrew
             </Link>
           </div>
         </section>

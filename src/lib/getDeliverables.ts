@@ -26,11 +26,11 @@ export async function getDeliverables(
     const params: unknown[] = [email]
     let paramIndex = 2
 
-    // Filtre statut
+    // Filtre statut — pending_review toujours inclus (Sophie voit le badge)
     if (includeArchived) {
-      conditions.push(`status IN ('draft', 'delivered', 'archived')`)
+      conditions.push(`status IN ('draft', 'delivered', 'archived', 'pending_review')`)
     } else {
-      conditions.push(`status IN ('draft', 'delivered')`)
+      conditions.push(`status IN ('draft', 'delivered', 'pending_review')`)
     }
 
     // Filtre type(s)
@@ -50,7 +50,7 @@ export async function getDeliverables(
 
     const whereClause = conditions.join(" AND ")
     const { rows } = await query<Deliverable>(
-      `SELECT id, type, title, status, month, created_at FROM deliverables
+      `SELECT id, type, title, status, month, created_at, metadata FROM deliverables
        WHERE ${whereClause}
        ORDER BY created_at DESC`,
       params

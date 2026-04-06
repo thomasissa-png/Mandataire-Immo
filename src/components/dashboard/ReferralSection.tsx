@@ -371,7 +371,7 @@ export function ReferralSection() {
         {/* Sharing tips */}
         <div className="rounded-lg bg-secondary-50/50 border border-secondary/10 p-3">
           <p className="text-caption text-secondary-700">
-            <span className="font-semibold">Astuce :</span> les mandataires qui partagent leur code en DM LinkedIn convertissent 3x plus que par email.
+            <span className="font-semibold">Astuce :</span> un DM LinkedIn personnalisé convertit bien mieux qu{"'"}un post public ou un email générique.
           </p>
         </div>
       </div>

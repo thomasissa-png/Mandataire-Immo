@@ -55,11 +55,12 @@ export const SOPHIE_ONBOARDING = {
 } as const
 
 /**
- * Expected pricing data — must match PACKS in Pricing.tsx
- * Updated 2026-03-26: prix ronds (400/150/100)
+ * Expected pricing data — must match ABONNEMENT_PACKS + PACK_BOOST in Pricing.tsx
+ * Updated 2026-04-02: 3 formules d'abonnement (mensuel, trimestriel, annuel) + boost
  */
 export const EXPECTED_PACKS = [
-  { name: "Pack Lancement", price: "400", href: "/api/checkout?pack=lancement" },
-  { name: "Pack Mensuel", price: "150", href: "/api/checkout?pack=mensuel" },
+  { name: "Mensuel", price: "150", href: "/api/checkout?pack=mensuel" },
+  { name: "Trimestriel", price: "120", href: "/api/checkout?pack=trimestriel" },
+  { name: "Annuel", price: "100", href: "/api/checkout?pack=annuel" },
   { name: "Boost Mandat", price: "100", href: "/api/checkout?pack=boost" },
 ] as const

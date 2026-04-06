@@ -80,7 +80,7 @@ SUJET :
 
 CONTEXTE IMMOCREW :
 - ImmoCrew est une équipe marketing dédiée aux mandataires immobiliers indépendants
-- Prix : 150 EUR/mois pour 12 posts/mois, 4 scripts vidéo, 2 articles SEO, 1 newsletter, 4 annonces personnalisées
+- Prix : 150 EUR/mois pour 12 posts/mois, 4 scripts vidéo, 4 articles SEO, 1 newsletter, 4 annonces personnalisées
 - Cible : mandataires chez IAD, SAFTI, Capifrance qui n'ont ni le temps ni les compétences marketing
 - Promesse : tout le contenu est personnalisé (zone géo, biens, ton) — pas des templates génériques
 - Le CTA final doit être naturel et pointer vers ImmoCrew comme solution

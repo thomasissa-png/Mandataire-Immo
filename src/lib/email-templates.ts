@@ -100,7 +100,7 @@ ${text}
 }
 
 // ---------------------------------------------------------------------------
-// J+2 — "Tes premiers contenus sont prêts" (Pack Lancement)
+// J+2 — "Tes premiers contenus sont prêts" (premiers contenus)
 // ---------------------------------------------------------------------------
 
 export function nurturingJ2(params: EmailTemplateParams): EmailTemplate {
@@ -112,7 +112,7 @@ export function nurturingJ2(params: EmailTemplateParams): EmailTemplate {
   const html = wrapInLayout(`
 <p style="margin:0 0 16px;font-size:18px;font-weight:600;">Salut ${prenom},</p>
 
-<p style="margin:0 0 16px;">Ton Pack Lancement est prêt. Voici ce qu'on a préparé pour toi :</p>
+<p style="margin:0 0 16px;">Tes premiers contenus sont prêts. Voici ce qu'on a préparé pour toi :</p>
 
 <ul style="margin:0 0 16px;padding-left:20px;">
 <li style="margin-bottom:8px;">Tes <strong>20 posts</strong> personnalisés pour tes réseaux</li>
@@ -126,7 +126,7 @@ export function nurturingJ2(params: EmailTemplateParams): EmailTemplate {
 
 ${ctaButton("Voir mes contenus", dashboardUrl)}
 
-<p style="margin:0 0 16px;">Et pour la suite ? Le <strong>Pack Mensuel à ${prixMensuel}€/mois</strong>, c'est 12 posts, 2 articles SEO et 4 annonces livrés chaque mois. Comme ça, tu ne retombes pas dans le silence radio au bout de 30 jours.</p>
+<p style="margin:0 0 16px;">Et pour la suite ? Le <strong>Pack Mensuel à ${prixMensuel}€/mois</strong>, c'est 12 posts, 4 articles SEO et 4 annonces livrés chaque mois. Comme ça, tu ne retombes pas dans le silence radio au bout de 30 jours.</p>
 
 <p style="margin:0 0 8px;">À très vite,</p>
 <p style="margin:0;font-weight:600;">L'équipe ImmoCrew</p>
@@ -134,7 +134,7 @@ ${ctaButton("Voir mes contenus", dashboardUrl)}
 
   const text = `Salut ${prenom},
 
-Ton Pack Lancement est prêt. Voici ce qu'on a préparé pour toi :
+Tes premiers contenus sont prêts. Voici ce qu'on a préparé pour toi :
 
 - 20 posts personnalisés pour tes réseaux
 - 5 articles SEO sur ta zone
@@ -146,7 +146,7 @@ Tout est dans ton espace client : ${dashboardUrl}
 
 Tu ouvres, tu copies, tu publies. 3 minutes par post.
 
-Et pour la suite ? Le Pack Mensuel à ${prixMensuel}€/mois, c'est 12 posts, 2 articles SEO et 4 annonces livrés chaque mois.
+Et pour la suite ? Le Pack Mensuel à ${prixMensuel}€/mois, c'est 12 posts, 4 articles SEO et 4 annonces livrés chaque mois.
 
 À très vite,
 L'équipe ImmoCrew`
@@ -178,7 +178,7 @@ export function nurturingJ7(params: EmailTemplateParams): EmailTemplate {
 
 <p style="margin:0 0 16px;">Une question ? Un truc qui bloque ? Réponds à cet email, on est là.</p>
 
-${ctaButton("Besoin d'aide ? Écris-nous", "mailto:support@immocrew.fr")}
+${ctaButton("Besoin d'aide ? Écris-nous", "mailto:contact@immocrew.fr")}
 
 <p style="margin:0 0 8px;">À bientôt,</p>
 <p style="margin:0;font-weight:600;">L'équipe ImmoCrew</p>
@@ -205,7 +205,7 @@ L'équipe ImmoCrew`
 }
 
 // ---------------------------------------------------------------------------
-// J+14 — "Ton bilan 2 semaines" (Pack Lancement sans mensuel)
+// J+14 — "Ton bilan 2 semaines" (premiers contenus sans mensuel)
 // ---------------------------------------------------------------------------
 
 export function nurturingJ14(params: EmailTemplateParams): EmailTemplate {
@@ -217,7 +217,7 @@ export function nurturingJ14(params: EmailTemplateParams): EmailTemplate {
   const html = wrapInLayout(`
 <p style="margin:0 0 16px;font-size:18px;font-weight:600;">Salut ${prenom},</p>
 
-<p style="margin:0 0 16px;">Ça fait 2 semaines que tu as reçu ton Pack Lancement. Si tu as commencé à publier, tu as dû voir les premiers retours : des likes, des commentaires, peut-être un contact entrant.</p>
+<p style="margin:0 0 16px;">Ça fait 2 semaines que tu as reçu tes premiers contenus. Si tu as commencé à publier, tu as dû voir les premiers retours : des likes, des commentaires, peut-être un contact entrant.</p>
 
 <p style="margin:0 0 8px;font-weight:600;">Ce qu'on t'a livré :</p>
 <ul style="margin:0 0 16px;padding-left:20px;">
@@ -229,7 +229,7 @@ export function nurturingJ14(params: EmailTemplateParams): EmailTemplate {
 
 <p style="margin:0 0 16px;">Mais dans 2 semaines, tu auras tout utilisé. Et c'est là que la plupart des mandataires retombent dans le silence radio — 2 mois sans poster, les algorithmes t'oublient.</p>
 
-<p style="margin:0 0 16px;"><strong>Le Pack Mensuel à ${prixMensuel}€/mois</strong>, c'est simple : chaque mois, tu reçois 12 posts, 4 scripts vidéo, 2 articles SEO, 4 annonces et 1 newsletter. Sans engagement — tu arrêtes quand tu veux.</p>
+<p style="margin:0 0 16px;"><strong>Le Pack Mensuel à ${prixMensuel}€/mois</strong>, c'est simple : chaque mois, tu reçois 12 posts, 4 scripts vidéo, 4 articles SEO, 4 annonces et 1 newsletter. Sans engagement — tu arrêtes quand tu veux.</p>
 
 <p style="margin:0 0 16px;">Si tu veux continuer à poster régulièrement sans y passer tes soirées, c'est fait pour toi.</p>
 
@@ -243,7 +243,7 @@ ${ctaButton("Voir le Pack Mensuel", pricingUrl)}
 
   const text = `Salut ${prenom},
 
-Ça fait 2 semaines que tu as reçu ton Pack Lancement. Si tu as commencé à publier, tu as dû voir les premiers retours.
+Ça fait 2 semaines que tu as reçu tes premiers contenus. Si tu as commencé à publier, tu as dû voir les premiers retours.
 
 Ce qu'on t'a livré :
 - 20 posts prêts à publier
@@ -253,7 +253,7 @@ Ce qu'on t'a livré :
 
 Mais dans 2 semaines, tu auras tout utilisé. Et c'est là que la plupart des mandataires retombent dans le silence radio.
 
-Le Pack Mensuel à ${prixMensuel}€/mois, c'est simple : chaque mois, tu reçois 12 posts, 4 scripts vidéo, 2 articles SEO, 4 annonces et 1 newsletter. Sans engagement.
+Le Pack Mensuel à ${prixMensuel}€/mois, c'est simple : chaque mois, tu reçois 12 posts, 4 scripts vidéo, 4 articles SEO, 4 annonces et 1 newsletter. Sans engagement.
 
 Si tu veux continuer à poster régulièrement sans y passer tes soirées, c'est fait pour toi.
 

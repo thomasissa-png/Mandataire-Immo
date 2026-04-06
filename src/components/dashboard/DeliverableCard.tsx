@@ -42,7 +42,7 @@ interface DeliverableCardProps {
   typeColor: string
   title: string
   content?: string
-  status?: "draft" | "delivered" | "archived"
+  status?: "draft" | "delivered" | "archived" | "pending_review"
   createdAt?: string
 }
 
@@ -65,6 +65,9 @@ export function DeliverableCard({
   const [feedback, setFeedback] = useState<Feedback>(null)
   const [rewriteCount, setRewriteCount] = useState(0)
   const [rewriting, setRewriting] = useState(false)
+  const [rewriteComment, setRewriteComment] = useState("")
+  const [showRewriteForm, setShowRewriteForm] = useState(false)
+  const [pendingReview, setPendingReview] = useState(false)
   const MAX_REWRITES = 3
 
   const deliverableType = type as DeliverableType
@@ -154,19 +157,26 @@ export function DeliverableCard({
     }
   }
 
-  const handleRewrite = async (e: React.MouseEvent) => {
+  const handleRewriteSubmit = async (e: React.MouseEvent) => {
     e.stopPropagation()
     if (rewriteCount >= MAX_REWRITES || rewriting) return
     setRewriting(true)
     track("deliverable_rewrite", { deliverable_id: id, type, attempt: rewriteCount + 1 })
     try {
-      const res = await fetch(`/api/deliverables/${id}/rewrite`, { method: "POST" })
+      const res = await fetch(`/api/deliverables/${id}/rewrite`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ comment: rewriteComment }),
+      })
       if (res.ok) {
         const data = await res.json()
-        if (data.content) {
+        setRewriteCount((c) => c + 1)
+        setShowRewriteForm(false)
+        setRewriteComment("")
+        if (data.pendingReview) {
+          setPendingReview(true)
+        } else if (data.content) {
           setContent(data.content)
-          setRewriteCount((c) => c + 1)
-          setFeedback(null)
         }
       }
     } catch {
@@ -220,10 +230,20 @@ export function DeliverableCard({
                   En préparation
                 </span>
               )}
+              {status === "pending_review" && (
+                <span className="inline-block px-2 py-0.5 rounded-full text-caption font-semibold bg-warning-50 text-warning-700">
+                  En validation
+                </span>
+              )}
               {status === "archived" && (
                 <span className="inline-block px-2 py-0.5 rounded-full text-caption font-semibold bg-neutral-200 text-neutral-600">
                   Archivé
                 </span>
+              )}
+              {createdAt && (
+                <time dateTime={createdAt} className="text-caption text-neutral-400">
+                  {new Date(createdAt).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}
+                </time>
               )}
             </div>
             <h3 className="font-display text-h4 text-primary leading-snug">
@@ -416,32 +436,78 @@ export function DeliverableCard({
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10 15v4a3 3 0 003 3l4-9V2H5.72a2 2 0 00-2 1.7l-1.38 9a2 2 0 002 2.3H10z" />
               </svg>
             </button>
-            {feedback === "dislike" && rewriteCount < MAX_REWRITES && (
+            {pendingReview ? (
+              <span className="ml-auto text-body-sm font-semibold text-warning-700 flex items-center gap-1.5">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Nouvelle version en cours de validation (sous 24h)
+              </span>
+            ) : rewriteCount < MAX_REWRITES ? (
               <button
                 type="button"
-                disabled={rewriting}
-                onClick={handleRewrite}
-                className="ml-auto text-body-sm font-semibold text-secondary hover:text-secondary-700 transition-colors disabled:text-neutral-400 disabled:cursor-wait flex items-center gap-1.5"
+                onClick={(e) => { e.stopPropagation(); setShowRewriteForm(!showRewriteForm) }}
+                className="ml-auto text-body-sm font-semibold text-secondary hover:text-secondary-700 transition-colors flex items-center gap-1.5"
               >
-                {rewriting ? (
-                  <>
-                    <div className="w-3.5 h-3.5 border-2 border-secondary/30 border-t-secondary rounded-full animate-spin" aria-hidden="true" />
-                    Réécriture...
-                  </>
-                ) : (
-                  <>Réécrire ({MAX_REWRITES - rewriteCount} restante{MAX_REWRITES - rewriteCount > 1 ? "s" : ""})</>
-                )}
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
+                </svg>
+                Regénérer ({MAX_REWRITES - rewriteCount} restante{MAX_REWRITES - rewriteCount > 1 ? "s" : ""})
               </button>
-            )}
+            ) : null}
             {rewriteCount >= MAX_REWRITES && feedback === "dislike" && (
               <a
-                href={`mailto:support@immocrew.fr?subject=Contenu%20%C3%A0%20revoir&body=ID%20:%20${id}`}
+                href={`mailto:contact@immocrew.fr?subject=Contenu%20%C3%A0%20revoir&body=ID%20:%20${id}`}
                 className="ml-auto text-body-sm font-semibold text-secondary hover:underline"
                 onClick={(e) => e.stopPropagation()}
               >
                 Contacter le support
               </a>
             )}
+          </div>
+        )}
+
+        {/* Formulaire de regénération avec commentaire */}
+        {showRewriteForm && expanded && !pendingReview && (
+          <div className="mt-3 pt-3 border-t border-border" onClick={(e) => e.stopPropagation()}>
+            <label htmlFor={`rewrite-comment-${id}`} className="block text-caption font-semibold text-neutral-500 mb-1.5">
+              Qu{"'"}est-ce que tu voudrais changer ? (optionnel)
+            </label>
+            <textarea
+              id={`rewrite-comment-${id}`}
+              value={rewriteComment}
+              onChange={(e) => setRewriteComment(e.target.value)}
+              placeholder="Ex : « Rends-le plus punchy », « Parle plus de mon quartier La Doutre », « Moins formel »..."
+              rows={2}
+              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-body-sm text-foreground placeholder:text-neutral-400 resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50 mb-3"
+            />
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                disabled={rewriting}
+                onClick={handleRewriteSubmit}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-secondary text-white font-display font-bold text-body-sm hover:bg-secondary-600 transition-all disabled:opacity-50 disabled:cursor-wait"
+              >
+                {rewriting ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
+                    Regénération...
+                  </>
+                ) : (
+                  "Regénérer"
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); setShowRewriteForm(false); setRewriteComment("") }}
+                className="px-3 py-2 text-body-sm text-neutral-500 hover:text-primary transition-colors"
+              >
+                Annuler
+              </button>
+              <p className="text-caption text-neutral-400 ml-auto">
+                La nouvelle version sera validée par notre équipe avant publication.
+              </p>
+            </div>
           </div>
         )}
 
@@ -452,7 +518,7 @@ export function DeliverableCard({
               Après avoir copié → ouvre ton appli et colle le texte
             </p>
             <a
-              href={`mailto:support@immocrew.fr?subject=Contenu%20%C3%A0%20revoir&body=ID%20du%20contenu%20:%20${id}%0AProbl%C3%A8me%20:%20`}
+              href={`mailto:contact@immocrew.fr?subject=Contenu%20%C3%A0%20revoir&body=ID%20du%20contenu%20:%20${id}%0AProbl%C3%A8me%20:%20`}
               className="text-caption text-neutral-400 hover:text-error-600 transition-colors"
               onClick={(e) => e.stopPropagation()}
             >

@@ -70,10 +70,10 @@ export async function GET() {
 
   const client = clients[0]
 
-  // Seuls les abonnes Pack Mensuel actifs peuvent parrainer
+  // Seuls les abonnés actifs peuvent parrainer (toutes formules)
   const isActiveMensuel =
     client.status === "active" &&
-    (client.pack === "mensuel" || client.pack === "mensuel-trimestriel")
+    (client.pack === "mensuel" || client.pack === "trimestriel" || client.pack === "annuel")
 
   if (!isActiveMensuel) {
     return NextResponse.json(

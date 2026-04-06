@@ -6,7 +6,7 @@ import { test, expect, EXPECTED_PACKS } from "./fixtures"
  * Why these tests exist:
  * The landing page is the sole acquisition channel. Every section must render
  * correctly, CTAs must point to the right checkout URLs, and pricing must
- * display the contractually committed amounts (497/197/97 EUR). A pricing
+ * display the contractually committed amounts (150/120/100 EUR). A pricing
  * regression costs trust AND potentially legal exposure (engagement tarifaire).
  *
  * Covers: Hero, Problem, Pillars, BeforeAfter, SocialProof, Pricing, FAQ,
@@ -72,16 +72,16 @@ test.describe("Landing page — Pricing cards", () => {
     const pricingSection = page.locator("#pricing")
 
     for (const pack of EXPECTED_PACKS) {
-      // Price must be visible as text (e.g. "497" in the section)
+      // Price must be visible as text (e.g. "150" in the section)
       await expect(pricingSection.getByText(pack.price + "\u20AC")).toBeVisible()
       // Pack name must be visible
       await expect(pricingSection.getByText(pack.name)).toBeVisible()
     }
   })
 
-  test("Pack Mensuel has 'Le plus populaire' badge", async ({ page }) => {
+  test("Pack Trimestriel has 'Recommandé' badge", async ({ page }) => {
     await expect(
-      page.locator("#pricing").getByText("Le plus populaire")
+      page.locator("#pricing").getByText("Recommandé")
     ).toBeVisible()
   })
 
@@ -250,7 +250,6 @@ test.describe("Landing page — SEO essentials", () => {
   test("page has correct meta title", async ({ page }) => {
     await page.goto("/")
     await expect(page).toHaveTitle(/ImmoCrew/)
-    await expect(page).toHaveTitle(/197/)
   })
 
   test("page has lang=fr on html element", async ({ page }) => {

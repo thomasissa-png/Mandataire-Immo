@@ -24,7 +24,7 @@ export function ArticleHeroImage({
   if (image.type !== "city") return null
 
   return (
-    <figure className="relative w-full h-[80px] tablet:h-[200px] rounded-xl overflow-hidden mb-8">
+    <figure className="relative w-full h-[160px] tablet:h-[240px] rounded-xl overflow-hidden mb-8">
       <Image
         src={image.url}
         alt={image.alt}
