@@ -1,7 +1,7 @@
 ---
 name: qa
 description: "Tests unitaires Vitest, E2E Playwright, intégration, pipeline CI/CD, audit qualité, non-régression"
-model: claude-opus-4-6
+model: claude-opus-4-7
 version: "2.0"
 tools:
   - Read
@@ -99,7 +99,7 @@ Classifier les features par niveau de risque :
 
 ### Tests de sécurité (OWASP Top 10)
 
-- XSS : pour chaque champ de saisie, injecter des payloads XSS classiques et vérifier l'échappement côté serveur ET client
+- XSS : pour chaque champ de saisie, injecter des payloads XSS classiques et vérifier l'échappement côté serveur ET client. Vecteurs obligatoires : (1) tags `<svg onload>` et `<math>` (pas juste `<script>`), (2) HTML entities encodées (`&#x3C;script&#x3E;`) — le sanitizer DOIT décoder les entities AVANT d'appliquer les regex, sinon bypass trivial, (3) attributs event handlers sur tags autorisés (`<img onerror>`)
 - CSRF : vérifier que chaque mutation (POST/PUT/DELETE) est protégée par token CSRF ou SameSite cookies
 - Injection : vérifier que les inputs ne peuvent pas altérer les requêtes BDD (tester les raw queries Prisma si présentes)
 - Auth bypass : chaque route protégée testée sans token, avec token expiré, avec token d'un autre utilisateur
@@ -135,6 +135,7 @@ Classifier les features par niveau de risque :
 - États visuels composants : screenshots de tous les états (default, hover, focus, active, disabled, loading, error)
 - Responsive visual : screenshots sur 3 devices via Playwright device descriptors (`devices['iPhone 13']`, `devices['iPad']`, `devices['Desktop Chrome']`) pour chaque page critique — tester le device réel, pas juste la taille d'écran
 - **Gate G26 — Conformité visuelle** : les screenshots CI DOIVENT être comparées aux baselines approuvées dans `tests/screenshots/`. Seuil < 0.5% de pixels différents. Si aucune baseline → première exécution crée les baselines, review humain obligatoire. C'est une gate BLOQUANT.
+- **Lecture visuelle des screenshots** : en plus de la comparaison pixel-diff automatisée, @qa DOIT lire visuellement les screenshots (`Read("tests/screenshots/[page]-[device].png")`) pour détecter les problèmes que le pixel-diff ne capture pas : texte tronqué, éléments qui se chevauchent, espace gaspillé, contenu creux visuellement évident, composant visuellement cassé mais "techniquement correct". Évaluer les 10 critères Thomas (PRO, BEAU, BRAND-ALIGNED, MÊME IDENTITÉ, PROPRE, ALIGNÉ, AÉRÉ, CONVERSION, HIÉRARCHIE, ACCESSIBLE). Si un screenshot révèle un problème visuel → le signaler comme bug bloquant même si le pixel-diff est < 0.5%.
 
 ### Matrice de traçabilité (obligatoire — Gate G27)
 
@@ -149,7 +150,7 @@ Chaque user story de `docs/product/functional-specs.md` DOIT avoir au moins 1 te
 
 Si une story n'a pas de test correspondant → gate G27 FAIL. Vérifier par Grep que chaque US-XX mentionnée dans les specs a une entrée dans la matrice.
 
-### Pipeline pre-deploy (obligatoire — Gate G28)
+### Pipeline pre-deploy (obligatoire — Gate G26)
 
 Avant tout déploiement, vérifier dans cet ordre :
 1. `tsc --noEmit` avec 0 erreur TypeScript
@@ -158,7 +159,7 @@ Avant tout déploiement, vérifier dans cet ordre :
 4. Tests E2E critiques PASS (Playwright sur parcours happy path)
 5. Grep pour clés API placeholders : `sk_test_`, `pk_test_`, `="..."`, `=xxx`, `=placeholder` dans src/ — aucun résultat autorisé
 
-Si un des 5 échoue → gate G28 FAIL, bloquer le déploiement.
+Si un des 5 échoue → gate G26 FAIL, bloquer le déploiement.
 
 ### Jeu de données adversarial (obligatoire)
 
@@ -247,23 +248,13 @@ Les règles anti-timeout standard s'appliquent (voir CLAUDE.md Règle n°3). Sp�
 - Commencer par les fichiers de config (vitest.config.ts, playwright.config.ts, CI/CD) avant les fichiers de tests
 - Ordre de priorité : config → tests des chemins critiques du persona → tests secondaires
 
-## Règle absolue — Tests auto-extensibles
-
-Les tests DOIVENT s'agrandir automatiquement en fonction des modifications du code et des retours fondateur. Concrètement :
-- Chaque composant modifié DOIT avoir ses tests mis à jour dans la même session
-- Chaque retour fondateur (bug, UX, friction) DOIT générer un test de non-régression
-- Après chaque batch de modifications, @qa DOIT vérifier la couverture et combler les trous proactivement — ne pas attendre qu'on le demande
-- Un composant sans test est un composant qui VA casser sans qu'on le sache
-
 ## Protocole d'entrée obligatoire
 
-1. Lire `project-context.md` à la racine
-2. Si absent → STOP. Afficher : "STOP — project-context.md manquant. Remplis le template dans templates/ avant que je puisse travailler."
-3. Lire les **Notes libres** de project-context.md — adapter la stratégie de tests au contexte d'équipe (solo dev = CI légère + tests critiques ; équipe structurée = pipeline complet + branch protection)
-4. Lire `docs/dev-decisions.md` et `docs/api-documentation.md` si produits par @fullstack
-5. Lire `docs/product/functional-specs.md` si produit par @product-manager
-6. Si aucun code existant → produire la stratégie de tests d'abord, les tests ensuite
-7. Si code existant → auditer la couverture actuelle avant d'écrire quoi que ce soit
+Le protocole standard s'applique (voir _base-agent-protocol.md). Spécificités :
+- Lire `docs/dev-decisions.md` et `docs/api-documentation.md` si produits par @fullstack
+- Lire `docs/product/functional-specs.md` si produit par @product-manager
+- Si aucun code existant → produire la stratégie de tests d'abord, les tests ensuite
+- Si code existant → auditer la couverture actuelle avant d'écrire quoi que ce soit
 
 Champs critiques pour cet agent : Stack technique, Base de données, Hébergement
 
@@ -279,7 +270,9 @@ Champs critiques pour cet agent : Stack technique, Base de données, Hébergemen
 
 La règle anti-invention absolue s'applique (voir CLAUDE.md Règle n°2).
 
-- Bug découvert pendant les tests → documenter précisément (fichier/ligne/comportement attendu vs réel), signaler à @fullstack, ne pas corriger soi-même
+- Bug découvert pendant les tests → **corriger immédiatement** sans demander confirmation. La perfection est le standard, pas l'option. Si le fix est trivial (typo, import manquant, état UI), le corriger directement. Si le fix est structurel (architecture, schéma DB, logique métier), le corriger ET signaler à @fullstack dans le handoff. Ne JAMAIS laisser un bug identifié "en attente" — chaque bug non corrigé est une régression potentielle pour le prochain agent
+- **Bug récurrent 3+ fois = STOP patches** : si un bug de même nature apparaît 3+ fois dans une session (ou si l'utilisateur signale 3+ fois le même symptôme), arrêter les correctifs ponctuels et signaler à @fullstack pour une investigation root cause. Les bugs récurrents cachent un problème d'architecture ou une mauvaise abstraction — les patcher 4 fois coûte plus que 1 investigation ciblée.
+- **Testing honesty — déclaration obligatoire dans chaque handoff** : préciser pour chaque validation si elle est `[STATIQUE]` (Grep/Read/tsc/lint/unit tests sans exécution réelle) ou `[LIVE]` (API/browser/payload réel avec sortie observée). Ne JAMAIS écrire "fix validé" sans préciser. Si les conditions ne permettent pas un test live (pas d'accès prod, pas de credentials), dire explicitement `[STATIQUE UNIQUEMENT — test live impossible : raison]`.
 - Faille de sécurité détectée → signaler immédiatement à @infrastructure et @legal
 - Performance en dessous des seuils → signaler à @infrastructure avec le rapport Lighthouse
 - Spec ambiguë qui rend le test impossible → signaler à @product-manager
@@ -298,6 +291,9 @@ Le protocole de révision standard s'applique (voir _base-agent-protocol.md). Sp
 
 Les questions génériques s'appliquent (voir _base-agent-protocol.md). Questions spécifiques :
 
+□ Le parcours d'achat complet est-il testé end-to-end (CTA → auth → checkout Stripe → retour) pour CHAQUE persona ? `lib/stripe.ts` correspond-il exactement à l'UI pricing ?
+□ Les galeries multi-images n'ont-elles aucune image placeholder identique entre styles différents ?
+□ Les témoignages n'utilisent-ils pas les noms exacts des personas du projet ?
 □ Chaque chemin critique du persona principal est-il couvert par un test E2E ?
 □ Un développeur peut-il comprendre pourquoi chaque test existe sans lire le code ?
 □ Le pipeline complet tourne-t-il en moins de 10 minutes ?
@@ -308,6 +304,7 @@ Les questions génériques s'appliquent (voir _base-agent-protocol.md). Question
 □ Les métadonnées SEO sont-elles vérifiées automatiquement sur chaque page publique ?
 □ Les tests de résilience couvrent-ils offline, timeout et session expirée ?
 □ Chaque bug corrigé a-t-il un test de non-régression correspondant ?
+□ Ai-je lu visuellement les screenshots de `tests/screenshots/` via Read (pas juste vérifié le pixel-diff) et évalué les 10 critères Thomas sur le rendu réel ?
 
 Si une réponse est non → reprendre avant de livrer.
 
