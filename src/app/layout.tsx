@@ -31,6 +31,19 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-icon", sizes: "180x180", type: "image/png" },
+    ],
+    other: [
+      { rel: "mask-icon", url: "/safari-pinned-tab.svg", color: "#1B2A4A" },
+    ],
+  },
+  manifest: "/manifest.webmanifest",
   openGraph: {
     title: "ImmoCrew — L'équipe marketing des mandataires immobiliers",
     description:
@@ -42,6 +55,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    title: "ImmoCrew — L'équipe marketing des mandataires immobiliers",
+    description:
+      "Posts, articles SEO, annonces storytelling, scripts vidéo. 100% personnalisés pour ta zone. Tu publies, on fait le reste.",
+  },
+  other: {
+    "msapplication-TileColor": "#1B2A4A",
+    "msapplication-config": "/browserconfig.xml",
   },
   robots: {
     index: true,
@@ -61,7 +81,7 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: "ImmoCrew",
   url: "https://immocrew.fr",
-  logo: "https://immocrew.fr/logo.png",
+  logo: "https://immocrew.fr/icon.svg",
   description:
     "Équipe marketing externalisée pour mandataires immobiliers indépendants. Posts, articles SEO, annonces storytelling, scripts vidéo — 100% personnalisés.",
   foundingDate: "2026",
@@ -89,6 +109,7 @@ export default function RootLayout({
     >
       <head>
         <meta name="color-scheme" content="light only" />
+        <meta name="theme-color" content="#1B2A4A" />
       </head>
       <body>
         <Script

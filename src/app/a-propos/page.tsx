@@ -26,7 +26,7 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: "ImmoCrew",
   url: "https://immocrew.fr",
-  logo: "https://immocrew.fr/logo.png",
+  logo: "https://immocrew.fr/icon.svg",
   description:
     "Service de marketing clé en main pour mandataires immobiliers indépendants en France. Chaque mois : 12 posts, 4 articles SEO, 4 annonces, 4 scripts vidéo, livrés prêts à publier.",
   foundingDate: "2026",

@@ -275,6 +275,7 @@ ImmoCrew n'est PAS un outil. C'est une ÉQUIPE. Le mandataire rêve d'avoir un d
 | @design | 2026-04-19 | Session 11 — Fix CTA arrow wrapping (commit 9a3ccad) | CTAButton.tsx : split label en texte + flèche via `splitArrow()`. Flèche enveloppée dans `<span className="whitespace-nowrap">` pour rester collée au dernier mot. | Fondateur signale : sur mobile, les CTA longs ("Commencer ce mois-ci →") wrappent et la flèche se retrouve seule sur la 2e ligne ("ci →"), très laid. Solution : whitespace-nowrap force la flèche à rester avec le dernier mot. Alternative écartée : raccourcir les labels — casse le ton de marque direct. Alternative écartée : flèche SVG séparée — change trop la DX d'appel du composant. |
 | @product-manager | 2026-04-19 | Session 11 — Suppression champ lien_annonce onboarding (commits c9c16d1 + e53ef16) | Étape 1 : rétrogradé de champ principal encadré orange à champ optionnel discret en bas. Étape 2 (feedback fondateur) : supprimé entièrement. Suppression du type `BienData`, `EMPTY_BIEN`, du formulaire UI, et du filtre de soumission. | Scraping LeBonCoin/SeLoger retourne 403 (learning session 7 — pas de fausse promesse). Le champ affichait "on le garde en référence pour personnaliser tes contenus" — honnête mais le placement proéminent suggérait une valeur qu'il n'apportait pas. Décision fondateur : supprimer plutôt que conserver (optionnel discret) — chaque champ qui n'apporte pas de valeur ajoute du bruit. Alternative retenue dans un 1er temps : déplacer en bas comme optionnel. Fondateur a demandé suppression complète. |
 | @orchestrator | 2026-04-19 | Session 11 — Diagnostic blocker onboarding sauvegarde | Identifié : migrations SQL 010-014 probablement non passées en prod (après que 015-019 aient été passées). La migration 010 ajoute `onboarding_draft*` colonnes sur clients — absence = erreur "Erreur lors de la sauvegarde" à la soumission. Commande fournie : `for f in sql/010_onboarding_draft.sql sql/011_email_nurturing.sql sql/012_email_unsubscribe.sql sql/013_agent_pages.sql sql/014_transaction_type.sql; do psql $DATABASE_URL -f $f; done`. | Diagnostic via Grep sur le code : `onboarding_draft` référencé dans api/onboarding/route.ts (UPSERT sur colonnes qui n'existent pas → erreur 500). Alternative écartée : ajouter un try/catch spécifique autour des références aux colonnes optionnelles — pattern fragile, préférable de maintenir la DB à jour. |
+| @orchestrator | 2026-04-19 | Session 12 — Favicons/icônes complets + REPLIT_ACTIONS.md prod setup | 6 fichiers créés (twitter-image.tsx, apple-icon.tsx, browserconfig.xml, safari-pinned-tab.svg, favicon-assets.md, favicon-assets.test.ts). 2 fichiers mis à jour (layout.tsx metadata complète, manifest.ts icons PNG). REPLIT_ACTIONS.md créé (migrations SQL 010-014, Stripe prod, pipeline IA, checklist pré-lancement). 29 tests favicon ajoutés. | Execution directe par l'orchestrateur (pas de delegation agents) car les tâches sont des créations de fichiers techniques (XML, SVG, TSX route handlers) et de la documentation. apple-icon.tsx (PNG dynamique) plutôt que SVG car iOS Safari ne supporte pas SVG comme touch icon. twitter-image.tsx identique visuellement à opengraph-image.tsx car cohérence des partages cross-plateforme. JSON-LD logo corrigé de /logo.png (inexistant) vers /icon.svg (existant). PNG 192x192 et 512x512 laissés à l'utilisateur (format binaire non générable par code). |
 
 ---
 
@@ -319,48 +320,40 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 
 ---
 
-## Memo de reprise — dernière session
+## Memo de reprise -- derniere session
 
-- **Date de clôture** : 2026-04-19, session 11
-- **Branche** : `claude/resume-session-10-8hHsw`
-- **Résumé de la session** : Intégration Stripe finalisée (webhook referral logic + pack detection + credit + script setup idempotent + page parrainage dashboard). Audit SEO complet avec corrections P0/P1 (sitemap dates fixes, canonicals absolus, FAQ SSR refactor `<details>`, JSON-LD RealEstateListing sur /bien). Nettoyage Pack Lancement résiduel (13 fichiers). Corrections frictions fondateur : incohérence pricing 100€ vs 150€ dans comparaison, nav blog cassée (`/#section`), CTA flèche orpheline sur 2e ligne mobile, suppression du champ lien_annonce onboarding. Migrations SQL 015-019 passées en prod. 28 suites, 361 tests, 0 échec.
-- **Travaux terminés cette session** :
-  - **Stripe** : webhook `checkout.session.completed` traite referral codes (lookup + INSERT referrals + crédit parrain), webhook `invoice.paid` détecte le pack réel via `subscription.metadata` (fini le hardcode "mensuel") et applique le crédit parrainage (décrément `referral_credit_months_remaining`), `invoice.payment_failed` même logique pack
-  - Script `scripts/stripe-setup.ts` idempotent (crée 3 produits + 4 prix via API)
-  - Page `/dashboard/parrainage` + lien sidebar desktop + mobile
-  - 17 tests webhook (était 11)
-  - **Pack Lancement cleanup** : 13 fichiers (tests, admin compteur, DashboardContent CTA mort, prompts, routes generate)
-  - **SEO P0** : sitemap dates fixes (plus de `new Date()` régénéré), robots disallow sign-in/sign-up, og:image sur a-propos/faq/blog
-  - **SEO P1** : canonicals absolus (blog + bien), JSON-LD RealEstateListing complet sur /bien/[id], FAQAccordion refactor `<details>/<summary>` pour SSR-friendly, layouts wrappers noindex sur sign-in/sign-up/onboarding
-  - **SEO pages agent** : generateMetadata + JSON-LD Person + RealEstateAgent sur /agent/[slug] et /agent/[slug]/blog/[articleId]
-  - **Fixes fondateur** : Pricing.tsx (formatPrice 150€ → formatStartingPrice 100€), opengraph-image, manifest.ts (150€ → 100€), Header NAV_LINKS (`#` → `/#`), CTAButton arrow nowrap, lien_annonce supprimé onboarding
-  - Migrations SQL 015-019 passées en prod
-- **Travaux en cours / non terminés** :
-  - Migrations SQL 010-014 probablement non passées (cause erreur onboarding save)
-  - Test end-to-end pipeline hebdomadaire avec ANTHROPIC_API_KEY réelle
-  - Test visuels IA avec OPENAI_API_KEY réelle
-  - Assets `/public/logo.png` et `/public/og-image.jpg` (1200×630) à créer (référencés par OG + JSON-LD)
-- **Promesses restantes à tenir pour Sophie** :
-  - Scraping/enrichissement lien annonce (champ supprimé de l'onboarding, retiré du scope court terme)
-  - Génération automatique de visuels pour TOUS les posts (pipeline en place, clé OPENAI_API_KEY nécessaire)
-- **Prochaines actions recommandées** :
-  1. **@fullstack / toi : Migrations SQL 010-014** — `for f in sql/010_onboarding_draft.sql sql/011_email_nurturing.sql sql/012_email_unsubscribe.sql sql/013_agent_pages.sql sql/014_transaction_type.sql; do psql $DATABASE_URL -f $f; done`. PRIORITÉ ABSOLUE — débloque l'onboarding (erreur "Erreur lors de la sauvegarde").
-  2. **@fullstack : Configuration Stripe production** — définir `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET`, puis `npx tsx scripts/stripe-setup.ts` → copier les 4 Price IDs dans .env, tester un checkout bout en bout (mensuel + trimestriel + annuel + referral flow).
-  3. **@fullstack : Tester pipeline hebdomadaire** — configurer `ANTHROPIC_API_KEY` + `CRON_SECRET`, lancer un batch de test sur un client pilote.
-  4. **@fullstack : Tester visuels IA** — configurer `OPENAI_API_KEY`, vérifier la qualité sur 5 posts.
-  5. **@design : Créer logo.png + og-image.jpg** — 1200×630, référencés dans JSON-LD Organization + og:image. Sans ça = schema Organization invalide + partages blog sans image.
+- **Date de cloture** : 2026-04-19, session 12
+- **Branche** : `claude/immocrew-s12-prod-assets-bg1w0`
+- **Resume de la session** : Favicons et icones complets (twitter-image.tsx, apple-icon.tsx PNG, browserconfig.xml, safari-pinned-tab.svg, layout.tsx metadata complete, manifest.ts enrichi). REPLIT_ACTIONS.md cree avec documentation complete des actions manuelles fondateur (migrations SQL, Stripe prod, pipeline IA, checklist pre-lancement). 17 tests favicon ajoutes. Aucun agent delegue -- execution directe par l'orchestrateur.
+- **Travaux termines cette session** :
+  - **Favicons/Icons** : twitter-image.tsx (1200x630 PNG), apple-icon.tsx (180x180 PNG), browserconfig.xml (Bing tiles), safari-pinned-tab.svg (monochrome)
+  - **Metadata layout.tsx** : icons (SVG + PNG), apple (PNG dynamique), mask-icon, manifest ref, theme-color, msapplication-TileColor, msapplication-config, twitter card complete, JSON-LD logo corrige (/icon.svg au lieu de /logo.png inexistant)
+  - **Manifest.ts** : icones PNG 192x192 et 512x512 ajoutees (refs -- fichiers a generer manuellement)
+  - **Documentation** : REPLIT_ACTIONS.md (5 sections : SQL 010-014, Stripe prod, pipeline IA, favicons, checklist pre-lancement)
+  - **Tests** : favicon-assets.test.ts (17 tests presence + contenu)
+  - **Specs** : docs/design/favicon-assets.md (inventaire complet)
+- **Travaux en cours / non termines** :
+  - PNG `public/icon-192x192.png` et `public/icon-512x512.png` a generer manuellement (voir REPLIT_ACTIONS.md section 4)
+  - Migrations SQL 010-014 a passer en prod (commandes dans REPLIT_ACTIONS.md section 1)
+  - Stripe clés live a configurer (REPLIT_ACTIONS.md section 2)
+  - Pipeline IA a tester avec vraies cles (REPLIT_ACTIONS.md section 3)
+- **Promesses restantes a tenir pour Sophie** :
+  - Scraping/enrichissement lien annonce (retire du scope court terme)
+  - Generation automatique de visuels pour TOUS les posts (pipeline en place, cle OPENAI_API_KEY necessaire)
+- **Prochaines actions recommandees** :
+  1. **Toi : Migrations SQL 010-014** -- voir REPLIT_ACTIONS.md section 1. PRIORITE ABSOLUE (debloque l'onboarding).
+  2. **Toi : Stripe prod** -- voir REPLIT_ACTIONS.md section 2. Configurer cles + run stripe-setup.ts.
+  3. **Toi : Pipeline IA** -- voir REPLIT_ACTIONS.md section 3. Configurer cles + batch test 1 client.
+  4. **Toi : PNG favicons** -- voir REPLIT_ACTIONS.md section 4. Generer via realfavicongenerator.net.
 - **Blockers** :
-  - Migrations SQL 010-014 à passer en prod (gate : onboarding save fonctionnel)
-  - STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET
-  - ANTHROPIC_API_KEY pour génération IA
-  - OPENAI_API_KEY pour visuels auto
-  - RESEND_API_KEY pour emails production
-  - CRON_SECRET pour cron hebdomadaire
-  - Assets logo.png + og-image.jpg (1200×630)
-  - Marque INPI "ImmoCrew" à vérifier
-- **Nom de branche recommandé pour la prochaine session** : `claude/immocrew-s12-prod-setup-[suffix]` (le suffix alphanum est généré par Claude Code au démarrage)
-- **Commande de reprise suggérée** :
+  - Migrations SQL 010-014 (gate : onboarding save fonctionnel)
+  - STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET + 4 Price IDs
+  - ANTHROPIC_API_KEY + OPENAI_API_KEY + RESEND_API_KEY + CRON_SECRET
+  - PNG favicons 192x192 + 512x512 (manifest PWA)
+  - Marque INPI "ImmoCrew" a verifier
+- **Nom de branche recommande pour la prochaine session** : `claude/immocrew-s13-[description]-[suffix]`
+- **Commande de reprise suggeree** :
 
 ```
-@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 11). Branche claude/immocrew-s12-prod-setup-[suffix]. Session 11 terminée : Stripe backend complet (webhook referral + credit), SEO P0/P1, nettoyage pricing, nav blog, CTA arrow, lien_annonce supprimé, migrations 015-019 en prod, 361 tests. Prochaine priorité : migrations 010-014 + configuration clés API (Stripe/Anthropic/OpenAI/Resend) + run scripts/stripe-setup.ts + tests end-to-end.
+@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 12). Branche claude/immocrew-s13-[suffix]. Session 12 terminee : favicons/icones complets, REPLIT_ACTIONS.md cree, 17 tests favicon. Prochaine priorite : passer les migrations SQL 010-014, configurer Stripe/Anthropic/OpenAI/Resend, tester pipeline IA end-to-end, generer PNG favicons.
 ```

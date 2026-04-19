@@ -90,7 +90,7 @@ export default async function BlogArticlePage({
       name: "ImmoCrew",
       logo: {
         "@type": "ImageObject",
-        url: `${baseUrl}/logo.png`,
+        url: `${baseUrl}/icon.svg`,
       },
     },
     mainEntityOfPage: {
