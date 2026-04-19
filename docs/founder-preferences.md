@@ -1,7 +1,14 @@
 # Préférences Fondateur — Thomas
 
 > Source de vérité pour @moi. Mis à jour après chaque session.
-> Dernière mise à jour : 2026-03-31, session 9.
+> Dernière mise à jour : 2026-04-19, session 11.
+
+## Session 11 — Nouvelles préférences observées
+
+- **Zéro fausse promesse dans les formulaires d'onboarding** : si un champ suggère une fonctionnalité qui n'est pas implémentée (ex : "Lien vers ton annonce" laissant supposer un scraping), il DOIT être supprimé — pas rétrogradé en optionnel. Thomas préfère la compacité à l'exhaustivité. Un champ qui n'apporte pas de valeur mesurable au produit final = bruit qui augmente le drop-off.
+- **Cohérence stricte pricing dans la communication** : quand le pricing a plusieurs formules, le discours marketing (titres, OG images, métadonnées, comparaisons) DOIT afficher le prix d'appel (le plus bas). Thomas a signalé comme friction majeure le fait de voir "150€/mois" dans un titre puis "100€ ImmoCrew" dans la colonne de comparaison juste en dessous. La cohérence cognitive prime sur la précision tarifaire dans les ancrages globaux.
+- **Analyser les screenshots en priorité** : quand Thomas signale un problème visuel, il envoie un screenshot. L'analyse du screenshot doit précéder toute action — un diagnostic basé uniquement sur la description textuelle risque de rater le vrai problème. Le contexte visuel est irremplaçable.
+- **Vérifier l'état des migrations SQL en prod avant de demander d'en passer** : Thomas a passé les migrations 015-019 pensant que 010-014 l'étaient déjà. Conséquence : erreur onboarding. Règle : avant de lister une plage de migrations, vérifier avec Thomas quelle est la dernière passée en prod. Fournir la commande complète de la première manquante à la dernière.
 
 ## Pricing & Business
 

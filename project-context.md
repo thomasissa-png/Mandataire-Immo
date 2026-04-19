@@ -267,6 +267,14 @@ ImmoCrew n'est PAS un outil. C'est une ÉQUIPE. Le mandataire rêve d'avoir un d
 | @creative-strategy | 2026-04-02 | Restructuration offre pricing (`docs/strategy/pricing-restructure.md`) | Recommandation offre unique 150€/mois avec setup mois 1 inclus (Option B). Suppression du Pack Lancement comme offre séparée. Boost Mandat conservé à 100€/bien. Résolution incohérence 197€ vs 150€ : tranché sur 150€ dans project-context.md. Canal partenariats mis à jour (Pack Lancement gratuit → premier mois gratuit). | Option B retenue car supprime la friction de choix (550€ mois 1 perçu) et reste dans le budget Sophie (150€/mois = 1 vente/an pour ROI). Option D (200€/mois) écartée car 67% du budget max Sophie — seuil psychologique dépassé. Option C (2 packs autonomes) écartée car charge cognitive élevée et perception de service "au rabais" sur le mensuel. Scénario revenus révisé : 30 clients × 150€ + 14 boosts × 100€ = 5 900€/mois. |
 | @creative-strategy | 2026-04-02 | Section "Formules d'engagement" dans `docs/strategy/pricing-restructure.md` | 3 formules : Mensuel 150€, Trimestriel 360€ (120€/mois, -20%), Annuel 1 200€ (100€/mois, -33%). Trimestriel featured. Boost Mandat inchangé à 100€/bien. Mois gratuit réservé au Mensuel. Scénario 30 clients 40/45/15 : MRR équivalent 3 860€ + 1 400€ boosts = 5 260€/mois. | 20% trimestriel retenu (vs 10-15%) car en dessous du seuil psychologique de déclenchement comportemental — 30€/mois d'économie (90€ sur 3 mois) est le minimum tangible. 33% annuel = "4 mois offerts" — argument mémorable. Trimestriel en featured (pas Annuel) car : Sophie doit d'abord valider le produit sur 3 mois avant de s'engager annuellement ; la durée 3 mois coïncide avec le KPI rétention North Star. Mois gratuit réservé au Mensuel pour éviter les abus (inscriptions annuelles gratuites + résiliation). Annuel positionné en upsell (abonnés existants) plutôt qu'en acquisition froide car 1 200€ one-shot = objection trésorerie bloquante pour Sophie sans historique produit. |
 | @copywriter | 2026-04-02 | Audit pricing complet (`docs/reviews/copy-audit-pricing.md`) | 39 corrections dans 12 fichiers : layout.tsx meta (197→100€), brand-voice.md (4 occurrences 197€ + Pack Lancement CTA), kpi-framework.md (NSM/ARPU/segments), tracking-plan.md (exemples d'events), tests Stripe (amount 19700→15000 centimes), prompts (Pack Lancement→Setup mois 1), E2E landing (assertion /197/, badge "Le plus populaire", montants). | Approche exhaustive via Grep multi-patterns avant toute correction. Distinction conservée entre données historiques (Historique des agents) et contenu actif. Tests Stripe corrigés sur le fond (nouveaux montants réels) et pas juste les commentaires — un test qui valide 197 sur un système à 150 est un faux positif. Badge E2E "Le plus populaire" corrigé en "Recommandé" car le Trimestriel est le featured pack (pas le Mensuel) dans pricing.ts. |
+| @fullstack | 2026-04-19 | Session 11 — Intégration Stripe complète : webhook referral + pack detection + setup script + page parrainage (commit 086f103) | Webhook `checkout.session.completed` traite maintenant les codes parrainage (lookup `referral_codes`, INSERT `referrals`, crédit parrain +1 mois). Webhook `invoice.paid` détecte le pack réel via `subscription.metadata.pack` (fini le hardcode "mensuel"). Webhook `invoice.paid` applique le crédit parrainage (décrémente `referral_credit_months_remaining`). `invoice.payment_failed` détecte le pack aussi. Script `scripts/stripe-setup.ts` idempotent crée les 3 produits + 4 prix via API. Page `/dashboard/parrainage` + lien sidebar (desktop + mobile). 17 tests webhook (était 11). | Script setup plutôt que création manuelle dashboard Stripe car : idempotent, reproductible sur staging/prod, documenté dans le code. Pack detection via metadata sub plutôt que via DB seule : la metadata est la source la plus fiable côté Stripe. Page dédiée `/dashboard/parrainage` plutôt que seulement embed dans DashboardContent : discoverable via sidebar, URL partageable. Event `referral_credit_applied` utilisé (registre tracking existant) plutôt que créer un nouveau event type `referral_credit_used` non enregistré. Alternative écartée : Stripe Customer Balance pour le crédit — la spec disait balance mais l'impl via `referral_credit_months_remaining` en DB permet un contrôle fin (suspension, pro-ration) sans dépendance Stripe. |
+| @fullstack | 2026-04-19 | Session 11 — Nettoyage Pack Lancement résiduel (commits d639c13 + c06c104) | 13 fichiers corrigés. Production : `src/lib/prompts/pack-*.ts` neutralisés (Pack Lancement → Setup mois 1), admin page (compteur "Lancements" → "Trimestriels" + "Annuels"), DashboardContent (CTA mort lancement→mensuel supprimé), `auto-produce` commentaire, `pack-lancement/route.ts` tracking event. Tests : `agent-activate.test.ts` (8 occurrences `pack: "lancement"` → "mensuel"), `AgentPageManager.test.tsx` (5 occurrences). | Le nom de fichier `pack-lancement/route.ts` est conservé car rename = refactoring séparé (3 callers à mettre à jour) — risque/valeur défavorable pour une URL interne. Tests corrigés sur le fond (pas juste commentaires) car un test qui valide "lancement" sur un système sans ce pack est un faux positif. Alternative écartée : supprimer entièrement `/api/generate/pack-lancement/route.ts` — conserve la route comme URL legacy pour éventuelle migration d'anciennes intégrations. |
+| @seo | 2026-04-19 | Session 11 — Audit SEO + corrections P0/P1 (commits b5ccbf4 + 5942133) | Audit : sitemap, robots, metadata sur 14 pages publiques. Corrections P0 : sitemap dates fixes (plus de `new Date()` régénéré à chaque build — signal spam Bing), robots.ts disallow `/sign-in` + `/sign-up`, og:image sur /a-propos, /faq, /blog. Corrections P1 : canonicals absolus (`https://immocrew.fr/blog` au lieu de `/blog`), canonical sur `/bien/[id]`, FAQAccordion refactor `<details>/<summary>` pour SSR, JSON-LD RealEstateListing complet sur /bien/[id] (price, floorSize, address, geo, DPE). sign-in/sign-up/onboarding : layouts wrappers avec `noindex`. JSON-LD Person + RealEstateAgent déjà présents sur `/agent/[slug]`. | FAQAccordion refactoré en HTML natif `<details>/<summary>` plutôt que garder le `<button aria-expanded>` + state React car : contenu visible dans le HTML initial sans JS (Bing rend moins bien le JS), accessible clavier nativement, le comportement accordion (fermer les autres) reste géré client-side via useRef. Canonicals absolus car Bing est moins fiable sur les relatifs. Dates sitemap fixes : `new Date()` régénéré à chaque build est interprété comme signal de spam par Bing. JSON-LD RealEstateListing sur /bien/[id] = éligibilité rich results Google. Alternative écartée : créer `/public/logo.png` et `/public/og-image.jpg` — non produit dans cette session (reste dans backlog design). |
+| @fullstack | 2026-04-19 | Session 11 — Fix pricing inconsistency hero vs comparaison (commit 510aea9) | 3 fichiers : Pricing.tsx (titre ancrage comparatif `formatPrice(PACK_MENSUEL)` 150€ → `formatStartingPrice()` "à partir de 100€/mois" pour cohérence avec la colonne ImmoCrew 100€), opengraph-image.tsx (150€ → 100€), manifest.ts (150€ → 100€). Audit complet via Explore : 0 autre incohérence trouvée. | Fondateur a signalé l'incohérence visuelle : le titre "150€/mois. La décision la plus simple..." juxtaposé avec la colonne "100€ ImmoCrew" crée une friction cognitive chez le visiteur. Le prix d'appel (100€) doit primer sur le prix d'entrée (150€) dans le discours marketing. Les autres pages (FAQ, a-propos, CGV) utilisaient correctement les constantes pricing.ts. |
+| @fullstack | 2026-04-19 | Session 11 — Fix nav liens cassés depuis /blog (commit 644420c) | Header.tsx : NAV_LINKS passés de `#section` à `/#section` (4 liens : Comment ça marche, Avant/Après, Tarifs, FAQ). Blog reste inchangé. | Depuis /blog, les ancres relatives `#pricing` résolvaient en `/blog#pricing` (n'existe pas). Les ancres absolues `/#pricing` naviguent correctement vers la landing puis la section. Le problème ne se voyait pas depuis la landing. Le footer et les CTA avaient déjà des URLs absolues. |
+| @design | 2026-04-19 | Session 11 — Fix CTA arrow wrapping (commit 9a3ccad) | CTAButton.tsx : split label en texte + flèche via `splitArrow()`. Flèche enveloppée dans `<span className="whitespace-nowrap">` pour rester collée au dernier mot. | Fondateur signale : sur mobile, les CTA longs ("Commencer ce mois-ci →") wrappent et la flèche se retrouve seule sur la 2e ligne ("ci →"), très laid. Solution : whitespace-nowrap force la flèche à rester avec le dernier mot. Alternative écartée : raccourcir les labels — casse le ton de marque direct. Alternative écartée : flèche SVG séparée — change trop la DX d'appel du composant. |
+| @product-manager | 2026-04-19 | Session 11 — Suppression champ lien_annonce onboarding (commits c9c16d1 + e53ef16) | Étape 1 : rétrogradé de champ principal encadré orange à champ optionnel discret en bas. Étape 2 (feedback fondateur) : supprimé entièrement. Suppression du type `BienData`, `EMPTY_BIEN`, du formulaire UI, et du filtre de soumission. | Scraping LeBonCoin/SeLoger retourne 403 (learning session 7 — pas de fausse promesse). Le champ affichait "on le garde en référence pour personnaliser tes contenus" — honnête mais le placement proéminent suggérait une valeur qu'il n'apportait pas. Décision fondateur : supprimer plutôt que conserver (optionnel discret) — chaque champ qui n'apporte pas de valeur ajoute du bruit. Alternative retenue dans un 1er temps : déplacer en bas comme optionnel. Fondateur a demandé suppression complète. |
+| @orchestrator | 2026-04-19 | Session 11 — Diagnostic blocker onboarding sauvegarde | Identifié : migrations SQL 010-014 probablement non passées en prod (après que 015-019 aient été passées). La migration 010 ajoute `onboarding_draft*` colonnes sur clients — absence = erreur "Erreur lors de la sauvegarde" à la soumission. Commande fournie : `for f in sql/010_onboarding_draft.sql sql/011_email_nurturing.sql sql/012_email_unsubscribe.sql sql/013_agent_pages.sql sql/014_transaction_type.sql; do psql $DATABASE_URL -f $f; done`. | Diagnostic via Grep sur le code : `onboarding_draft` référencé dans api/onboarding/route.ts (UPSERT sur colonnes qui n'existent pas → erreur 500). Alternative écartée : ajouter un try/catch spécifique autour des références aux colonnes optionnelles — pattern fragile, préférable de maintenir la DB à jour. |
 
 ---
 
@@ -313,55 +321,46 @@ Le fondateur dispose d'un framework multi-agents (Gradient Agents — 19 agents 
 
 ## Memo de reprise — dernière session
 
-- **Date de clôture** : 2026-04-02, session 10
-- **Branche** : `claude/extract-project-context-Pxon1`
-- **Résumé de la session** : Session massive — restructuration pricing (3 formules mensuel/trimestriel/annuel), refonte complète dashboard (13 composants, 50+ corrections), pipeline IA hebdomadaire, visuels gpt-image-1.5, blog mandataire, éditeur articles, section support, codes promo. Audits consolidés @moi + @mandataire sur dashboard, onboarding, site public. 357 tests passent.
+- **Date de clôture** : 2026-04-19, session 11
+- **Branche** : `claude/resume-session-10-8hHsw`
+- **Résumé de la session** : Intégration Stripe finalisée (webhook referral logic + pack detection + credit + script setup idempotent + page parrainage dashboard). Audit SEO complet avec corrections P0/P1 (sitemap dates fixes, canonicals absolus, FAQ SSR refactor `<details>`, JSON-LD RealEstateListing sur /bien). Nettoyage Pack Lancement résiduel (13 fichiers). Corrections frictions fondateur : incohérence pricing 100€ vs 150€ dans comparaison, nav blog cassée (`/#section`), CTA flèche orpheline sur 2e ligne mobile, suppression du champ lien_annonce onboarding. Migrations SQL 015-019 passées en prod. 28 suites, 361 tests, 0 échec.
 - **Travaux terminés cette session** :
-  - Pricing restructuré : Pack Lancement supprimé, 3 formules (150€/120€/100€ par mois), Boost inchangé
-  - 10 codes promo pour essai gratuit (sql/019)
-  - Audit pricing complet : 39 corrections, 0 incohérence
-  - Calendrier éditorial : template hebdo (Lun=article, Mar/Jeu/Sam=posts, Ven=vidéo), overflow, modal centré, dots lettres
-  - Posts : plateforme intelligente, tips horaires, brief visuel, hashtags max 3
-  - Scripts vidéo : confort_camera branché, diaporama débutant, gardes null/undefined
-  - Articles SEO : éditeur inline (modifier avant publication), DeliverableCard
-  - Annonces : modal portail (titre+description séparés, compteur), photos, CTA contact
-  - Stratégie : sections fixes, regénérer visible, brief graphique retiré
-  - Blog mandataire : section articles sur /agent/[slug], page article publique
-  - Page Support : formulaire feedback (amélioration/bug/question)
-  - Visuels IA : gpt-image-1.5, 7 types de prompts, pipeline intégré
-  - Pipeline hebdomadaire : weekly-batch + cron + retry backoff
-  - Regénération avec approbation admin (pending_review)
-  - Onboarding : autocomplete ville, département auto, subtitles "pourquoi", LinkedIn fusionné
-  - Blog : cards verticales, hero 160px, CTA contextualisé
-  - Site public : faux témoignages supprimés, 181 entités HTML→UTF-8, Header/Footer page bien
-  - Hook pre-commit tsc --noEmit
-  - 28 suites, 357 tests, 0 échec
+  - **Stripe** : webhook `checkout.session.completed` traite referral codes (lookup + INSERT referrals + crédit parrain), webhook `invoice.paid` détecte le pack réel via `subscription.metadata` (fini le hardcode "mensuel") et applique le crédit parrainage (décrément `referral_credit_months_remaining`), `invoice.payment_failed` même logique pack
+  - Script `scripts/stripe-setup.ts` idempotent (crée 3 produits + 4 prix via API)
+  - Page `/dashboard/parrainage` + lien sidebar desktop + mobile
+  - 17 tests webhook (était 11)
+  - **Pack Lancement cleanup** : 13 fichiers (tests, admin compteur, DashboardContent CTA mort, prompts, routes generate)
+  - **SEO P0** : sitemap dates fixes (plus de `new Date()` régénéré), robots disallow sign-in/sign-up, og:image sur a-propos/faq/blog
+  - **SEO P1** : canonicals absolus (blog + bien), JSON-LD RealEstateListing complet sur /bien/[id], FAQAccordion refactor `<details>/<summary>` pour SSR-friendly, layouts wrappers noindex sur sign-in/sign-up/onboarding
+  - **SEO pages agent** : generateMetadata + JSON-LD Person + RealEstateAgent sur /agent/[slug] et /agent/[slug]/blog/[articleId]
+  - **Fixes fondateur** : Pricing.tsx (formatPrice 150€ → formatStartingPrice 100€), opengraph-image, manifest.ts (150€ → 100€), Header NAV_LINKS (`#` → `/#`), CTAButton arrow nowrap, lien_annonce supprimé onboarding
+  - Migrations SQL 015-019 passées en prod
 - **Travaux en cours / non terminés** :
-  - Stripe intégration : 3 produits à créer (mensuel/trimestriel/annuel), checkout, webhooks
-  - Webhook `invoice.payment_succeeded` : logique crédit parrain
-  - Migrations SQL 015-019 à exécuter en production
-  - Emails nurturing : quelques références "Pack Lancement" résiduelles dans les templates
-  - Visuels IA : à tester avec OPENAI_API_KEY réelle
-  - Pipeline hebdomadaire : à tester avec ANTHROPIC_API_KEY
+  - Migrations SQL 010-014 probablement non passées (cause erreur onboarding save)
+  - Test end-to-end pipeline hebdomadaire avec ANTHROPIC_API_KEY réelle
+  - Test visuels IA avec OPENAI_API_KEY réelle
+  - Assets `/public/logo.png` et `/public/og-image.jpg` (1200×630) à créer (référencés par OG + JSON-LD)
 - **Promesses restantes à tenir pour Sophie** :
-  - Scraping/enrichissement lien annonce (texte reformulé, feature dans le backlog)
-  - Génération automatique de visuels pour TOUS les posts (pipeline en place, clé API nécessaire)
+  - Scraping/enrichissement lien annonce (champ supprimé de l'onboarding, retiré du scope court terme)
+  - Génération automatique de visuels pour TOUS les posts (pipeline en place, clé OPENAI_API_KEY nécessaire)
 - **Prochaines actions recommandées** :
-  1. **@fullstack : Stripe intégration** — créer 3 produits Stripe (mensuel 150€, trimestriel 360€, annuel 1200€), implémenter checkout + webhooks + logique parrainage. PRIORITÉ ABSOLUE — bloque la mise en production.
-  2. **@fullstack : Migrations SQL** — exécuter 015-019 en production
-  3. **@fullstack : Tester pipeline hebdomadaire** — configurer ANTHROPIC_API_KEY + CRON_SECRET, lancer un batch de test
-  4. **@fullstack : Tester visuels IA** — configurer OPENAI_API_KEY, vérifier la qualité sur 5 posts
-  5. **@seo : Audit SEO pages publiques** — sitemap à jour, meta OG, Schema.org
+  1. **@fullstack / toi : Migrations SQL 010-014** — `for f in sql/010_onboarding_draft.sql sql/011_email_nurturing.sql sql/012_email_unsubscribe.sql sql/013_agent_pages.sql sql/014_transaction_type.sql; do psql $DATABASE_URL -f $f; done`. PRIORITÉ ABSOLUE — débloque l'onboarding (erreur "Erreur lors de la sauvegarde").
+  2. **@fullstack : Configuration Stripe production** — définir `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET`, puis `npx tsx scripts/stripe-setup.ts` → copier les 4 Price IDs dans .env, tester un checkout bout en bout (mensuel + trimestriel + annuel + referral flow).
+  3. **@fullstack : Tester pipeline hebdomadaire** — configurer `ANTHROPIC_API_KEY` + `CRON_SECRET`, lancer un batch de test sur un client pilote.
+  4. **@fullstack : Tester visuels IA** — configurer `OPENAI_API_KEY`, vérifier la qualité sur 5 posts.
+  5. **@design : Créer logo.png + og-image.jpg** — 1200×630, référencés dans JSON-LD Organization + og:image. Sans ça = schema Organization invalide + partages blog sans image.
 - **Blockers** :
-  - STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET + 3 produits Stripe à créer
-  - ANTHROPIC_API_KEY pour la génération IA
-  - OPENAI_API_KEY pour les visuels auto
-  - RESEND_API_KEY pour emails réels
-  - CRON_SECRET pour le cron hebdomadaire
-  - Migrations SQL : `for f in sql/015*.sql sql/016*.sql sql/017*.sql sql/018*.sql sql/019*.sql; do psql $DATABASE_URL -f $f; done`
+  - Migrations SQL 010-014 à passer en prod (gate : onboarding save fonctionnel)
+  - STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET
+  - ANTHROPIC_API_KEY pour génération IA
+  - OPENAI_API_KEY pour visuels auto
+  - RESEND_API_KEY pour emails production
+  - CRON_SECRET pour cron hebdomadaire
+  - Assets logo.png + og-image.jpg (1200×630)
   - Marque INPI "ImmoCrew" à vérifier
+- **Nom de branche recommandé pour la prochaine session** : `claude/immocrew-s12-prod-setup-[suffix]` (le suffix alphanum est généré par Claude Code au démarrage)
 - **Commande de reprise suggérée** :
 
 ```
-@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 10). Branche claude/extract-project-context-Pxon1. Session 10 terminée : pricing restructuré (3 formules), dashboard complet, pipeline IA hebdomadaire, 357 tests. Prochaine priorité : Stripe intégration (3 produits + checkout + webhooks).
+@orchestrator Mode reprise. Lis project-context.md (memo de reprise session 11). Branche claude/immocrew-s12-prod-setup-[suffix]. Session 11 terminée : Stripe backend complet (webhook referral + credit), SEO P0/P1, nettoyage pricing, nav blog, CTA arrow, lien_annonce supprimé, migrations 015-019 en prod, 361 tests. Prochaine priorité : migrations 010-014 + configuration clés API (Stripe/Anthropic/OpenAI/Resend) + run scripts/stripe-setup.ts + tests end-to-end.
 ```

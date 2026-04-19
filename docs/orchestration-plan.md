@@ -184,11 +184,21 @@ SaaS + Service productisé — le contenu marketing EST le produit. L'ordre est 
 - **2026-03-25 S3** : Règle n°5 ajoutée à CLAUDE.md : "Mindset IA, pas équipe humaine".
 - **2026-03-25 S3** : Clôture session. Phase 6 (pipeline IA) préparée mais non lancée.
 - **2026-03-31 S9** : Phase 9 — Features dashboard avancées : liens partageables annonces, photos ville blog, filtres mois + archive (6 pages), calendrier éditorial visuel (1/jour, jours préférés), parrainage complet (4 API + UI + Stripe), corrections blog Sophie, fix profil photo, QA 3P1+2P2 corrigés. 284 tests. @social stratégie calendrier éditorial.
+- **2026-04-02 S10** : Phase 10 — Pricing 3 formules, refonte dashboard, pipeline IA hebdomadaire, visuels gpt-image-1.5, blog mandataire, 357 tests.
+- **2026-04-19 S11** : Phase 11 — Intégration Stripe complète (webhook referral + pack detection + script setup + page parrainage), nettoyage Pack Lancement résiduel, audit SEO + corrections P0/P1 (sitemap, canonicals, FAQ SSR, JSON-LD RealEstateListing), fix pricing incohérence comparaison, fix nav blog, fix CTA arrow wrapping, suppression champ lien_annonce onboarding, migrations SQL 015-019 passées en prod. 361 tests. Diagnostic blocker onboarding (migrations 010-014 probablement non passées en prod).
 
 ## État pour reprise prochaine session
-- **Phases terminées** : 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 (pricing restructuré, dashboard complet, pipeline IA hebdomadaire, visuels gpt-image-1.5, 357 tests)
-- **Phase en cours** : 11 — Stripe intégration + déploiement production
-  - Session 10 (2026-04-02) : Pricing 3 formules (mensuel/trimestriel/annuel), 50+ corrections dashboard, pipeline hebdomadaire, visuels IA, blog mandataire, éditeur articles, support, codes promo, onboarding amélioré, audits @moi + Sophie sur tout
-- **Prochaine phase** : 11 — Stripe intégration (3 produits, checkout, webhooks, parrainage) + déploiement
-- **Blockers** : STRIPE_*, ANTHROPIC_API_KEY, OPENAI_API_KEY, RESEND_API_KEY, CRON_SECRET, migrations SQL 015-019, INPI
+- **Phases terminées** : 0 → 11 (Stripe backend complet, SEO P0/P1, nettoyage pricing, 361 tests, 0 échec)
+- **Phase en cours** : 12 — Configuration environnement + mise en production
+  - Session 11 (2026-04-19) : Stripe webhook logic (referral + pack detection + credit), script setup, page parrainage dashboard, SEO corrections complètes, incohérence pricing "100€ vs 150€" corrigée, nav blog, CTA arrow, lien_annonce supprimé
+- **Prochaine phase** : 12 — Configuration keys + tests end-to-end + mise en prod
+- **Blockers** :
+  - Migrations SQL 010-014 à passer en prod (gate : onboarding save fonctionnel)
+  - STRIPE_SECRET_KEY + WEBHOOK_SECRET + run `scripts/stripe-setup.ts` pour récupérer les 4 Price IDs
+  - ANTHROPIC_API_KEY (pipeline IA hebdomadaire)
+  - OPENAI_API_KEY (visuels gpt-image-1.5)
+  - RESEND_API_KEY (emails nurturing production)
+  - CRON_SECRET (cron hebdomadaire Replit)
+  - Assets manquants : `/public/logo.png` + `/public/og-image.jpg` (1200×630)
+  - Marque INPI "ImmoCrew" à vérifier
 - **Pour reprendre** : voir mémo de reprise dans project-context.md
